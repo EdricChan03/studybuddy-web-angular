@@ -1,0 +1,35 @@
+<md-sidenav-container fullscreen>
+	<md-sidenav #left mode="side" class="app-sidenav">
+		<div class="sidenav-content">
+			<div class="account" *ngIf="isSignedIn">
+				<img src="" class="mat-card-avatar">
+			</div>
+			<md-nav-list>
+				<a md-list-item *ngFor="let link of sidenavLinks" [routerLink]="['/'+link.link]" routerLinkActive="active-link" (click)="left.close()">
+					<md-icon mdListIcon>{{link.icon}}</md-icon>
+					{{link.title}}
+				</a>
+			</md-nav-list>
+		</div>
+	</md-sidenav>
+	<md-toolbar color="primary">
+		<button md-icon-button (click)="left.toggle()">
+			<md-icon>menu</md-icon>
+		</button>
+		<span>Study Buddy&nbsp;</span>
+		<strong>(BETA)</strong>
+		<span fxFlex></span>
+		<button md-icon-button [mdMenuTriggerFor]="moreMenu">
+			<md-icon>more_vert</md-icon>
+		</button>
+		<md-menu #moreMenu="mdMenu">
+			<button md-menu-item>
+				<md-icon>info</md-icon>
+				About
+			</button>
+		</md-menu>
+	</md-toolbar>
+	<div class="app-content" fxLayout="column">
+		<router-outlet></router-outlet>
+	</div>
+</md-sidenav-container>

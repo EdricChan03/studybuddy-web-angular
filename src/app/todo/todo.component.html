@@ -1,0 +1,26 @@
+<md-card>
+	<md-card-title>Add new todo</md-card-title>
+	<md-card-content>
+		<form #addForm="ngForm">
+			<md-form-field class="app-form-field">
+				<input mdInput [(ngModel)]="add.title" placeholder="Title" name="title" required>
+				<md-error>This is required</md-error>
+			</md-form-field>
+			<md-form-field class="app-form-field">
+				<textarea name="content" cols="3" mdInput [(ngModel)]="add.content" placeholder="Content" required></textarea>
+				<md-error>This is required</md-error>
+			</md-form-field>
+			<md-form-field class="app-form-field">
+				<input mdInput [mdDatepicker]="dueDatePicker" placeholder="Due date">
+				<md-datepicker #dueDatePicker></md-datepicker>
+				<md-datepicker-toggle mdSuffix [for]="dueDatePicker"></md-datepicker-toggle>
+			</md-form-field>
+		</form>
+	</md-card-content>
+	<md-card-actions>
+		<button md-button (click)="cancel()" color="primary">Cancel</button>
+		<button md-button (click)="addTodo()" color="primary" [disabled]="addForm.invalid">Add</button>
+	</md-card-actions>
+</md-card>
+
+<div *ngIf=""></div>
