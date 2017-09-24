@@ -1,0 +1,34 @@
+
+<p class="mat-body">Welcome to the test page! This page is used to test the shared functions.</p>
+<button md-button (click)="alertDialog()">Alert Dialog</button>
+<button md-button (click)="confirmDialog()">Confirm Dialog</button>
+<button md-button (click)="promptDialog()">Prompt Dialog</button>
+<div id="result"></div>
+<md-divider></md-divider>
+<fieldset fxLayout="column">
+	<legend>Snackbar properties</legend>
+	<md-form-field>
+		<input mdInput type="number" [(ngModel)]="duration" placeholder="Duration of snackbar">
+	</md-form-field>
+	<md-form-field>
+		<input mdInput [(ngModel)]="action" placeholder="Action of snackbar">
+	</md-form-field>
+	<h3>Vertical Position:</h3>
+	<md-radio-group [(ngModel)]="verticalPosition" fxLayout="column">
+		<md-radio-button *ngFor="let opt of verticalPos" [value]="opt">{{opt}}</md-radio-button>
+	</md-radio-group>
+	<h3>Horizontal Position:</h3>
+	<md-radio-group [(ngModel)]="horizontalPosition" fxLayout="column">
+		<md-radio-button *ngFor="let opt of horizontalPos" [value]="opt">{{opt}}</md-radio-button>
+	</md-radio-group>
+	<h3>Extra classes</h3>
+	<md-select [(ngModel)]="extraClass" style="width:200px">
+		<md-option value="red"><code>red</code></md-option>
+		<md-option value="party"><code>party</code></md-option>
+	</md-select>
+</fieldset>
+<br>
+<button md-button (click)="closeSnackBar()">Close all snackbars</button>
+<button md-button (click)="snackBar()">Normal Snackbar</button>
+<button md-button (click)="durationSnackBar()">Duration Snackbar</button>
+<button md-button (click)="snackBarWithResult()">Snackbar with result</button>

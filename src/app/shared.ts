@@ -1,20 +1,31 @@
 import { Observable } from 'rxjs/Observable';
 import { Injectable, Component, OnInit } from '@angular/core';
-import { MdSnackBarConfig, MdSnackBar, MdDialog, MdDialogConfig, MdDialogRef } from '@angular/material';
+import { MdSnackBarConfig, MdSnackBar, MdDialog, MdDialogConfig, MdDialogRef, SimpleSnackBar, MdSnackBarRef } from '@angular/material';
 import { ComponentType } from '@angular/cdk/portal';
 
 @Injectable()
 export class Shared {
 	constructor(private snackbar: MdSnackBar, private dialog: MdDialog) { }
 	/**
-	 * Opens a snackbar with the specified params
+	 * Opens a snackbar with the specified params and no return
 	 * @param {SnackBarConfig} opts The options of the snackbar
 	 */
 	public openSnackBar(opts: SnackBarConfig) {
 		this.handleSnackBar(opts);
 	}
-	public openActionSnackBar(opts: SnackBarConfig): Observable<void> {
-		return this.handleSnackBarWithReturn(opts);
+	/**
+	 * Opens a snackbar with the specified params and a return of the snackbar's ref (for component)
+	 * @param {SnackBarConfig} opts The options of the snackbar
+	 */
+	public openSnackBarComponent(opts: SnackBarConfig): MdSnackBarRef<any> {
+		return this.handleSnackBarWithComponent(opts);
+	}
+	/**
+	 * Opens a snackbar with the specified params and a return of the snackbar's ref (not for component)
+	 * @param {SnackBarConfig} opts The options of the snackbar
+	 */
+	public openSnackBarWithRef(opts: SnackBarConfig): MdSnackBarRef<SimpleSnackBar> {
+		return this.handleSnackBarWithRef(opts);
 	}
 	/**
 	 * Handling of the snackBar
@@ -23,17 +34,25 @@ export class Shared {
 	 */
 	private handleSnackBar(opts: SnackBarConfig) {
 		if (opts) {
-			if (opts.action) {
+			if (opts.component) {
 				if (opts.additionalOpts) {
-					this.snackbar.open(opts.msg, opts.action, opts.additionalOpts);
+					this.snackbar.openFromComponent(opts.component, opts.additionalOpts);
 				} else {
-					this.snackbar.open(opts.msg, opts.action);
+					this.snackbar.openFromComponent(opts.component);
 				}
 			} else {
-				if (opts.additionalOpts) {
-					this.snackbar.open(opts.msg, undefined, opts.additionalOpts);
+				if (opts.action) {
+					if (opts.additionalOpts) {
+						this.snackbar.open(opts.msg, opts.action, opts.additionalOpts);
+					} else {
+						this.snackbar.open(opts.msg, opts.action);
+					}
 				} else {
-					this.snackbar.open(opts.msg);
+					if (opts.additionalOpts) {
+						this.snackbar.open(opts.msg, undefined, opts.additionalOpts);
+					} else {
+						this.snackbar.open(opts.msg);
+					}
 				}
 			}
 		} else {
@@ -41,24 +60,39 @@ export class Shared {
 		}
 	}
 	/**
-	 * Handling of the snackBar
-	 * @param {SnackBarConfig} opts The snackBar config
+	 * Handles a snackbar with a snackbarref if the developer needs a return
+	 * @param {SnackBarConfig} opts The config for the snackbar.
+	 * @returns {MdSnackBarRef<SimpleSnackBar>}
 	 * @private
-	 * @returns {Observable<void>}
 	 */
-	private handleSnackBarWithReturn(opts: SnackBarConfig): Observable<void> {
+	private handleSnackBarWithRef(opts: SnackBarConfig): MdSnackBarRef<SimpleSnackBar> {
 		if (opts) {
 			if (opts.action) {
 				if (opts.additionalOpts) {
-					return this.snackbar.open(opts.msg, opts.action, opts.additionalOpts).onAction();
+					return this.snackbar.open(opts.msg, opts.action, opts.additionalOpts);
 				} else {
-					return this.snackbar.open(opts.msg, opts.action).onAction();
+					return this.snackbar.open(opts.msg, opts.action);
 				}
 			} else {
-				this.throwError("action", "string");
+				this.throwError("opts.action", "string");
 			}
 		} else {
-			this.throwError("message", "string");
+			this.throwError("opts", "SnackBarConfig");
+		}
+	}
+	private handleSnackBarWithComponent(opts: SnackBarConfig): MdSnackBarRef<any> {
+		if (opts) {
+			if (opts.additionalOpts) {
+				if (opts.additionalOpts) {
+					return this.snackbar.openFromComponent(opts.component, opts.additionalOpts);
+				} else {
+					return this.snackbar.openFromComponent(opts.component);
+				}
+			} else {
+				this.throwError("opts.additionalOpts", "MdSnackBarConfig");
+			}
+		} else {
+			this.throwError("opts", "SnackBarConfig");
 		}
 	}
 	/**
