@@ -1,3 +1,4 @@
+import { NewTodoDialog } from './newtodo/newtodo.component';
 import { MyMaterialModule } from './material.module';
 import {
 	Shared,
@@ -27,6 +28,7 @@ import { TestpageComponent } from './testpage/testpage.component';
 		AppdownloadsComponent,
 		TodoComponent,
 		TestpageComponent,
+		NewTodoDialog,
 		AlertDialog,
 		ConfirmDialog,
 		PromptDialog
@@ -49,7 +51,8 @@ import { TestpageComponent } from './testpage/testpage.component';
 	entryComponents: [
 		AlertDialog,
 		PromptDialog,
-		ConfirmDialog
+		ConfirmDialog,
+		NewTodoDialog
 	]
 })
 export class AppModule { }

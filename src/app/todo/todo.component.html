@@ -1,26 +1,12 @@
-<md-card>
-	<md-card-title>Add new todo</md-card-title>
-	<md-card-content>
-		<form #addForm="ngForm">
-			<md-form-field class="app-form-field">
-				<input mdInput [(ngModel)]="add.title" placeholder="Title" name="title" required>
-				<md-error>This is required</md-error>
-			</md-form-field>
-			<md-form-field class="app-form-field">
-				<textarea name="content" cols="3" mdInput [(ngModel)]="add.content" placeholder="Content" required></textarea>
-				<md-error>This is required</md-error>
-			</md-form-field>
-			<md-form-field class="app-form-field">
-				<input mdInput [mdDatepicker]="dueDatePicker" placeholder="Due date">
-				<md-datepicker #dueDatePicker></md-datepicker>
-				<md-datepicker-toggle mdSuffix [for]="dueDatePicker"></md-datepicker-toggle>
-			</md-form-field>
-		</form>
-	</md-card-content>
-	<md-card-actions>
-		<button md-button (click)="cancel()" color="primary">Cancel</button>
-		<button md-button (click)="addTodo()" color="primary" [disabled]="addForm.invalid">Add</button>
-	</md-card-actions>
-</md-card>
-
-<div *ngIf=""></div>
+<button md-raised-button color="primary" (click)="newTodo()">New Todo</button>
+<!-- <button md-raised-button (click)="getTodos()">Get todos</button> -->
+<md-list>
+	<md-list-item *ngFor="let todo of todos | async" (click)="null">
+		<h3 mdLine>{{todo.title}}</h3>
+		<p mdLine>{{todo.content}}</p>
+		<span mdLine><md-icon *ngIf="todo.dueDate" color="primary">assignment</md-icon><span *ngIf="todo.dueDate">Due date: {{todo.dueDate | date}}</span></span>
+		<span fxFlex></span>
+		<button md-icon-button mdTooltip="Remove todo" (click)="removeTodo(todo.$key)"><md-icon>delete</md-icon></button>
+		<md-divider></md-divider>
+	</md-list-item>
+</md-list>

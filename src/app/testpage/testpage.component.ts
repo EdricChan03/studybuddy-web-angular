@@ -19,12 +19,12 @@ export class TestpageComponent {
 		this.shared.openAlertDialog({ msg: "I'm an alert message made with code!", ok: "Got it" });
 	}
 	confirmDialog() {
-		this.shared.openConfirmDialog({ msg: "I'm a confirm message made with code!", cancel: "Nah", ok: "Yeah" }).subscribe((res) => {
+		this.shared.openConfirmDialog({ msg: "I'm a confirm message made with code!", cancel: "Nah", ok: "Yeah" }).afterClosed().subscribe((res) => {
 			console.log(res);
 		});
 	}
 	promptDialog() {
-		this.shared.openPromptDialog({ msg: "I'm a prompt message prepopulated with a value!", cancel: "Nah", ok: "Yeah", inputType: "text", placeholder: "A value goes here", value: "Something here", color: "accent" }).subscribe((res) => {
+		this.shared.openPromptDialog({ msg: "I'm a prompt message prepopulated with a value!", cancel: "Nah", ok: "Yeah", inputType: "text", placeholder: "A value goes here", value: "Something here", color: "accent" }).afterClosed().subscribe((res) => {
 			document.getElementById('result').innerText = `Result: ${res}`;
 		});
 	}

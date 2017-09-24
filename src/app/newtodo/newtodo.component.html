@@ -1,0 +1,22 @@
+<h3 md-dialog-title>New Todo</h3>
+<div md-dialog-content>
+	<form #addForm="ngForm">
+		<md-form-field class="app-form-field">
+			<input mdInput [(ngModel)]="add.title" placeholder="Title" name="title" required>
+			<md-error>This is required</md-error>
+		</md-form-field>
+		<md-form-field class="app-form-field">
+			<textarea name="content" cols="3" mdInput [(ngModel)]="add.content" placeholder="Content" required></textarea>
+			<md-error>This is required</md-error>
+		</md-form-field>
+		<md-form-field class="app-form-field">
+			<input mdInput [mdDatepicker]="dueDatePicker" placeholder="Due date" [(ngModel)]="add.dueDate" name="dueDate">
+			<md-datepicker #dueDatePicker></md-datepicker>
+			<md-datepicker-toggle mdSuffix [for]="dueDatePicker"></md-datepicker-toggle>
+		</md-form-field>
+	</form>
+</div>
+<div md-dialog-actions align="end">
+		<button md-button (click)="cancel()" color="primary">Cancel</button>
+		<button md-button (click)="addTodo(add)" color="primary" [disabled]="addForm.invalid">Add</button>
+</div>

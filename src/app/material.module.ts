@@ -15,7 +15,8 @@ import {
 	MdTooltipModule,
 	MdDialogModule,
 	MdRadioModule,
-	MdSelectModule
+	MdSelectModule,
+    MdCheckboxModule
 } from '@angular/material';
 const MATERIAL_MODULES = [
 	MdButtonModule,
@@ -33,7 +34,8 @@ const MATERIAL_MODULES = [
 	MdTooltipModule,
 	MdDialogModule,
 	MdRadioModule,
-	MdSelectModule
+	MdSelectModule,
+	MdCheckboxModule
 ];
 @NgModule({
 	imports: [

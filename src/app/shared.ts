@@ -1,11 +1,14 @@
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 import { Injectable, Component, OnInit } from '@angular/core';
 import { MdSnackBarConfig, MdSnackBar, MdDialog, MdDialogConfig, MdDialogRef, SimpleSnackBar, MdSnackBarRef } from '@angular/material';
 import { ComponentType } from '@angular/cdk/portal';
+import { Title } from '@angular/platform-browser';
+import * as firebase from 'firebase';
 
 @Injectable()
 export class Shared {
-	constructor(private snackbar: MdSnackBar, private dialog: MdDialog) { }
+	constructor(private snackbar: MdSnackBar, private dialog: MdDialog, private afDatabase: AngularFireDatabase, private title: Title) { }
 	/**
 	 * Opens a snackbar with the specified params and no return
 	 * @param {SnackBarConfig} opts The options of the snackbar
@@ -111,13 +114,13 @@ export class Shared {
 	/**
 	 * Opens an alert dialog with the specified parameters
 	 * @param {AlertDialogConfig} opts The options for the dialog
-	 * @returns {Observable<any>}
+	 * @returns {MdDialogRef<AlertDialog>}
 	 */
-	public openAlertDialog(opts: AlertDialogConfig): Observable<any> {
+	public openAlertDialog(opts: AlertDialogConfig): MdDialogRef<AlertDialog> {
 		if (opts) {
 			let dialogRef = this.dialog.open(AlertDialog);
 			dialogRef.componentInstance.alertConfig = opts;
-			return dialogRef.afterClosed();
+			return dialogRef;
 		} else {
 			this.throwError("opts", "AlertDialogConfig");
 		}
@@ -125,13 +128,13 @@ export class Shared {
 	/**
 	 * Opens a confirm dialog with the specified parameters
 	 * @param {ConfirmDialogConfig} opts The options for the dialog
-	 * @return {Observable<any>}
+	 * @return {MdDialogRef<ConfirmDialog>}
 	 */
-	public openConfirmDialog(opts: ConfirmDialogConfig): Observable<any> {
+	public openConfirmDialog(opts: ConfirmDialogConfig): MdDialogRef<ConfirmDialog> {
 		if (opts) {
 			let dialogRef = this.dialog.open(ConfirmDialog);
 			dialogRef.componentInstance.confirmConfig = opts;
-			return dialogRef.afterClosed();
+			return dialogRef;
 		} else {
 			this.throwError("opts", "ConfirmDialogConfig");
 		}
@@ -139,13 +142,13 @@ export class Shared {
 	/**
 	 * Opens a prompt dialog with the specified parameters
 	 * @param {PromptDialogConfig} opts The options for the dialog
-	 * @return {Observable<any>}
+	 * @return {MdDialogRef<PromptDialog>}
 	 */
-	public openPromptDialog(opts: PromptDialogConfig): Observable<any> {
+	public openPromptDialog(opts: PromptDialogConfig): MdDialogRef<PromptDialog> {
 		if (opts) {
 			let dialogRef = this.dialog.open(PromptDialog);
 			dialogRef.componentInstance.promptConfig = opts;
-			return dialogRef.afterClosed();
+			return dialogRef;
 		} else {
 			this.throwError("opts", "PromptDialogConfig");
 		}
@@ -158,6 +161,36 @@ export class Shared {
 	 */
 	private throwError(variable: string, type: string) {
 		throw new Error(`${variable} was not specified. Please ensure that the ${variable} property is specified and that it is of type ${type}.`);
+	}
+	/**
+	 * Adds a new todo
+	 * @param {string} userId The user's id
+	 * @param {Todo} todo The todo object
+	 */
+	public newTodo(userId: string, todo: Todo): firebase.database.ThenableReference {
+		let ref = this.afDatabase.list(`users/${userId}/todo`);
+		// .set(todo);
+		return ref.push(todo);
+	}
+	/**
+	 * Gets the user's todos
+	 * @param {string} userId The user's id
+	 */
+	public getTodos(userId: string): FirebaseListObservable<any> {
+		return this.afDatabase.list(`users/${userId}/todo`);
+	}
+	/**
+	 * Sets the document's title
+	 * @param {string} title The title of the document to set
+	 */
+	public setTitle(title: string) {
+		this.title.setTitle(title);
+	}
+	/**
+	 * Returns the document's title
+	 */
+	public getTitle(): string {
+		return this.title.getTitle();
 	}
 }
 
@@ -177,7 +210,7 @@ export class AlertDialog {
 	selector: 'confirm-dialog',
 	templateUrl: './partials/confirmdialog.shared.html'
 })
-export class ConfirmDialog {
+export class ConfirmDialog{
 	constructor(private dialogRef: MdDialogRef<ConfirmDialog>) { }
 	confirmConfig: ConfirmDialogConfig;
 	cancel() {
@@ -233,4 +266,10 @@ export interface PromptDialogConfig extends DialogConfig {
 	inputType?: "text" | "email" | "password" | "number";
 	value?: string;
 	color?: "primary" | "accent" | "warn";
+}
+export interface Todo {
+	title: string;
+	content: string;
+	dueDate?: number|any;
+	tags?: string[];
 }
