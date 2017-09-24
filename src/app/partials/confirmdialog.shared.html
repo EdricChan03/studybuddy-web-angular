@@ -1,0 +1,8 @@
+<h3 md-dialog-title>{{confirmConfig.title ? confirmConfig.title : 'Confirm'}}</h3>
+<md-dialog-content fxLayout="column">
+	{{confirmConfig.msg}}
+</md-dialog-content>
+<md-dialog-actions align="end">
+	<button md-button (click)="cancel()" color="primary">{{confirmConfig.cancel ? confirmConfig.cancel : 'Cancel'}}</button>
+	<button md-button (click)="ok()" color="primary">{{confirmConfig.ok ? confirmConfig.ok : 'OK'}}</button>
+</md-dialog-actions>

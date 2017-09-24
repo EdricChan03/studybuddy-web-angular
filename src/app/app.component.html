@@ -30,7 +30,7 @@
 			<md-icon>account_circle</md-icon>
 		</button>
 		<md-menu #moreMenu="mdMenu">
-			<button md-menu-item>
+			<button md-menu-item (click)="about()">
 				<md-icon>info</md-icon>
 				About
 			</button>
@@ -51,7 +51,7 @@
 			</md-nav-list>
 		</md-menu>
 	</md-toolbar>
-	<div class="app-content" fxLayout="column">
+	<div class="app-content mat-typography" fxLayout="column">
 		<!-- {{(user | async | json)}} -->
 		<router-outlet></router-outlet>
 	</div>

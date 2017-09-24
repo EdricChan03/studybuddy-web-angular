@@ -1,0 +1,11 @@
+<h3 md-dialog-title>{{promptConfig.title ? promptConfig.title : 'Prompt'}}</h3>
+<md-dialog-content fxLayout="column">
+	{{promptConfig.msg}}
+	<md-form-field color="{{promptConfig.color ? promptConfig.color : 'primary'}}" style="width:100%">
+		<input mdInput [(ngModel)]="input" placeholder="{{promptConfig.placeholder}}" type="{{promptConfig.inputType ? promptConfig.inputType : 'text'}}">
+	</md-form-field>
+</md-dialog-content>
+<md-dialog-actions align="end">
+	<button md-button (click)="cancel()" color="primary">{{promptConfig.cancel ? promptConfig.cancel : 'Cancel'}}</button>
+	<button md-button (click)="ok()" color="primary">{{promptConfig.ok ? promptConfig.ok : 'OK'}}</button>
+</md-dialog-actions>

@@ -1,3 +1,4 @@
+import { TestpageComponent } from './testpage/testpage.component';
 import { TodoComponent } from './todo/todo.component';
 import { AppdownloadsComponent } from './appdownloads/appdownloads.component';
 import { AppComponent } from './app.component';
@@ -7,6 +8,7 @@ import { ModuleWithProviders } from '@angular/core';
 export const AppRoutes: Routes = [
 	{ path: 'downloads', component: AppdownloadsComponent },
 	{ path: 'todo', component: TodoComponent },
+	{ path: 'test', component: TestpageComponent },
 	{ path: '**', redirectTo: 'todo' }
 ]
 

@@ -10,9 +10,9 @@ import { Observable } from 'rxjs/Observable';
 })
 export class AppComponent {
 	user: Observable<firebase.User>;
-	constructor(private shared: Shared, private afAuth: AngularFireAuth){
+	constructor(private shared: Shared, private afAuth: AngularFireAuth) {
 		this.user = afAuth.authState;
-		this.afAuth.auth.onAuthStateChanged((user)=> {
+		this.afAuth.auth.onAuthStateChanged((user) => {
 			if (user) {
 				console.log(user);
 				this.isSignedIn = true;
@@ -50,13 +50,13 @@ export class AppComponent {
 	signOut() {
 		this.afAuth.auth.signOut().then((res) => {
 			// this.shared.openSnackBar(res);
-			let snackbarRef = this.shared.openSnackbarWithResult("Signed out.", "Undo");
+			let snackbarRef = this.shared.openActionSnackBar({ msg: "Signed in with Google", action: "Sign out", additionalOpts: { duration: 4000 } });
 			snackbarRef.subscribe(_ => {
 				this.signIn();
 			})
 			console.log(res);
-		}, (err)=> {
-			this.shared.openDurationSnackbar(`Error: ${err.message}`, 4000);
+		}, (err) => {
+			this.shared.openSnackBar({ msg: `Error: ${err.message}`, additionalOpts: { duration: 4000 } });
 		});
 	}
 	signIn() {
@@ -64,7 +64,10 @@ export class AppComponent {
 			console.log(a);
 			// this.shared.openSnackBar(a);
 		}, err => {
-			this.shared.openDurationSnackbar(`Error: ${err.message}`, 4000);
+			this.shared.openSnackBar({ msg: `Error: ${err.message}`, additionalOpts: { duration: 4000 } });
 		})
+	}
+	about() {
+		this.shared.openAlertDialog({ msg: "Did you know that this dialog was made using a shared function? Check out the code for more info!" });
 	}
 }

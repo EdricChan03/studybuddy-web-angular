@@ -2,32 +2,89 @@
 
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 @import 'assets/md-font/material-icons.css';
-
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500");
 .app-sidenav {
-	width: 256px;
+    width: 256px;
 }
+
 .active-link {
-	color: #3F51B5 !important;
-	background-color: #e8e8e8;
+    color: #3F51B5 !important;
+    background-color: #e8e8e8;
 }
-.app-android-download-btn, .app-src-code-btn {
-	height: 50px;
-	width: 250px;
-}
-.app-android-download-btn {
-	color: #A4C639 !important;
-	background-color: rgba(0, 0, 0, 0.6);
-}
+
+.app-android-download-btn,
 .app-src-code-btn {
-	color: #E4E432 !important;
-	background-color: rgba(0, 0, 0, 0.6);
+    height: 50px;
+    width: 250px;
 }
-[md-button], [md-raised-button] {
-	text-transform: uppercase;
+
+.app-android-download-btn {
+    color: #A4C639 !important;
+    background-color: rgba(0, 0, 0, 0.6);
 }
+
+.app-src-code-btn {
+    color: #E4E432 !important;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+[md-button],
+[md-raised-button] {
+    text-transform: uppercase;
+}
+
 .app-downloads {
-	padding: 40px;
+    padding: 40px;
 }
+
 .app-form-field {
-	width: 100%;
+    width: 100%;
+}
+
+.app-content {
+    padding: 4px;
+}
+
+// Excerpt from snackbar demo on material2's demoapp
+.party {
+    animation: party 5000ms infinite;
+}
+
+@keyframes party {
+    0% {
+        background-color: #00f;
+    }
+    10% {
+        background-color: #8e44ad;
+    }
+    20% {
+        background-color: #1abc9c;
+    }
+    30% {
+        background-color: #d35400;
+    }
+    40% {
+        background-color: #00f;
+    }
+    50% {
+        background-color: #34495e;
+    }
+    60% {
+        background-color: #00f;
+    }
+    70% {
+        background-color: #2980b9;
+    }
+    80% {
+        background-color: #f1c40f;
+    }
+    90% {
+        background-color: #2980b9;
+    }
+    100% {
+        background-color: #0ff;
+    }
+}
+.red {
+	background-color: red;
 }
