@@ -1,3 +1,9 @@
+import {
+	Shared,
+	AlertDialog,
+	ConfirmDialog,
+	PromptDialog
+} from './shared';
 import { environment } from './../environments/environment';
 import { AppRouting } from './app.routing';
 import { BrowserModule } from '@angular/platform-browser';
@@ -13,7 +19,9 @@ import {
 	MdFormFieldModule,
 	MdInputModule,
 	MdDatepickerModule,
-	MdNativeDateModule
+	MdNativeDateModule,
+	MdSnackBarModule,
+    MdTooltipModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -21,9 +29,7 @@ import { AppComponent } from './app.component';
 import { AppdownloadsComponent } from './appdownloads/appdownloads.component';
 import { TodoComponent } from './todo/todo.component';
 import { FormsModule } from '@angular/forms';
-import {
-	AngularFireModule
-} from 'angularfire2';
+import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 
@@ -38,7 +44,9 @@ const MATERIAL_MODULES = [
 	MdFormFieldModule,
 	MdInputModule,
 	MdDatepickerModule,
-	MdNativeDateModule
+	MdNativeDateModule,
+	MdSnackBarModule,
+	MdTooltipModule
 ];
 @NgModule({
 	imports: [
@@ -53,7 +61,10 @@ export class MyMaterialModule { }
 	declarations: [
 		AppComponent,
 		AppdownloadsComponent,
-		TodoComponent
+		TodoComponent,
+		AlertDialog,
+		ConfirmDialog,
+		PromptDialog
 	],
 	imports: [
 		BrowserModule,
@@ -67,5 +78,13 @@ export class MyMaterialModule { }
 		AngularFireDatabaseModule
 	],
 	bootstrap: [AppComponent],
+	providers: [
+		Shared
+	],
+	entryComponents: [
+		AlertDialog,
+		PromptDialog,
+		ConfirmDialog
+	]
 })
 export class AppModule { }

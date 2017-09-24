@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
 	selector: 'app-appdownloads',
-	templateUrl: './appdownloads.component.html',
-	styleUrls: ['./appdownloads.component.css']
+	templateUrl: './appdownloads.component.html'
 })
 export class AppdownloadsComponent implements OnInit {
 

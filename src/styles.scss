@@ -1,13 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
-@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+@import 'assets/md-font/material-icons.css';
 
 .app-sidenav {
-	width: 200px;
+	width: 256px;
 }
 .active-link {
 	color: #3F51B5 !important;
+	background-color: #e8e8e8;
 }
 .app-android-download-btn, .app-src-code-btn {
 	height: 50px;

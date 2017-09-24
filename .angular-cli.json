@@ -51,7 +51,17 @@
     }
   },
   "defaults": {
-    "styleExt": "css",
-    "component": {}
+    "styleExt": "scss",
+    "component": {
+		"spec": false,
+		"viewEncapsulation": "None",
+		"inlineStyle": true
+	},
+	"pipe": {
+		"spec": false
+	},
+	"service": {
+		"spec": false
+	}
   }
 }

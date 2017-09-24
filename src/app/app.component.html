@@ -1,18 +1,22 @@
 <md-sidenav-container fullscreen>
-	<md-sidenav #left mode="side" class="app-sidenav">
-		<div class="sidenav-content">
-			<div class="account" *ngIf="isSignedIn">
-				<img src="" class="mat-card-avatar">
-			</div>
+	<md-sidenav #left mode="side" class="app-sidenav mat-elevation-z2">
+		<div class="sidenav-content" fxLayout="column">
 			<md-nav-list>
 				<a md-list-item *ngFor="let link of sidenavLinks" [routerLink]="['/'+link.link]" routerLinkActive="active-link" (click)="left.close()">
 					<md-icon mdListIcon>{{link.icon}}</md-icon>
-					{{link.title}}
+					<p mdLine>{{link.title}}</p>
+				</a>
+				<h3 md-subheader>Other links</h3>
+				<a md-list-item *ngFor="let link of otherLinks" [routerLink]="['/'+link.link]" routerLinkActive="active-link" (click)="left.close()">
+					<md-icon mdListIcon>{{link.icon}}</md-icon>
+					<p mdLine>{{link.title}}</p>
 				</a>
 			</md-nav-list>
+			<span fxFlex></span>
+			<small style="bottom:0">Version 1.0.0</small>
 		</div>
 	</md-sidenav>
-	<md-toolbar color="primary">
+	<md-toolbar color="primary" class="mat-elevation-z2">
 		<button md-icon-button (click)="left.toggle()">
 			<md-icon>menu</md-icon>
 		</button>
@@ -22,14 +26,33 @@
 		<button md-icon-button [mdMenuTriggerFor]="moreMenu">
 			<md-icon>more_vert</md-icon>
 		</button>
+		<button md-icon-button [mdMenuTriggerFor]="accountMenu" mdTooltip="Account">
+			<md-icon>account_circle</md-icon>
+		</button>
 		<md-menu #moreMenu="mdMenu">
 			<button md-menu-item>
 				<md-icon>info</md-icon>
 				About
 			</button>
 		</md-menu>
+		<md-menu #accountMenu="mdMenu">
+			<md-nav-list>
+				<md-list-item *ngIf="isSignedIn">
+					<img mdListAvatar src="{{(user | async)?.photoURL}}">
+					<h3 mdLine>{{(user | async)?.displayName}}</h3>
+					<span mdLine style="overflow:initial">{{(user | async)?.email}}</span>
+				</md-list-item>
+				<a md-list-item (click)="signIn()" *ngIf="!isSignedIn">
+					<p mdLine>Login</p>
+				</a>
+				<a md-list-item (click)="signOut()" *ngIf="isSignedIn">
+					<p mdLine>Logout</p>
+				</a>
+			</md-nav-list>
+		</md-menu>
 	</md-toolbar>
 	<div class="app-content" fxLayout="column">
+		<!-- {{(user | async | json)}} -->
 		<router-outlet></router-outlet>
 	</div>
 </md-sidenav-container>

@@ -1,27 +1,70 @@
+import { Shared } from './shared';
 import { Component } from '@angular/core';
+import { AngularFireAuth } from 'angularfire2/auth';
+import * as firebase from 'firebase/app';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
 	selector: 'app-root',
-	templateUrl: './app.component.html',
-	styleUrls: ['./app.component.css']
+	templateUrl: './app.component.html'
 })
 export class AppComponent {
-	title = 'app';
+	user: Observable<firebase.User>;
+	constructor(private shared: Shared, private afAuth: AngularFireAuth){
+		this.user = afAuth.authState;
+		this.afAuth.auth.onAuthStateChanged((user)=> {
+			if (user) {
+				console.log(user);
+				this.isSignedIn = true;
+			} else {
+				this.isSignedIn = false;
+			}
+		})
+	}
+	currentUser: any;
 	sidenavLinks = [
 		{
-			link: 'home',
-			title: 'Home',
-			icon: 'home'
+			link: 'todo',
+			title: 'Todos',
+			icon: 'check_circle'
 		},
 		{
 			link: 'downloads',
 			title: 'App Downloads',
 			icon: 'apps'
-		},
-		{
-			link: 'todo',
-			title: 'Todos',
-			icon: 'check_circle'
 		}
 	]
+	otherLinks = [
+		{
+			link: 'settings',
+			title: 'Settings',
+			icon: 'settings'
+		},
+		{
+			link: 'about',
+			title: 'About',
+			icon: 'info'
+		}
+	]
+	isSignedIn = false;
+	signOut() {
+		this.afAuth.auth.signOut().then((res) => {
+			// this.shared.openSnackBar(res);
+			let snackbarRef = this.shared.openSnackbarWithResult("Signed out.", "Undo");
+			snackbarRef.subscribe(_ => {
+				this.signIn();
+			})
+			console.log(res);
+		}, (err)=> {
+			this.shared.openDurationSnackbar(`Error: ${err.message}`, 4000);
+		});
+	}
+	signIn() {
+		this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then((a) => {
+			console.log(a);
+			// this.shared.openSnackBar(a);
+		}, err => {
+			this.shared.openDurationSnackbar(`Error: ${err.message}`, 4000);
+		})
+	}
 }
