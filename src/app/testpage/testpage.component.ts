@@ -42,7 +42,8 @@ export class TestpageComponent {
 		this.shared.openSnackBar({ msg: "I'm a duration snackbar!", additionalOpts: { duration: this.duration } });
 	}
 	snackBarWithResult() {
-		this.shared.openActionSnackBar({ msg: "I'm a snackbar with an action!", action: this.action }).subscribe(_ => {
+		let snackBarRef = this.shared.openSnackBarWithRef({ msg: "I'm a snackbar with an action!", action: this.action });
+		snackBarRef.onAction().subscribe(_ => {
 			this.shared.openAlertDialog({ msg: `You clicked on the "${this.action}" button.` });
 		});
 	}
