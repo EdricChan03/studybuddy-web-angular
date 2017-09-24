@@ -16,6 +16,7 @@ export class Shared {
 	/**
 	 * Opens a snackbar with the specified params and a return of the snackbar's ref (for component)
 	 * @param {SnackBarConfig} opts The options of the snackbar
+	 * @returns {MdSnackBarRef<any>}
 	 */
 	public openSnackBarComponent(opts: SnackBarConfig): MdSnackBarRef<any> {
 		return this.handleSnackBarWithComponent(opts);
@@ -23,6 +24,7 @@ export class Shared {
 	/**
 	 * Opens a snackbar with the specified params and a return of the snackbar's ref (not for component)
 	 * @param {SnackBarConfig} opts The options of the snackbar
+	 * @returns {MdSnackBar<SimpleSnackBar>}
 	 */
 	public openSnackBarWithRef(opts: SnackBarConfig): MdSnackBarRef<SimpleSnackBar> {
 		return this.handleSnackBarWithRef(opts);
@@ -80,6 +82,11 @@ export class Shared {
 			this.throwError("opts", "SnackBarConfig");
 		}
 	}
+	/**
+	 * Handles a snackbar with a component
+	 * @param {SnackBarConfig} opts The config for the snackbar
+	 * @returns {MdSnackbarRef<any>}
+	 */
 	private handleSnackBarWithComponent(opts: SnackBarConfig): MdSnackBarRef<any> {
 		if (opts) {
 			if (opts.additionalOpts) {
@@ -144,7 +151,7 @@ export class Shared {
 		}
 	}
 	/**
-	 * Throws an error
+	 * Throws an error with the specified parameters
 	 * @param {string} variable The variable that was not specified
 	 * @param {string} type The type of variable
 	 * @private
