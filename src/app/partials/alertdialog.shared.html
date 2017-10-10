@@ -1,7 +1,8 @@
-<h3 md-dialog-title>{{alertConfig.title ? alertConfig.title : 'Alert'}}</h3>
-<md-dialog-content fxLayout="column">
-	{{alertConfig.msg}}
-</md-dialog-content>
-<md-dialog-actions align="end">
-	<button md-button color="primary" (click)="close()">{{alertConfig.ok ? alertConfig.ok : 'Dismiss'}}</button>
-</md-dialog-actions>
+<h3 matDialogTitle>{{alertConfig.title ? alertConfig.title : 'Alert'}}</h3>
+<mat-dialog-content fxLayout="column" class="mat-typography">
+	<p class="mat-body" *ngIf="!alertConfig.isHtml">{{alertConfig.msg}}</p>
+	<span *ngIf="alertConfig.isHtml" [innerHTML]="alertConfig.msg"></span>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+	<button mat-button color="primary" (click)="close()">{{alertConfig.ok ? alertConfig.ok : 'Dismiss'}}</button>
+</mat-dialog-actions>

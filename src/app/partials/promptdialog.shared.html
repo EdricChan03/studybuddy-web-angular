@@ -1,11 +1,15 @@
-<h3 md-dialog-title>{{promptConfig.title ? promptConfig.title : 'Prompt'}}</h3>
-<md-dialog-content fxLayout="column">
-	{{promptConfig.msg}}
-	<md-form-field color="{{promptConfig.color ? promptConfig.color : 'primary'}}" style="width:100%">
-		<input mdInput [(ngModel)]="input" placeholder="{{promptConfig.placeholder}}" type="{{promptConfig.inputType ? promptConfig.inputType : 'text'}}">
-	</md-form-field>
-</md-dialog-content>
-<md-dialog-actions align="end">
-	<button md-button (click)="cancel()" color="primary">{{promptConfig.cancel ? promptConfig.cancel : 'Cancel'}}</button>
-	<button md-button (click)="ok()" color="primary">{{promptConfig.ok ? promptConfig.ok : 'OK'}}</button>
-</md-dialog-actions>
+<h3 matDialogTitle>{{promptConfig.title ? promptConfig.title : 'Prompt'}}</h3>
+<mat-dialog-content fxLayout="column" class="mat-typography">
+	<p class="mat-body" *ngIf="!promptConfig.isHtml">{{promptConfig.msg}}</p>
+	<span *ngIf="promptConfig.isHtml" [innerHTML]="promptConfig.msg"></span>
+	<form #form="ngForm">
+		<mat-form-field color="{{promptConfig.color ? promptConfig.color : 'primary'}}" style="width:100%">
+			<input matInput [(ngModel)]="input" placeholder="{{promptConfig.placeholder}}" type="{{promptConfig.inputType ? promptConfig.inputType : 'text'}}" required name="input">
+			<mat-error>This is required.</mat-error>
+		</mat-form-field>
+	</form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+	<button mat-button (click)="cancel()" color="primary">{{promptConfig.cancel ? promptConfig.cancel : 'Cancel'}}</button>
+	<button mat-button (click)="ok()" color="primary" [disabled]="form.invalid">{{promptConfig.ok ? promptConfig.ok : 'OK'}}</button>
+</mat-dialog-actions>

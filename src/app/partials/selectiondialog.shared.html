@@ -1,0 +1,12 @@
+<h3 matDialogTitle>{{selectionConfig.title ? selectionConfig.title : 'Select options from the list'}}</h3>
+<mat-dialog-content fxLayout="column" class="mat-typography">
+	<mat-selection-list #selection>
+		<mat-list-option *ngFor="let option of selectionConfig.options" [disabled]="option.disabled" [value]="option.value" [checkboxPosition]="option.checkboxPosition ? option.checkboxPosition : 'before'" [selected]="option.selected">
+			{{option.content}}
+		</mat-list-option>
+	</mat-selection-list>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+	<button mat-button color="primary" (click)="cancel()">{{selectionConfig.cancel ? selectionConfig.cancel : 'Cancel'}}</button>
+	<button mat-button color="primary" (click)="ok()" [disabled]="selection.selectedOptions.selected.length < 1">{{selectionConfig.ok ? selectionConfig.ok : 'OK'}}</button>
+</mat-dialog-actions>

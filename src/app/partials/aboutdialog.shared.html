@@ -1,0 +1,12 @@
+<h3 matDialogTitle>About</h3>
+<mat-dialog-content fxLayout="column" class="mat-typography">
+	<div fxLayout="row">
+		<img src="{{aboutConfig.appImg}}" alt="{{aboutConfig.appName}}">
+		<h3>{{aboutConfig.appName}}</h3>
+		<span>{{aboutConfig.version}}</span>
+	</div>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+	<button mat-button (click)="close()" color="primary">Close</button>
+</mat-dialog-actions>
