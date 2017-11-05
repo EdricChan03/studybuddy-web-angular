@@ -49,7 +49,7 @@ export class AppComponent {
 	isSignedIn = false;
 	signOut() {
 		this.afAuth.auth.signOut().then((res) => {
-			let snackbarRef = this.shared.openSnackBarWithRef({ msg: "Signed in with Google", action: "Sign out", additionalOpts: { duration: 4000 } });
+			let snackbarRef = this.shared.openSnackBarWithRef({ msg: "Signed out", action: "Undo", additionalOpts: { duration: 4000 } });
 			snackbarRef.onAction().subscribe(_ => {
 				this.signIn();
 			})
