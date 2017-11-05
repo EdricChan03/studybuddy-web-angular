@@ -534,3 +534,10 @@ export interface Todo {
 	 */
 	isDone?: boolean;
 }
+
+export const SHARED_DIALOGS = [
+	AlertDialog,
+	ConfirmDialog,
+	PromptDialog,
+	SelectionDialog
+];

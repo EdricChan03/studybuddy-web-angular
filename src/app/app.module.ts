@@ -1,10 +1,10 @@
+import { ResourcesComponent } from './resources/resources.component';
+import { TodoService, TodoDatabase, TodoDataSource } from './todo/todo.service';
 import { NewTodoDialog } from './newtodo/newtodo.component';
 import { MyMaterialModule } from './material.module';
 import {
 	Shared,
-	AlertDialog,
-	ConfirmDialog,
-	PromptDialog
+	SHARED_DIALOGS
 } from './shared';
 import { environment } from './../environments/environment';
 import { AppRouting } from './app.routing';
@@ -17,10 +17,9 @@ import { AppdownloadsComponent } from './appdownloads/appdownloads.component';
 import { TodoComponent } from './todo/todo.component';
 import { FormsModule } from '@angular/forms';
 import { AngularFireModule } from 'angularfire2';
-import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { TestpageComponent } from './testpage/testpage.component';
-
 
 @NgModule({
 	declarations: [
@@ -28,10 +27,9 @@ import { TestpageComponent } from './testpage/testpage.component';
 		AppdownloadsComponent,
 		TodoComponent,
 		TestpageComponent,
+		ResourcesComponent,
 		NewTodoDialog,
-		AlertDialog,
-		ConfirmDialog,
-		PromptDialog
+		SHARED_DIALOGS
 	],
 	imports: [
 		BrowserModule,
@@ -42,16 +40,17 @@ import { TestpageComponent } from './testpage/testpage.component';
 		FlexLayoutModule,
 		AngularFireModule.initializeApp(environment.firebase),
 		AngularFireAuthModule,
-		AngularFireDatabaseModule
+		AngularFirestoreModule.enablePersistence()
 	],
 	bootstrap: [AppComponent],
 	providers: [
-		Shared
+		Shared,
+		TodoService,
+		TodoDatabase,
+		TodoDataSource
 	],
 	entryComponents: [
-		AlertDialog,
-		PromptDialog,
-		ConfirmDialog,
+		SHARED_DIALOGS,
 		NewTodoDialog
 	]
 })
