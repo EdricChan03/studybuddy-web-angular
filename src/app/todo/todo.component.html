@@ -1,12 +1,62 @@
-<button md-raised-button color="primary" (click)="newTodo()">New Todo</button>
-<!-- <button md-raised-button (click)="getTodos()">Get todos</button> -->
-<md-list>
-	<md-list-item *ngFor="let todo of todos | async" (click)="null">
-		<h3 mdLine>{{todo.title}}</h3>
-		<p mdLine>{{todo.content}}</p>
-		<span mdLine><md-icon *ngIf="todo.dueDate" color="primary">assignment</md-icon><span *ngIf="todo.dueDate">Due date: {{todo.dueDate | date}}</span></span>
+<button mat-raised-button color="primary" (click)="newTodo()">New Todo</button>
+<mat-checkbox [(ngModel)]="todoTable">Show todos as table</mat-checkbox>
+<mat-list *ngIf="!todoTable">
+	<mat-list-item *ngFor="let todo of todos | async" (click)="null">
+		<h3 matLine>{{todo.title}}</h3>
+		<p matLine>{{todo.content}}</p>
+		<span matLine><mat-icon *ngIf="todo.dueDate" color="primary">assignment</mat-icon><span *ngIf="todo.dueDate">Due date: {{todo.dueDate | date}}</span></span>
 		<span fxFlex></span>
-		<button md-icon-button mdTooltip="Remove todo" (click)="removeTodo(todo.$key)"><md-icon>delete</md-icon></button>
-		<md-divider></md-divider>
-	</md-list-item>
-</md-list>
+		<button mat-icon-button matTooltip="Remove todo" (click)="removeTodo(todo.$key)"><mat-icon>delete</mat-icon></button>
+		<mat-divider></mat-divider>
+	</mat-list-item>
+</mat-list>
+<mat-table #table [dataSource]="dataSource" *ngIf="todoTable">
+	<ng-container matColumnDef="title">
+		<mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
+		<mat-cell *matCellDef="let row"> {{row.title}} </mat-cell>
+	</ng-container>
+	<ng-container matColumnDef="content">
+		<mat-header-cell *matHeaderCellDef> Content </mat-header-cell>
+		<mat-cell *matCellDef="let row"> {{row.content}} </mat-cell>
+	</ng-container>
+	<ng-container matColumnDef="dueDate">
+		<mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
+		<mat-cell *matCellDef="let row"> {{row.dueDate}} </mat-cell>
+	</ng-container>
+	<ng-container matColumnDef="tags">
+		<mat-header-cell *matHeaderCellDef> Tags </mat-header-cell>
+		<mat-cell *matCellDef="let row"> {{row.tags}} </mat-cell>
+	</ng-container>
+	<ng-container matColumnDef="importance">
+		<mat-header-cell *matHeaderCellDef> Importance </mat-header-cell>
+		<mat-cell *matCellDef="let row"> {{row.importance}} </mat-cell>
+	</ng-container>
+	<ng-container matColumnDef="type">
+		<mat-header-cell *matHeaderCellDef> School subject type </mat-header-cell>
+		<mat-cell *matCellDef="let row"> {{row.type}} </mat-cell>
+	</ng-container>
+
+	<!-- Delete Buttons Column -->
+	<ng-container matColumnDef="delete">
+		<mat-header-cell *matHeaderCellDef> Delete / Edit </mat-header-cell>
+		<mat-cell *matCellDef="let row">
+			<button (click)="deleteMember(row.$key)">Delete</button>
+			<button (click)="goToDetailPage(row.$key)">Edit</button>
+		</mat-cell>
+	</ng-container>
+
+	<!-- Database key Column -->
+
+	<ng-container matColumnDef="key">
+		<mat-header-cell *matHeaderCellDef class="hiddenField"> Key </mat-header-cell>
+		<mat-cell *matCellDef="let row" class="hiddenField"> {{row.$key}} </mat-cell>
+	</ng-container>
+
+
+	<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+	<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+
+</mat-table>
+<mat-paginator #paginator [length]="dataLength?.length" [pageIndex]="0" [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]">
+</mat-paginator>
