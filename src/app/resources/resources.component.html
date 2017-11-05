@@ -1,0 +1,22 @@
+<mat-card>
+	<mat-card-title>Word of the Day</mat-card-title>
+	<mat-card-content>
+		<p>Today's word: {{(wordOfDay)?.word}}</p>
+		<p>Definitions:
+			<ol>
+				<li *ngFor="let def of {{(wordOfDay)?.definitions}}">
+					<p>{{(def)?.text}}</p>
+					<p *ngIf="def.note">Note: {{(def)?.note}}</p>
+					<span>({{(def)?.partOfSpeech}})</span>
+				</li>
+			</ol>
+		</p>
+		<p>Examples:</p>
+		<ol>
+			<li *ngFor="let example of {(wordOfDay)?.examples}}">
+				<span>{{(example)?.title}}</span>
+				<p>{{(example)?.text}}</p>
+			</li>
+		</ol>
+	</mat-card-content>
+</mat-card>

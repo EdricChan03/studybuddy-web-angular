@@ -1,3 +1,4 @@
+import { ResourcesComponent } from './resources/resources.component';
 import { TestpageComponent } from './testpage/testpage.component';
 import { TodoComponent } from './todo/todo.component';
 import { AppdownloadsComponent } from './appdownloads/appdownloads.component';
@@ -9,6 +10,7 @@ export const AppRoutes: Routes = [
 	{ path: 'downloads', component: AppdownloadsComponent },
 	{ path: 'todo', component: TodoComponent },
 	{ path: 'test', component: TestpageComponent },
+	{ path: 'resources', component: ResourcesComponent },
 	{ path: '**', redirectTo: 'todo' }
 ]
 
