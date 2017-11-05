@@ -276,7 +276,7 @@ export class AlertDialog implements OnInit {
 }
 @Component({
 	selector: 'confirm-dialog',
-	templateUrl: './partials/confirMatialog.shared.html'
+	templateUrl: './partials/confirmdialog.shared.html'
 })
 export class ConfirmDialog implements OnInit {
 	constructor(private dialogRef: MatDialogRef<ConfirmDialog>) {
