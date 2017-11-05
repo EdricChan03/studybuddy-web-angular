@@ -1,19 +1,20 @@
-import { Shared } from './../shared';
+import { Shared, SelectionDialogOptions } from './../shared';
 import { Component } from '@angular/core';
-import { MdSnackBarVerticalPosition, MdSnackBarHorizontalPosition } from '@angular/material';
+import { MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition } from '@angular/material/snack-bar';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
 	selector: 'app-testpage',
 	templateUrl: './testpage.component.html'
 })
 export class TestpageComponent {
-	constructor(private shared: Shared) { }
+	constructor(private shared: Shared, private dom: DomSanitizer) { }
 	duration: number = 1000;
 	action: string = "Undo";
 	verticalPos = ["top", "bottom"];
 	horizontalPos = ["start", "center", "end", "left", "right"];
-	verticalPosition: MdSnackBarVerticalPosition = "bottom";
-	horizontalPosition: MdSnackBarHorizontalPosition = "end";
+	verticalPosition: MatSnackBarVerticalPosition = "bottom";
+	horizontalPosition: MatSnackBarHorizontalPosition = "end";
 	extraClass: string;
 	alertDialog() {
 		this.shared.openAlertDialog({ msg: "I'm an alert message made with code!", ok: "Got it" });
@@ -27,6 +28,22 @@ export class TestpageComponent {
 		this.shared.openPromptDialog({ msg: "I'm a prompt message prepopulated with a value!", cancel: "Nah", ok: "Yeah", inputType: "text", placeholder: "A value goes here", value: "Something here", color: "accent" }).afterClosed().subscribe((res) => {
 			document.getElementById('result').innerText = `Result: ${res}`;
 		});
+	}
+	selectionDialog() {
+		let tempVar = [];
+		for (var i = 0; i < 10; i++) {
+			if (i == 1) {
+				tempVar.push({ content: "Item 1", disabled: true, value: "item-1" });
+			} else if (i == 8) {
+				tempVar.push({ content: "Item 8", value: "item-8", selected: true });
+			} else {
+				tempVar.push({ content: `Item ${i}`, value: `item-${i}` });
+			}
+		}
+		let dialogRef = this.shared.openSelectionDialog({ msg: "Select from tons of options", ok: "Yeah", cancel: "Nah", options: tempVar });
+		dialogRef.afterClosed().subscribe((result) => {
+			this.shared.openAlertDialog({msg: this.dom.bypassSecurityTrustHtml("<pre><code>{{result | json}}</code></pre>"), isHtml: true});
+		})
 	}
 	closeSnackBar() {
 		this.shared.closeSnackbar();

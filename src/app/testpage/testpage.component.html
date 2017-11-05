@@ -1,34 +1,39 @@
-
-<p class="mat-body">Welcome to the test page! This page is used to test the shared functions.</p>
-<button md-button (click)="alertDialog()">Alert Dialog</button>
-<button md-button (click)="confirmDialog()">Confirm Dialog</button>
-<button md-button (click)="promptDialog()">Prompt Dialog</button>
+<p class="mat-body">
+	Welcome to the test page! This page is used to test the shared functions.</p>
+<button mat-button (click)="alertDialog()">Alert Dialog</button>
+<button mat-button (click)="confirmDialog()">Confirm Dialog</button>
+<button mat-button (click)="promptDialog()">Prompt Dialog</button>
+<button mat-button (click)="selectionDialog()">Selection Dialog</button>
 <div id="result"></div>
-<md-divider></md-divider>
+<mat-divider></mat-divider>
 <fieldset fxLayout="column">
 	<legend>Snackbar properties</legend>
-	<md-form-field>
-		<input mdInput type="number" [(ngModel)]="duration" placeholder="Duration of snackbar">
-	</md-form-field>
-	<md-form-field>
-		<input mdInput [(ngModel)]="action" placeholder="Action of snackbar">
-	</md-form-field>
+	<mat-form-field>
+		<input matInput type="number" [(ngModel)]="duration" placeholder="Duration of snackbar">
+	</mat-form-field>
+	<mat-form-field>
+		<input matInput [(ngModel)]="action" placeholder="Action of snackbar">
+	</mat-form-field>
 	<h3>Vertical Position:</h3>
-	<md-radio-group [(ngModel)]="verticalPosition" fxLayout="column">
-		<md-radio-button *ngFor="let opt of verticalPos" [value]="opt">{{opt}}</md-radio-button>
-	</md-radio-group>
+	<mat-radio-group [(ngModel)]="verticalPosition" fxLayout="column">
+		<mat-radio-button *ngFor="let opt of verticalPos" [value]="opt">{{opt}}</mat-radio-button>
+	</mat-radio-group>
 	<h3>Horizontal Position:</h3>
-	<md-radio-group [(ngModel)]="horizontalPosition" fxLayout="column">
-		<md-radio-button *ngFor="let opt of horizontalPos" [value]="opt">{{opt}}</md-radio-button>
-	</md-radio-group>
+	<mat-radio-group [(ngModel)]="horizontalPosition" fxLayout="column">
+		<mat-radio-button *ngFor="let opt of horizontalPos" [value]="opt">{{opt}}</mat-radio-button>
+	</mat-radio-group>
 	<h3>Extra classes</h3>
-	<md-select [(ngModel)]="extraClass" style="width:200px">
-		<md-option value="red"><code>red</code></md-option>
-		<md-option value="party"><code>party</code></md-option>
-	</md-select>
+	<mat-select [(ngModel)]="extraClass" style="width:200px">
+		<mat-option value="red">
+			<code>red</code>
+		</mat-option>
+		<mat-option value="party">
+			<code>party</code>
+		</mat-option>
+	</mat-select>
 </fieldset>
 <br>
-<button md-button (click)="closeSnackBar()">Close all snackbars</button>
-<button md-button (click)="snackBar()">Normal Snackbar</button>
-<button md-button (click)="durationSnackBar()">Duration Snackbar</button>
-<button md-button (click)="snackBarWithResult()">Snackbar with result</button>
+<button mat-button (click)="closeSnackBar()">Close all snackbars</button>
+<button mat-button (click)="snackBar()">Normal Snackbar</button>
+<button mat-button (click)="durationSnackBar()">Duration Snackbar</button>
+<button mat-button (click)="snackBarWithResult()">Snackbar with result</button>
