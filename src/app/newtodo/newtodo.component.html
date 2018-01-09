@@ -1,22 +1,23 @@
-<h3 matDialogTitle>New Todo</h3>
+<h2 matDialogTitle>New Todo</h2>
 <div mat-dialog-content>
 	<form #addForm="ngForm">
 		<mat-form-field class="app-form-field">
-			<input matInput [(ngModel)]="add.title" placeholder="Title" name="title" required>
+			<input matInput [(ngModel)]="newTodo.title" placeholder="Title" name="title" required>
 			<mat-error>This is required</mat-error>
 		</mat-form-field>
 		<mat-form-field class="app-form-field">
-			<textarea name="content" cols="3" matInput [(ngModel)]="add.content" placeholder="Content" required></textarea>
+			<textarea name="content" cols="3" matInput [(ngModel)]="newTodo.content" placeholder="Content" required></textarea>
 			<mat-error>This is required</mat-error>
 		</mat-form-field>
 		<mat-form-field class="app-form-field">
-			<input matInput [matDatepicker]="dueDatePicker" placeholder="Due date" [(ngModel)]="add.dueDate" name="dueDate">
+			<input matInput [matDatepicker]="dueDatePicker" placeholder="Due date" [(ngModel)]="newTodo.dueDate" name="dueDate">
 			<mat-datepicker #dueDatePicker></mat-datepicker>
 			<mat-datepicker-toggle matSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
 		</mat-form-field>
 	</form>
 </div>
 <div mat-dialog-actions align="end">
-		<button mat-button (click)="cancel()" color="primary">Cancel</button>
-		<button mat-button (click)="addTodo(add)" color="primary" [disabled]="addForm.invalid">Add</button>
+	<button mat-button (click)="cancel()" color="primary">Cancel</button>
+	<button mat-button (click)="resetForm()" color="warn">Reset</button>
+	<button mat-button (click)="addTodo()" color="primary" [disabled]="addForm.invalid">Add</button>
 </div>

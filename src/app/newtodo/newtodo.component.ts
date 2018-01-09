@@ -1,6 +1,8 @@
+import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
 import { MatDialogRef } from '@angular/material/dialog';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { Todo, Shared } from './../shared';
+import { SharedService } from '../shared.service';
+import { TodoItem } from '../interfaces';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -8,33 +10,42 @@ import { Component, OnInit } from '@angular/core';
 	templateUrl: './newtodo.component.html'
 })
 export class NewTodoDialog {
-	add: Todo = {
-		"title": "",
-		"content": ""
+	newTodo: TodoItem = {
+		'title': '',
+		'content': ''
+	};
+	todoCollection: AngularFirestoreCollection<TodoItem>;
+	constructor(
+		private shared: SharedService,
+		private afAuth: AngularFireAuth,
+		private dialogRef: MatDialogRef<NewTodoDialog>,
+		private fs: AngularFirestore) {
+		if (afAuth.auth.currentUser) {
+			this.todoCollection = this.fs.collection(`users/${afAuth.auth.currentUser.uid}/todos`);
+		} else {
+			// User isn't signed in! Add todo stuff to disable dialog
+			console.warn('Current user is logged out. Please login before continuing.');
+		}
 	}
-	currentUser: string;
-	constructor(private shared: Shared, private afAuth: AngularFireAuth, private dialogRef: MatDialogRef<NewTodoDialog>) {
-		afAuth.auth.onAuthStateChanged((user) => {
-			if (user) {
-				console.log(user);
-				this.currentUser = user.uid;
-			} else {
-			}
-		})
+	resetForm() {
+		this.newTodo = {
+			'title': '',
+			'content': ''
+		};
 	}
-
 	cancel() {
 		this.dialogRef.close();
 	}
-	addTodo(add: Todo) {
-		if (add.dueDate) {
-			add.dueDate = new Date(add.dueDate).getTime();
+	addTodo() {
+		if (this.newTodo.dueDate) {
+			this.newTodo.dueDate = new Date(this.newTodo.dueDate);
 		}
-		// this.shared.newTodo(add).then(_ => {
-		// 	this.dialogRef.close();
-		// }, (a) => {
-		// 	this.shared.openSnackBar({msg: `Error: ${a}`, additionalOpts: {duration: 4000}});
-		// });
+		this.todoCollection.add(this.newTodo).then(result => {
+			console.log(`Successfully written data with result: ${result}`);
+		}, error => {
+			console.error(`An error occured: ${error.message}`);
+		});
+		this.dialogRef.close();
 	}
 
 }
