@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -14,13 +15,14 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatNativeDateModule } from '@angular/material/core';
 import {
-	CdkTableModule
-} from '@angular/cdk/table';
+	LayoutModule
+} from '@angular/cdk/layout';
 const MATERIAL_MODULES = [
 	MatButtonModule,
 	MatToolbarModule,
@@ -29,6 +31,7 @@ const MATERIAL_MODULES = [
 	MatListModule,
 	MatMenuModule,
 	MatCardModule,
+	MatChipsModule,
 	MatFormFieldModule,
 	MatInputModule,
 	MatDatepickerModule,
@@ -40,11 +43,12 @@ const MATERIAL_MODULES = [
 	MatSelectModule,
 	MatCheckboxModule,
 	MatTableModule,
-	MatPaginatorModule
+	MatPaginatorModule,
+	MatProgressSpinnerModule
 ];
 const CDK_MODULES = [
-	CdkTableModule
-]
+	LayoutModule
+];
 @NgModule({
 	imports: [
 		MATERIAL_MODULES,
@@ -55,4 +59,4 @@ const CDK_MODULES = [
 		CDK_MODULES
 	]
 })
-export class MyMaterialModule { }
+export class MaterialModule { }

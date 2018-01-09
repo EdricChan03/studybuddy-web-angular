@@ -1,12 +1,9 @@
 import { ResourcesComponent } from './resources/resources.component';
 import { TodoService, TodoDatabase, TodoDataSource } from './todo/todo.service';
 import { NewTodoDialog } from './newtodo/newtodo.component';
-import { MyMaterialModule } from './material.module';
-import {
-	Shared,
-	SHARED_DIALOGS
-} from './shared';
-import { environment } from './../environments/environment';
+import { MaterialModule } from './material.module';
+import { SharedModule } from './shared.service';
+import { environment } from '../environments/environment';
 import { AppRouting } from './app.routing';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -20,6 +17,9 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { TestpageComponent } from './testpage/testpage.component';
+import { HttpClientModule } from '@angular/common/http';
+import 'hammerjs';
+import { SettingsComponent } from './settings/settings.component';
 
 @NgModule({
 	declarations: [
@@ -29,28 +29,29 @@ import { TestpageComponent } from './testpage/testpage.component';
 		TestpageComponent,
 		ResourcesComponent,
 		NewTodoDialog,
-		SHARED_DIALOGS
+		SettingsComponent
 	],
 	imports: [
 		BrowserModule,
 		BrowserAnimationsModule,
 		FormsModule,
-		MyMaterialModule,
+		MaterialModule,
 		AppRouting,
+		HttpClientModule,
 		FlexLayoutModule,
 		AngularFireModule.initializeApp(environment.firebase),
 		AngularFireAuthModule,
-		AngularFirestoreModule.enablePersistence()
+		AngularFirestoreModule.enablePersistence(),
+		SharedModule
 	],
 	bootstrap: [AppComponent],
 	providers: [
-		Shared,
+		SharedService,
 		TodoService,
 		TodoDatabase,
 		TodoDataSource
 	],
 	entryComponents: [
-		SHARED_DIALOGS,
 		NewTodoDialog
 	]
 })
