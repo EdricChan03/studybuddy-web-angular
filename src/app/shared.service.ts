@@ -1,40 +1,62 @@
-import { AngularFirestore } from 'angularfire2/firestore';
-import { AngularFireAuth } from 'angularfire2/auth';
-import { AngularFireDatabase } from 'angularfire2/database';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Observable } from 'rxjs/Observable';
-import { Injectable, Component, OnInit, ViewChild, DoCheck } from '@angular/core';
-import { MatSnackBarConfig, MatSnackBar, SimpleSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
-import { MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
-import { MatSelectionList } from '@angular/material/list';
+import { Injectable, Component, OnInit, ViewChild, NgModule } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+
+import {
+	MatSnackBarConfig,
+	MatSnackBar,
+	SimpleSnackBar,
+	MatSnackBarRef,
+	MatSnackBarModule
+} from '@angular/material/snack-bar';
+import {
+	MatDialog,
+	MatDialogRef,
+	MatDialogConfig,
+	MatDialogModule
+} from '@angular/material/dialog';
+import { MatSelectionList, MatListModule } from '@angular/material/list';
 import { ComponentType } from '@angular/cdk/portal';
 import { Title, SafeHtml } from '@angular/platform-browser';
-import * as firebase from 'firebase';
+import { BrowserModule } from '@angular/platform-browser';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Injectable()
-export class Shared {
-	private currentUser: string;
-	constructor(private snackbar: MatSnackBar, private dialog: MatDialog, private afDatabase: AngularFireDatabase, private title: Title, private afAuth: AngularFireAuth, private fs: AngularFirestore) {
-		afAuth.auth.onAuthStateChanged((user) => {
-			if (user) {
-				console.log(user);
-				this.currentUser = user.uid;
-			} else {
-			}
-		})
+export class SharedService {
+	constructor(
+		private snackbar: MatSnackBar,
+		private dialog: MatDialog,
+		private title: Title,
+		private breakpointObserver: BreakpointObserver
+	) { }
+	// Getters and setters
+	/**
+	 * Getter to check if the user is online
+	 * @returns {boolean}
+	 */
+	get isOnline(): boolean {
+		return navigator.onLine;
 	}
 	/**
-	 * Opens a snackbar with the specified params and no return
-	 * @param {SnackBarConfig} opts The options of the snackbar
-	 */
-	public openSnackBar(opts: SnackBarConfig) {
-		this.handleSnackBar(opts);
+ * Detects if the user is using a mobile device
+ * @returns {boolean}
+ */
+	get isMobile(): boolean {
+		if (this.breakpointObserver.isMatched('(max-width: 599px)')) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	/**
 	 * Opens a snackbar with the specified params and a return of the snackbar's ref (for component)
 	 * @param {SnackBarConfig} opts The options of the snackbar
 	 * @returns {MatSnackBarRef<any>}
 	 */
-	public openSnackBarComponent(opts: SnackBarConfig): MatSnackBarRef<any> {
+	openSnackBarComponent(opts: SnackBarConfig): MatSnackBarRef<any> {
 		return this.handleSnackBarWithComponent(opts);
 	}
 	/**
@@ -42,40 +64,8 @@ export class Shared {
 	 * @param {SnackBarConfig} opts The options of the snackbar
 	 * @returns {MatSnackBar<SimpleSnackBar>}
 	 */
-	public openSnackBarWithRef(opts: SnackBarConfig): MatSnackBarRef<SimpleSnackBar> {
-		return this.handleSnackBarWithRef(opts);
-	}
-	/**
-	 * Handling of the snackBar
-	 * @param {SnackBarConfig} opts The snackBar config
-	 * @private
-	 */
-	private handleSnackBar(opts: SnackBarConfig) {
-		if (opts) {
-			if (opts.component) {
-				if (opts.additionalOpts) {
-					this.snackbar.openFromComponent(opts.component, opts.additionalOpts);
-				} else {
-					this.snackbar.openFromComponent(opts.component);
-				}
-			} else {
-				if (opts.action) {
-					if (opts.additionalOpts) {
-						this.snackbar.open(opts.msg, opts.action, opts.additionalOpts);
-					} else {
-						this.snackbar.open(opts.msg, opts.action);
-					}
-				} else {
-					if (opts.additionalOpts) {
-						this.snackbar.open(opts.msg, undefined, opts.additionalOpts);
-					} else {
-						this.snackbar.open(opts.msg);
-					}
-				}
-			}
-		} else {
-			this.throwError("message", "string");
-		}
+	openSnackBar(opts: SnackBarConfig): MatSnackBarRef<SimpleSnackBar> {
+		return this.handleSnackBar(opts);
 	}
 	/**
 	 * Handles a snackbar with a snackbarref if the developer needs a return
@@ -83,7 +73,7 @@ export class Shared {
 	 * @returns {MatSnackBarRef<SimpleSnackBar>}
 	 * @private
 	 */
-	private handleSnackBarWithRef(opts: SnackBarConfig): MatSnackBarRef<SimpleSnackBar> {
+	private handleSnackBar(opts: SnackBarConfig): MatSnackBarRef<SimpleSnackBar> {
 		if (opts) {
 			if (opts.action) {
 				if (opts.additionalOpts) {
@@ -92,10 +82,10 @@ export class Shared {
 					return this.snackbar.open(opts.msg, opts.action);
 				}
 			} else {
-				this.throwError("opts.action", "string");
+				this.throwError('opts.action', 'string');
 			}
 		} else {
-			this.throwError("opts", "SnackBarConfig");
+			this.throwError('opts', 'SnackBarConfig');
 		}
 	}
 	/**
@@ -112,16 +102,16 @@ export class Shared {
 					return this.snackbar.openFromComponent(opts.component);
 				}
 			} else {
-				this.throwError("opts.additionalOpts", "MatSnackBarConfig");
+				this.throwError('opts.additionalOpts', 'MatSnackBarConfig');
 			}
 		} else {
-			this.throwError("opts", "SnackBarConfig");
+			this.throwError('opts', 'SnackBarConfig');
 		}
 	}
 	/**
 	 * Closes the current snackbar
 	 */
-	public closeSnackbar() {
+	closeSnackbar() {
 		this.snackbar.dismiss();
 	}
 	/**
@@ -129,13 +119,13 @@ export class Shared {
 	 * @param {AlertDialogConfig} opts The options for the dialog
 	 * @returns {MatDialogRef<AlertDialog>}
 	 */
-	public openAlertDialog(opts: AlertDialogConfig): MatDialogRef<AlertDialog> {
+	openAlertDialog(opts: AlertDialogConfig): MatDialogRef<AlertDialog> {
 		if (opts) {
-			let dialogRef = this.dialog.open(AlertDialog);
+			const dialogRef = this.dialog.open(AlertDialog);
 			dialogRef.componentInstance.alertConfig = opts;
 			return dialogRef;
 		} else {
-			this.throwError("opts", "AlertDialogConfig");
+			this.throwError('opts', 'AlertDialogConfig');
 		}
 	}
 	/**
@@ -143,13 +133,13 @@ export class Shared {
 	 * @param {ConfirMatialogConfig} opts The options for the dialog
 	 * @return {MatDialogRef<ConfirMatialog>}
 	 */
-	public openConfirmDialog(opts: ConfirmDialogConfig): MatDialogRef<ConfirmDialog> {
+	openConfirmDialog(opts: ConfirmDialogConfig): MatDialogRef<ConfirmDialog> {
 		if (opts) {
-			let dialogRef = this.dialog.open(ConfirmDialog);
+			const dialogRef = this.dialog.open(ConfirmDialog);
 			dialogRef.componentInstance.confirmConfig = opts;
 			return dialogRef;
 		} else {
-			this.throwError("opts", "ConfirmDialogConfig");
+			this.throwError('opts', 'ConfirmDialogConfig');
 		}
 	}
 	/**
@@ -157,13 +147,13 @@ export class Shared {
 	 * @param {PromptDialogConfig} opts The options for the dialog
 	 * @return {MatDialogRef<PromptDialog>}
 	 */
-	public openPromptDialog(opts: PromptDialogConfig): MatDialogRef<PromptDialog> {
+	openPromptDialog(opts: PromptDialogConfig): MatDialogRef<PromptDialog> {
 		if (opts) {
-			let dialogRef = this.dialog.open(PromptDialog);
+			const dialogRef = this.dialog.open(PromptDialog);
 			dialogRef.componentInstance.promptConfig = opts;
 			return dialogRef;
 		} else {
-			this.throwError("opts", "PromptDialogConfig");
+			this.throwError('opts', 'PromptDialogConfig');
 		}
 	}
 	/**
@@ -171,26 +161,26 @@ export class Shared {
 	 * @param {SelectionDialogConfig} opts The options for the dialog
 	 * @returns {MatDialogRef<SelectionDialog>}
 	 */
-	public openSelectionDialog(opts: SelectionDialogConfig): MatDialogRef<SelectionDialog> {
+	openSelectionDialog(opts: SelectionDialogConfig): MatDialogRef<SelectionDialog> {
 		if (opts) {
-			let dialogRef = this.dialog.open(SelectionDialog, { disableClose: true, panelClass: "selection-dialog" });
+			const dialogRef = this.dialog.open(SelectionDialog, { disableClose: true, panelClass: 'selection-dialog' });
 			dialogRef.componentInstance.selectionConfig = opts;
 			return dialogRef;
 		} else {
-			this.throwError("opts", "SelectionDialogConfig");
+			this.throwError('opts', 'SelectionDialogConfig');
 		}
 	}
 	/**
 	 * Gets all currently opened dialogs
 	 * @returns {MatDialogRef<any>[]}
 	 */
-	public getDialogs(): MatDialogRef<any>[] {
+	getDialogs(): MatDialogRef<any>[] {
 		return this.dialog.openDialogs;
 	}
 	/**
 	 * Closes all dialogs currently opened
 	 */
-	public closeAllDialogs() {
+	closeAllDialogs() {
 		this.dialog.closeAll();
 	}
 	/**
@@ -198,14 +188,14 @@ export class Shared {
 	 * @param {string} id The ID of the dialog
 	 * @returns {MatDialogRef<any>}
 	 */
-	public getDialogById(id: string): MatDialogRef<any> {
+	getDialogById(id: string): MatDialogRef<any> {
 		return this.dialog.getDialogById(id);
 	}
 	/**
 	 * Observable for after all dialogs have been closed
 	 * @returns {Observable<void>}
 	 */
-	public afterAllClosed(): Observable<void> {
+	afterAllClosed(): Observable<void> {
 		return this.dialog.afterAllClosed;
 	}
 	/**
@@ -215,43 +205,20 @@ export class Shared {
 	 * @private
 	 */
 	private throwError(variable: string, type: string) {
+		// tslint:disable-next-line:max-line-length
 		throw new Error(`${variable} was not specified. Please ensure that the ${variable} property is specified and that it is of type ${type}.`);
-	}
-	/**
-	 * Adds a new todo
-	 * @param {string} userId The user's id
-	 * @param {Todo} todo The todo object
-	 * @returns {firebase.database.ThenableReference}
-	 * @todo Convert to Firestore
-	 */
-	public newTodo(todo: Todo) {
-		this.fs.collection(`users/${this.currentUser}`).add({
-			todo
-		})
-			.then((result => {
-				console.log(`Document was written at ${result}`);
-			}))
-	}
-	/**
-	 * Gets the user's todos
-	 * @returns {FirebaseListObservable<Todo[]>}
-	 * @todo Convert to Firestore
-	 */
-	public getTodos(): Observable<any> {
-		return this.fs.collection(`users/${this.currentUser}`).valueChanges();
-		// return this.afDatabase.list(`users/${this.currentUser}/todo`).valueChanges();
 	}
 	/**
 	 * Sets the document's title
 	 * @param {string} title The title of the document to set
 	 */
-	public setTitle(title: string) {
+	setTitle(title: string) {
 		this.title.setTitle(title);
 	}
 	/**
 	 * Returns the document's title
 	 */
-	public getTitle(): string {
+	getTitle(): string {
 		return this.title.getTitle();
 	}
 }
@@ -259,7 +226,16 @@ export class Shared {
 
 @Component({
 	selector: 'alert-dialog',
-	templateUrl: './partials/alertdialog.shared.html'
+	template: `
+	<h2 matDialogTitle>{{alertConfig.title ? alertConfig.title : 'Alert'}}</h2>
+	<mat-dialog-content fxLayout="column" class="mat-typography">
+		<p class="mat-body" *ngIf="!alertConfig.isHtml">{{alertConfig.msg}}</p>
+		<span *ngIf="alertConfig.isHtml" [innerHTML]="alertConfig.msg"></span>
+	</mat-dialog-content>
+	<mat-dialog-actions align="end">
+		<button mat-button color="primary" (click)="close()">{{alertConfig.ok ? alertConfig.ok : 'Dismiss'}}</button>
+	</mat-dialog-actions>
+	`
 })
 export class AlertDialog implements OnInit {
 	constructor(private dialogRef: MatDialogRef<AlertDialog>) {
@@ -276,7 +252,17 @@ export class AlertDialog implements OnInit {
 }
 @Component({
 	selector: 'confirm-dialog',
-	templateUrl: './partials/confirmdialog.shared.html'
+	template: `
+	<h2 matDialogTitle>{{confirmConfig.title ? confirmConfig.title : 'Confirm'}}</h2>
+	<mat-dialog-content fxLayout="column" class="mat-typography">
+		<p class="mat-body" *ngIf="!confirmConfig.isHtml">{{confirmConfig.msg}}</p>
+		<span *ngIf="confirmConfig.isHtml" [innerHTML]="confirmConfig.msg"></span>
+	</mat-dialog-content>
+	<mat-dialog-actions align="end">
+		<button mat-button (click)="cancel()" color="primary">{{confirmConfig.cancel ? confirmConfig.cancel : 'Cancel'}}</button>
+		<button mat-button (click)="ok()" color="primary">{{confirmConfig.ok ? confirmConfig.ok : 'OK'}}</button>
+	</mat-dialog-actions>
+	`
 })
 export class ConfirmDialog implements OnInit {
 	constructor(private dialogRef: MatDialogRef<ConfirmDialog>) {
@@ -284,10 +270,10 @@ export class ConfirmDialog implements OnInit {
 	}
 	confirmConfig: ConfirmDialogConfig;
 	cancel() {
-		this.dialogRef.close("cancel");
+		this.dialogRef.close('cancel');
 	}
 	ok() {
-		this.dialogRef.close("ok");
+		this.dialogRef.close('ok');
 	}
 	ngOnInit() {
 		if (this.confirmConfig.disableClose) {
@@ -297,15 +283,31 @@ export class ConfirmDialog implements OnInit {
 }
 @Component({
 	selector: 'prompt-dialog',
-	templateUrl: './partials/promptdialog.shared.html'
+	template: `
+	<h2 matDialogTitle>{{promptConfig.title ? promptConfig.title : 'Prompt'}}</h2>
+	<mat-dialog-content fxLayout="column" class="mat-typography">
+		<p class="mat-body" *ngIf="!promptConfig.isHtml">{{promptConfig.msg}}</p>
+		<span *ngIf="promptConfig.isHtml" [innerHTML]="promptConfig.msg"></span>
+		<form #form="ngForm">
+			<mat-form-field color="{{promptConfig.color ? promptConfig.color : 'primary'}}" style="width:100%">
+				<input matInput [(ngModel)]="input" placeholder="{{promptConfig.placeholder}}" type="{{promptConfig.inputType ? promptConfig.inputType : 'text'}}" required name="input">
+				<mat-error>This is required.</mat-error>
+			</mat-form-field>
+		</form>
+	</mat-dialog-content>
+	<mat-dialog-actions align="end">
+		<button mat-button (click)="cancel()" color="primary">{{promptConfig.cancel ? promptConfig.cancel : 'Cancel'}}</button>
+		<button mat-button (click)="ok()" color="primary" [disabled]="form.invalid">{{promptConfig.ok ? promptConfig.ok : 'OK'}}</button>
+	</mat-dialog-actions>
+	`
 })
 export class PromptDialog implements OnInit {
 	constructor(private dialogRef: MatDialogRef<PromptDialog>) {
 	}
 	promptConfig: PromptDialogConfig;
-	input: string|number;
+	input: string | number;
 	cancel() {
-		this.dialogRef.close("cancel");
+		this.dialogRef.close('cancel');
 	}
 	ok() {
 		this.dialogRef.close(this.input);
@@ -321,9 +323,22 @@ export class PromptDialog implements OnInit {
 }
 @Component({
 	selector: 'selection-dialog',
-	templateUrl: './partials/selectiondialog.shared.html'
+	template: `
+	<h2 matDialogTitle>{{selectionConfig.title ? selectionConfig.title : 'Select options from the list'}}</h2>
+	<mat-dialog-content fxLayout="column" class="mat-typography">
+		<mat-selection-list #selection>
+			<mat-list-option *ngFor="let option of selectionConfig.options" [disabled]="option.disabled" [value]="option.value" [checkboxPosition]="option.checkboxPosition ? option.checkboxPosition : 'before'" [selected]="option.selected">
+				{{option.content}}
+			</mat-list-option>
+		</mat-selection-list>
+	</mat-dialog-content>
+	<mat-dialog-actions align="end">
+		<button mat-button color="primary" (click)="cancel()">{{selectionConfig.cancel ? selectionConfig.cancel : 'Cancel'}}</button>
+		<button mat-button color="primary" (click)="ok()" [disabled]="selection.selectedOptions.selected.length < 1">{{selectionConfig.ok ? selectionConfig.ok : 'OK'}}</button>
+	</mat-dialog-actions>
+	`
 })
-export class SelectionDialog implements OnInit, DoCheck {
+export class SelectionDialog implements OnInit {
 	@ViewChild('selection') selection: MatSelectionList;
 	constructor(private dialogRef: MatDialogRef<SelectionDialog>) {
 	}
@@ -334,13 +349,10 @@ export class SelectionDialog implements OnInit, DoCheck {
 		}
 	}
 	cancel() {
-		this.dialogRef.close("cancel");
+		this.dialogRef.close('cancel');
 	}
 	ok() {
 		this.dialogRef.close(this.selection.selectedOptions.selected);
-	}
-	ngDoCheck() {
-		console.log(this.selection);
 	}
 }
 export interface SnackBarConfig {
@@ -421,19 +433,19 @@ export interface PromptDialogConfig extends DialogConfig {
 	placeholder: string;
 	/**
 	 * The input type
-	 * @type {"text"|"email"|"password"|"number"}
+	 * @type {"text"|"email"|"password"|"number"|string}
 	 */
-	inputType?: "text" | "email" | "password" | "number";
+	inputType?: 'text' | 'email' | 'password' | 'number' | string;
 	/**
 	 * The initial value of the input
 	 * @type {string|number}
 	 */
-	value?: string|number;
+	value?: string | number;
 	/**
 	 * The color of the input
-	 * @type {"primary"|"accent"|"warn"}
+	 * @type {"primary"|"accent"|"warn"|""}
 	 */
-	color?: "primary" | "accent" | "warn";
+	color?: 'primary' | 'accent' | 'warn' | '';
 }
 export interface SelectionDialogConfig extends DialogConfig {
 	/**
@@ -472,72 +484,34 @@ export interface SelectionDialogOptions {
 	 * The checkbox position of the selection list item
 	 * @type {"before"|"after"}
 	 */
-	checkboxPosition?: "before" | "after";
+	checkboxPosition?: 'before' | 'after';
 	/**
 	 * Whether the selection list item is initially selected
 	 * @type {boolean}
 	 */
 	selected?: boolean;
 }
-export interface AboutDialogConfig extends DialogConfig {
-	/**
-	 * The app's name
-	 * @type {string}
-	 */
-	appName: string;
-	/**
-	 * The app's icon
-	 * @type {string}
-	 */
-	appImg: string;
-	/**
-	 * The app's image width
-	 * @type {string}
-	 */
-	appImgWidth?: string;
-	/**
-	 * The app's image height
-	 * @type {string}
-	 */
-	appImgHeight?: string;
-	/**
-	 * The app's version
-	 * @type {string|number|any}
-	 */
-	version: string | number | any;
 
-}
-export interface Todo {
-	/**
-	 * The title of the todo
-	 * @type {string}
-	 */
-	title: string;
-	/**
-	 * The content of the todo
-	 * @type {string}
-	 */
-	content: string;
-	/**
-	 * The due date of the todo
-	 * @type {number|any}
-	 */
-	dueDate?: number | any;
-	/**
-	 * The tags of the todo
-	 * @type {string[]}
-	 */
-	tags?: string[];
-	/**
-	 * Whether the todo is done
-	 * @type {boolean}
-	 */
-	isDone?: boolean;
-}
-
-export const SHARED_DIALOGS = [
+const SHARED_DIALOGS = [
 	AlertDialog,
 	ConfirmDialog,
 	PromptDialog,
 	SelectionDialog
 ];
+const SHARED_MODULES = [
+	BrowserModule,
+	BrowserAnimationsModule,
+	FormsModule,
+	MatButtonModule,
+	MatDialogModule,
+	MatFormFieldModule,
+	MatListModule,
+	MatSnackBarModule
+];
+@NgModule({
+	imports: SHARED_MODULES,
+	declarations: SHARED_DIALOGS,
+	entryComponents: SHARED_DIALOGS,
+	exports: SHARED_DIALOGS
+})
+export class SharedModule { }

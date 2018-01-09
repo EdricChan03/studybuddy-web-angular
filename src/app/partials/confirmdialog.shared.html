@@ -1,9 +1,0 @@
-<h3 matDialogTitle>{{confirmConfig.title ? confirmConfig.title : 'Confirm'}}</h3>
-<mat-dialog-content fxLayout="column" class="mat-typography">
-	<p class="mat-body" *ngIf="!confirmConfig.isHtml">{{confirmConfig.msg}}</p>
-	<span *ngIf="confirmConfig.isHtml" [innerHTML]="confirmConfig.msg"></span>
-</mat-dialog-content>
-<mat-dialog-actions align="end">
-	<button mat-button (click)="cancel()" color="primary">{{confirmConfig.cancel ? confirmConfig.cancel : 'Cancel'}}</button>
-	<button mat-button (click)="ok()" color="primary">{{confirmConfig.ok ? confirmConfig.ok : 'OK'}}</button>
-</mat-dialog-actions>
