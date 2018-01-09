@@ -1,12 +1,16 @@
-<button mat-raised-button color="primary" (click)="newTodo()">New Todo</button>
 <mat-checkbox [(ngModel)]="todoTable">Show todos as table</mat-checkbox>
-<mat-list *ngIf="!todoTable">
-	<mat-list-item *ngFor="let todo of todos | async" (click)="null">
-		<h3 matLine>{{todo.title}}</h3>
-		<p matLine>{{todo.content}}</p>
-		<span matLine><mat-icon *ngIf="todo.dueDate" color="primary">assignment</mat-icon><span *ngIf="todo.dueDate">Due date: {{todo.dueDate | date}}</span></span>
+<mat-list *ngIf="!todoTable && todos$">
+	<mat-list-item *ngFor="let todo of todos$ | async" (click)="null">
+		<h3 matLine>{{todo?.title}}</h3>
+		<p matLine>{{todo?.content}}</p>
+		<span matLine *ngIf="todo?.dueDate">
+			<mat-icon color="primary">assignment</mat-icon>
+			<span>Due date: {{todo?.dueDate | date}}</span>
+		</span>
 		<span fxFlex></span>
-		<button mat-icon-button matTooltip="Remove todo" (click)="removeTodo(todo.$key)"><mat-icon>delete</mat-icon></button>
+		<button mat-icon-button matTooltip="Remove todo" (click)="removeTodo(todo?.id)">
+			<mat-icon>delete</mat-icon>
+		</button>
 		<mat-divider></mat-divider>
 	</mat-list-item>
 </mat-list>
@@ -58,5 +62,8 @@
 
 
 </mat-table>
-<mat-paginator #paginator [length]="dataLength?.length" [pageIndex]="0" [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]">
+<mat-paginator #paginator [length]="dataLength?.length" [pageIndex]="0" [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]" *ngIf="todoTable">
 </mat-paginator>
+<button mat-fab (click)="newTodo()" matTooltip="New todo" matTooltipPosition="left" class="new-todo-fab">
+	<mat-icon>add</mat-icon>
+</button>
