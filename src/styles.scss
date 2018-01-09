@@ -1,13 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import "~@angular/material/prebuilt-themes/purple-green.css";
+@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
 @import 'assets/md-font/material-icons.css';
-@import "~@angular/material/theming";
-// Typography
-$studybuddy-typography: mat-typography-config( $font-family: 'Roboto, Arial, Helvetica, sans-serif',
-$headline: mat-typography-level(32px, 48px, 700),
-$body-1: mat-typography-level(16px, 24px, 400));
-@include angular-material-typography($studybuddy-typography);
+
 .app-sidenav {
     width: 256px;
 }
@@ -120,4 +115,13 @@ mat-sidenav.sidenav::-webkit-scrollbar-trac,
 .app-content::-webkit-scrollbar-thumb {
     background-color: #6e6e6e;
     outline: 1px solid #333;
+}
+// This is to align with the Material spec
+mat-card {
+	margin: 8px;
+}
+.new-todo-fab {
+	position: absolute !important;
+	bottom: 16px;
+	right: 16px;
 }
