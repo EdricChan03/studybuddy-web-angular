@@ -1,8 +1,8 @@
 import { AngularFireAuth } from 'angularfire2/auth';
-import { Todo, Shared } from './../shared';
 import { Injectable, Inject } from '@angular/core';
 import { FirebaseApp } from 'angularfire2';
-import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { TodoItem } from '../interfaces';
 
 // Data Table imports.
 import { MatPaginator } from '@angular/material';
@@ -18,45 +18,53 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class TodoService {
 	public currentUser: string;
-	private todos$: Observable<Todo[]>;
-	constructor(public af: AngularFireDatabase, @Inject(FirebaseApp) fb, private afAuth: AngularFireAuth) {
+	private todos$: any;
+	constructor(public fs: AngularFirestore, @Inject(FirebaseApp) fb, private afAuth: AngularFireAuth) {
 		afAuth.auth.onAuthStateChanged((user) => {
 			if (user) {
 				console.log(user);
 				this.currentUser = user.uid;
 				console.log(this.currentUser);
-				this.todos$ = af.list(`users/${this.currentUser}/todo`).valueChanges();
+				this.todos$ = fs.collection(`users/${this.currentUser}/todos`).snapshotChanges();
 			} else {
 			}
-		})
+		});
 	}
 }
 
 @Injectable()
 export class TodoDatabase {
-	public dataChange: BehaviorSubject<Todo[]> = new BehaviorSubject<Todo[]>([]);
-	private database = this.todoService.af.list(`users/${this.todoService.currentUser}/todo`);
-	get data(): Todo[] {
+	public dataChange: BehaviorSubject<TodoItem[]> = new BehaviorSubject<TodoItem[]>([]);
+	private todoCollection: AngularFirestoreCollection<TodoItem>;
+	get data(): TodoItem[] {
 		return this.dataChange.value;
 	}
-	public getTodos(): Observable<Todo[]> {
-		console.log("Getting todos...");
-		return this.database.valueChanges();
+	public getTodos(): Observable<TodoItem[]> {
+		// TODO: Remove this logging line
+		console.log('Getting todos...');
+		return this.todoCollection.snapshotChanges().map(actions => {
+			return actions.map(a => {
+				const data = a.payload.doc.data() as TodoItem;
+				const id = a.payload.doc.id;
+				return { id, ...data };
+			});
+		});
 	}
-	constructor(private todoService: TodoService, private shared: Shared) {
+	constructor(private todoService: TodoService) {
+		this.todoCollection = todoService.fs.collection(`users/${todoService.currentUser}/todos`);
 		this.getTodos().subscribe(data => this.dataChange.next(data));
 	}
 }
 
 @Injectable()
-export class TodoDataSource extends DataSource<Todo> {
+export class TodoDataSource extends DataSource<TodoItem> {
 	constructor(
 		private todoDatabase: TodoDatabase,
 		private paginator: MatPaginator
 	) {
 		super();
 	}
-	connect(): Observable<Todo[]> {
+	connect(): Observable<TodoItem[]> {
 		const displayDataChanges = [
 			this.todoDatabase.dataChange,
 			this.paginator.page
@@ -69,7 +77,7 @@ export class TodoDataSource extends DataSource<Todo> {
 				const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
 
 				return dataSlice.splice(startIndex, this.paginator.pageSize);
-			})
+			});
 	}
 	disconnect() { }
 }
