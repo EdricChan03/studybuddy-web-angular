@@ -1,57 +1,64 @@
 <mat-sidenav-container fullscreen>
-	<mat-sidenav #left mode="side" class="app-sidenav mat-elevation-z2">
-		<div class="sidenav-content" fxLayout="column">
-			<mat-nav-list>
-				<a mat-list-item *ngFor="let link of sidenavLinks" [routerLink]="['/'+link.link]" routerLinkActive="active-link" (click)="left.close()">
-					<mat-icon matListIcon>{{link.icon}}</mat-icon>
-					<p matLine>{{link.title}}</p>
-				</a>
-				<h3 matSubheader>Other links</h3>
-				<a mat-list-item *ngFor="let link of otherLinks" [routerLink]="['/'+link.link]" routerLinkActive="active-link" (click)="left.close()">
-					<mat-icon matListIcon>{{link.icon}}</mat-icon>
-					<p matLine>{{link.title}}</p>
-				</a>
-			</mat-nav-list>
+	<mat-sidenav #left [mode]="isMobile ? 'over':'side'" class="app-sidenav mat-elevation-z2">
+		<mat-toolbar>
+			Links
 			<span fxFlex></span>
-			<small style="bottom:0">Version 1.0.0</small>
-		</div>
-	</mat-sidenav>
-	<mat-toolbar color="primary" class="mat-elevation-z2">
-		<button mat-icon-button (click)="left.toggle()">
-			<mat-icon>menu</mat-icon>
-		</button>
-		<span>Study Buddy&nbsp;</span>
-		<strong>(BETA)</strong>
-		<span fxFlex></span>
-		<button mat-icon-button [matMenuTriggerFor]="moreMenu">
-			<mat-icon>more_vert</mat-icon>
-		</button>
-		<button mat-icon-button [matMenuTriggerFor]="accountMenu" matTooltip="Account">
-			<mat-icon>account_circle</mat-icon>
-		</button>
-		<mat-menu #moreMenu="matMenu">
-			<button mat-menu-item (click)="about()">
-				<mat-icon>info</mat-icon>
-				About
+			<button mat-icon-button (click)="left.close()" matTooltip="Close sidenav">
+				<mat-icon>keyboard_arrow_left</mat-icon>
 			</button>
-		</mat-menu>
-		<mat-menu #accountMenu="matMenu">
-			<mat-nav-list>
-				<mat-list-item *ngIf="isSignedIn">
-					<img matListAvatar src="{{(user | async)?.photoURL}}">
-					<h3 matLine>{{(user | async)?.displayName}}</h3>
-					<span matLine style="overflow:initial">{{(user | async)?.email}}</span>
-				</mat-list-item>
-				<a mat-list-item (click)="signIn()" *ngIf="!isSignedIn">
-					<p matLine>Login</p>
-				</a>
-				<a mat-list-item (click)="signOut()" *ngIf="isSignedIn">
-					<p matLine>Logout</p>
-				</a>
-			</mat-nav-list>
-		</mat-menu>
-	</mat-toolbar>
+		</mat-toolbar>
+		<mat-nav-list>
+			<a mat-list-item *ngFor="let link of sidenavLinks" [routerLink]="['/'+link.link]" routerLinkActive="active-link" (click)="left.close()">
+				<mat-icon matListIcon>{{link.icon}}</mat-icon>
+				<h3 matLine>{{link.title}}</h3>
+			</a>
+			<mat-divider inset></mat-divider>
+			<a mat-list-item *ngFor="let link of otherLinks" [routerLink]="['/'+link.link]" routerLinkActive="active-link" (click)="left.close()">
+				<mat-icon matListIcon>{{link.icon}}</mat-icon>
+				<h3 matLine>{{link.title}}</h3>
+			</a>
+		</mat-nav-list>
+		<footer style="bottom:0;position:absolute" fxLayout="row">
+			<mat-icon>info</mat-icon>
+			<p>Version 1.0.0</p>
+		</footer>
+	</mat-sidenav>
 	<mat-sidenav-content>
+		<mat-toolbar color="primary" class="mat-elevation-z3">
+			<button mat-icon-button (click)="left.toggle()" *ngIf="!isSidenavOpened">
+				<mat-icon>menu</mat-icon>
+			</button>
+			<span>Study Buddy&nbsp;</span>
+			<strong>(BETA)</strong>
+			<span fxFlex></span>
+			<button mat-icon-button [matMenuTriggerFor]="moreMenu">
+				<mat-icon>more_vert</mat-icon>
+			</button>
+			<button mat-icon-button [matMenuTriggerFor]="accountMenu" matTooltip="Account">
+				<mat-icon>account_circle</mat-icon>
+			</button>
+			<mat-menu #moreMenu="matMenu">
+				<button mat-menu-item (click)="about()">
+					<mat-icon>info</mat-icon>
+					About
+				</button>
+			</mat-menu>
+			<mat-menu #accountMenu="matMenu">
+				<mat-nav-list>
+					<mat-list-item *ngIf="isSignedIn">
+						<img matListAvatar src="{{(user | async)?.photoURL}}">
+						<h3 matLine>{{(user | async)?.displayName}}</h3>
+						<span matLine style="overflow:initial">{{(user | async)?.email}}</span>
+					</mat-list-item>
+					<a mat-list-item (click)="signIn()" *ngIf="!isSignedIn">
+						<p matLine>Login</p>
+					</a>
+					<a mat-list-item (click)="signOut()" *ngIf="isSignedIn">
+						<p matLine>Logout</p>
+					</a>
+				</mat-nav-list>
+			</mat-menu>
+		</mat-toolbar>
 		<div class="app-content mat-typography" fxLayout="column">
 			<!-- {{(user | async | json)}} -->
 			<router-outlet></router-outlet>
