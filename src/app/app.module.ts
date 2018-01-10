@@ -46,7 +46,6 @@ import { SettingsComponent } from './settings/settings.component';
 	],
 	bootstrap: [AppComponent],
 	providers: [
-		SharedService,
 		TodoService,
 		TodoDatabase,
 		TodoDataSource
