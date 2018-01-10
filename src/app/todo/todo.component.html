@@ -42,9 +42,8 @@
 
 	<!-- Delete Buttons Column -->
 	<ng-container matColumnDef="delete">
-		<mat-header-cell *matHeaderCellDef> Delete / Edit </mat-header-cell>
+		<mat-header-cell *matHeaderCellDef> Edit </mat-header-cell>
 		<mat-cell *matCellDef="let row">
-			<button (click)="deleteMember(row.$key)">Delete</button>
 			<button (click)="goToDetailPage(row.$key)">Edit</button>
 		</mat-cell>
 	</ng-container>

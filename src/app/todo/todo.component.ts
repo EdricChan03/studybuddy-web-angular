@@ -69,11 +69,12 @@ export class TodoComponent implements OnInit {
 		this.shared.openConfirmDialog({ msg: 'Are you sure you want to delete the todo? Once deleted, it will be lost forever and cannot be retrieved again.' }).afterClosed().subscribe(res => {
 			if (res === 'ok') {
 				this.todosCollection.doc(id).delete().then(() => {
-					this.shared.openSnackBar({ msg: 'Todo was removed', additionalOpts: { duration: 3000 } });
+					// tslint:disable-next-line:max-line-length
+					this.shared.openSnackBar({ msg: 'Todo was removed', additionalOpts: { duration: 3000, horizontalPosition: 'start', panelClass: 'mat-elevation-z3' } });
 				});
 			} else {
 				// tslint:disable-next-line:max-line-length
-				this.shared.openSnackBar({ msg: 'Todo was not deleted', action: 'Undo', additionalOpts: { duration: 6000 } }).onAction().subscribe(() => {
+				this.shared.openSnackBar({ msg: 'Todo was not deleted', action: 'Undo', additionalOpts: { duration: 6000, horizontalPosition: 'start', panelClass: 'mat-elevation-z3' } }).onAction().subscribe(() => {
 					this.removeTodo(id);
 				});
 			}
