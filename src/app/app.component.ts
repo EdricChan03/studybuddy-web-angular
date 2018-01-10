@@ -22,10 +22,10 @@ export class AppComponent {
 		});
 		if (!this.shared.isOnline) {
 			// tslint:disable-next-line:max-line-length
-			const snackBarRef = this.shared.openSnackBar({msg: 'You are offline. Showing limited messages', action: 'Retry', additionalOpts: {extraClasses: ['mat-elevation-z3'], horizontalPosition: 'start'}});
-			snackBarRef.onAction().subscribe(()=> {
+			const snackBarRef = this.shared.openSnackBar({ msg: 'You are offline. Some actions will not be available.', action: 'Retry', additionalOpts: { panelClass: 'mat-elevation-z3', horizontalPosition: 'start' } });
+			snackBarRef.onAction().subscribe(() => {
 				window.location.reload(true);
-			})
+			});
 		}
 	}
 	get isMobile() {
