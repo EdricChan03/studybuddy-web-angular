@@ -9,28 +9,30 @@
 <fieldset fxLayout="column">
 	<legend>Snackbar properties</legend>
 	<mat-form-field>
-		<input matInput type="number" [(ngModel)]="duration" placeholder="Duration of snackbar">
+		<input matInput type="number" [(ngModel)]="snackBarProps.duration" placeholder="Duration of snackbar">
 	</mat-form-field>
 	<mat-form-field>
-		<input matInput [(ngModel)]="action" placeholder="Action of snackbar">
+		<input matInput [(ngModel)]="snackBarProps.action" placeholder="Action of snackbar">
 	</mat-form-field>
 	<h3>Vertical Position:</h3>
-	<mat-radio-group [(ngModel)]="verticalPosition" fxLayout="column">
+	<mat-radio-group [(ngModel)]="snackBarProps.verticalPos" fxLayout="column">
 		<mat-radio-button *ngFor="let opt of verticalPos" [value]="opt">{{opt}}</mat-radio-button>
 	</mat-radio-group>
 	<h3>Horizontal Position:</h3>
-	<mat-radio-group [(ngModel)]="horizontalPosition" fxLayout="column">
+	<mat-radio-group [(ngModel)]="snackBarProps.horizontalPos" fxLayout="column">
 		<mat-radio-button *ngFor="let opt of horizontalPos" [value]="opt">{{opt}}</mat-radio-button>
 	</mat-radio-group>
 	<h3>Extra classes</h3>
-	<mat-select [(ngModel)]="extraClass" style="width:200px">
-		<mat-option value="red">
-			<code>red</code>
-		</mat-option>
-		<mat-option value="party">
-			<code>party</code>
-		</mat-option>
-	</mat-select>
+	<mat-form-field>
+		<mat-select [(ngModel)]="snackBarProps.panelClass">
+			<mat-option value="red">
+				<code>red</code>
+			</mat-option>
+			<mat-option value="party">
+				<code>party</code>
+			</mat-option>
+		</mat-select>
+	</mat-form-field>
 </fieldset>
 <br>
 <button mat-button (click)="closeSnackBar()">Close all snackbars</button>

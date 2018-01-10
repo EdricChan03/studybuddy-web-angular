@@ -9,13 +9,9 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class TestpageComponent {
 	constructor(private shared: SharedService, private dom: DomSanitizer) { }
-	duration = 1000;
-	action = 'Undo';
+	snackBarProps: SnackBarProps = {};
 	verticalPos = ['top', 'bottom'];
 	horizontalPos = ['start', 'center', 'end', 'left', 'right'];
-	verticalPosition: MatSnackBarVerticalPosition = 'bottom';
-	horizontalPosition: MatSnackBarHorizontalPosition = 'end';
-	extraClass: string;
 	alertDialog() {
 		this.shared.openAlertDialog({ msg: 'I\'m an alert message made with code!', ok: 'Got it' });
 	}
@@ -44,28 +40,31 @@ export class TestpageComponent {
 		}
 		const dialogRef = this.shared.openSelectionDialog({ msg: 'Select from tons of options', ok: 'Yeah', cancel: 'Nah', options: tempVar });
 		dialogRef.afterClosed().subscribe((result) => {
-			this.shared.openAlertDialog({msg: this.dom.bypassSecurityTrustHtml('<pre><code>{{result | json}}</code></pre>'), isHtml: true});
+			this.shared.openAlertDialog({ msg: this.dom.bypassSecurityTrustHtml('<pre><code>{{result | json}}</code></pre>'), isHtml: true });
 		});
 	}
 	closeSnackBar() {
 		this.shared.closeSnackbar();
 	}
 	snackBar() {
-		if (this.extraClass) {
-			// tslint:disable-next-line:max-line-length
-			this.shared.openSnackBar({ msg: 'I\'m a snackbar!', additionalOpts: { horizontalPosition: this.horizontalPosition, verticalPosition: this.verticalPosition, extraClasses: new Array(this.extraClass) } });
-		} else {
-			// tslint:disable-next-line:max-line-length
-			this.shared.openSnackBar({ msg: 'I\'m a snackbar!', additionalOpts: { horizontalPosition: this.horizontalPosition, verticalPosition: this.verticalPosition } });
-		}
+		// tslint:disable-next-line:max-line-length
+		this.shared.openSnackBar({ msg: 'I\'m a snackbar!', additionalOpts: { horizontalPosition: this.snackBarProps.horizontalPos, verticalPosition: this.snackBarProps.verticalPos, panelClass: this.snackBarProps.panelClass } });
 	}
 	durationSnackBar() {
-		this.shared.openSnackBar({ msg: 'I\'m a duration snackbar!', additionalOpts: { duration: this.duration } });
+		this.shared.openSnackBar({ msg: 'I\'m a duration snackbar!', additionalOpts: { duration: this.snackBarProps.duration } });
 	}
 	snackBarWithResult() {
-		const snackBarRef = this.shared.openSnackBar({ msg: 'I\'m a snackbar with an action!', action: this.action });
+		const snackBarRef = this.shared.openSnackBar({ msg: 'I\'m a snackbar with an action!', action: this.snackBarProps.action });
 		snackBarRef.onAction().subscribe(_ => {
-			this.shared.openAlertDialog({ msg: `You clicked on the "${this.action}" button.` });
+			this.shared.openAlertDialog({ msg: `You clicked on the "${this.snackBarProps.action}" button.` });
 		});
 	}
+}
+
+interface SnackBarProps {
+	duration?: number;
+	action?: string;
+	verticalPos?: MatSnackBarVerticalPosition;
+	horizontalPos?: MatSnackBarHorizontalPosition;
+	panelClass?: string;
 }
