@@ -14,7 +14,8 @@ export class SettingsComponent implements OnInit {
 		if (this.settings) {
 			let tempSettings = <Settings>JSON.parse(window.localStorage.getItem('settings'));
 			window.localStorage.setItem('settings', JSON.stringify(this.settings));
-			let snackBarRef = this.shared.openSnackBar({ msg: 'Settings saved', action: 'Undo', additionalOpts: { duration: 6000, horizontalPosition: 'start' } });
+			// tslint:disable-next-line:max-line-length
+			const snackBarRef = this.shared.openSnackBar({ msg: 'Settings saved', action: 'Undo', additionalOpts: { duration: 6000, horizontalPosition: 'start' } });
 			snackBarRef.onAction().subscribe(() => {
 				window.localStorage.setItem('settings', JSON.stringify(tempSettings));
 				tempSettings = null;
