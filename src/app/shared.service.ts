@@ -1,3 +1,4 @@
+import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -206,7 +207,7 @@ export class SharedService {
 	 */
 	private throwError(variable: string, type: string) {
 		// tslint:disable-next-line:max-line-length
-		throw new Error(`${variable} was not specified. Please ensure that the ${variable} property is specified and that it is of type ${type}.`);
+		throw new Error(`"${variable}" was not specified. Please ensure that the "${variable}" property is specified and that it is of type "${type}".`);
 	}
 	/**
 	 * Sets the document's title
@@ -505,6 +506,7 @@ const SHARED_MODULES = [
 	MatButtonModule,
 	MatDialogModule,
 	MatFormFieldModule,
+	MatInputModule,
 	MatListModule,
 	MatSnackBarModule
 ];
@@ -512,6 +514,7 @@ const SHARED_MODULES = [
 	imports: SHARED_MODULES,
 	declarations: SHARED_DIALOGS,
 	entryComponents: SHARED_DIALOGS,
-	exports: SHARED_DIALOGS
+	exports: SHARED_DIALOGS,
+	providers: [SharedService]
 })
 export class SharedModule { }
