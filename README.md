@@ -1,8 +1,17 @@
-# StudybuddyWeb
+# StudyBuddy-web
 
-Hey there user! Welcome to the new StudyBuddy for web official client (now in beta!).
+Hey there user! Welcome to StudyBuddy for web official client (now in rc!).
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.4.2.
-Currently not accessible online, coming soon!
+
+## Website
+
+The website is available [here](https://studybuddy-e5f46.firebaseapp.com).
+
+## Android
+For Android builds, see this [Github repo](https://github.com/Chan4077/StudyBuddy) and its [Releases](https://github.com/Chan4077/StudyBuddy/releases).
+
+---
+# Angular CLI commands
 
 ## Development server
 
