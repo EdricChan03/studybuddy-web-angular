@@ -1,0 +1,66 @@
+<h2 matDialogTitle>{{isNewTodo ? 'New' : 'Edit'}} Todo</h2>
+<div mat-dialog-content>
+	<form #addForm="ngForm">
+		<mat-form-field class="app-form-field">
+			<input matInput [(ngModel)]="todoItem.title" placeholder="Title" name="title" required (change)="checkWhitespace('title')">
+			<mat-error>This is required</mat-error>
+			<mat-hint>The subject of your todo.</mat-hint>
+		</mat-form-field>
+		<mat-form-field class="app-form-field">
+			<textarea name="content" cols="3" matInput [(ngModel)]="todoItem.content" placeholder="Content" required matTextareaAutosize
+			 (change)="checkWhitespace('content')"></textarea>
+			<a mat-icon-button matSuffix matTooltip="Learn more about Markdown" href="https://guides.github.com/features/mastering-markdown"
+			 target="_blank">
+				<mat-icon>help</mat-icon>
+			</a>
+			<mat-error>This is required</mat-error>
+			<mat-hint>The content of your todo. Markdown is supported.</mat-hint>
+		</mat-form-field>
+		<button mat-button (click)="editContent()">Edit</button>
+		<div class="msg-container msg-danger" *ngIf="isUnsupported" @collapse>
+			<mat-icon class="msg-icon">warning</mat-icon>
+			<p>Using Markdown may not render properly on
+				<span *ngIf="platform.FIREFOX">Firefox</span>
+				<span *ngIf="platform.SAFARI">Safari</span>.</p>
+			<span fxFlex></span>
+			<button mat-icon-button (click)="toggleNotice()" matTooltip="Hide notice">
+				<mat-icon>close</mat-icon>
+			</button>
+		</div>
+		<mat-form-field class="app-form-field">
+			<input matInput [(ngModel)]="todoItem.project" placeholder="Project" name="project">
+			<mat-hint>The workspace where the todo will be saved in. (optional)</mat-hint>
+		</mat-form-field>
+		<mat-form-field class="app-form-field">
+			<input matInput [matDatepicker]="dueDatePicker" placeholder="Due date" [(ngModel)]="todoItem.dueDate" name="dueDate">
+			<mat-datepicker #dueDatePicker [touchUi]="shared.isMobile"></mat-datepicker>
+			<mat-datepicker-toggle matSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
+			<mat-hint>This app will give you reminders if the due date is approaching.</mat-hint>
+		</mat-form-field>
+		<mat-checkbox [(ngModel)]="enableTags" [ngModelOptions]="{'standalone': true}">Enable tags?</mat-checkbox>
+		<mat-form-field class="app-form-field" *ngIf="enableTags">
+			<mat-icon matPrefix>local_offer</mat-icon>
+			<mat-chip-list #tagsList>
+				<mat-chip *ngFor="let tag of todoItem.tags" removable (remove)="removeTag(tag)">
+					{{tag}}
+					<mat-icon matChipRemove>cancel</mat-icon>
+				</mat-chip>
+				<input
+					placeholder="New Tag..."
+					[matChipInputFor]="tagsList"
+					matChipInputAddOnBlur
+					(matChipInputTokenEnd)="addTag($event)" />
+			</mat-chip-list>
+			<button mat-icon-button (click)="todoItem.tags = []" matSuffix matTooltip="Clear tags">
+				<mat-icon>clear</mat-icon>
+			</button>
+		</mat-form-field>
+		<br>
+		<mat-checkbox [(ngModel)]="todoItem.hasDone" name="hasDone">Mark as done</mat-checkbox>
+	</form>
+</div>
+<div mat-dialog-actions align="end">
+	<button mat-button (click)="cancel()" color="primary">Cancel</button>
+	<button mat-button (click)="resetForm()" color="warn" *ngIf="isNewTodo">Reset</button>
+	<button mat-button (click)="saveOrAddTodo()" color="primary" [disabled]="addForm.invalid">{{isNewTodo ? 'Add' : 'Save'}}</button>
+</div>

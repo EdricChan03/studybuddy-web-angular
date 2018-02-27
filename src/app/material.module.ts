@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
@@ -20,13 +22,15 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatNativeDateModule } from '@angular/material/core';
-import {
-	LayoutModule
-} from '@angular/cdk/layout';
+import { MatBadgeModule } from '@angular/material/badge';
+import { LayoutModule } from '@angular/cdk/layout';
+import { PlatformModule } from '@angular/cdk/platform';
 const MATERIAL_MODULES = [
 	MatButtonModule,
+	MatButtonToggleModule,
 	MatToolbarModule,
 	MatSidenavModule,
+	MatAutocompleteModule,
 	MatIconModule,
 	MatListModule,
 	MatMenuModule,
@@ -44,10 +48,12 @@ const MATERIAL_MODULES = [
 	MatCheckboxModule,
 	MatTableModule,
 	MatPaginatorModule,
-	MatProgressSpinnerModule
+	MatProgressSpinnerModule,
+	MatBadgeModule
 ];
 const CDK_MODULES = [
-	LayoutModule
+	LayoutModule,
+	PlatformModule
 ];
 @NgModule({
 	imports: [

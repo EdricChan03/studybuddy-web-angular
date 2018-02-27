@@ -1,10 +1,12 @@
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Observable } from 'rxjs/Observable';
 import { Injectable, Component, OnInit, ViewChild, NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { ThemePalette } from '@angular/material/core';
 
 import {
 	MatSnackBarConfig,
@@ -42,9 +44,9 @@ export class SharedService {
 		return navigator.onLine;
 	}
 	/**
- * Detects if the user is using a mobile device
- * @returns {boolean}
- */
+ 	 * Detects if the user is using a mobile device
+ 	 * @returns {boolean}
+ 	 */
 	get isMobile(): boolean {
 		if (this.breakpointObserver.isMatched('(max-width: 599px)')) {
 			return true;
@@ -78,12 +80,64 @@ export class SharedService {
 		if (opts) {
 			if (opts.action) {
 				if (opts.additionalOpts) {
+					if (opts.additionalOpts.panelClass) {
+						if (typeof opts.additionalOpts.panelClass === 'string') {
+							let tempArray = [];
+							if (typeof opts.hasElevation === 'number') {
+								tempArray.push(`mat-elevation-z${opts.hasElevation}`);
+							} else {
+								tempArray.push('mat-elevation-z3');
+							}
+							tempArray.push(opts.additionalOpts.panelClass);
+							opts.additionalOpts.panelClass = tempArray;
+						} else {
+							if (typeof opts.hasElevation === 'number') {
+								opts.additionalOpts.panelClass = `mat-elevation-z${opts.hasElevation}`;
+							} else {
+								opts.additionalOpts.panelClass = 'mat-elevation-z3';
+							}
+						}
+					} else {
+						if (typeof opts.hasElevation === 'number') {
+							opts.additionalOpts.panelClass = `mat-elevation-z${opts.hasElevation}`;
+						} else {
+							opts.additionalOpts.panelClass = 'mat-elevation-z3';
+						}
+					}
 					return this.snackbar.open(opts.msg, opts.action, opts.additionalOpts);
 				} else {
 					return this.snackbar.open(opts.msg, opts.action);
 				}
 			} else {
-				this.throwError('opts.action', 'string');
+				if (opts.additionalOpts) {
+					if (opts.additionalOpts.panelClass) {
+						if (typeof opts.additionalOpts.panelClass === 'string') {
+							let tempArray = [];
+							if (typeof opts.hasElevation === 'number') {
+								tempArray.push(`mat-elevation-z${opts.hasElevation}`);
+							} else {
+								tempArray.push('mat-elevation-z3');
+							}
+							tempArray.push(opts.additionalOpts.panelClass);
+							opts.additionalOpts.panelClass = tempArray;
+						} else {
+							if (typeof opts.hasElevation === 'number') {
+								opts.additionalOpts.panelClass = `mat-elevation-z${opts.hasElevation}`;
+							} else {
+								opts.additionalOpts.panelClass = 'mat-elevation-z3';
+							}
+						}
+					} else {
+						if (typeof opts.hasElevation === 'number') {
+							opts.additionalOpts.panelClass = `mat-elevation-z${opts.hasElevation}`;
+						} else {
+							opts.additionalOpts.panelClass = 'mat-elevation-z3';
+						}
+					}
+					return this.snackbar.open(opts.msg, undefined, opts.additionalOpts);
+				} else {
+					return this.snackbar.open(opts.msg);
+				}
 			}
 		} else {
 			this.throwError('opts', 'SnackBarConfig');
@@ -112,7 +166,7 @@ export class SharedService {
 	/**
 	 * Closes the current snackbar
 	 */
-	closeSnackbar() {
+	closeSnackBar() {
 		this.snackbar.dismiss();
 	}
 	/**
@@ -234,7 +288,7 @@ export class SharedService {
 		<span *ngIf="alertConfig.isHtml" [innerHTML]="alertConfig.msg"></span>
 	</mat-dialog-content>
 	<mat-dialog-actions align="end">
-		<button mat-button color="primary" (click)="close()">{{alertConfig.ok ? alertConfig.ok : 'Dismiss'}}</button>
+		<button mat-button [color]="alertConfig.okColor ? alertConfig.okColor : 'primary'" (click)="close()">{{alertConfig.ok ? alertConfig.ok : 'Dismiss'}}</button>
 	</mat-dialog-actions>
 	`
 })
@@ -258,16 +312,41 @@ export class AlertDialog implements OnInit {
 	<mat-dialog-content fxLayout="column" class="mat-typography">
 		<p class="mat-body" *ngIf="!confirmConfig.isHtml">{{confirmConfig.msg}}</p>
 		<span *ngIf="confirmConfig.isHtml" [innerHTML]="confirmConfig.msg"></span>
+		<div class="checkbox-box" *ngIf="confirmConfig.hasCheckbox">
+			<mat-checkbox [color]="confirmConfig.checkboxColor" [(ngModel)]="confirmConfig.checkboxValue">{{confirmConfig.checkboxLabel}}</mat-checkbox>
+		</div>
 	</mat-dialog-content>
 	<mat-dialog-actions align="end">
-		<button mat-button (click)="cancel()" color="primary">{{confirmConfig.cancel ? confirmConfig.cancel : 'Cancel'}}</button>
-		<button mat-button (click)="ok()" color="primary">{{confirmConfig.ok ? confirmConfig.ok : 'OK'}}</button>
+		<button mat-button (click)="cancel()" [color]="confirmConfig.cancelColor ? confirmConfig.cancelColor : 'primary'">{{confirmConfig.cancel ? confirmConfig.cancel : 'Cancel'}}</button>
+		<button mat-button (click)="ok()" [color]="confirmConfig.okColor ? confirmConfig.okColor : 'primary'" [disabled]="okBtnDisabled">{{confirmConfig.ok ? confirmConfig.ok : 'OK'}}</button>
 	</mat-dialog-actions>
-	`
+	`,
+	styles: [
+		`
+		.checkbox-box {
+			padding: 8px;
+			background-color: grey;
+			overflow-wrap: break-word;
+			word-wrap: break-word;
+			hyphens: auto;
+		}
+		`
+	]
 })
 export class ConfirmDialog implements OnInit {
 	constructor(private dialogRef: MatDialogRef<ConfirmDialog>) {
 
+	}
+	get okBtnDisabled() {
+		if (this.confirmConfig.dialogRequiresCheckbox) {
+			if (this.confirmConfig.checkboxValue) {
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			return false;
+		}
 	}
 	confirmConfig: ConfirmDialogConfig;
 	cancel() {
@@ -290,15 +369,15 @@ export class ConfirmDialog implements OnInit {
 		<p class="mat-body" *ngIf="!promptConfig.isHtml">{{promptConfig.msg}}</p>
 		<span *ngIf="promptConfig.isHtml" [innerHTML]="promptConfig.msg"></span>
 		<form #form="ngForm">
-			<mat-form-field color="{{promptConfig.color ? promptConfig.color : 'primary'}}" style="width:100%">
+			<mat-form-field [color]="promptConfig.inputColor ? promptConfig.inputColor : 'primary'" style="width:100%">
 				<input matInput [(ngModel)]="input" placeholder="{{promptConfig.placeholder}}" type="{{promptConfig.inputType ? promptConfig.inputType : 'text'}}" required name="input">
 				<mat-error>This is required.</mat-error>
 			</mat-form-field>
 		</form>
 	</mat-dialog-content>
 	<mat-dialog-actions align="end">
-		<button mat-button (click)="cancel()" color="primary">{{promptConfig.cancel ? promptConfig.cancel : 'Cancel'}}</button>
-		<button mat-button (click)="ok()" color="primary" [disabled]="form.invalid">{{promptConfig.ok ? promptConfig.ok : 'OK'}}</button>
+		<button mat-button (click)="cancel()" [color]="promptConfig.cancelColor ? promptConfig.cancelColor : 'primary'">{{promptConfig.cancel ? promptConfig.cancel : 'Cancel'}}</button>
+		<button mat-button (click)="ok()" [color]="promptConfig.okColor ? promptConfig.okColor : 'primary'" [disabled]="form.invalid">{{promptConfig.ok ? promptConfig.ok : 'OK'}}</button>
 	</mat-dialog-actions>
 	`
 })
@@ -377,13 +456,19 @@ export interface SnackBarConfig {
 	 * @type {MatSnackBarConfig}
 	 */
 	additionalOpts?: MatSnackBarConfig;
+	/**
+	 * Whether to show an elevation on the snackbar
+	 * If a number is supplied, the elevation level will be the specified number. Or else it will be set to level 3
+	 * @type {number|boolean}
+	 */
+	hasElevation?: number | boolean;
 }
 export interface DialogConfig extends MatDialogConfig {
 	/**
 	 * The message of the dialog
 	 * @type {string|SafeHtml}
 	 */
-	msg: string | SafeHtml;
+	msg?: string | SafeHtml;
 	/**
 	 * The title of the dialog
 	 * @type {string}
@@ -394,6 +479,11 @@ export interface DialogConfig extends MatDialogConfig {
 	 * @type {boolean}
 	 */
 	isHtml?: boolean;
+	/**
+	 * The theme color for the dialog
+	 * @type {ThemePalette}
+	 */
+	themeColor?: ThemePalette;
 }
 export interface AlertDialogConfig extends DialogConfig {
 	/**
@@ -401,6 +491,10 @@ export interface AlertDialogConfig extends DialogConfig {
 	 * @type {string}
 	 */
 	ok?: string;
+	/**
+	 * The ok button color
+	 */
+	okColor?: ThemePalette;
 }
 
 export interface ConfirmDialogConfig extends DialogConfig {
@@ -414,6 +508,41 @@ export interface ConfirmDialogConfig extends DialogConfig {
 	 * @type {string}
 	 */
 	cancel?: string;
+	/**
+	 * The ok button color
+	 * @type {ThemePalette}
+	 */
+	okColor?: ThemePalette;
+	/**
+	 * The cancel button color
+	 * @type {ThemePalette}
+	 */
+	cancelColor?: ThemePalette;
+	/**
+	 * Whether the confirm dialog should have a checkbox
+	 * @type {boolean}
+	 */
+	hasCheckbox?: boolean;
+	/**
+	 * The label pf the checkbox. Depends on `hasCheckbox`.
+	 * @type {string}
+	 */
+	checkboxLabel?: string;
+	/**
+	 * The color of the checkbox
+	 * @type {ThemePalette}
+	 */
+	checkboxColor?: ThemePalette;
+	/**
+	 * Whether the dialog must have the checkbox checked in order for the ok button to be enabled
+	 * @type {boolean}
+	 */
+	dialogRequiresCheckbox?: boolean;
+	/**
+	 * The initial value of the checkbox
+	 * @type {boolean}
+	 */
+	checkboxValue?: boolean;
 }
 
 export interface PromptDialogConfig extends DialogConfig {
@@ -423,10 +552,20 @@ export interface PromptDialogConfig extends DialogConfig {
 	 */
 	ok?: string;
 	/**
+	 * The color of the ok button
+	 * @type {ThemePalette}
+	 */
+	okColor?: ThemePalette;
+	/**
 	 * The cancel button text
 	 * @type {string}
 	 */
 	cancel?: string;
+	/**
+	 * The color of the cancel button
+	 * @type {ThemePalette}
+	 */
+	cancelColor?: ThemePalette;
 	/**
 	 * The placeholder of the input
 	 * @type {string}
@@ -434,7 +573,7 @@ export interface PromptDialogConfig extends DialogConfig {
 	placeholder: string;
 	/**
 	 * The input type
-	 * @type {"text"|"email"|"password"|"number"|string}
+	 * @type {'text'|'email'|'password'|'number'|string}
 	 */
 	inputType?: 'text' | 'email' | 'password' | 'number' | string;
 	/**
@@ -444,9 +583,9 @@ export interface PromptDialogConfig extends DialogConfig {
 	value?: string | number;
 	/**
 	 * The color of the input
-	 * @type {"primary"|"accent"|"warn"|""}
+	 * @type {ThemePalette}
 	 */
-	color?: 'primary' | 'accent' | 'warn' | '';
+	inputColor?: ThemePalette;
 }
 export interface SelectionDialogConfig extends DialogConfig {
 	/**
@@ -455,10 +594,20 @@ export interface SelectionDialogConfig extends DialogConfig {
 	 */
 	ok?: string;
 	/**
+	 * The color of the ok button
+	 * @type {ThemePalette}
+	 */
+	okColor?: ThemePalette;
+	/**
 	 * The cancel button text
 	 * @type {string}
 	 */
 	cancel?: string;
+	/**
+	 * The color of the cancel button
+	 * @type {ThemePalette}
+	 */
+	cancelColor?: ThemePalette;
 	/**
 	 * The options for the selection dialog
 	 * @type {SelectionDialogOptions[]}
@@ -508,7 +657,8 @@ const SHARED_MODULES = [
 	MatFormFieldModule,
 	MatInputModule,
 	MatListModule,
-	MatSnackBarModule
+	MatSnackBarModule,
+	MatCheckboxModule
 ];
 @NgModule({
 	imports: SHARED_MODULES,

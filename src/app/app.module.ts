@@ -1,6 +1,6 @@
-import { ResourcesComponent } from './resources/resources.component';
+import { ToolbarService } from './toolbar.service';
+import { TipsComponent } from './tips/tips.component';
 import { TodoService, TodoDatabase, TodoDataSource } from './todo/todo.service';
-import { NewTodoDialog } from './newtodo/newtodo.component';
 import { MaterialModule } from './material.module';
 import { SharedModule } from './shared.service';
 import { environment } from '../environments/environment';
@@ -10,9 +10,8 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AppComponent } from './app.component';
-import { AppdownloadsComponent } from './appdownloads/appdownloads.component';
-import { TodoComponent } from './todo/todo.component';
-import { FormsModule } from '@angular/forms';
+import { AppDownloadsComponent } from './appdownloads/appdownloads.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
@@ -20,21 +19,58 @@ import { TestpageComponent } from './testpage/testpage.component';
 import { HttpClientModule } from '@angular/common/http';
 import 'hammerjs';
 import { SettingsComponent } from './settings/settings.component';
+import {
+	TodoHomeComponent,
+	TodoProjectComponent,
+	TodoArchivedComponent,
+	TodoDashboardComponent
+} from './todo';
+import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
+import { AboutComponent } from './about/about.component';
+import {
+	EditContentDialogComponent,
+	TodoDialogComponent,
+	SignInDialogComponent,
+	UserInfoDialogComponent
+} from './dialogs';
+import { SupportHomeComponent } from './support/support-home/support-home.component';
+import { SupportViewerComponent } from './support/shared/support-viewer/support-viewer.component';
+import { SupportSearchComponent } from './support/shared/support-search/support-search.component';
+import { ChatsComponent } from './chats/chats.component';
+import { ChatViewerComponent } from './chats/chat-viewer/chat-viewer.component';
+import { CheatsheetViewerComponent } from './cheatsheets/shared/cheatsheet-viewer/cheatsheet-viewer.component';
+import { CheatsheetHomeComponent } from './cheatsheets/cheatsheet-home/cheatsheet-home.component';
+import { MessagingService } from './messaging.service';
 
 @NgModule({
 	declarations: [
 		AppComponent,
-		AppdownloadsComponent,
-		TodoComponent,
+		AppDownloadsComponent,
+		TodoHomeComponent,
 		TestpageComponent,
-		ResourcesComponent,
-		NewTodoDialog,
-		SettingsComponent
+		TipsComponent,
+		TodoDialogComponent,
+		SettingsComponent,
+		TodoProjectComponent,
+		TodoArchivedComponent,
+		TodoDashboardComponent,
+		EditContentDialogComponent,
+		AboutComponent,
+		SignInDialogComponent,
+		SupportHomeComponent,
+		SupportViewerComponent,
+		SupportSearchComponent,
+		UserInfoDialogComponent,
+		ChatsComponent,
+		ChatViewerComponent,
+		CheatsheetViewerComponent,
+		CheatsheetHomeComponent
 	],
 	imports: [
 		BrowserModule,
 		BrowserAnimationsModule,
 		FormsModule,
+		ReactiveFormsModule,
 		MaterialModule,
 		AppRouting,
 		HttpClientModule,
@@ -42,16 +78,33 @@ import { SettingsComponent } from './settings/settings.component';
 		AngularFireModule.initializeApp(environment.firebase),
 		AngularFireAuthModule,
 		AngularFirestoreModule.enablePersistence(),
-		SharedModule
+		SharedModule,
+		MarkdownModule.forRoot({
+			provide: MarkedOptions,
+			useValue: {
+				gfm: true,
+				tables: true,
+				breaks: false,
+				pedantic: false,
+				sanitize: false,
+				smartLists: true,
+				smartypants: false
+			}
+		})
 	],
 	bootstrap: [AppComponent],
 	providers: [
 		TodoService,
 		TodoDatabase,
-		TodoDataSource
+		TodoDataSource,
+		ToolbarService,
+		MessagingService
 	],
 	entryComponents: [
-		NewTodoDialog
+		TodoDialogComponent,
+		EditContentDialogComponent,
+		SignInDialogComponent,
+		UserInfoDialogComponent
 	]
 })
 export class AppModule { }

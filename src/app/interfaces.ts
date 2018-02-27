@@ -40,7 +40,7 @@ export interface TodoItem {
 	/**
 	 * The tags to assign to the todo
 	 */
-	tags?: string[] | any;
+	tags?: string[];
 	/**
 	 * The project that the todo is in
 	 */
@@ -49,4 +49,14 @@ export interface TodoItem {
 	 * The id of the todo
 	 */
 	id?: string | any;
+}
+
+export interface Chat {
+	id: string;
+	name: string;
+	people: string[];
+	lastModified?: Date;
+	createdAt: Date;
+	owner: string;
+	notifications?: number | string;
 }

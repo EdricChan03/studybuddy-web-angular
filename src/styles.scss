@@ -1,19 +1,209 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
-@import 'assets/md-font/material-icons.css';
+@import '~assets/md-font/material-icons.css';
+@import '~@angular/material/theming';
+@mixin studybuddy-theme($theme) {
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+    .active-link {
+        color: mat-color($primary) !important;
+        mat-icon {
+            color: mat-color($primary) !important;
+        }
+        background-color: map-get($background, status-bar) !important;
+    }
+    .mat-primary-text-color {
+        color: mat-color($primary) !important;
+    }
+    .mat-primary-bg-color {
+        background-color: mat-color($primary) !important;
+    }
+    .mat-accent-text-color {
+        color: mat-color($accent) !important;
+    }
+    .mat-accent-bg-color {
+        background-color: mat-color($accent) !important;
+    }
+    .mat-warn-text-color {
+        color: mat-color($warn) !important;
+    }
+    .mat-warn-bg-color {
+        background-color: mat-color($warn) !important;
+    }
+    a.anchor-link {
+        color: mat-color($primary);
+        &:active {
+            color: mat-color($accent);
+        }
+    }
+    .mat-list-item-content mat-icon {
+        color: map-get($foreground, icons);
+    }
+    /*
+	Code adapted from:
+	https://github.com/Teradata/covalent/blob/ce05fb682260262b4c4b7ff86f0e896ab3ed0192/src/platform/core/message/_message-theme.scss#L26-L40
+	https://github.com/Teradata/covalent/blob/develop/src/platform/core/message/message.component.scss
+	*/
+    .msg-container {
+        padding: 8px 16px;
+        min-height: 52px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        align-content: center;
+        max-width: 100%;
+        justify-content: start;
+        *:not(.mat-icon) {
+            margin: 0;
+        }
+        .msg-icon {
+            margin-right: 16px;
+             ::ng-deep [dir='rtl'] & {
+                margin-left: 16px;
+                margin-right: 0;
+            }
+        }
+        .msg-label {
+            font-weight: 500;
+        }
+        &.mat-primary {
+            color: mat-color($primary);
+            background-color: mat-color($primary, 0.15);
+        }
+        &.mat-accent {
+            color: mat-color($accent);
+            background-color: mat-color($accent, 0.15);
+        }
+        &.mat-warn {
+            color: mat-color($warn);
+            background-color: mat-color($warn, 0.15);
+        }
+        &.msg-danger {
+            color: #ef6c00;
+            background-color: rgba(239, 108, 0, 0.15);
+        }
+        &.msg-info {
+            color: #0288d1;
+            background-color: rgba(2, 136, 209, 0.15);
+        }
+    }
+    .notifications-badge,
+    .badge {
+        color: white;
+        background: mat-color($primary);
+    }
+}
+
+@mixin tables-theme($theme) {
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+    $is-dark-theme: map-get($theme, is-dark);
+    $tableBorderOpacity: if($is-dark-theme, 0.08, 0.03);
+    table.app-table {
+        color: mat-color($foreground, text);
+        th {
+            background: mat-color($background, app-bar);
+        }
+        td {
+            border: 1px solid rgba(mat-color($foreground, secondary-text), $tableBorderOpacity);
+        }
+    }
+}
+
+// @import 'assets/icons/material-icons.css';
+@include mat-core();
+$studybuddy-theme-primary: mat-palette($mat-deep-purple);
+$studybuddy-theme-accent: mat-palette($mat-amber, A200, A100, A400);
+$studybuddy-theme-theme: mat-light-theme($studybuddy-theme-primary, $studybuddy-theme-accent);
+@include angular-material-theme($studybuddy-theme-theme);
+@include studybuddy-theme($studybuddy-theme-theme);
+@include tables-theme($studybuddy-theme-theme);
+// Styles for table
+table.app-table {
+    border-collapse: collapse;
+    border-radius: 2px;
+    border-spacing: 0;
+    margin: 0 0 32px 0;
+    width: 100%;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, .24), 0 0 2px rgba(0, 0, 0, .12);
+    th {
+        font-weight: 400;
+        max-width: 100px;
+        padding: 13px 32px;
+        text-align: left
+    }
+    td {
+        font-weight: 400;
+        padding: 8px 16px
+    }
+}
+
+.notifications-badge,
+.badge {
+    width: 22px;
+    height: 22px;
+    line-height: 22px;
+    text-align: center;
+    display: inline-block;
+    border-radius: 50%;
+    transition: all 0.2 ease-in-out;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    pointer-events: none;
+    font-weight: 600;
+    font-size: 12px;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.no-padding mat-dialog-container {
+    padding: 0;
+}
+
+.padding-container {
+    padding: 6px;
+}
+
+// Material icons
+.material-icons {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    /* Preferred icon size */
+    display: inline-block;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+    /* Support for all WebKit browsers. */
+    -webkit-font-smoothing: antialiased;
+    /* Support for Safari and Chrome. */
+    text-rendering: optimizeLegibility;
+    /* Support for Firefox. */
+    -moz-osx-font-smoothing: grayscale;
+    /* Support for IE. */
+    font-feature-settings: 'liga';
+}
 
 .app-sidenav {
     width: 256px;
 }
-
-body {
-    font-family: Roboto, Arial, Helvetica, sans-serif;
+.app-notify-sidenav {
+	width: 412px;
 }
 
-.active-link {
-    color: #3F51B5 !important;
-    background-color: #e8e8e8 !important;
+.currently-selected {
+    background-color: #E0E0E0 !important;
 }
 
 .app-android-download-btn,
@@ -32,7 +222,11 @@ body {
     background-color: rgba(0, 0, 0, 0.6);
 }
 
-.mat-button, .mat-raised-button, .mat-simple-snackbar-action {
+.mat-button,
+.mat-raised-button,
+.mat-flat-button,
+.mat-stroked-button,
+.mat-simple-snackbar-action {
     text-transform: uppercase;
 }
 
@@ -116,12 +310,42 @@ mat-sidenav.sidenav::-webkit-scrollbar-trac,
     background-color: #6e6e6e;
     outline: 1px solid #333;
 }
+
 // This is to align with the Material spec
 mat-card {
-	margin: 8px;
+    margin: 8px;
 }
+
 .new-todo-fab {
-	position: absolute !important;
-	bottom: 16px;
-	right: 16px;
+    position: fixed !important;
+    right: 32px;
+    bottom: 32px;
+    margin-bottom: 0 !important;
+}
+
+// Fake toolbar
+.fake-toolbar.shown {
+    height: 64px;
+}
+
+@media (max-width: 600px) {
+    .fake-toolbar.shown {
+        height: 56px;
+    }
+}
+
+.overlay-toolbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+// Styles for todo page
+.app-todo-list-item {
+    // Chrome
+    height: fit-content; // TODO(Edric): Figure out a way to solve fit-content for Firefox browsers
+    // height: -moz-fit-content;
+    // Safari for iOS
+    height: -webkit-fit-content;
 }

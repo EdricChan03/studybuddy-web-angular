@@ -1,0 +1,13 @@
+<div class="search-input" [class.search-input-focused]="isInputFocused">
+	<mat-icon aria-hidden="true" class="search-btn-left">search</mat-icon>
+	<input
+		type="search"
+		[(ngModel)]="keywords"
+		placeholder="Search everything"
+		(blur)="isInputFocused = false"
+		(focus)="isInputFocused = true"
+		(input)="onInputChange()">
+	<button mat-icon-button (click)="keywords = ''" matTooltip="Clear" *ngIf="keywords && showClearBtn" aria-label="Clear input">
+		<mat-icon aria-hidden="true">close</mat-icon>
+	</button>
+</div>

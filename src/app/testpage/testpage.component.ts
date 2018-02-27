@@ -23,7 +23,7 @@ export class TestpageComponent {
 	}
 	promptDialog() {
 		// tslint:disable-next-line:max-line-length
-		this.shared.openPromptDialog({ msg: 'I\'m a prompt message prepopulated with a value!', cancel: 'Nah', ok: 'Yeah', inputType: 'text', placeholder: 'A value goes here', value: 'Something here', color: 'accent' }).afterClosed().subscribe((res) => {
+		this.shared.openPromptDialog({ msg: 'I\'m a prompt message prepopulated with a value!', cancel: 'Nah', ok: 'Yeah', inputType: 'text', placeholder: 'A value goes here', value: 'Something here', inputColor: 'accent' }).afterClosed().subscribe((res) => {
 			document.getElementById('result').innerText = `Result: ${res}`;
 		});
 	}
@@ -44,7 +44,7 @@ export class TestpageComponent {
 		});
 	}
 	closeSnackBar() {
-		this.shared.closeSnackbar();
+		this.shared.closeSnackBar();
 	}
 	snackBar() {
 		// tslint:disable-next-line:max-line-length
