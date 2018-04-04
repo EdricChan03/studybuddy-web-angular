@@ -7,16 +7,14 @@
 			<mat-hint>The subject of your todo.</mat-hint>
 		</mat-form-field>
 		<mat-form-field class="app-form-field">
-			<textarea name="content" cols="3" matInput [(ngModel)]="todoItem.content" placeholder="Content" required matTextareaAutosize
+			<textarea name="content" cols="3" matInput [(ngModel)]="todoItem.content" placeholder="Content" matTextareaAutosize
 			 (change)="checkWhitespace('content')"></textarea>
 			<a mat-icon-button matSuffix matTooltip="Learn more about Markdown" href="https://guides.github.com/features/mastering-markdown"
 			 target="_blank">
 				<mat-icon>help</mat-icon>
 			</a>
-			<mat-error>This is required</mat-error>
 			<mat-hint>The content of your todo. Markdown is supported.</mat-hint>
 		</mat-form-field>
-		<button mat-button (click)="editContent()">Edit</button>
 		<div class="msg-container msg-danger" *ngIf="isUnsupported" @collapse>
 			<mat-icon class="msg-icon">warning</mat-icon>
 			<p>Using Markdown may not render properly on
@@ -35,7 +33,7 @@
 			<input matInput [matDatepicker]="dueDatePicker" placeholder="Due date" [(ngModel)]="todoItem.dueDate" name="dueDate">
 			<mat-datepicker #dueDatePicker [touchUi]="shared.isMobile"></mat-datepicker>
 			<mat-datepicker-toggle matSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
-			<mat-hint>This app will give you reminders if the due date is approaching.</mat-hint>
+			<mat-hint>This app will give you reminders if the due date is nearing.</mat-hint>
 		</mat-form-field>
 		<mat-checkbox [(ngModel)]="enableTags" [ngModelOptions]="{'standalone': true}">Enable tags?</mat-checkbox>
 		<mat-form-field class="app-form-field" *ngIf="enableTags">

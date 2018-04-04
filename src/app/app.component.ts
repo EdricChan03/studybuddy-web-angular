@@ -1,15 +1,18 @@
-import { ToolbarService } from './toolbar.service';
-import { SharedService } from './shared.service';
+import * as firebase from 'firebase';
+
 import { Component, ViewChild } from '@angular/core';
+import { Message, MessageImportance, MessagingService } from './messaging.service';
+import { NavigationStart, Router } from '@angular/router';
+
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore } from 'angularfire2/firestore';
-import * as firebase from 'firebase';
-import { Observable } from 'rxjs/Observable';
-import { environment } from '../environments/environment';
-import { MatSidenav } from '@angular/material/sidenav';
 import { MatDialog } from '@angular/material/dialog';
-import { Router, NavigationStart } from '@angular/router';
+import { MatSidenav } from '@angular/material/sidenav';
+import { Observable } from 'rxjs/Observable';
+import { SharedService } from './shared.service';
+import { ToolbarService } from './toolbar.service';
 import { UserInfoDialogComponent } from './dialogs';
+import { environment } from '../environments/environment';
 
 @Component({
 	selector: 'app-root',
@@ -22,7 +25,8 @@ export class AppComponent {
 		private toolbarService: ToolbarService,
 		private router: Router,
 		private afFs: AngularFirestore,
-		private dialog: MatDialog
+		private dialog: MatDialog,
+		private messagingService: MessagingService
 	) {
 		this.userObservable = afAuth.authState;
 		this.afAuth.auth.onAuthStateChanged((user) => {
@@ -51,6 +55,9 @@ export class AppComponent {
 			}
 		});
 	}
+	get messages(): Message[] {
+		return this.messagingService.messages;
+	}
 	/**
 	 * Checks whether the user is using a mobile device
 	 */
@@ -64,12 +71,13 @@ export class AppComponent {
 	environment = environment;
 	user: firebase.User;
 	userObservable: Observable<firebase.User>;
+	todayDate = new Date();
 	/**
 	 * Links for the sidenav
 	 */
 	sidenavLinks = [
 		{
-			link: 'todo/home',
+			link: 'todo',
 			title: 'Todos',
 			icon: 'check_circle'
 		},
@@ -89,9 +97,14 @@ export class AppComponent {
 			icon: 'chat'
 		},
 		{
-			link: 'cheatsheets/home',
+			link: 'cheatsheets',
 			title: 'Cheatsheets',
 			icon: 'library_books'
+		},
+		{
+			link: 'notes',
+			title: 'Notes',
+			icon: 'subject'
 		}
 	];
 	/**
@@ -114,6 +127,7 @@ export class AppComponent {
 			icon: 'help'
 		}
 	];
+	tempId = 0;
 	/**
 	 * Whether the user is signed in
 	 */
@@ -124,6 +138,41 @@ export class AppComponent {
 	 */
 	get isSidenavOpened(): boolean {
 		return this.sidenav.opened;
+	}
+	closeLeftSidenav(ref: MatSidenav) {
+		if (this.shared.settings.closeSidenavOnClick) {
+			ref.close();
+		}
+	}
+	toggleNotificationSettings() {
+
+	}
+	addDebugMessage() {
+		if (environment.production) {
+			console.error('Please run this app in developer mode for this method to function. Aborting..');
+		} else {
+			this.tempId++;
+			let random = Math.floor((Math.random() * 5) + 1);
+			switch (random) {
+				case 1:
+					this.messagingService.addMessage({ category: 'Product announcements', title: 'Check out the all new XX feature which is available starting today!', date: this.todayDate, id: `debug-${this.tempId}`, importanceLevel: MessageImportance.Low, actions: [{ title: 'Read blogpost', onClickListener: (ev) => { window.location.href = 'https://example.com' } }] });
+					break;
+				case 2:
+					this.messagingService.addMessage({ category: 'Critical alert', title: 'Feature xx is currently down. Please stand by for more updates.', date: this.todayDate, id: `debug-${this.tempId}`, importanceLevel: MessageImportance.Critical, actions: [{ title: 'Dismiss', onClickListener: (ev) => { window.location.href = 'https://example.com' } }] });
+					break;
+				case 3:
+					this.messagingService.addMessage({ category: 'Notification', title: 'Hi there!', date: this.todayDate, id: `debug-${this.tempId}`, importanceLevel: MessageImportance.Low, actions: [{ title: 'Dismiss', onClickListener: (ev) => { window.location.href = 'https://example.com' } }] });
+					break;
+				case 4:
+					this.messagingService.addMessage({ category: 'Newsletter', title: 'This week\'s newsletter', date: this.todayDate, id: `debug-${this.tempId}`, importanceLevel: MessageImportance.Medium, actions: [{ title: 'Dismiss', onClickListener: (ev) => { window.location.href = 'https://example.com' } }] });
+					break;
+				case 5:
+					this.messagingService.addMessage({ category: 'Critical alert', title: 'Update: All features are back up!', date: this.todayDate, id: `debug-${this.tempId}`, importanceLevel: MessageImportance.Critical, actions: [{ title: 'Dismiss', onClickListener: (ev) => { window.location.href = 'https://example.com' } }] });
+					break;
+				default:
+					break;
+			}
+		}
 	}
 	openUserInfoDialog() {
 		this.dialog.open(UserInfoDialogComponent);
@@ -195,6 +244,16 @@ export class AppComponent {
 		// tslint:disable-next-line:max-line-length
 		this.shared.openAlertDialog({ title: 'Export data', msg: '<p>Unfortunately, there\'s currently no such support for exporting/ importing data from/ to the database.</p><p>You should probably keep a physical copy of your notes somewhere! :)</p>', isHtml: true, ok: 'Dismiss' });
 	}
+	deleteData() {
+		this.afFs.doc(`users/${this.user.uid}`)
+			.delete()
+			.then(() => {
+				console.log('Data successfully deleted!');
+			})
+			.catch((error) => {
+				this.handleError(error.message);
+			});
+	}
 	deleteUser() {
 		// tslint:disable-next-line:max-line-length
 		let confirmDialogRef = this.shared.openConfirmDialog({ title: 'Unregister?', msg: '<p>Unregistering will clear all data associated with your account.</p><p><strong>Take note that if you would like to save your data, you can do so by going to Account > Export data.</strong></p>', isHtml: true, ok: 'Unregister and delete data' });
@@ -206,14 +265,7 @@ export class AppComponent {
 					console.log(result2);
 					console.log(this.user);
 					if (result2 === 'ok' && this.user) {
-						this.afFs.doc(`users/${this.user.uid}`)
-							.delete()
-							.then(() => {
-								console.log('Data successfully deleted!');
-							})
-							.catch((error) => {
-								this.handleError(error.message);
-							});
+						this.deleteData();
 						this.user.delete().then(() => {
 							console.log('User successfully deleted!');
 							// tslint:disable-next-line:max-line-length
@@ -238,10 +290,6 @@ export class AppComponent {
 		});
 	}
 	private handleError(errorMsg: string) {
-		// tslint:disable-next-line:max-line-length
-		this.shared.openSnackBar({ msg: `Error: ${errorMsg}`, additionalOpts: { duration: 4000, panelClass: 'mat-elevation-z3', horizontalPosition: 'start' } });
-	}
-	about() {
-		this.shared.openAlertDialog({ msg: 'Did you know that this dialog was made using a shared function? Check out the code for more info!' });
+		this.shared.openErrorSnackBar(errorMsg, null);
 	}
 }

@@ -2,6 +2,7 @@ import { Observable } from 'rxjs/Observable';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Component } from '@angular/core';
+import * as firebase from 'firebase';
 
 @Component({
 	selector: 'app-user-info-dialog',

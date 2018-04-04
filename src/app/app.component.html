@@ -8,13 +8,13 @@
 			</button>
 		</mat-toolbar>
 		<mat-nav-list>
-			<a mat-list-item *ngFor="let link of sidenavLinks" [routerLink]="['/'+link.link]" routerLinkActive="active-link" (click)="left.close()">
+			<a mat-list-item *ngFor="let link of sidenavLinks" [routerLink]="['/'+link.link]" routerLinkActive="active-link" (click)="closeLeftSidenav(left)">
 				<mat-icon matListIcon>{{link.icon}}</mat-icon>
 				<h3 matLine>{{link.title}}</h3>
 			</a>
 			<mat-divider></mat-divider>
 			<h3 matSubheader>Other</h3>
-			<a mat-list-item *ngFor="let link of otherLinks" [routerLink]="['/'+link.link]" routerLinkActive="active-link" (click)="left.close()">
+			<a mat-list-item *ngFor="let link of otherLinks" [routerLink]="['/'+link.link]" routerLinkActive="active-link" (click)="closeLeftSidenav(left)">
 				<mat-icon matListIcon>{{link.icon}}</mat-icon>
 				<h3 matLine>{{link.title}}</h3>
 			</a>
@@ -25,28 +25,34 @@
 			<p>Version 1.0.0</p>
 		</footer>
 	</mat-sidenav>
-	<mat-sidenav #notifySidenav class="app-notify-sidenav mat-elevation-z2" align="end">
-		<mat-toolbar color="primary">
+	<mat-sidenav #notifySidenav class="app-notify-sidenav mat-elevation-z2" position="end">
+		<mat-toolbar color="primary" class="sticky-toolbar mat-elevation-z3">
 			Notifications
 			<span fxFlex></span>
-			<button mat-icon-button (click)="notifySidenav.close()">
+			<button mat-icon-button *ngIf="!environment.production" (click)="addDebugMessage()" matTooltip="Add notification [DEBUG]">
+				<mat-icon>add</mat-icon>
+			</button>
+			<a mat-icon-button matTooltip="Notification settings" (click)="toggleNotificationSettings()">
+				<mat-icon>settings</mat-icon>
+			</a>
+			<button mat-icon-button matTooltip="Clear all notifications" (click)="messagingService.deleteMessages()" [disabled]="messages.length === 0">
+				<mat-icon>clear_all</mat-icon>
+			</button>
+			<button mat-icon-button (click)="notifySidenav.close()" matTooltip="Close sidenav">
 				<mat-icon>close</mat-icon>
 			</button>
 		</mat-toolbar>
-		<mat-card>
-			<mat-card-title>Todo due soon</mat-card-title>
-			<mat-card-content>
-				Your todo "todo #1" will be due soon.
-			</mat-card-content>
-			<mat-card-actions align="end">
-				<button mat-icon-button matTooltip="Mark as done"><mat-icon>done</mat-icon></button>
-				<button mat-icon-button matTooltip="Change due date"><mat-icon>event</mat-icon></button>
-				<button mat-icon-button matTooltip="Dismiss"><mat-icon>close</mat-icon></button>
-			</mat-card-actions>
-		</mat-card>
+		<message-card *ngFor="let message of messages; let i = index" [message]="message" [index]="i">
+		</message-card>
+		<div *ngIf="messages.length === 0" class="empty-state-container">
+			<div class="empty-state-div">
+				<p>All caught up!</p>
+				<button mat-raised-button color="primary">Notifications history</button>
+			</div>
+		</div>
 	</mat-sidenav>
 	<mat-sidenav-content>
-		<mat-toolbar color="primary" class="mat-elevation-z3" *ngIf="toolbarService.showToolbar" id="topToolbar">
+		<mat-toolbar color="primary" class="mat-elevation-z3 sticky-toolbar" *ngIf="toolbarService.showToolbar" id="topToolbar">
 			<button mat-icon-button (click)="left.toggle()" *ngIf="!isSidenavOpened">
 				<mat-icon>menu</mat-icon>
 			</button>
@@ -57,36 +63,15 @@
 			</button>
 			<mat-menu #accountMenu="matMenu" [overlapTrigger]="false">
 				<mat-nav-list>
-					<mat-list-item *ngIf="isSignedIn">
+					<mat-list-item *ngIf="isSignedIn" disableRipple>
 						<img matListAvatar src="{{(userObservable | async)?.photoURL}}">
 						<h3 matLine>{{(userObservable | async)?.displayName}}</h3>
 						<span matLine style="overflow:initial">{{(userObservable | async)?.email}}</span>
 					</mat-list-item>
-					<mat-divider></mat-divider>
-					<div *ngIf="isSignedIn">
-						<h3 matSubheader>Account Actions</h3>
-						<mat-list-item>
-							<mat-icon matListIcon>sync</mat-icon>
-							<h3 matLine>Sync</h3>
-						</mat-list-item>
-						<mat-list-item (click)="exportData()">
-							<mat-icon matListIcon>file_download</mat-icon>
-							<h3 matLine>Export data</h3>
-						</mat-list-item>
-						<mat-list-item (click)="deleteUser()">
-							<mat-icon matListIcon>
-								<svg width="24px" height="24px" viewBox="0 0 24 24">
-									<path d="M15,14C17.67,14 23,15.33 23,18V20H7V18C7,15.33 12.33,14 15,14M15,12A4,4 0 0,1 11,8A4,4 0 0,1 15,4A4,4 0 0,1 19,8A4,4 0 0,1 15,12M5,9.59L7.12,7.46L8.54,8.88L6.41,11L8.54,13.12L7.12,14.54L5,12.41L2.88,14.54L1.46,13.12L3.59,11L1.46,8.88L2.88,7.46L5,9.59Z"
-									/>
-								</svg>
-							</mat-icon>
-							<h3 matLine>Unregister</h3>
-						</mat-list-item>
-						<mat-list-item (click)="signOut()">
-							<mat-icon matListIcon>exit_to_app</mat-icon>
-							<h3 matLine>Log out</h3>
-						</mat-list-item>
-					</div>
+					<a mat-list-item routerLink="/account">
+						<mat-icon matListIcon>account_box</mat-icon>
+						<h3 matLine>My account</h3>
+					</a>
 					<mat-divider></mat-divider>
 					<h3 matSubheader>Help</h3>
 					<a routerLink="/settings" mat-list-item>

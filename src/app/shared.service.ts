@@ -1,31 +1,32 @@
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { FormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { Observable } from 'rxjs/Observable';
-import { Injectable, Component, OnInit, ViewChild, NgModule } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { ThemePalette } from '@angular/material/core';
-
-import {
-	MatSnackBarConfig,
-	MatSnackBar,
-	SimpleSnackBar,
-	MatSnackBarRef,
-	MatSnackBarModule
-} from '@angular/material/snack-bar';
+import { Component, Injectable, NgModule, OnInit, ViewChild } from '@angular/core';
 import {
 	MatDialog,
-	MatDialogRef,
 	MatDialogConfig,
-	MatDialogModule
+	MatDialogModule,
+	MatDialogRef
 } from '@angular/material/dialog';
-import { MatSelectionList, MatListModule } from '@angular/material/list';
-import { ComponentType } from '@angular/cdk/portal';
-import { Title, SafeHtml } from '@angular/platform-browser';
-import { BrowserModule } from '@angular/platform-browser';
+import { MatListModule, MatSelectionList } from '@angular/material/list';
+import {
+	MatSnackBar,
+	MatSnackBarConfig,
+	MatSnackBarModule,
+	MatSnackBarRef,
+	SimpleSnackBar
+} from '@angular/material/snack-bar';
+import { SafeHtml, Title } from '@angular/platform-browser';
+
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserModule } from '@angular/platform-browser';
+import { ComponentType } from '@angular/cdk/portal';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { Observable } from 'rxjs/Observable';
+import { Settings } from './interfaces';
+import { ThemePalette } from '@angular/material/core';
 
 @Injectable()
 export class SharedService {
@@ -35,6 +36,7 @@ export class SharedService {
 		private title: Title,
 		private breakpointObserver: BreakpointObserver
 	) { }
+	private _settings: Settings = {};
 	// Getters and setters
 	/**
 	 * Getter to check if the user is online
@@ -52,6 +54,47 @@ export class SharedService {
 			return true;
 		} else {
 			return false;
+		}
+	}
+	get settings(): Settings {
+		return <Settings>JSON.parse(window.localStorage.getItem('settings'));
+	}
+	set settings(settings: Settings) {
+		this._settings = settings;
+	}
+	/**
+	 * Handles errors (opens in a snackbar)
+	 * @param {string} error The error to handle
+	 * @param {SnackBarConfig} snackBarConfig The snackbar config. Overrides all other params. Specify `null` to ignore this param.
+	 * @param {boolean} showRetryBtn Whether to show a retry button. A callback is required if this parameter is true
+	 * @param {() => void} callback The callback that is called when the retry button is clicked/tapped. Requires for `showRetryBtn` to be true
+	 * @param {boolean} retryBtnText The text of the retry button.
+	 */
+	openErrorSnackBar(error: string, snackBarConfig?: SnackBarConfig, showRetryBtn?: boolean, callback?: () => void, retryBtnText?: string) {
+		if (snackBarConfig) {
+			if (callback) {
+				this.openSnackBar(snackBarConfig)
+					.onAction()
+					.subscribe(callback);
+			} else {
+				throw new Error('Please specify a callback for the retry button');
+			}
+		} else {
+			const _errorSnackBarConfig = new SnackBarConfig();
+			_errorSnackBarConfig.msg = error;
+			if (showRetryBtn) {
+				if (callback) {
+					if (retryBtnText) {
+						_errorSnackBarConfig.action = retryBtnText;
+					} else {
+						_errorSnackBarConfig.action = 'Retry';
+					}
+				} else {
+					throw new Error('Please specify a callback for the retry button');
+				}
+			}
+			this.openSnackBar(_errorSnackBarConfig)
+				.onAction().subscribe(callback);
 		}
 	}
 	/**
@@ -435,7 +478,7 @@ export class SelectionDialog implements OnInit {
 		this.dialogRef.close(this.selection.selectedOptions.selected);
 	}
 }
-export interface SnackBarConfig {
+export class SnackBarConfig {
 	/**
 	 * The message for the snackbar
 	 * @type {string}
@@ -463,7 +506,7 @@ export interface SnackBarConfig {
 	 */
 	hasElevation?: number | boolean;
 }
-export interface DialogConfig extends MatDialogConfig {
+export class DialogConfig extends MatDialogConfig {
 	/**
 	 * The message of the dialog
 	 * @type {string|SafeHtml}
@@ -485,7 +528,7 @@ export interface DialogConfig extends MatDialogConfig {
 	 */
 	themeColor?: ThemePalette;
 }
-export interface AlertDialogConfig extends DialogConfig {
+export class AlertDialogConfig extends DialogConfig {
 	/**
 	 * The ok button text
 	 * @type {string}
@@ -497,7 +540,7 @@ export interface AlertDialogConfig extends DialogConfig {
 	okColor?: ThemePalette;
 }
 
-export interface ConfirmDialogConfig extends DialogConfig {
+export class ConfirmDialogConfig extends DialogConfig {
 	/**
 	 * The ok button text
 	 * @type {string}
@@ -545,7 +588,7 @@ export interface ConfirmDialogConfig extends DialogConfig {
 	checkboxValue?: boolean;
 }
 
-export interface PromptDialogConfig extends DialogConfig {
+export class PromptDialogConfig extends DialogConfig {
 	/**
 	 * The ok button text
 	 * @type {string}
@@ -587,7 +630,7 @@ export interface PromptDialogConfig extends DialogConfig {
 	 */
 	inputColor?: ThemePalette;
 }
-export interface SelectionDialogConfig extends DialogConfig {
+export class SelectionDialogConfig extends DialogConfig {
 	/**
 	 * The ok button text
 	 * @type {string}
@@ -614,7 +657,7 @@ export interface SelectionDialogConfig extends DialogConfig {
 	 */
 	options: SelectionDialogOptions[];
 }
-export interface SelectionDialogOptions {
+export class SelectionDialogOptions {
 	/**
 	 * The title of the selection list item
 	 * @type {string}

@@ -40,7 +40,11 @@ import { ChatsComponent } from './chats/chats.component';
 import { ChatViewerComponent } from './chats/chat-viewer/chat-viewer.component';
 import { CheatsheetViewerComponent } from './cheatsheets/shared/cheatsheet-viewer/cheatsheet-viewer.component';
 import { CheatsheetHomeComponent } from './cheatsheets/cheatsheet-home/cheatsheet-home.component';
-import { MessagingService } from './messaging.service';
+import { MessagingService, MessageCardComponent } from './messaging.service';
+import { NotesHomeComponent } from './notes/notes-home/notes-home.component';
+import { NotesViewerComponent } from './notes/notes-viewer/notes-viewer.component';
+import { NoteNotFoundComponent } from './notes/note-not-found/note-not-found.component';
+import { AccountComponent } from './account/account.component';
 
 @NgModule({
 	declarations: [
@@ -64,7 +68,12 @@ import { MessagingService } from './messaging.service';
 		ChatsComponent,
 		ChatViewerComponent,
 		CheatsheetViewerComponent,
-		CheatsheetHomeComponent
+		CheatsheetHomeComponent,
+		MessageCardComponent,
+		NotesHomeComponent,
+		NotesViewerComponent,
+		NoteNotFoundComponent,
+		AccountComponent
 	],
 	imports: [
 		BrowserModule,

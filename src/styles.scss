@@ -7,13 +7,16 @@
     $accent: map-get($theme, accent);
     $warn: map-get($theme, warn);
     $background: map-get($theme, background);
-    $foreground: map-get($theme, foreground);
+	$foreground: map-get($theme, foreground);
+	$is-dark-theme: map-get($theme, is-dark);
     .active-link {
-        color: mat-color($primary) !important;
+		// Since it's a bit hard to actually see the text in the dark theme, it'll use the accent colour if it's dark and primary if it's not. Same applies for mat-icon
+        color: if($is-dark-theme, mat-color($accent), mat-color($primary)) !important;
         mat-icon {
-            color: mat-color($primary) !important;
-        }
-        background-color: map-get($background, status-bar) !important;
+            color: if($is-dark-theme, mat-color($accent), mat-color($primary)) !important;
+		}
+		// Note: These colours are based on the Android sidenav selection state
+        background-color: if($is-dark-theme, #595959, #DCDCDC) !important;
     }
     .mat-primary-text-color {
         color: mat-color($primary) !important;
@@ -119,12 +122,20 @@
 
 // @import 'assets/icons/material-icons.css';
 @include mat-core();
-$studybuddy-theme-primary: mat-palette($mat-deep-purple);
-$studybuddy-theme-accent: mat-palette($mat-amber, A200, A100, A400);
-$studybuddy-theme-theme: mat-light-theme($studybuddy-theme-primary, $studybuddy-theme-accent);
-@include angular-material-theme($studybuddy-theme-theme);
-@include studybuddy-theme($studybuddy-theme-theme);
-@include tables-theme($studybuddy-theme-theme);
+$studybuddy-light-theme-primary: mat-palette($mat-indigo);
+$studybuddy-light-theme-accent: mat-palette($mat-pink, A200, A100, A400);
+$studybuddy-light-theme-theme: mat-light-theme($studybuddy-light-theme-primary, $studybuddy-light-theme-accent);
+@include angular-material-theme($studybuddy-light-theme-theme);
+@include studybuddy-theme($studybuddy-light-theme-theme);
+@include tables-theme($studybuddy-light-theme-theme);
+.studybuddy-dark {
+	$studybuddy-dark-theme-primary: mat-palette($mat-purple);
+	$studybuddy-dark-theme-accent: mat-palette($mat-green, A200, A100, A400);
+	$studybuddy-dark-theme-theme: mat-dark-theme($studybuddy-dark-theme-primary, $studybuddy-dark-theme-accent);
+	@include angular-material-theme($studybuddy-dark-theme-theme);
+	@include studybuddy-theme($studybuddy-dark-theme-theme);
+	@include tables-theme($studybuddy-dark-theme-theme);
+}
 // Styles for table
 table.app-table {
     border-collapse: collapse;
@@ -198,8 +209,9 @@ table.app-table {
 .app-sidenav {
     width: 256px;
 }
+
 .app-notify-sidenav {
-	width: 412px;
+    width: 412px;
 }
 
 .currently-selected {
@@ -348,4 +360,24 @@ mat-card {
     // height: -moz-fit-content;
     // Safari for iOS
     height: -webkit-fit-content;
+}
+
+// Sticky toolbar
+.sticky-toolbar {
+    position: sticky; // For Safari
+    position: -webkit-sticky;
+    top: 0;
+    z-index: 9999;
+}
+
+// Empty state
+.empty-state-container {
+    height: 100%;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    .empty-state-div {
+        text-align: center;
+    }
+    .empty-state-icon {}
 }

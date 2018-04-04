@@ -19,6 +19,10 @@ export interface Settings {
 	 * Whether to enable experimental stuff
 	 */
 	enableExperimental?: boolean;
+	/**
+	 * Whether to close the sidenav when a list item is clicked
+	 */
+	closeSidenavOnClick?: boolean;
 }
 export interface TodoItem {
 	/**
