@@ -1,0 +1,10 @@
+
+<h1>Todos</h1>
+<mat-card *ngFor="let todo of dashboard.todos">
+	<mat-card-title>{{todo?.title}}</mat-card-title>
+	<mat-card-content *ngIf="todo?.content">
+		<p [innerHTML]="todo?.content | markdown"></p>
+	</mat-card-content>
+</mat-card>
+<h2>Overdue todos</h2>
+<h1>Notes</h1>
