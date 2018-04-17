@@ -23,11 +23,13 @@ export class AppComponent {
 	constructor(
 		private shared: SharedService,
 		private afAuth: AngularFireAuth,
-		private toolbarService: ToolbarService,
+		// TODO(Edric): Figure out a way to make this private
+		public toolbarService: ToolbarService,
 		private router: Router,
 		private afFs: AngularFirestore,
 		private dialog: MatDialog,
-		private messagingService: MessagingService
+		// TODO(Edric): Figure out a way to make this private
+		public messagingService: MessagingService
 	) {
 		this.userObservable = afAuth.authState;
 		this.afAuth.auth.onAuthStateChanged((user) => {

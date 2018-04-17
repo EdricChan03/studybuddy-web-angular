@@ -46,7 +46,8 @@ export class TodoDialogComponent implements OnInit {
 	showUnsupportedNotice = true;
 	enableTags = false;
 	constructor(
-		private shared: SharedService,
+		// TODO(Edric): Figure out a way to make this private
+		public shared: SharedService,
 		private afAuth: AngularFireAuth,
 		private dialogRef: MatDialogRef<TodoDialogComponent>,
 		private fs: AngularFirestore,

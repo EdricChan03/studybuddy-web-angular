@@ -87,8 +87,10 @@ export class MessagingService {
 	`
 })
 export class MessageCardComponent {
-	constructor(private messagingService: MessagingService) {
-	}
+	constructor(
+		// TODO(Edric): Figure out a way to make this private
+		public messagingService: MessagingService
+	) { }
 	@Input() message: Message;
 	@Input() index: number;
 }
