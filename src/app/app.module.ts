@@ -1,6 +1,5 @@
 import { ToolbarService } from './toolbar.service';
 import { TipsComponent } from './tips/tips.component';
-import { TodoService, TodoDatabase, TodoDataSource } from './todo/todo.service';
 import { MaterialModule } from './material.module';
 import { SharedModule } from './shared.service';
 import { environment } from '../environments/environment';
@@ -45,6 +44,9 @@ import { NotesHomeComponent } from './notes/notes-home/notes-home.component';
 import { NotesViewerComponent } from './notes/notes-viewer/notes-viewer.component';
 import { NoteNotFoundComponent } from './notes/note-not-found/note-not-found.component';
 import { AccountComponent } from './account/account.component';
+import { LoginComponent } from './login/login.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { AuthService } from './auth.service';
 
 @NgModule({
 	declarations: [
@@ -73,7 +75,9 @@ import { AccountComponent } from './account/account.component';
 		NotesHomeComponent,
 		NotesViewerComponent,
 		NoteNotFoundComponent,
-		AccountComponent
+		AccountComponent,
+		LoginComponent,
+		DashboardComponent
 	],
 	imports: [
 		BrowserModule,
@@ -103,11 +107,9 @@ import { AccountComponent } from './account/account.component';
 	],
 	bootstrap: [AppComponent],
 	providers: [
-		TodoService,
-		TodoDatabase,
-		TodoDataSource,
 		ToolbarService,
-		MessagingService
+		MessagingService,
+		AuthService
 	],
 	entryComponents: [
 		TodoDialogComponent,

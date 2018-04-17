@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { SharedService } from '../shared.service';
 import { AngularFirestore } from 'angularfire2/firestore';
-import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase';
+import { AuthService } from '../auth.service';
+
 @Component({
 	selector: 'app-account',
 	templateUrl: './account.component.html'
@@ -13,10 +14,10 @@ export class AccountComponent {
 	isSignedIn: boolean = false;
 	constructor(
 		private shared: SharedService,
-		private afFs: AngularFirestore,
-		private afAuth: AngularFireAuth
+		private authService: AuthService,
+		private afFs: AngularFirestore
 	) {
-		this.afAuth.auth.onAuthStateChanged((user) => {
+		this.authService.getAuthState().subscribe((user) => {
 			if (user) {
 				this.user = user;
 				console.log(user);
@@ -33,7 +34,7 @@ export class AccountComponent {
 		let dialogRef = this.shared.openConfirmDialog({ title: 'Log out?', msg: 'Changes not saved will be lost.', ok: 'Log out', okColor: 'warn' });
 		dialogRef.afterClosed().subscribe(result => {
 			if (result === 'ok') {
-				this.afAuth.auth.signOut().then((res) => {
+				this.authService.logOut().then((res) => {
 					// tslint:disable-next-line:max-line-length
 					const snackbarRef = this.shared.openSnackBar({ msg: 'Signed out', action: 'Undo', additionalOpts: { duration: 4000, horizontalPosition: 'start' } });
 					snackbarRef.onAction().subscribe(() => {
@@ -50,7 +51,7 @@ export class AccountComponent {
 	 * Signs in with Google
 	 */
 	signInWithGoogle() {
-		this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then((result) => {
+		this.authService.logInWithGoogle().then((result) => {
 			// tslint:disable-next-line:max-line-length
 			this.shared.openSnackBar({ msg: `Signed in as ${result.user.email}`, additionalOpts: { duration: 4000, horizontalPosition: 'start', panelClass: 'mat-elevation-z3' } });
 		}).catch((error) => {
@@ -136,7 +137,7 @@ export class AccountComponent {
 		});
 	}
 	private handleError(errorMsg: string) {
-		this.shared.openErrorSnackBar(errorMsg, null);
+		this.shared.openErrorSnackBar({ msg: `Error: ${errorMsg}`, hasElevation: 2, additionalOpts: { horizontalPosition: 'start' } });
 	}
 
 }
