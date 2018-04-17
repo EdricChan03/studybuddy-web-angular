@@ -1,21 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
-
-@import '~assets/md-font/material-icons.css';
 @import '~@angular/material/theming';
 @mixin studybuddy-theme($theme) {
     $primary: map-get($theme, primary);
     $accent: map-get($theme, accent);
     $warn: map-get($theme, warn);
     $background: map-get($theme, background);
-	$foreground: map-get($theme, foreground);
-	$is-dark-theme: map-get($theme, is-dark);
+    $foreground: map-get($theme, foreground);
+    $is-dark-theme: map-get($theme, is-dark);
     .active-link {
-		// Since it's a bit hard to actually see the text in the dark theme, it'll use the accent colour if it's dark and primary if it's not. Same applies for mat-icon
+        // Since it's a bit hard to actually see the text in the dark theme, it'll use the accent colour if it's dark and primary if it's not. Same applies for mat-icon
         color: if($is-dark-theme, mat-color($accent), mat-color($primary)) !important;
         mat-icon {
             color: if($is-dark-theme, mat-color($accent), mat-color($primary)) !important;
-		}
-		// Note: These colours are based on the Android sidenav selection state
+        } // Note: These colours are based on the Android sidenav selection state
         background-color: if($is-dark-theme, #595959, #DCDCDC) !important;
     }
     .mat-primary-text-color {
@@ -42,7 +39,7 @@
             color: mat-color($accent);
         }
     }
-    .mat-list-item-content mat-icon {
+    .mat-list-item-content mat-icon, .mat-icon-foreground {
         color: map-get($foreground, icons);
     }
     /*
@@ -65,7 +62,7 @@
         }
         .msg-icon {
             margin-right: 16px;
-             ::ng-deep [dir='rtl'] & {
+            ::ng-deep [dir='rtl'] & {
                 margin-left: 16px;
                 margin-right: 0;
             }
@@ -129,13 +126,18 @@ $studybuddy-light-theme-theme: mat-light-theme($studybuddy-light-theme-primary, 
 @include studybuddy-theme($studybuddy-light-theme-theme);
 @include tables-theme($studybuddy-light-theme-theme);
 .studybuddy-dark {
-	$studybuddy-dark-theme-primary: mat-palette($mat-purple);
-	$studybuddy-dark-theme-accent: mat-palette($mat-green, A200, A100, A400);
-	$studybuddy-dark-theme-theme: mat-dark-theme($studybuddy-dark-theme-primary, $studybuddy-dark-theme-accent);
-	@include angular-material-theme($studybuddy-dark-theme-theme);
-	@include studybuddy-theme($studybuddy-dark-theme-theme);
-	@include tables-theme($studybuddy-dark-theme-theme);
+    $studybuddy-dark-theme-primary: mat-palette($mat-purple);
+    $studybuddy-dark-theme-accent: mat-palette($mat-green, A200, A100, A400);
+    $studybuddy-dark-theme-theme: mat-dark-theme($studybuddy-dark-theme-primary, $studybuddy-dark-theme-accent);
+    @include angular-material-theme($studybuddy-dark-theme-theme);
+    @include studybuddy-theme($studybuddy-dark-theme-theme);
+    @include tables-theme($studybuddy-dark-theme-theme);
 }
+
+body {
+    overflow: hidden;
+}
+
 // Styles for table
 table.app-table {
     border-collapse: collapse;
@@ -347,19 +349,19 @@ mat-card {
 }
 
 .overlay-toolbar {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
+    z-index: 9999;
 }
 
 // Styles for todo page
 .app-todo-list-item {
     // Chrome
-    height: fit-content; // TODO(Edric): Figure out a way to solve fit-content for Firefox browsers
+    height: fit-content !important; // TODO(Edric): Figure out a way to solve fit-content for Firefox browsers
     // height: -moz-fit-content;
     // Safari for iOS
-    height: -webkit-fit-content;
+    // height: -webkit-fit-content;
 }
 
 // Sticky toolbar
@@ -380,4 +382,12 @@ mat-card {
         text-align: center;
     }
     .empty-state-icon {}
+}
+
+// Markdown
+blockquote {
+    padding: 0 1em;
+    color: #6a737d;
+	border-left: 0.25em solid #dfe2e5;
+	margin: 0;
 }
