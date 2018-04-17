@@ -9,8 +9,14 @@ export class MessagingService {
 	get messages(): Message[] {
 		return this._messages;
 	}
+	set messages(messages: Message[]) {
+		this._messages = messages;
+	}
 	get archivedMessages(): Message[] {
 		return this._archivedMeesages;
+	}
+	set archivedMessages(archivedMessages: Message[]) {
+		this._archivedMeesages = archivedMessages;
 	}
 	getMessages(): Message[] {
 		return this._messages;
@@ -22,9 +28,6 @@ export class MessagingService {
 		for (let i = 0; i++; i < messages.length) {
 			this._messages.push(messages[i]);
 		}
-	}
-	setMessages(messages: Message[]) {
-		this._messages = messages;
 	}
 	getMessageById(id: string): Message {
 		return this._messages.find((message: Message) => message.id === id);
