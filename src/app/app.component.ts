@@ -1,6 +1,6 @@
 import * as firebase from 'firebase';
 
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, HostListener } from '@angular/core';
 import { Message, MessageImportance, MessagingService } from './messaging.service';
 import { NavigationStart, Router } from '@angular/router';
 
@@ -8,7 +8,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSidenav } from '@angular/material/sidenav';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { SharedService } from './shared.service';
 import { ToolbarService } from './toolbar.service';
 import { UserInfoDialogComponent } from './dialogs';
@@ -16,7 +16,8 @@ import { environment } from '../environments/environment';
 
 @Component({
 	selector: 'app-root',
-	templateUrl: './app.component.html'
+	templateUrl: './app.component.html',
+	host: { '(window:keydown)': 'onKeydown($event)' }
 })
 export class AppComponent {
 	constructor(
@@ -72,10 +73,16 @@ export class AppComponent {
 	user: firebase.User;
 	userObservable: Observable<firebase.User>;
 	todayDate = new Date();
+	showNotificationSettings: boolean = false;
 	/**
 	 * Links for the sidenav
 	 */
 	sidenavLinks = [
+		{
+			link: 'dashboard',
+			title: 'Dashboard',
+			icon: 'view_quiltc'
+		},
 		{
 			link: 'todo',
 			title: 'Todos',
@@ -105,12 +112,17 @@ export class AppComponent {
 			link: 'notes',
 			title: 'Notes',
 			icon: 'subject'
-		}
+		},
 	];
 	/**
 	 * Other links for the sidenav
 	 */
 	otherLinks = [
+		{
+			link: 'account',
+			title: 'Account',
+			icon: 'account_box'
+		},
 		{
 			link: 'settings',
 			title: 'Settings',
@@ -139,13 +151,18 @@ export class AppComponent {
 	get isSidenavOpened(): boolean {
 		return this.sidenav.opened;
 	}
+	onKeydown($event: KeyboardEvent) {
+		// console.log(`key down: ${$event}`);
+		console.log(`onKeydown: key: ${$event.key}`);
+		console.log(`onKeydown: keyCode: ${$event.keyCode}`);
+	}
 	closeLeftSidenav(ref: MatSidenav) {
 		if (this.shared.settings.closeSidenavOnClick) {
 			ref.close();
 		}
 	}
 	toggleNotificationSettings() {
-
+		this.showNotificationSettings = !this.showNotificationSettings;
 	}
 	addDebugMessage() {
 		if (environment.production) {
@@ -290,6 +307,6 @@ export class AppComponent {
 		});
 	}
 	private handleError(errorMsg: string) {
-		this.shared.openErrorSnackBar(errorMsg, null);
+		this.shared.openErrorSnackBar({ msg: `Error: ${errorMsg}`, hasElevation: 2, additionalOpts: { horizontalPosition: 'start', } });
 	}
 }

@@ -1,3 +1,4 @@
+<router-outlet name="noToolbar"></router-outlet>
 <mat-sidenav-container fullscreen>
 	<mat-sidenav #left [mode]="isMobile ? 'over':'side'" class="app-sidenav mat-elevation-z2">
 		<mat-toolbar>
@@ -42,13 +43,18 @@
 				<mat-icon>close</mat-icon>
 			</button>
 		</mat-toolbar>
-		<message-card *ngFor="let message of messages; let i = index" [message]="message" [index]="i">
-		</message-card>
-		<div *ngIf="messages.length === 0" class="empty-state-container">
-			<div class="empty-state-div">
-				<p>All caught up!</p>
-				<button mat-raised-button color="primary">Notifications history</button>
+		<div *ngIf="!showNotificationSettings">
+			<message-card *ngFor="let message of messages; let i = index" [message]="message" [index]="i">
+			</message-card>
+			<div *ngIf="messages.length === 0" class="empty-state-container">
+				<div class="empty-state-div">
+					<p>All caught up!</p>
+					<button mat-raised-button color="primary">Notifications history</button>
+				</div>
 			</div>
+		</div>
+		<div *ngIf="showNotificationSettings">
+			Notification settings
 		</div>
 	</mat-sidenav>
 	<mat-sidenav-content>
@@ -56,7 +62,7 @@
 			<button mat-icon-button (click)="left.toggle()" *ngIf="!isSidenavOpened">
 				<mat-icon>menu</mat-icon>
 			</button>
-			Study Buddy
+			<span class="toolbar-title">Study Buddy</span>
 			<span fxFlex></span>
 			<button mat-icon-button [matMenuTriggerFor]="accountMenu" matTooltip="Account">
 				<mat-icon>account_circle</mat-icon>
