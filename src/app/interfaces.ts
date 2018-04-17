@@ -28,7 +28,7 @@ export interface TodoItem {
 	/**
 	 * The content of the todo
 	 */
-	content: string;
+	content?: string;
 	/**
 	 * The title of the todo
 	 */
