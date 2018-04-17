@@ -24,10 +24,17 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Settings } from './interfaces';
 import { ThemePalette } from '@angular/material/core';
+import { MatIconModule } from '@angular/material';
 
+/**
+ * This callback gets called when the action button has been clicked
+ * @callback SharedService~actionBtnCallback
+ */
+
+// Shared service
 @Injectable()
 export class SharedService {
 	constructor(
@@ -64,38 +71,25 @@ export class SharedService {
 	}
 	/**
 	 * Handles errors (opens in a snackbar)
-	 * @param {string} error The error to handle
 	 * @param {SnackBarConfig} snackBarConfig The snackbar config. Overrides all other params. Specify `null` to ignore this param.
-	 * @param {boolean} showRetryBtn Whether to show a retry button. A callback is required if this parameter is true
-	 * @param {() => void} callback The callback that is called when the retry button is clicked/tapped. Requires for `showRetryBtn` to be true
-	 * @param {boolean} retryBtnText The text of the retry button.
+	 * @param {(string|boolean)} [icon] The icon of the snackbar
+	 * @returns The snackbar ref
 	 */
-	openErrorSnackBar(error: string, snackBarConfig?: SnackBarConfig, showRetryBtn?: boolean, callback?: () => void, retryBtnText?: string) {
+	openErrorSnackBar(snackBarConfig: ErrorSnackBarConfig, icon?: string): MatSnackBarRef<ErrorSnackBar> {
+		let snackBarRef: MatSnackBarRef<ErrorSnackBar>;
+		snackBarRef = this.snackbar.openFromComponent(ErrorSnackBar);
 		if (snackBarConfig) {
-			if (callback) {
-				this.openSnackBar(snackBarConfig)
-					.onAction()
-					.subscribe(callback);
-			} else {
-				throw new Error('Please specify a callback for the retry button');
+			if (!snackBarConfig.additionalOpts.panelClass) {
+				snackBarConfig.additionalOpts.panelClass = 'warning-snackbar';
+			}
+			if (typeof icon == 'string') {
+				snackBarConfig.icon = icon;
+				snackBarRef.instance.snackBarConfig = snackBarConfig;
 			}
 		} else {
-			const _errorSnackBarConfig = new SnackBarConfig();
-			_errorSnackBarConfig.msg = error;
-			if (showRetryBtn) {
-				if (callback) {
-					if (retryBtnText) {
-						_errorSnackBarConfig.action = retryBtnText;
-					} else {
-						_errorSnackBarConfig.action = 'Retry';
-					}
-				} else {
-					throw new Error('Please specify a callback for the retry button');
-				}
-			}
-			this.openSnackBar(_errorSnackBarConfig)
-				.onAction().subscribe(callback);
+			throw new Error('A snack bar config is required for this method to work. Please specify a snack bar config.')
 		}
+		return snackBarRef;
 	}
 	/**
 	 * Opens a snackbar with the specified params and a return of the snackbar's ref (for component)
@@ -478,6 +472,27 @@ export class SelectionDialog implements OnInit {
 		this.dialogRef.close(this.selection.selectedOptions.selected);
 	}
 }
+@Component({
+	selector: 'error-snackbar',
+	template: `
+	<mat-icon>error</mat-icon>
+	{{snackBarConfig.msg}}
+	<div class="mat-simple-snackbar-action" *ngIf="hasAction">
+  		<button mat-button (click)="action()">{{snackBarConfig.action}}</button>
+	</div>
+	`
+})
+export class ErrorSnackBar implements OnInit {
+	snackBarConfig: SnackBarConfig;
+	hasAction: boolean;
+	constructor(private snackBarRef: MatSnackBarRef<ErrorSnackBar>) { }
+	action() {
+		this.snackBarRef.dismissWithAction();
+	}
+	ngOnInit() {
+		this.hasAction = this.snackBarConfig.action ? true : false;
+	}
+}
 export class SnackBarConfig {
 	/**
 	 * The message for the snackbar
@@ -502,9 +517,17 @@ export class SnackBarConfig {
 	/**
 	 * Whether to show an elevation on the snackbar
 	 * If a number is supplied, the elevation level will be the specified number. Or else it will be set to level 3
-	 * @type {number|boolean}
+	 * @type {(number|boolean)}
 	 */
 	hasElevation?: number | boolean;
+}
+export class ErrorSnackBarConfig extends SnackBarConfig {
+	/**
+	 * The icon of the snackbar
+	 * Defaults to `error`
+	 * @type {string}
+	 */
+	icon?: string;
 }
 export class DialogConfig extends MatDialogConfig {
 	/**
@@ -691,6 +714,9 @@ const SHARED_DIALOGS = [
 	PromptDialog,
 	SelectionDialog
 ];
+const SHARED_SNACKBARS = [
+	ErrorSnackBar
+];
 const SHARED_MODULES = [
 	BrowserModule,
 	BrowserAnimationsModule,
@@ -701,13 +727,14 @@ const SHARED_MODULES = [
 	MatInputModule,
 	MatListModule,
 	MatSnackBarModule,
-	MatCheckboxModule
+	MatCheckboxModule,
+	MatIconModule
 ];
 @NgModule({
 	imports: SHARED_MODULES,
-	declarations: SHARED_DIALOGS,
-	entryComponents: SHARED_DIALOGS,
-	exports: SHARED_DIALOGS,
+	declarations: [SHARED_DIALOGS, SHARED_SNACKBARS],
+	entryComponents: [SHARED_DIALOGS, SHARED_SNACKBARS],
+	exports: [SHARED_DIALOGS, SHARED_SNACKBARS],
 	providers: [SharedService]
 })
 export class SharedModule { }
