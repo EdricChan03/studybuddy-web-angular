@@ -23,6 +23,8 @@ import { SupportHomeComponent } from './support/support-home/support-home.compon
 import { SupportViewerComponent } from './support/shared/support-viewer/support-viewer.component';
 import { TestpageComponent } from './testpage/testpage.component';
 import { TipsComponent } from './tips/tips.component';
+import { LoginComponent } from './login/login.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 const SUPPORT_ROUTES: Route[] = [
 	{ path: 'home', component: SupportHomeComponent },
@@ -69,6 +71,10 @@ export const AppRoutes: Route[] = [
 	{ path: 'notes/:id', component: NotesViewerComponent },
 	// Account
 	{ path: 'account', component: AccountComponent },
+	// Login page
+	{ path: 'login', component: LoginComponent },
+	// Dashboard
+	{ path: 'dashboard', component: DashboardComponent },
 	// Automatically redirect users to /todo if none of the routes above match
 	{ path: '**', redirectTo: 'todo' }
 ];
