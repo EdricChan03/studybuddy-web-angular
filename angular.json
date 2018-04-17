@@ -62,8 +62,8 @@
 						"dev": {
 							"fileReplacements": [
 								{
-									"from": "src/environments/environment.ts",
-									"to": "dist/environments/environment.ts"
+									"src": "src/environments/environment.ts",
+									"replaceWith": "dist/environments/environment.ts"
 								}
 							]
 						},
@@ -79,8 +79,8 @@
 							"buildOptimizer": true,
 							"fileReplacements": [
 								{
-									"from": "src/environments/environment.ts",
-									"to": "dist/undefined"
+									"src": "src/environments/environment.ts",
+									"replaceWith": "src/environments/environment.prod.ts"
 								}
 							]
 						}
