@@ -1,19 +1,18 @@
 import { ToolbarService } from '../../toolbar.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-import { TodoService, TodoDatabase, TodoDataSource } from '../todo.service';
 import { TodoDialogComponent } from '../../dialogs';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { SharedService } from '../../shared.service';
+import { SharedService, SnackBarConfig } from '../../shared.service';
 import { TodoItem } from '../../interfaces';
 import { Component, OnInit, AfterViewInit, AfterContentInit, ViewChild } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { MatMenuTrigger } from '@angular/material/menu';
-import 'rxjs/add/observable/of';
-import { Observable } from 'rxjs/Observable';
+// import { of } from 'rxjs/create';
+import { Observable, of } from 'rxjs';
 
 @Component({
 	selector: 'app-todo-home',
@@ -26,7 +25,6 @@ export class TodoHomeComponent implements OnInit {
 	todosCollection: AngularFirestoreCollection<TodoItem>;
 	todoTable = false;
 	selectedTodos: TodoItem[] = [];
-	public dataSource: TodoDataSource | null;
 	public displayedColumns = [
 		'title',
 		'content',
@@ -41,8 +39,6 @@ export class TodoHomeComponent implements OnInit {
 		private shared: SharedService,
 		private afAuth: AngularFireAuth,
 		private dialog: MatDialog,
-		private todoService: TodoService,
-		private todoDatabase: TodoDatabase,
 		private fs: AngularFirestore,
 		private dom: DomSanitizer,
 		public toolbarService: ToolbarService
@@ -63,6 +59,9 @@ export class TodoHomeComponent implements OnInit {
 				console.warn('Current user doesn\'t exist yet!');
 			}
 		});
+	}
+	private _checkEmpty(statement: any): boolean {
+		return statement.length != 0;
 	}
 	clearSelectedTodos() {
 		this.selectedTodos = [];
@@ -90,8 +89,38 @@ export class TodoHomeComponent implements OnInit {
 			}
 		});
 	}
+	/**
+	 * Deletes all todos
+	 * See https://stackoverflow.com/a/49161622 for more info
+	 */
 	deleteAllTodos() {
-		console.log('Subscribing');
+		const dialogRef = this.shared.openConfirmDialog({ msg: 'Are you sure you want to delete all todos? Once deleted, it cannot be restored!', title: 'Delete all todos?' });
+		dialogRef.afterClosed().subscribe(result => {
+			if (result == 'ok') {
+				let promises = [];
+				this.todosCollection.ref.get()
+					.then((refs) => {
+						refs.forEach((doc) => {
+							promises.push(this.todosCollection.doc(doc.id).delete());
+						})
+					})
+					.catch((error: { message: string }) => {
+						let snackBarRef = this.shared.openErrorSnackBar({ action: 'Retry', hasElevation: 2, msg: `${error.message}`, additionalOpts: { horizontalPosition: 'start' } });
+						snackBarRef.onAction().subscribe(result => {
+							this.deleteAllTodos();
+						})
+					})
+				Promise.all(promises).then(() => {
+					console.log('All documents of collection deleted.');
+				})
+					.catch((error: { message: string }) => {
+						let snackBarRef = this.shared.openErrorSnackBar({ action: 'Retry', hasElevation: 2, msg: `${error.message}`, additionalOpts: { horizontalPosition: 'start' } });
+						snackBarRef.onAction().subscribe(result => {
+							this.deleteAllTodos();
+						})
+					})
+			}
+		})
 	}
 	handleListClick(todo: TodoItem, event: MouseEvent) {
 		if (!this.toolbarService.showToolbar) {
@@ -192,12 +221,6 @@ export class TodoHomeComponent implements OnInit {
 		});
 	}
 	ngOnInit() {
-		this.todoDatabase.getTodos().subscribe(data => {
-			console.log(data);
-			this.dataSource = new TodoDataSource(this.todoDatabase, this.paginator);
-			this.dataLength = data;
-		});
-		console.log(`Data source: ${this.dataSource}`);
 	}
 
 }

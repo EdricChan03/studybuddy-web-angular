@@ -1,4 +1,4 @@
-<mat-toolbar *ngIf="!toolbarService.showToolbar" class="mat-elevation-z3 overlay-toolbar sticky-toolbar">
+<mat-toolbar *ngIf="!toolbarService.showToolbar" class="mat-elevation-z3 overlay-toolbar">
 	<button mat-icon-button (click)="clearSelectedTodos()" matTooltip="Clear selection">
 		<mat-icon>close</mat-icon>
 	</button>
@@ -22,10 +22,14 @@
 		</div>
 	</ng-template>
 	<button mat-button (click)="deleteAllTodos()" color="warn">Delete all</button>
-	<ng-container *ngIf="(todos$ | async)?.length > 0; else: emptystate">
+	<ng-container *ngIf="(todos$ | async).length != 0; else: emptystate">
 		<mat-nav-list>
-			<mat-list-item *ngFor="let todo of todos$ | async" (click)="handleListClick(todo, $event)" [ngClass]="{'currently-selected': hasListItemSelected(todo)}"
-			 class="app-todo-list-item">
+			<mat-list-item
+				*ngFor="let todo of todos$ | async"
+				(click)="handleListClick(todo, $event)"
+				[ngClass]="{'currently-selected': hasListItemSelected(todo)}"
+				class="app-todo-list-item"
+				disableRipple>
 				<mat-icon matListIcon *ngIf="!toolbarService.showToolbar">
 					<svg width="24px" height="24px" viewBox="0 0 24 24" *ngIf="hasListItemSelected(todo)" fill="#673ab7">
 						<path d="M10,17L5,12L6.41,10.58L10,14.17L17.59,6.58L19,8M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"
@@ -73,7 +77,7 @@
 			</mat-list-item>
 		</mat-nav-list>
 	</ng-container> 
-	<mat-table #table [dataSource]="dataSource" *ngIf="todoTable">
+	<!-- <mat-table #table [dataSource]="dataSource" *ngIf="todoTable">
 		<ng-container matColumnDef="title">
 			<mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
 			<mat-cell *matCellDef="let row"> {{row.title}} </mat-cell>
@@ -99,15 +103,12 @@
 			<mat-cell *matCellDef="let row"> {{row.type}} </mat-cell>
 		</ng-container>
 
-		<!-- Delete Buttons Column -->
 		<ng-container matColumnDef="delete">
 			<mat-header-cell *matHeaderCellDef> Edit </mat-header-cell>
 			<mat-cell *matCellDef="let row">
 				<button (click)="goToDetailPage(row.$key)">Edit</button>
 			</mat-cell>
 		</ng-container>
-
-		<!-- Database key Column -->
 
 		<ng-container matColumnDef="key">
 			<mat-header-cell *matHeaderCellDef class="hiddenField"> Key </mat-header-cell>
@@ -122,7 +123,7 @@
 	</mat-table>
 	<mat-paginator #paginator [length]="dataLength?.length" [pageIndex]="0" [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]"
 	 *ngIf="todoTable">
-	</mat-paginator>
+	</mat-paginator> -->
 </div>
 <button mat-fab (click)="newTodo()" matTooltip="New todo" matTooltipPosition="left" class="new-todo-fab" *ngIf="toolbarService.showToolbar">
 	<mat-icon>add</mat-icon>
