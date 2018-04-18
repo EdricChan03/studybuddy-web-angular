@@ -43,6 +43,7 @@ export class TodoHomeComponent implements OnInit {
 		private dom: DomSanitizer,
 		public toolbarService: ToolbarService
 	) {
+		shared.title = 'Todos';
 		afAuth.auth.onAuthStateChanged((user) => {
 			if (user) {
 				console.log(user);
@@ -122,6 +123,18 @@ export class TodoHomeComponent implements OnInit {
 			}
 		})
 	}
+	toggleChecked(todo: TodoItem) {
+		todo.hasDone = !todo.hasDone;
+		if (todo.hasDone) {
+			this.todosCollection.doc<TodoItem>(todo.id).update({
+				hasDone: true
+			});
+		} else {
+			this.todosCollection.doc<TodoItem>(todo.id).update({
+				hasDone: false
+			});
+		}
+	}
 	handleListClick(todo: TodoItem, event: MouseEvent) {
 		if (!this.toolbarService.showToolbar) {
 			if (this.selectedTodos.indexOf(todo) === -1) {
@@ -145,16 +158,7 @@ export class TodoHomeComponent implements OnInit {
 					console.debug('[DEBUG] Item removed:', this.selectedTodos);
 				}
 			} else {
-				todo.hasDone = !todo.hasDone;
-				if (todo.hasDone) {
-					this.todosCollection.doc<TodoItem>(todo.id).update({
-						hasDone: true
-					});
-				} else {
-					this.todosCollection.doc<TodoItem>(todo.id).update({
-						hasDone: false
-					});
-				}
+				this.toggleChecked(todo);
 			}
 		}
 		if (this.selectedTodos.length > 0) {
@@ -173,7 +177,10 @@ export class TodoHomeComponent implements OnInit {
 		let dialogRef = this.dialog.open(TodoDialogComponent, { disableClose: true });
 		dialogRef.componentInstance.isNewTodo = true;
 	}
-	editTodo(todoItem: TodoItem) {
+	editTodo(todoItem: TodoItem, event?: KeyboardEvent | MouseEvent) {
+		if (event) {
+			event.stopImmediatePropagation();
+		}
 		let dialogRef = this.dialog.open(TodoDialogComponent, { disableClose: true });
 		dialogRef.componentInstance.isNewTodo = false;
 		dialogRef.componentInstance.todoToEdit = todoItem;
@@ -184,9 +191,19 @@ export class TodoHomeComponent implements OnInit {
 			this.shared.openSnackBar({ msg: 'Todo was removed', additionalOpts: { duration: 3000, horizontalPosition: 'start', panelClass: 'mat-elevation-z3' } });
 		});
 	}
+	stopPropogation(event: KeyboardEvent) {
+		event.stopImmediatePropagation();
+	}
 	removeTodo(id: string, bypassDialog?: boolean, event?: KeyboardEvent) {
-		if (event && event.shiftKey || bypassDialog) {
-			this._deleteTodo(id);
+		if (event) {
+			event.stopImmediatePropagation();
+			// Check if shify key is pressed
+			if (event.shiftKey || bypassDialog) {
+				this._deleteTodo(id);
+			} else {
+				// Show confirmation dialog
+				this.deleteConfirmDialog(id, true);
+			}
 		} else {
 			this.deleteConfirmDialog(id, true);
 		}
