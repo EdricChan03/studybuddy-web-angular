@@ -3,12 +3,12 @@ import * as firebase from 'firebase';
 import { Component, ViewChild, HostListener } from '@angular/core';
 import { Message, MessageImportance, MessagingService } from './messaging.service';
 import {
+	Event,
 	NavigationStart,
-	Router,
-	RouterEvent,
 	NavigationEnd,
 	NavigationCancel,
-	NavigationError
+	NavigationError,
+	Router
 } from '@angular/router';
 
 import { AngularFireAuth } from 'angularfire2/auth';
@@ -161,7 +161,7 @@ export class AppComponent {
 	get isSidenavOpened(): boolean {
 		return this.sidenav.opened;
 	}
-	navigationInterceptor(event: RouterEvent) {
+	navigationInterceptor(event: Event) {
 		if (event instanceof NavigationStart) {
 			this.toolbarService.setProgress(true, true);
 		}
