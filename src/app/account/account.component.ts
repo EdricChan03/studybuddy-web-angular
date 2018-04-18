@@ -17,6 +17,7 @@ export class AccountComponent {
 		private authService: AuthService,
 		private afFs: AngularFirestore
 	) {
+		shared.title = 'Account';
 		this.authService.getAuthState().subscribe((user) => {
 			if (user) {
 				this.user = user;

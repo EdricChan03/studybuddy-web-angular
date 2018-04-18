@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TodoItem } from '../interfaces';
+import { SharedService } from '../shared.service';
 
 interface Dashboard {
 	todos: TodoItem[];
@@ -7,12 +8,15 @@ interface Dashboard {
 }
 @Component({
 	selector: 'app-dashboard',
-	templateUrl: './dashboard.component.html',
-	styles: []
+	templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent implements OnInit {
 
-	constructor() { }
+	constructor(
+		private shared: SharedService
+	) {
+		shared.title = 'Dashboard';
+	}
 	dashboard: Dashboard = {
 		todos: [
 			{

@@ -1,4 +1,3 @@
-<router-outlet name="noToolbar"></router-outlet>
 <mat-sidenav-container fullscreen>
 	<mat-sidenav #left [mode]="isMobile ? 'over':'side'" class="app-sidenav mat-elevation-z2">
 		<mat-toolbar>
@@ -58,11 +57,16 @@
 		</div>
 	</mat-sidenav>
 	<mat-sidenav-content>
+		<mat-progress-bar
+			color="accent"
+			[mode]="toolbarService.progressIndeterminate ? 'indeterminate' : 'determinate'"
+			*ngIf="toolbarService.showProgress"
+			[value]="toolbarService.progressPercentage"></mat-progress-bar>
 		<mat-toolbar color="primary" class="mat-elevation-z3 sticky-toolbar" *ngIf="toolbarService.showToolbar" id="topToolbar">
 			<button mat-icon-button (click)="left.toggle()" *ngIf="!isSidenavOpened">
 				<mat-icon>menu</mat-icon>
 			</button>
-			<span class="toolbar-title">Study Buddy</span>
+			<span class="toolbar-title">Study Buddy - {{shared.title}}</span>
 			<span fxFlex></span>
 			<button mat-icon-button [matMenuTriggerFor]="accountMenu" matTooltip="Account">
 				<mat-icon>account_circle</mat-icon>

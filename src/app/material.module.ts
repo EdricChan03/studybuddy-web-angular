@@ -18,6 +18,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -49,7 +50,8 @@ const MATERIAL_MODULES = [
 	MatTableModule,
 	MatPaginatorModule,
 	MatProgressSpinnerModule,
-	MatBadgeModule
+	MatBadgeModule,
+	MatProgressBarModule
 ];
 const CDK_MODULES = [
 	LayoutModule,

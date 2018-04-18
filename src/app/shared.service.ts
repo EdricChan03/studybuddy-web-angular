@@ -40,10 +40,20 @@ export class SharedService {
 	constructor(
 		private snackbar: MatSnackBar,
 		private dialog: MatDialog,
-		private title: Title,
+		private documentTitle: Title,
 		private breakpointObserver: BreakpointObserver
 	) { }
 	private _settings: Settings = {};
+	_title = '';
+
+	get title(): string { return this._title };
+	set title(title: string) {
+		this._title = title;
+		if (title !== '') {
+		  title = `${title} | `;
+		}
+		this.documentTitle.setTitle(`${title}Study Buddy`);
+	}
 	// Getters and setters
 	/**
 	 * Getter to check if the user is online
@@ -299,19 +309,6 @@ export class SharedService {
 	private throwError(variable: string, type: string) {
 		// tslint:disable-next-line:max-line-length
 		throw new Error(`"${variable}" was not specified. Please ensure that the "${variable}" property is specified and that it is of type "${type}".`);
-	}
-	/**
-	 * Sets the document's title
-	 * @param {string} title The title of the document to set
-	 */
-	setTitle(title: string) {
-		this.title.setTitle(title);
-	}
-	/**
-	 * Returns the document's title
-	 */
-	getTitle(): string {
-		return this.title.getTitle();
 	}
 }
 

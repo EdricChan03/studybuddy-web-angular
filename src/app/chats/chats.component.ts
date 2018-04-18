@@ -1,5 +1,6 @@
 import { Chat } from '../interfaces';
 import { Component, OnInit } from '@angular/core';
+import { SharedService } from '../shared.service';
 
 @Component({
 	selector: 'app-chats',
@@ -7,7 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ChatsComponent implements OnInit {
 
-	constructor() { }
+	constructor(
+		private shared: SharedService
+	) {
+		shared.title = 'Chats';
+	}
 	chats: Chat[];
 	ngOnInit() {
 		this.chats = [

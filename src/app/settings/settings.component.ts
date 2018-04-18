@@ -9,7 +9,11 @@ import { SharedService } from '../shared.service';
 	encapsulation: ViewEncapsulation.None
 })
 export class SettingsComponent implements OnInit {
-	constructor(private shared: SharedService) { }
+	constructor(
+		private shared: SharedService
+	) {
+		shared.title = 'Settings';
+	}
 
 	defaultSettings: Settings = {
 		enableCalendar: false,

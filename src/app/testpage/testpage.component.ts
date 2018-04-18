@@ -43,7 +43,9 @@ export class TestpageComponent implements OnInit {
 	constructor(
 		private shared: SharedService,
 		private dom: DomSanitizer
-	) { }
+	) {
+		shared.title = 'Test page';
+	}
 	ngOnInit() {
 		this.dialog.dialogType = 'alert';
 		this.buttons = [

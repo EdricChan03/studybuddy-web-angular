@@ -1,15 +1,19 @@
 import { Component, OnInit } from '@angular/core';
+import { SharedService } from '../../shared.service';
 
 @Component({
-  selector: 'app-cheatsheet-home',
-  templateUrl: './cheatsheet-home.component.html',
-  styles: []
+	selector: 'app-cheatsheet-home',
+	templateUrl: './cheatsheet-home.component.html',
 })
 export class CheatsheetHomeComponent implements OnInit {
 
-  constructor() { }
+	constructor(
+		private shared: SharedService
+	) {
+		shared.title = 'Cheatsheets';
+	}
 
-  ngOnInit() {
-  }
+	ngOnInit() {
+	}
 
 }

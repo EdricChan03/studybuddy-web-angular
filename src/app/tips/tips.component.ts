@@ -13,7 +13,9 @@ export class TipsComponent implements OnInit {
 	constructor(
 		private http: HttpClient,
 		private shared: SharedService
-	) { }
+	) {
+		shared.title = 'Tips';
+	}
 
 	/**
 	 * Gets today's quote of the day

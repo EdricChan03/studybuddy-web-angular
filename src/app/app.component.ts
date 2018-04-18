@@ -2,7 +2,14 @@ import * as firebase from 'firebase';
 
 import { Component, ViewChild, HostListener } from '@angular/core';
 import { Message, MessageImportance, MessagingService } from './messaging.service';
-import { NavigationStart, Router } from '@angular/router';
+import {
+	NavigationStart,
+	Router,
+	RouterEvent,
+	NavigationEnd,
+	NavigationCancel,
+	NavigationError
+} from '@angular/router';
 
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore } from 'angularfire2/firestore';
@@ -21,7 +28,7 @@ import { environment } from '../environments/environment';
 })
 export class AppComponent {
 	constructor(
-		private shared: SharedService,
+		public shared: SharedService,
 		private afAuth: AngularFireAuth,
 		// TODO(Edric): Figure out a way to make this private
 		public toolbarService: ToolbarService,
@@ -56,6 +63,7 @@ export class AppComponent {
 					this.toolbarService.showToolbar = true;
 				}
 			}
+			this.navigationInterceptor(event);
 		});
 	}
 	get messages(): Message[] {
@@ -152,6 +160,22 @@ export class AppComponent {
 	 */
 	get isSidenavOpened(): boolean {
 		return this.sidenav.opened;
+	}
+	navigationInterceptor(event: RouterEvent) {
+		if (event instanceof NavigationStart) {
+			this.toolbarService.setProgress(true, true);
+		}
+		if (event instanceof NavigationEnd) {
+			this.toolbarService.setProgress(false);
+		}
+		
+		// Set loading state to false in both of the below events to hide the spinner in case a request fails
+		if (event instanceof NavigationCancel) {
+			this.toolbarService.setProgress(false);
+		}
+		if (event instanceof NavigationError) {
+			this.toolbarService.setProgress(false);
+		}
 	}
 	onKeydown($event: KeyboardEvent) {
 		// console.log(`key down: ${$event}`);

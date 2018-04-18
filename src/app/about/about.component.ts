@@ -1,13 +1,17 @@
 import { Component, OnInit } from '@angular/core';
+import { SharedService } from '../shared.service';
 
 @Component({
 	selector: 'app-about',
 	templateUrl: './about.component.html',
-	styles: []
 })
 export class AboutComponent implements OnInit {
 
-	constructor() { }
+	constructor(
+		private shared: SharedService
+	) {
+		shared.title = 'About';
+	}
 
 	ngOnInit() {
 	}
