@@ -1,23 +1,2 @@
-<div fxLayout="row">
-	<div fxFlex="30">
-		<div class="fake-toolbar" [ngClass]="{'shown': !toolbarService.showToolbar}"></div>
-		<mat-nav-list>
-			<a mat-list-item routerLink="/todo/home" routerLinkActive="active-link" (click)="toggleToolbar(true)">
-				<mat-icon matListIcon>home</mat-icon>
-				<h3 matLine>Home</h3>
-			</a>
-			<a mat-list-item routerLink="/todo/archived" routerLinkActive="active-link" (click)="toggleToolbar(true)">
-				<mat-icon matListIcon>archive</mat-icon>
-				<h3 matLine>Archived</h3>
-			</a>
-			<a mat-list-item routerLink="." (click)="toggleToolbar(true)">
-				<mat-icon matListIcon>assistant</mat-icon>
-				<h3 matLine>Assistant <strong>(COMING SOON)</strong></h3>
-			</a>
-		</mat-nav-list>
-	</div>
-	<div fxFlex="70">
-		<div class="fake-toolbar" [ngClass]="{'shown': !toolbarService.showToolbar}"></div>
-		<router-outlet></router-outlet>
-	</div>
-</div>
+<div class="fake-toolbar" [ngClass]="{'shown': !toolbarService.showToolbar}"></div>
+<router-outlet></router-outlet>
