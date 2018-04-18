@@ -11,7 +11,7 @@
 		<mat-icon>delete</mat-icon>
 	</button>
 </mat-toolbar>
-<div class="mat-elevation-z2" style="min-height: 400px">
+<div>
 	<ng-template #emptystate>
 		<div class="empty-state-container">
 			<div class="empty-state-div">
@@ -21,11 +21,12 @@
 			</div>
 		</div>
 	</ng-template>
+	<p>{{(todos$ | async).length}}</p>
 	<button mat-button (click)="deleteAllTodos()" color="warn">Delete all</button>
-	<ng-container *ngIf="(todos$ | async).length != 0; else: emptystate">
+	<ng-container *ngIf="todos$ | async; let todos; else: emptystate">
 		<mat-nav-list>
 			<mat-list-item
-				*ngFor="let todo of todos$ | async"
+				*ngFor="let todo of todos"
 				(click)="handleListClick(todo, $event)"
 				[ngClass]="{'currently-selected': hasListItemSelected(todo)}"
 				class="app-todo-list-item"
@@ -67,12 +68,28 @@
 					<span>Project: {{todo?.project}}</span>
 				</span>
 				<span fxFlex></span>
-				<button mat-icon-button matTooltip="Edit todo" (click)="editTodo(todo)" *ngIf="toolbarService.showToolbar">
-					<mat-icon>edit</mat-icon>
-				</button>
-				<button mat-icon-button matTooltip="Remove todo" (click)="removeTodo(todo?.id, false, $event)" *ngIf="toolbarService.showToolbar">
-					<mat-icon>delete</mat-icon>
-				</button>
+				<ng-container *ngIf="toolbarService.showToolbar">
+					<button [matMenuTriggerFor]="moreActionsMenu" mat-icon-button (click)="stopPropogation($event)">
+						<mat-icon>more_vert</mat-icon>
+					</button>
+					<mat-menu #moreActionsMenu="matMenu">
+						<button mat-menu-item (click)="editTodo(todo, $event)">
+							<mat-icon>edit</mat-icon>
+							Edit todo
+						</button>
+						<button mat-menu-item>
+							<mat-icon>archive</mat-icon>
+							Archive todo
+						</button>
+						<button mat-menu-item (click)="toggleChecked(todo)">
+							<mat-icon>{{todo?.hasDone ? 'check_box_outline_blank' : 'check_box'}}</mat-icon>
+							Mark todo as {{todo?.hasDone ? 'undone' : 'done'}}
+						</button>
+					</mat-menu>
+					<button mat-icon-button matTooltip="Remove todo" (click)="removeTodo(todo?.id, false, $event)" *ngIf="toolbarService.showToolbar">
+						<mat-icon>delete</mat-icon>
+					</button>
+				</ng-container>
 				<mat-divider></mat-divider>
 			</mat-list-item>
 		</mat-nav-list>
