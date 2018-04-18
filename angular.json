@@ -63,7 +63,7 @@
 							"fileReplacements": [
 								{
 									"src": "src/environments/environment.ts",
-									"replaceWith": "dist/environments/environment.ts"
+									"replaceWith": "src/environments/environment.ts"
 								}
 							]
 						},
