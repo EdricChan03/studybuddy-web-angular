@@ -1,0 +1,28 @@
+<h2 matDialogTitle>New project</h2>
+<div matDialogContent fxLayout="column">
+	<form [formGroup]="options" fxLayout="column">
+		<mat-form-field>
+			<mat-label>Name</mat-label>
+			<input matInput formControlName="name">
+			<mat-error *ngIf="options.get('name')?.hasError('required')">A name is required.</mat-error>
+			<mat-error *ngIf="options.get('name')?.hasError('minLength')">A minimum of three characters is required.</mat-error>
+		</mat-form-field>
+		<p>Accepted color values: #RRGGBB</p>
+		<p>Where they denote the following:</p>
+		<ul>
+			<li><strong>RR</strong> denotes the red value of the color. Accepted values: 00 to FF.</li>
+			<li><strong>GG</strong> denotes the green value of the color. Accepted values: 00 to FF.</li>
+			<li><strong>BB</strong> denotes the blue value of the color. Accepted values: 00 to FF.</li>
+		</ul>
+		<mat-form-field>
+			<mat-label>Color</mat-label>
+			<input matInput formControlName="color">
+			<mat-error *ngIf="options.get('color')?.hasError('required')">A color is re	quired</mat-error>
+			<mat-error *ngIf="options.get('color')?.hasError('pattern')">The color is to be in the form #RRGGBB.</mat-error>
+		</mat-form-field>
+	</form>
+</div>
+<div matDialogActions align="end">
+	<button mat-button matDialogClose color="primary">Cancel</button>
+	<button mat-button matDialogClose (click)="onClose()" color="primary" [disabled]="options.invalid">Add</button>
+</div>

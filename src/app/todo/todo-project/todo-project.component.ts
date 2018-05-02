@@ -1,24 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { AuthService } from '../../auth.service';
+import { TodoProject } from '../../interfaces';
+import { Observable } from 'rxjs';
+import { AngularFirestoreCollection } from 'angularfire2/firestore';
+import { ToolbarService } from '../../toolbar.service';
 
 @Component({
 	selector: 'app-todo-project',
 	templateUrl: './todo-project.component.html'
 })
-export class TodoProjectComponent implements OnInit {
-
-	constructor(
-		private router: Router,
-		private route: ActivatedRoute
-	) {
-		route.params.subscribe(result => {
-			if (result.projectId) {
-				console.log(`Project ID: ${result.projectId}`);
-			}
-		})
-	}
-
-	ngOnInit() {
-	}
-
+export class TodoProjectComponent {
 }

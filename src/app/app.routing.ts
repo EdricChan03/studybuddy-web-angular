@@ -25,6 +25,7 @@ import { TestpageComponent } from './testpage/testpage.component';
 import { TipsComponent } from './tips/tips.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { TodoOutletComponent } from './todo/todo-outlet/todo-outlet.component';
 
 const SUPPORT_ROUTES: Route[] = [
 	{ path: 'home', component: SupportHomeComponent },
@@ -36,14 +37,15 @@ export const AppRoutes: Route[] = [
 	// Downloads for the app. Currently a bit empty
 	{ path: 'downloads', component: AppDownloadsComponent },
 	{
-		path: 'todo', component: TodoDashboardComponent, children: [
+		path: 'todo', component: TodoOutletComponent, children: [
 			// All todos
 			{ path: 'home', component: TodoHomeComponent },
 			// Not working as of now
 			{ path: 'archived', component: TodoArchivedComponent },
 			// Experimental, currently WIP
 			{ path: 'project/:projectId', component: TodoProjectComponent },
-			{ path: '**', redirectTo: 'home' }
+			{ path: 'dashboard', component: TodoDashboardComponent },
+			{ path: '**', redirectTo: '/todo/dashboard' }
 		]
 	},
 	// Test links for developers.
@@ -74,9 +76,7 @@ export const AppRoutes: Route[] = [
 	// Login page
 	{ path: 'login', component: LoginComponent },
 	// Dashboard
-	{ path: 'dashboard', component: DashboardComponent },
-	// Automatically redirect users to /todo if none of the routes above match
-	{ path: '**', redirectTo: 'todo' }
+	{ path: 'dashboard', component: DashboardComponent }
 ];
 
 // The routing

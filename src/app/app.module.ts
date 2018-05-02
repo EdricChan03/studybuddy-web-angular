@@ -30,7 +30,8 @@ import {
 	EditContentDialogComponent,
 	TodoDialogComponent,
 	SignInDialogComponent,
-	UserInfoDialogComponent
+	UserInfoDialogComponent,
+	NewProjectDialogComponent
 } from './dialogs';
 import { SupportHomeComponent } from './support/support-home/support-home.component';
 import { SupportViewerComponent } from './support/shared/support-viewer/support-viewer.component';
@@ -47,6 +48,7 @@ import { AccountComponent } from './account/account.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AuthService } from './auth.service';
+import { TodoOutletComponent } from './todo/todo-outlet/todo-outlet.component';
 
 @NgModule({
 	declarations: [
@@ -77,7 +79,9 @@ import { AuthService } from './auth.service';
 		NoteNotFoundComponent,
 		AccountComponent,
 		LoginComponent,
-		DashboardComponent
+		DashboardComponent,
+		TodoOutletComponent,
+		NewProjectDialogComponent
 	],
 	imports: [
 		BrowserModule,
@@ -109,13 +113,15 @@ import { AuthService } from './auth.service';
 	providers: [
 		ToolbarService,
 		MessagingService,
-		AuthService
+		AuthService,
+		NewProjectDialogComponent
 	],
 	entryComponents: [
 		TodoDialogComponent,
 		EditContentDialogComponent,
 		SignInDialogComponent,
-		UserInfoDialogComponent
+		UserInfoDialogComponent,
+		NewProjectDialogComponent
 	]
 })
 export class AppModule { }

@@ -11,12 +11,17 @@ import { TodoItem } from '../../interfaces';
 import { Component, OnInit, AfterViewInit, AfterContentInit, ViewChild } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { MatMenuTrigger } from '@angular/material/menu';
-// import { of } from 'rxjs/create';
 import { Observable, of } from 'rxjs';
+import { transition, style, animate, trigger, keyframes } from '@angular/animations';
+import { getColourFlashAnimation } from '../../animations';
+// import { animations } from '../../animations';
 
 @Component({
 	selector: 'app-todo-home',
-	templateUrl: './todo-home.component.html'
+	templateUrl: './todo-home.component.html',
+	animations: [
+		getColourFlashAnimation('#fff3e0', 'todoUpdateAnim')
+	]
 })
 export class TodoHomeComponent implements OnInit {
 	@ViewChild(MatMenuTrigger) rightClickMenu: MatMenuTrigger;
@@ -25,16 +30,6 @@ export class TodoHomeComponent implements OnInit {
 	todosCollection: AngularFirestoreCollection<TodoItem>;
 	todoTable = false;
 	selectedTodos: TodoItem[] = [];
-	public displayedColumns = [
-		'title',
-		'content',
-		'dueDate',
-		'tags',
-		'importance',
-		'type'
-	];
-	@ViewChild(MatPaginator) paginator: MatPaginator;
-	public dataLength: any;
 	constructor(
 		private shared: SharedService,
 		private afAuth: AngularFireAuth,
@@ -52,10 +47,13 @@ export class TodoHomeComponent implements OnInit {
 				this.todos$ = this.todosCollection.snapshotChanges().map(actions => {
 					return actions.map(a => {
 						const data = a.payload.doc.data() as TodoItem;
-						const id = a.payload.doc.id;
-						return { id, ...data };
+						data.id = a.payload.doc.id;
+						return data;
 					});
 				});
+				this.todos$.subscribe(() => {
+					this.toolbarService.setProgress(false);
+				})
 			} else {
 				console.warn('Current user doesn\'t exist yet!');
 			}
@@ -182,8 +180,9 @@ export class TodoHomeComponent implements OnInit {
 			event.stopImmediatePropagation();
 		}
 		let dialogRef = this.dialog.open(TodoDialogComponent, { disableClose: true });
+		let tempTodoItem = Object.assign({}, todoItem);
 		dialogRef.componentInstance.isNewTodo = false;
-		dialogRef.componentInstance.todoToEdit = todoItem;
+		dialogRef.componentInstance.todoToEdit = tempTodoItem;
 	}
 	private _deleteTodo(id: string) {
 		this.todosCollection.doc(id).delete().then(() => {
@@ -238,6 +237,7 @@ export class TodoHomeComponent implements OnInit {
 		});
 	}
 	ngOnInit() {
+		this.toolbarService.setProgress(true, true);
 	}
 
 }

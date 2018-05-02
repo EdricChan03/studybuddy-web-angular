@@ -1,2 +1,32 @@
-<div class="fake-toolbar" [ngClass]="{'shown': !toolbarService.showToolbar}"></div>
-<router-outlet></router-outlet>
+<div class="padding-percentage-container">
+	<h1>Todo Dashboard</h1>
+	<h2>Todos</h2>
+	<mat-card class="todo-dashboard-card">
+		<a class="card-section" fxLayout="row" fxLayoutAlign="space-between center" routerLink="/todo/home" tabindex="0">
+			<span>Home</span>
+			<mat-icon>navigate_next</mat-icon>
+		</a>
+		<a class="card-section" fxLayout="row" fxLayoutAlign="space-between center" routerLink="/todo/archived" tabindex="0">
+			<span>Archived</span>
+			<mat-icon>navigate_next</mat-icon>
+		</a>
+	</mat-card>
+	<div class="todo-dashboard-projects-header" fxLayout="row" fxLayoutAlign="space-between center">
+		<h2 fxLayout="row" fxLayoutAlign="center center">
+			<mat-icon svgIcon="mdi:project"></mat-icon>
+			<span fxFlex="3"></span>
+			Projects
+		</h2>
+		<button mat-raised-button (click)="addNewProject()" color="primary"><mat-icon>add</mat-icon> New Project</button>
+	</div>
+	<mat-card class="todo-dashboard-card">
+		<a class="card-section" fxLayout="row" [routerLink]="['/todo/project', project.id]" *ngFor="let project of projects$ | async" @todoProjectUpdateAnim tabindex="0">
+			<mat-icon svgIcon="mdi:project" [style.color]="project.color"></mat-icon>
+			<span fxFlex="3"></span>
+			<span>{{project?.name}}</span>
+			<span fxFlex></span>
+			<button mat-icon-button (click)="removeProject(project.id, false, $event)" matTooltip="Delete project"><mat-icon>delete</mat-icon></button>
+			<mat-icon>navigate_next</mat-icon>
+		</a>
+	</mat-card>
+</div>

@@ -64,3 +64,10 @@ export interface Chat {
 	owner: string;
 	notifications?: number | string;
 }
+
+export interface TodoProject {
+	name: string;
+	todos?: any;
+	id?: string;
+	color?: string;
+}
