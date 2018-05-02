@@ -9,13 +9,23 @@ import { animations, getColourFlashAnimation } from '../../animations';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material';
 import { NewProjectDialogComponent } from '../../dialogs';
+import { transition, style, animate, trigger, keyframes } from '@angular/animations';
 
 @Component({
 	selector: 'app-todo-dashboard',
 	templateUrl: './todo-dashboard.component.html',
 	styleUrls: ['./todo-dashboard.component.scss'],
 	animations: [
-		getColourFlashAnimation('#fff3e0', 'todoProjectUpdateAnim')
+		trigger('todoProjectUpdateAnim', [
+			transition(':enter', [
+				animate('0.5s cubic-bezier(0.4, 0, 0.2, 1)', keyframes([
+					style({ 'background-color': '*', offset: 0 }),
+					style({ 'background-color': '#fff3e0', offset: 0.25 }),
+					style({ 'background-color': '#fff3e0', offset: 0.75 }),
+					style({ 'background-color': '*', offset: 1 })
+				])
+				)]
+			)])
 	]
 })
 export class TodoDashboardComponent {

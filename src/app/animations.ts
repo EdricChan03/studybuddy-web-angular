@@ -36,26 +36,3 @@ export const animations: Animations = {
 			)]
 		)])
 }
-
-/**
- * Gets a flashing colour animation
- * @param {string} colour The colour to flash
- * @param {string} [animationName] The animation metadata's name
- * @deprecated Use your own implementation
- * @returns {AnimationTriggerMetadata} The animation metadata
- */
-export function getColourFlashAnimation(colour: string, animationName?: string): AnimationTriggerMetadata {
-	if (!animationName) { 
-		animationName = 'colourAnim';
-	}
-	return trigger(animationName, [
-		transition(':enter', [
-			animate('0.5s cubic-bezier(0.4, 0, 0.2, 1)', keyframes([
-				style({ 'background-color': '*', offset: 0 }),
-				style({ 'background-color': colour, offset: 0.25 }),
-				style({ 'background-color': colour, offset: 0.75 }),
-				style({ 'background-color': '*', offset: 1 })
-			])
-			)]
-		)])
-}
