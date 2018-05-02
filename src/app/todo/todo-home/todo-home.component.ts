@@ -20,7 +20,16 @@ import { getColourFlashAnimation } from '../../animations';
 	selector: 'app-todo-home',
 	templateUrl: './todo-home.component.html',
 	animations: [
-		getColourFlashAnimation('#fff3e0', 'todoUpdateAnim')
+		trigger('todoUpdateAnim', [
+			transition(':enter', [
+				animate('0.5s cubic-bezier(0.4, 0, 0.2, 1)', keyframes([
+					style({ 'background-color': '*', offset: 0 }),
+					style({ 'background-color': '#fff3e0', offset: 0.25 }),
+					style({ 'background-color': '#fff3e0', offset: 0.75 }),
+					style({ 'background-color': '*', offset: 1 })
+				])
+				)]
+			)])
 	]
 })
 export class TodoHomeComponent implements OnInit {
