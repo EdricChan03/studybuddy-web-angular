@@ -4,7 +4,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCardModule } from '@angular/material/card';
@@ -26,6 +26,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatBadgeModule } from '@angular/material/badge';
 import { LayoutModule } from '@angular/cdk/layout';
 import { PlatformModule } from '@angular/cdk/platform';
+import { DomSanitizer } from '@angular/platform-browser';
 const MATERIAL_MODULES = [
 	MatButtonModule,
 	MatButtonToggleModule,
@@ -58,13 +59,13 @@ const CDK_MODULES = [
 	PlatformModule
 ];
 @NgModule({
-	imports: [
-		MATERIAL_MODULES,
-		CDK_MODULES
-	],
 	exports: [
 		MATERIAL_MODULES,
 		CDK_MODULES
 	]
 })
-export class MaterialModule { }
+export class MaterialModule {
+	constructor(private dom: DomSanitizer, private iconRegistry: MatIconRegistry) {
+		iconRegistry.addSvgIconSetInNamespace('mdi', dom.bypassSecurityTrustResourceUrl('assets/mdi-icons.svg'));
+	}
+}
