@@ -301,6 +301,18 @@ export class SharedService {
 		return this.dialog.afterAllClosed;
 	}
 	/**
+	 * Generates a random hex colour
+	 * @returns A random hexdigit colour
+	 */
+	getRandomColor(): string {
+		let letters = '0123456789ABCDEF';
+		let color = '#';
+		for (let i = 0; i < 6; i++) {
+		  color += letters[Math.floor(Math.random() * 16)];
+		}
+		return color;
+	}
+	/**
 	 * Throws an error with the specified parameters
 	 * @param {string} variable The variable that was not specified
 	 * @param {string} type The type of variable
@@ -404,7 +416,7 @@ export class ConfirmDialog implements OnInit {
 		<span *ngIf="promptConfig.isHtml" [innerHTML]="promptConfig.msg"></span>
 		<form #form="ngForm">
 			<mat-form-field [color]="promptConfig.inputColor ? promptConfig.inputColor : 'primary'" style="width:100%">
-				<input matInput [(ngModel)]="input" placeholder="{{promptConfig.placeholder}}" type="{{promptConfig.inputType ? promptConfig.inputType : 'text'}}" required name="input">
+				<input matInput [(ngModel)]="input" [placeholder]="promptConfig.placeholder" [type]="promptConfig.inputType ? promptConfig.inputType : 'text'" required name="input">
 				<mat-error>This is required.</mat-error>
 			</mat-form-field>
 		</form>
