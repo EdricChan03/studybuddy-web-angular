@@ -11,7 +11,6 @@ import {
 	Router
 } from '@angular/router';
 
-import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSidenav } from '@angular/material/sidenav';
@@ -20,6 +19,7 @@ import { SharedService } from './shared.service';
 import { ToolbarService } from './toolbar.service';
 import { UserInfoDialogComponent } from './dialogs';
 import { environment } from '../environments/environment';
+import { AuthService } from './auth.service';
 
 @Component({
 	selector: 'app-root',
@@ -29,7 +29,7 @@ import { environment } from '../environments/environment';
 export class AppComponent {
 	constructor(
 		public shared: SharedService,
-		private afAuth: AngularFireAuth,
+		public auth: AuthService,
 		// TODO(Edric): Figure out a way to make this private
 		public toolbarService: ToolbarService,
 		private router: Router,
@@ -38,8 +38,8 @@ export class AppComponent {
 		// TODO(Edric): Figure out a way to make this private
 		public messagingService: MessagingService
 	) {
-		this.userObservable = afAuth.authState;
-		this.afAuth.auth.onAuthStateChanged((user) => {
+		this.userObservable = this.auth.getAuthState();
+		this.auth.getAuthState().subscribe((user) => {
 			if (user) {
 				this.user = user;
 				console.log(user);
@@ -168,7 +168,7 @@ export class AppComponent {
 		if (event instanceof NavigationEnd) {
 			this.toolbarService.setProgress(false);
 		}
-		
+
 		// Set loading state to false in both of the below events to hide the spinner in case a request fails
 		if (event instanceof NavigationCancel) {
 			this.toolbarService.setProgress(false);
@@ -181,6 +181,24 @@ export class AppComponent {
 		// console.log(`key down: ${$event}`);
 		console.log(`onKeydown: key: ${$event.key}`);
 		console.log(`onKeydown: keyCode: ${$event.keyCode}`);
+	}
+	logOut() {
+		// tslint:disable-next-line:max-line-length
+		let dialogRef = this.shared.openConfirmDialog({ title: 'Log out?', msg: 'Changes not saved will be lost.', ok: 'Log out', okColor: 'warn' });
+		dialogRef.afterClosed().subscribe(result => {
+			if (result === 'ok') {
+				this.auth.logOut().then((res) => {
+					// tslint:disable-next-line:max-line-length
+					const snackbarRef = this.shared.openSnackBar({ msg: 'Signed out', action: 'Undo', additionalOpts: { duration: 4000, horizontalPosition: 'start' } });
+					snackbarRef.onAction().subscribe(() => {
+						this.newSignIn('google');
+					});
+					console.log(res);
+				}, (error) => {
+					this.handleError(error.message);
+				});
+			}
+		})
 	}
 	closeLeftSidenav(ref: MatSidenav) {
 		if (this.shared.settings.closeSidenavOnClick) {
@@ -228,7 +246,7 @@ export class AppComponent {
 		let dialogRef = this.shared.openConfirmDialog({ title: 'Log out?', msg: 'Changes not saved will be lost.', ok: 'Log out', okColor: 'warn' });
 		dialogRef.afterClosed().subscribe(result => {
 			if (result === 'ok') {
-				this.afAuth.auth.signOut().then((res) => {
+				this.auth.logOut().then((res) => {
 					// tslint:disable-next-line:max-line-length
 					const snackbarRef = this.shared.openSnackBar({ msg: 'Signed out', action: 'Undo', additionalOpts: { duration: 4000, horizontalPosition: 'start' } });
 					snackbarRef.onAction().subscribe(() => {
@@ -251,7 +269,7 @@ export class AppComponent {
 	 * Signs in with Google
 	 */
 	signInWithGoogle() {
-		this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then((result) => {
+		this.auth.logInWithGoogle().then((result) => {
 			// tslint:disable-next-line:max-line-length
 			this.shared.openSnackBar({ msg: `Signed in as ${result.user.email}`, additionalOpts: { duration: 4000, horizontalPosition: 'start', panelClass: 'mat-elevation-z3' } });
 		}).catch((error) => {
