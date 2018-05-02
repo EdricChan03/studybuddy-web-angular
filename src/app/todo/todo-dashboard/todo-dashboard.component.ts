@@ -5,7 +5,7 @@ import { ToolbarService } from '../../toolbar.service';
 import { Observable } from 'rxjs';
 import { TodoProject } from '../../interfaces';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-import { animations, getColourFlashAnimation } from '../../animations';
+import { animations } from '../../animations';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material';
 import { NewProjectDialogComponent } from '../../dialogs';
