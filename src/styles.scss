@@ -1,6 +1,30 @@
 /* You can add global styles to this file, and also import other style files */
+
 @import '~@angular/material/theming';
+@import './app/todo/todo-dashboard/todo-dashboard.component';
+
+@mixin tables-theme($theme) {
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+    $is-dark-theme: map-get($theme, is-dark);
+    $tableBorderOpacity: if($is-dark-theme, 0.08, 0.03);
+    table.app-table {
+        color: mat-color($foreground, text);
+        th {
+            background: mat-color($background, app-bar);
+        }
+        td {
+            border: 1px solid rgba(mat-color($foreground, secondary-text), $tableBorderOpacity);
+        }
+    }
+}
+
 @mixin studybuddy-theme($theme) {
+	@include tables-theme($theme);
+	@include todo-dashboard-theme($theme);
     $primary: map-get($theme, primary);
     $accent: map-get($theme, accent);
     $warn: map-get($theme, warn);
@@ -13,6 +37,9 @@
         mat-icon {
             color: if($is-dark-theme, mat-color($accent), mat-color($primary)) !important;
         } // Note: These colours are based on the Android sidenav selection state
+        background-color: if($is-dark-theme, #595959, #DCDCDC) !important;
+    }
+    .currently-selected {
         background-color: if($is-dark-theme, #595959, #DCDCDC) !important;
     }
     .mat-primary-text-color {
@@ -39,7 +66,8 @@
             color: mat-color($accent);
         }
     }
-    .mat-list-item-content mat-icon, .mat-icon-foreground {
+    .mat-list-item-content mat-icon,
+    .mat-icon-foreground {
         color: map-get($foreground, icons);
     }
     /*
@@ -98,25 +126,6 @@
     }
 }
 
-@mixin tables-theme($theme) {
-    $primary: map-get($theme, primary);
-    $accent: map-get($theme, accent);
-    $warn: map-get($theme, warn);
-    $background: map-get($theme, background);
-    $foreground: map-get($theme, foreground);
-    $is-dark-theme: map-get($theme, is-dark);
-    $tableBorderOpacity: if($is-dark-theme, 0.08, 0.03);
-    table.app-table {
-        color: mat-color($foreground, text);
-        th {
-            background: mat-color($background, app-bar);
-        }
-        td {
-            border: 1px solid rgba(mat-color($foreground, secondary-text), $tableBorderOpacity);
-        }
-    }
-}
-
 // @import 'assets/icons/material-icons.css';
 @include mat-core();
 $studybuddy-light-theme-primary: mat-palette($mat-indigo);
@@ -124,14 +133,12 @@ $studybuddy-light-theme-accent: mat-palette($mat-pink, A200, A100, A400);
 $studybuddy-light-theme-theme: mat-light-theme($studybuddy-light-theme-primary, $studybuddy-light-theme-accent);
 @include angular-material-theme($studybuddy-light-theme-theme);
 @include studybuddy-theme($studybuddy-light-theme-theme);
-@include tables-theme($studybuddy-light-theme-theme);
 .studybuddy-dark {
     $studybuddy-dark-theme-primary: mat-palette($mat-purple);
     $studybuddy-dark-theme-accent: mat-palette($mat-green, A200, A100, A400);
     $studybuddy-dark-theme-theme: mat-dark-theme($studybuddy-dark-theme-primary, $studybuddy-dark-theme-accent);
     @include angular-material-theme($studybuddy-dark-theme-theme);
     @include studybuddy-theme($studybuddy-dark-theme-theme);
-    @include tables-theme($studybuddy-dark-theme-theme);
 }
 
 body {
@@ -183,6 +190,9 @@ table.app-table {
 .padding-container {
     padding: 6px;
 }
+.padding-percentage-container {
+	padding: 5%;
+}
 
 // Material icons
 .material-icons {
@@ -214,10 +224,6 @@ table.app-table {
 
 .app-notify-sidenav {
     width: 412px;
-}
-
-.currently-selected {
-    background-color: #E0E0E0 !important;
 }
 
 .app-android-download-btn,
@@ -388,6 +394,25 @@ mat-card {
 blockquote {
     padding: 0 1em;
     color: #6a737d;
-	border-left: 0.25em solid #dfe2e5;
-	margin: 0;
+    border-left: 0.25em solid #dfe2e5;
+    margin: 0;
+}
+
+.checkbox-td {
+    text-align: center !important;
+}
+
+.new-todo-button {
+	width: 100%;
+	padding: 0 !important;
+	text-align: left;
+	.new-todo-label {
+		align-items: center;
+		display: flex;
+		flex-direction: row;
+		padding: 4px 12px;
+		p {
+			margin: 0 0 0 8px;
+		}
+	}
 }
