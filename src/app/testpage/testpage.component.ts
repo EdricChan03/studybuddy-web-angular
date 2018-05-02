@@ -145,7 +145,7 @@ export class TestpageComponent implements OnInit {
 			}
 		}
 		// tslint:disable-next-line:max-line-length
-		const dialogRef = this.shared.openSelectionDialog({ title: this.dialog.title ? this.dialog.title : 'Select', msg: this.dialog.message ? this.dialog.message : 'Select from tons of options', ok: this.dialog.okBtn ? this.dialog.okBtn : 'Yeah', cancel: this.dialog.cancelBtn ? this.dialog.cancelBtn : 'Nah', options: tempVar });
+		const dialogRef = this.shared.openSelectionDialog({ title: this.setDefaultValue(this.dialog.title, 'Select'), msg: this.dialog.message ? this.dialog.message : 'Select from tons of options', ok: this.dialog.okBtn ? this.dialog.okBtn : 'Yeah', cancel: this.dialog.cancelBtn ? this.dialog.cancelBtn : 'Nah', options: tempVar });
 		dialogRef.afterClosed().subscribe((result) => {
 			this.outputResult(result);
 		});
@@ -168,6 +168,14 @@ export class TestpageComponent implements OnInit {
 		opts = {};
 	}
 	/**
+	 * Sets the default value
+	 * @param {*} varToSet The variable to set
+	 * @param {*} defaultVal Default variable
+	 */
+	private setDefaultValue(varToSet: any, defaultVal: any): any {
+		return varToSet ? varToSet : defaultVal;
+	}
+	/**
 	 * Closes the current snackbar
 	 */
 	closeSnackBar() {
@@ -178,15 +186,21 @@ export class TestpageComponent implements OnInit {
 	 */
 	snackBar() {
 		// tslint:disable-next-line:max-line-length
-		this.shared.openSnackBar({ msg: this.snackbar.snackBarMsg ? this.snackbar.snackBarMsg : 'I\'m a snackbar!', additionalOpts: { horizontalPosition: this.snackbar.horizontalPosition, verticalPosition: this.snackbar.verticalPosition, panelClass: this.snackbar.panelClass } });
+		this.shared.openSnackBar({ msg: this.setDefaultValue(this.snackbar.snackBarMsg, 'I\'m a snackbar!'), additionalOpts: { horizontalPosition: this.snackbar.horizontalPosition, verticalPosition: this.snackbar.verticalPosition, panelClass: this.snackbar.panelClass } });
 		this.clearOptions(this.snackbar);
+	}
+	/**
+	 * Opens an error snackbar
+	 */
+	errorSnackBar() {
+		this.shared.openErrorSnackBar({ msg: this.setDefaultValue(this.snackbar.snackBarMsg, 'Error: Something happened'), additionalOpts: { duration: 5000, horizontalPosition: 'start' } })
 	}
 	/**
 	 * Opens a snackbar with a duration
 	 */
 	durationSnackBar() {
 		// tslint:disable-next-line:max-line-length
-		this.shared.openSnackBar({ msg: this.snackbar.snackBarMsg ? this.snackbar.snackBarMsg : 'I\'m a duration snackbar!', additionalOpts: { duration: this.snackbar.duration ? this.snackbar.duration : 5000, horizontalPosition: this.snackbar.horizontalPosition, verticalPosition: this.snackbar.verticalPosition, panelClass: this.snackbar.panelClass } });
+		this.shared.openSnackBar({ msg: this.setDefaultValue(this.snackbar.snackBarMsg, 'I\'m a duration snackbar!'), additionalOpts: { duration: this.snackbar.duration ? this.snackbar.duration : 5000, horizontalPosition: this.snackbar.horizontalPosition, verticalPosition: this.snackbar.verticalPosition, panelClass: this.snackbar.panelClass } });
 		this.clearOptions(this.snackbar);
 	}
 	/**
@@ -194,7 +208,7 @@ export class TestpageComponent implements OnInit {
 	 */
 	snackBarWithResult() {
 		// tslint:disable-next-line:max-line-length
-		const snackBarRef = this.shared.openSnackBar({ msg: this.snackbar.snackBarMsg ? this.snackbar.snackBarMsg : 'I\'m a snackbar with an action!', action: this.snackbar.action, additionalOpts: { horizontalPosition: this.snackbar.horizontalPosition, verticalPosition: this.snackbar.verticalPosition, panelClass: this.snackbar.panelClass } });
+		const snackBarRef = this.shared.openSnackBar({ msg: this.setDefaultValue(this.snackbar.snackBarMsg, 'I\'m a snackbar with an action!'), action: this.snackbar.action, additionalOpts: { horizontalPosition: this.snackbar.horizontalPosition, verticalPosition: this.snackbar.verticalPosition, panelClass: this.snackbar.panelClass } });
 		snackBarRef.onAction().subscribe(() => {
 			this.shared.openAlertDialog({ msg: `You clicked on the "${this.snackbar.action}" button.` });
 		});
