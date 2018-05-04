@@ -39,7 +39,7 @@
 		<mat-form-field class="app-form-field" *ngIf="enableTags">
 			<mat-icon matPrefix>local_offer</mat-icon>
 			<mat-chip-list #tagsList>
-				<mat-chip *ngFor="let tag of todoItem.tags" removable (remove)="removeTag(tag)">
+				<mat-chip *ngFor="let tag of todoItem.tags" removable (removed)="removeTag(tag)">
 					{{tag}}
 					<mat-icon matChipRemove>cancel</mat-icon>
 				</mat-chip>
