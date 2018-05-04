@@ -1,3 +1,15 @@
-.login-container-background {
-	background-image: url('/assets/svg/login-page-desktop.svg');
+.login-container {
+	height: calc(100% - 64px);
+	.strike {
+		padding: 25px;
+	}
+	mat-card {
+		min-height: 350px;
+		min-width: 300px;
+	}
+}
+@media (max-width: 599px) {
+	.login-container {
+		height: calc(100% - 56px);
+	}
 }

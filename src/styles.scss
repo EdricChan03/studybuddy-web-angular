@@ -2,7 +2,6 @@
 
 @import '~@angular/material/theming';
 @import './app/todo/todo-dashboard/todo-dashboard.component';
-
 @mixin tables-theme($theme) {
     $primary: map-get($theme, primary);
     $accent: map-get($theme, accent);
@@ -23,14 +22,21 @@
 }
 
 @mixin studybuddy-theme($theme) {
-	@include tables-theme($theme);
-	@include todo-dashboard-theme($theme);
+    @include tables-theme($theme);
+    @include todo-dashboard-theme($theme);
     $primary: map-get($theme, primary);
     $accent: map-get($theme, accent);
     $warn: map-get($theme, warn);
     $background: map-get($theme, background);
     $foreground: map-get($theme, foreground);
     $is-dark-theme: map-get($theme, is-dark);
+    .strike>span {
+        &::before,
+        &::after {
+            background-color: map-get($foreground, divider);
+        }
+        color: map-get($foreground, text);
+    }
     .active-link {
         // Since it's a bit hard to actually see the text in the dark theme, it'll use the accent colour if it's dark and primary if it's not. Same applies for mat-icon
         color: if($is-dark-theme, mat-color($accent), mat-color($primary)) !important;
@@ -190,8 +196,9 @@ table.app-table {
 .padding-container {
     padding: 6px;
 }
+
 .padding-percentage-container {
-	padding: 5%;
+    padding: 5%;
 }
 
 // Material icons
@@ -403,16 +410,48 @@ blockquote {
 }
 
 .new-todo-button {
-	width: 100%;
-	padding: 0 !important;
-	text-align: left;
-	.new-todo-label {
-		align-items: center;
-		display: flex;
-		flex-direction: row;
-		padding: 4px 12px;
-		p {
-			margin: 0 0 0 8px;
-		}
-	}
+    width: 100%;
+    padding: 0 !important;
+    text-align: left;
+    .new-todo-label {
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+        padding: 4px 12px;
+        p {
+            margin: 0 0 0 8px;
+        }
+    }
+}
+
+// See https://stackoverflow.com/a/22603610 for more info
+.strike {
+    display: block;
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.strike>span {
+    position: relative;
+    display: inline-block;
+}
+
+.strike>span:before,
+.strike>span:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 9999px;
+    height: 1px;
+}
+
+.strike>span:before {
+    right: 100%;
+    margin-right: 15px;
+}
+
+.strike>span:after {
+    left: 100%;
+    margin-left: 15px;
 }

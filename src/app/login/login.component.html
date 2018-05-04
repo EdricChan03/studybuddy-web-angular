@@ -1,3 +1,29 @@
-<div class="container container-center login-container-background">
-
+<div class="container container-center login-container" fxLayout="column" fxLayoutAlign="center center">
+	<mat-card>
+		<mat-card-content fxLayout="column">
+			<button mat-stroked-button color="primary" (click)="loginWithGoogle()">
+				Sign in with Google
+			</button>
+			<div class="strike">
+				<span>Or</span>
+			</div>
+			<form [formGroup]="loginForm" fxLayout="column">
+				<mat-form-field>
+					<mat-label>Email</mat-label>
+					<input matInput type="email" formControlName="email">
+					<mat-error *ngIf="loginForm.get('email')?.hasError('required')">THis is required</mat-error>
+					<mat-error *ngIf="loginForm.get('email')?.hasError('email')">Please enter a valid email</mat-error>
+				</mat-form-field>
+				<mat-form-field>
+					<mat-label>Password</mat-label>
+					<input matInput [type]="showPassword ? 'text' : 'password'" formControlName="password">
+					<button mat-icon-button (click)="togglePassword()" [matTooltip]="(showPassword ? 'Hide' : 'Show') + ' Password'" matSuffix><mat-icon>{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon></button>
+					<mat-error *ngIf="loginForm.get('password')?.hasError('required')">THis is required</mat-error>
+				</mat-form-field>
+			</form>
+		</mat-card-content>
+		<mat-card-actions align="end">
+			<button mat-button (click)="loginWithUsernameAndPassword()" [disabled]="loginForm.invalid">Login</button>
+		</mat-card-actions>
+	</mat-card>
 </div>
