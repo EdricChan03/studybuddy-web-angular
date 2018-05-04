@@ -26,6 +26,7 @@ import { TipsComponent } from './tips/tips.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { TodoOutletComponent } from './todo/todo-outlet/todo-outlet.component';
+import { AuthGuardService } from './auth-guard.service';
 
 const SUPPORT_ROUTES: Route[] = [
 	{ path: 'home', component: SupportHomeComponent },
@@ -37,7 +38,7 @@ export const AppRoutes: Route[] = [
 	// Downloads for the app. Currently a bit empty
 	{ path: 'downloads', component: AppDownloadsComponent },
 	{
-		path: 'todo', component: TodoOutletComponent, children: [
+		path: 'todo', component: TodoOutletComponent, canActivate: [AuthGuardService], children: [
 			// All todos
 			{ path: 'home', component: TodoHomeComponent },
 			// Not working as of now
@@ -51,7 +52,7 @@ export const AppRoutes: Route[] = [
 	// Test links for developers.
 	{ path: 'test', component: TestpageComponent },
 	// Settings page. Currently a bit broken
-	{ path: 'settings', component: SettingsComponent },
+	{ path: 'settings', component: SettingsComponent, canActivate: [AuthGuardService] },
 	// Tips page.
 	{ path: 'tips', component: TipsComponent },
 	// Reroutes those going to the old route to the new 'tips' route
@@ -65,18 +66,18 @@ export const AppRoutes: Route[] = [
 	{ path: 'cheatsheets', component: CheatsheetHomeComponent },
 	{ path: 'cheatsheets/:id', component: CheatsheetViewerComponent },
 	// Chatrooms! Coming soon.
-	{ path: 'chats', component: ChatsComponent },
-	{ path: 'chats/:id', component: ChatViewerComponent },
+	{ path: 'chats', component: ChatsComponent, canActivate: [AuthGuardService] },
+	{ path: 'chats/:id', component: ChatViewerComponent, canActivate: [AuthGuardService] },
 	// Notes
-	{ path: 'notes', component: NotesHomeComponent },
-	{ path: 'notes/note-not-found', component: NoteNotFoundComponent },
-	{ path: 'notes/:id', component: NotesViewerComponent },
+	{ path: 'notes', component: NotesHomeComponent, canActivate: [AuthGuardService] },
+	{ path: 'notes/note-not-found', component: NoteNotFoundComponent, canActivate: [AuthGuardService] },
+	{ path: 'notes/:id', component: NotesViewerComponent, canActivate: [AuthGuardService] },
 	// Account
 	{ path: 'account', component: AccountComponent },
 	// Login page
 	{ path: 'login', component: LoginComponent },
 	// Dashboard
-	{ path: 'dashboard', component: DashboardComponent }
+	{ path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardService] }
 ];
 
 // The routing
