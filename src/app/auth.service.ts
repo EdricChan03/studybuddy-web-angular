@@ -15,7 +15,15 @@ export class AuthService {
 		public afAuth: AngularFireAuth
 	) { }
 	/**
-	 * Attempts to login with Google
+	 * Attemps to log in with a username and password
+	 * @param email The email to login as
+	 * @param password The password to login as
+	 */
+	logInWithUsernameAndPassword(email: string, password: string): Promise<any> {
+		return this.afAuth.auth.signInWithEmailAndPassword(email, password);
+	}
+	/**
+	 * Attempts to log in with Google
 	 * @returns {Promise<any>} The promise of the login
 	 */
 	logInWithGoogle(): Promise<any> {
