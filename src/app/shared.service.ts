@@ -27,7 +27,7 @@ import { MatInputModule } from '@angular/material/input';
 import { Observable } from 'rxjs';
 import { Settings } from './interfaces';
 import { ThemePalette } from '@angular/material/core';
-import { MatIconModule } from '@angular/material';
+import { MatIconModule } from '@angular/material/icon';
 
 /**
  * This callback gets called when the action button has been clicked
@@ -50,7 +50,7 @@ export class SharedService {
 	set title(title: string) {
 		this._title = title;
 		if (title !== '') {
-		  title = `${title} | `;
+			title = `${title} | `;
 		}
 		this.documentTitle.setTitle(`${title}Study Buddy`);
 	}
@@ -87,15 +87,15 @@ export class SharedService {
 	 */
 	openErrorSnackBar(snackBarConfig: ErrorSnackBarConfig, icon?: string): MatSnackBarRef<ErrorSnackBar> {
 		let snackBarRef: MatSnackBarRef<ErrorSnackBar>;
-		snackBarRef = this.snackbar.openFromComponent(ErrorSnackBar);
+		snackBarRef = this.openSnackBarComponent({ component: ErrorSnackBar, msg: snackBarConfig.msg });
 		if (snackBarConfig) {
 			if (!snackBarConfig.additionalOpts.panelClass) {
 				snackBarConfig.additionalOpts.panelClass = 'warning-snackbar';
 			}
 			if (typeof icon == 'string') {
 				snackBarConfig.icon = icon;
-				snackBarRef.instance.snackBarConfig = snackBarConfig;
 			}
+			snackBarRef.instance.snackBarConfig = snackBarConfig;
 		} else {
 			throw new Error('A snack bar config is required for this method to work. Please specify a snack bar config.')
 		}
@@ -308,7 +308,7 @@ export class SharedService {
 		let letters = '0123456789ABCDEF';
 		let color = '#';
 		for (let i = 0; i < 6; i++) {
-		  color += letters[Math.floor(Math.random() * 16)];
+			color += letters[Math.floor(Math.random() * 16)];
 		}
 		return color;
 	}
