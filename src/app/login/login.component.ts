@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
 		this.auth.getAuthState().subscribe(result => {
 			if (result && JSON.parse(localStorage.getItem('loggedIn'))) {
 				console.log('User is already logged in. Redirecting...');
-				let snackBarRef = this.shared.openSnackBar({ msg: 'You\'re already logged in! Redirecting in 2 seconds...', action: 'Log out', hasElevation: true, additionalOpts?: { duration: 5000, horizontalPosition: 'start' } });
+				let snackBarRef = this.shared.openSnackBar({ msg: 'You\'re already logged in! Redirecting in 2 seconds...', action: 'Log out', hasElevation: true, additionalOpts: { duration: 5000, horizontalPosition: 'start' } });
 				snackBarRef.onAction().subscribe(result => {
 					this.auth.logOut().then(() => {
 						this.shared.openSnackBar({ msg: 'Successfully logged out', hasElevation: true, additionalOpts: { duration: 3000, horizontalPosition: 'start' } });
