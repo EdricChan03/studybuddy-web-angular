@@ -3,7 +3,6 @@ import * as firebase from 'firebase';
 import { Component, ViewChild, HostListener } from '@angular/core';
 import { Message, MessageImportance, MessagingService } from './messaging.service';
 import {
-	Event,
 	NavigationStart,
 	NavigationEnd,
 	NavigationCancel,
@@ -20,11 +19,17 @@ import { ToolbarService } from './toolbar.service';
 import { UserInfoDialogComponent } from './dialogs';
 import { environment } from '../environments/environment';
 import { AuthService } from './auth.service';
+import { SidenavLink } from './interfaces';
+import { animations } from './animations';
 
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
-	host: { '(window:keydown)': 'onKeydown($event)' }
+	host: { '(window:keydown)': 'onKeydown($event)' },
+	animations: [
+		animations.toggleIconAnimation,
+		animations.toggleItemsAnimation
+	]
 })
 export class AppComponent {
 	constructor(
@@ -84,10 +89,12 @@ export class AppComponent {
 	userObservable: Observable<firebase.User>;
 	todayDate = new Date();
 	showNotificationSettings: boolean = false;
+	toggleState = [];
+	toggleOtherState = [];
 	/**
 	 * Links for the sidenav
 	 */
-	sidenavLinks = [
+	sidenavLinks: SidenavLink[] = [
 		{
 			link: 'dashboard',
 			title: 'Dashboard',
@@ -96,7 +103,24 @@ export class AppComponent {
 		{
 			link: 'todo',
 			title: 'Todos',
-			icon: 'check_circle'
+			icon: 'check_circle',
+			list: [
+				{
+					link: 'todo/dashboard',
+					title: 'Dashboard',
+					icon: 'view_quilt'
+				},
+				{
+					link: 'todo/home',
+					title: 'Home',
+					icon: 'home'
+				},
+				{
+					link: 'todo/archived',
+					title: 'Archived Todos',
+					icon: 'archive'
+				}
+			]
 		},
 		{
 			link: 'downloads',
@@ -127,7 +151,7 @@ export class AppComponent {
 	/**
 	 * Other links for the sidenav
 	 */
-	otherLinks = [
+	otherLinks: SidenavLink[] = [
 		{
 			link: 'account',
 			title: 'Account',
@@ -181,6 +205,34 @@ export class AppComponent {
 		// console.log(`key down: ${$event}`);
 		console.log(`onKeydown: key: ${$event.key}`);
 		console.log(`onKeydown: keyCode: ${$event.keyCode}`);
+	}
+	toggleList(event: KeyboardEvent | MouseEvent, index: number) {
+		event.stopImmediatePropagation();
+		event.stopPropagation();
+		event.preventDefault();
+		if (this.toggleState[index]) {
+			if (this.toggleState[index] == 'notToggled') {
+				this.toggleState[index] = 'toggled';
+			} else {
+				this.toggleState[index] = 'notToggled';
+			}
+		} else {
+			this.toggleState[index] = 'toggled';
+		}
+	}
+	toggleOtherList(event: KeyboardEvent | MouseEvent, index: number) {
+		event.stopImmediatePropagation();
+		event.stopPropagation();
+		event.preventDefault();
+		if (this.toggleOtherState[index]) {
+			if (this.toggleOtherState[index] == 'notToggled') {
+				this.toggleOtherState[index] = 'toggled';
+			} else {
+				this.toggleOtherState[index] = 'notToggled';
+			}
+		} else {
+			this.toggleOtherState[index] = 'toggled';
+		}
 	}
 	logOut() {
 		// tslint:disable-next-line:max-line-length

@@ -1,3 +1,10 @@
+export interface SidenavLink {
+	link?: string;
+	icon?: string;
+	svgIcon?: string;
+	title?: string;
+	list?: SidenavLink[];
+}
 export interface Settings {
 	/**
 	 * Whether to enable the experimental calendar

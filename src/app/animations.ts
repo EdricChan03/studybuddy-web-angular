@@ -4,7 +4,8 @@ import {
 	style,
 	animate,
 	AnimationTriggerMetadata,
-	keyframes
+	keyframes,
+	state
 } from '@angular/animations';
 
 export interface Animations {
@@ -12,7 +13,18 @@ export interface Animations {
 	 * Enter-leave animation
 	 */
 	enterLeaveAnimation: AnimationTriggerMetadata;
-	flashColourUpdateAnimation: AnimationTriggerMetadata;
+	/**
+	 * Animation for flashing a color when an update has taken place
+	 */
+	flashColorUpdateAnimation: AnimationTriggerMetadata;
+	/**
+	 * Animation used for toggling icon for nested list
+	 */
+	toggleIconAnimation: AnimationTriggerMetadata;
+	/**
+	 * Animation used for toggling items for nested list
+	 */
+	toggleItemsAnimation: AnimationTriggerMetadata;
 }
 export const animations: Animations = {
 	enterLeaveAnimation: trigger('enterLeaveAnim', [
@@ -25,7 +37,7 @@ export const animations: Animations = {
 			animate('0.2s ease-in-out')
 		])
 	]),
-	flashColourUpdateAnimation: trigger('flashColourAnim', [
+	flashColorUpdateAnimation: trigger('flashColorAnim', [
 		transition(':enter', [
 			animate('0.5s cubic-bezier(0.4, 0, 0.2, 1)', keyframes([
 				style({ 'background-color': '*', offset: 0 }),
@@ -34,5 +46,29 @@ export const animations: Animations = {
 				style({ 'background-color': '*', offset: 1 })
 			])
 			)]
-		)])
+		)]),
+	toggleIconAnimation: trigger('toggleIconAnim', [
+		state('toggled', style({
+			transform: 'rotate(90deg)'
+		})),
+		state('notToggled', style({
+			transform: 'rotate(0deg)'
+		})),
+		transition('* => *', animate('200ms ease-in-out'))
+	]),
+
+	toggleItemsAnimation: trigger('toggleItemsAnim', [
+		state('notToggled', style({
+			visibility: 'hidden',
+			opacity: 0,
+			'max-height': '0'
+		})),
+		state('toggled', style({
+			visibility: 'visible',
+			opacity: 1,
+			'max-height': '4000px'
+		})),
+		transition('notToggled => toggled', animate('500ms ease-in-out')),
+		transition('toggled => notToggled', animate('280ms ease-out'))
+	])
 }
