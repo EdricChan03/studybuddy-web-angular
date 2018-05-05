@@ -38,11 +38,11 @@
         color: map-get($foreground, text);
     }
     .active-link {
-        // Since it's a bit hard to actually see the text in the dark theme, it'll use the accent colour if it's dark and primary if it's not. Same applies for mat-icon
+        // Since it's a bit hard to actually see the text in the dark theme, it'll use the accent color if it's dark and primary if it's not. Same applies for mat-icon
         color: if($is-dark-theme, mat-color($accent), mat-color($primary)) !important;
         mat-icon {
             color: if($is-dark-theme, mat-color($accent), mat-color($primary)) !important;
-        } // Note: These colours are based on the Android sidenav selection state
+        } // Note: These colors are based on the Android sidenav selection state
         background-color: if($is-dark-theme, #595959, #DCDCDC) !important;
     }
     .currently-selected {

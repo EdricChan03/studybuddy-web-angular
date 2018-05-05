@@ -301,8 +301,8 @@ export class SharedService {
 		return this.dialog.afterAllClosed;
 	}
 	/**
-	 * Generates a random hex colour
-	 * @returns A random hexdigit colour
+	 * Generates a random hex color
+	 * @returns A random hexdigit color
 	 */
 	getRandomColor(): string {
 		let letters = '0123456789ABCDEF';
