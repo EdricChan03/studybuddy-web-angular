@@ -22,7 +22,7 @@ export class NewProjectDialogComponent {
 		private fb: FormBuilder
 	) {
 		this.options = fb.group({
-			'name': ['', [Validators.required, Validators.minLength(3)]],
+			'name': ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
 			'color': ['#000000', [Validators.required, Validators.pattern(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i)]]
 		})
 		this.authService.getAuthState().subscribe((user) => {
