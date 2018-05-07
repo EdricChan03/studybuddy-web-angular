@@ -87,7 +87,7 @@ export class SharedService {
 	 */
 	openErrorSnackBar(snackBarConfig: ErrorSnackBarConfig, icon?: string): MatSnackBarRef<ErrorSnackBar> {
 		let snackBarRef: MatSnackBarRef<ErrorSnackBar>;
-		snackBarRef = this.openSnackBarComponent({ component: ErrorSnackBar, msg: snackBarConfig.msg });
+		snackBarRef = this.openSnackBarComponent({ component: ErrorSnackBar, msg: snackBarConfig.msg, additionalOpts: snackBarConfig.additionalOpts, action: snackBarConfig.action ? snackBarConfig.action : null });
 		if (snackBarConfig) {
 			if (!snackBarConfig.additionalOpts.panelClass) {
 				snackBarConfig.additionalOpts.panelClass = 'warning-snackbar';
