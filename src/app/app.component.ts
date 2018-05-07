@@ -1,13 +1,14 @@
 import * as firebase from 'firebase';
 
-import { Component, ViewChild, HostListener } from '@angular/core';
+import { Component, ViewChild, HostListener, OnInit } from '@angular/core';
 import { Message, MessageImportance, MessagingService } from './messaging.service';
 import {
 	NavigationStart,
 	NavigationEnd,
 	NavigationCancel,
 	NavigationError,
-	Router
+	Router,
+	Event
 } from '@angular/router';
 
 import { AngularFirestore } from 'angularfire2/firestore';
@@ -31,7 +32,7 @@ import { animations } from './animations';
 		animations.toggleItemsAnimation
 	]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 	constructor(
 		public shared: SharedService,
 		public auth: AuthService,
@@ -117,7 +118,7 @@ export class AppComponent {
 				},
 				{
 					link: 'todo/archived',
-					title: 'Archived Todos',
+					title: 'Archived',
 					icon: 'archive'
 				}
 			]
@@ -184,6 +185,13 @@ export class AppComponent {
 	 */
 	get isSidenavOpened(): boolean {
 		return this.sidenav.opened;
+	}
+	ngOnInit() {
+		this.sidenavLinks.forEach(item => {
+			if (item.list) {
+				this.toggleState.push('notToggled');
+			}
+		})
 	}
 	navigationInterceptor(event: Event) {
 		if (event instanceof NavigationStart) {
