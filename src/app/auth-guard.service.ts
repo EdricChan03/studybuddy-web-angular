@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from './auth.service';
 import { SharedService } from './shared.service';
+import { Observable } from 'rxjs';
+import { take, map, tap } from 'rxjs/operators';
 
 @Injectable({
 	providedIn: 'root'
@@ -16,14 +18,20 @@ export class AuthGuardService implements CanActivate {
 	/**
 	 * Whether the route can be enabled
 	 */
-	canActivate(): boolean {
-		if (this.auth.isLoggedIn()) {
-			return true;
-		} else {
-			this.shared.openSnackBar({ msg: 'Please login before accessing the page', hasElevation: true, additionalOpts: { horizontalPosition: 'start', duration: 5000 } });
-			this.router.navigate(['login']);
-			return false;
-		}
-	}
+	canActivate(
+		next: ActivatedRouteSnapshot,
+		state: RouterStateSnapshot): Observable<boolean> | boolean {
+		return this.auth.afAuth.authState.pipe(
+			take(1),
+			map(user => !!user),
+			tap((loggedIn: boolean) => {
+				if (!loggedIn) {
+					this.shared.openSnackBar({ msg: 'Please login before accessing this page', additionalOpts: { duration: 5000, horizontalPosition: 'start' } });
+					this.router.navigate(['/login']);
+				}
+			})
+		)
+	})
+}
 	
 }

@@ -8,19 +8,35 @@ import { Observable } from 'rxjs';
 	providedIn: 'root'
 })
 export class AuthService {
+	authState: firebase.User = null;
 	constructor(
 		/**
 		 * Angular Fire - Firebase Authentication
 		 */
 		public afAuth: AngularFireAuth
-	) { }
+	) {
+		afAuth.authState.subscribe((result) => {
+			this.authState = result;
+		})
+	}
+	get authenticated(): boolean {
+		return this.authState != null;
+	}
 	/**
 	 * Attemps to log in with a username and password
 	 * @param email The email to login as
 	 * @param password The password to login as
 	 */
-	logInWithUsernameAndPassword(email: string, password: string): Promise<any> {
+	logInWithEmailAndPassword(email: string, password: string): Promise<any> {
 		return this.afAuth.auth.signInWithEmailAndPassword(email, password);
+	}
+	/**
+	 * Attempts to sign up with a username and password
+	 * @param email The email to sign up with
+	 * @param password The password to sign up with
+	 */
+	signUpWithEmailAndPassword(email: string, password: string): Promise<any> {
+		return this.afAuth.auth.createUserWithEmailAndPassword(email, password);
 	}
 	/**
 	 * Attempts to log in with Google
