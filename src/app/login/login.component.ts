@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../shared.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 
@@ -20,11 +20,31 @@ export class LoginComponent implements OnInit {
 		shared.title = 'Login';
 		this.loginForm = fb.group({
 			'email': ['', [Validators.required, Validators.email]],
-			'password': ['', Validators.required]
-		})
+			'password': ['', Validators.required],
+			'confirmPassword': ['', [Validators.required, this.validatorCheckEqual]]
+		});
+		this.signUpForm = fb.group({
+			'email': ['', [Validators.required, Validators.email]],
+			'password': ['', Validators.required],
+			'confirmPassword': ['', [Validators.required, this.validatorCheckEqual]]
+		});
 	}
 	loginForm: FormGroup;
-	showPassword: boolean = false;
+	signUpForm: FormGroup;
+	showLoginFormPassword: boolean = false;
+	showSignUpFormPassword: boolean = false;
+	validatorCheckEqual: ValidatorFn = (control: AbstractControl) => {
+		console.log(control.parent);
+		console.log(typeof control.parent);
+		console.log(control.root);
+		console.log(typeof control.root.parent);
+		console.log(control.get('confirmPassword'));
+		// console.log(control.root.get('password'));
+		const password = control.root.get('password').value;
+		const secondPassword = control.root.get('confirmPassword').value;
+
+		return password == secondPassword ? null : { passwordNotSame: true };
+	}
 	ngOnInit() {
 		this.auth.getAuthState().subscribe(result => {
 			if (result && JSON.parse(localStorage.getItem('loggedIn'))) {
@@ -42,8 +62,11 @@ export class LoginComponent implements OnInit {
 			}
 		})
 	}
-	togglePassword() {
-		this.showPassword = !this.showPassword;
+	toggleLoginFormPassword() {
+		this.showLoginFormPassword = !this.showLoginFormPassword;
+	}
+	toggleSignUpFormPassword() {
+		this.showSignUpFormPassword = !this.showSignUpFormPassword;
 	}
 	loginWithGoogle() {
 		this.auth.logInWithGoogle().then((result) => {
@@ -54,10 +77,17 @@ export class LoginComponent implements OnInit {
 			this.handleError(error.message);
 		});
 	}
-	loginWithUsernameAndPassword() {
-		this.auth.logInWithUsernameAndPassword(this.loginForm.get('email').value, this.loginForm.get('password').value).then((result) => {
+	loginWithEmailAndPassword() {
+		this.auth.logInWithEmailAndPassword(this.loginForm.get('email').value, this.loginForm.get('password').value).then((result) => {
 			// tslint:disable-next-line:max-line-length
-			this.shared.openSnackBar({ msg: `Signed in as ${result.user.email}`, additionalOpts: { duration: 4000, horizontalPosition: 'start', panelClass: 'mat-elevation-z3' } });
+			this.shared.openSnackBar({ msg: `Signed in as ${result.user.email}`, hasElevation: true, additionalOpts: { duration: 4000, horizontalPosition: 'start' } });
+		}).catch((error) => {
+			this.handleError(error.message);
+		})
+	}
+	signUpWithEmailAndPassword() {
+		this.auth.signUpWithEmailAndPassword(this.signUpForm.get('email').value, this.loginForm.get('password').value).then((result) => {
+			this.shared.openSnackBar({ msg: `Successfully created account as ${result.user.email}`, hasElevation: true, additionalOpts: { duration: 4000, horizontalPosition: 'start' } });
 		}).catch((error) => {
 			this.handleError(error.message);
 		})
