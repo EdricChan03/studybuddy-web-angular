@@ -5,7 +5,11 @@ import {
 	animate,
 	AnimationTriggerMetadata,
 	keyframes,
-	state
+	state,
+	AUTO_STYLE,
+	group,
+	animateChild,
+	query
 } from '@angular/animations';
 
 export interface Animations {
@@ -25,6 +29,10 @@ export interface Animations {
 	 * Animation used for toggling items for nested list
 	 */
 	toggleItemsAnimation: AnimationTriggerMetadata;
+	/**
+	 * Animation for collapsing a view
+	 */
+	collapseAnimation: AnimationTriggerMetadata;
 }
 export const animations: Animations = {
 	enterLeaveAnimation: trigger('enterLeaveAnim', [
@@ -70,5 +78,26 @@ export const animations: Animations = {
 		})),
 		transition('notToggled => toggled', animate('500ms ease-in-out')),
 		transition('toggled => notToggled', animate('280ms ease-out'))
-	])
+	]),
+	collapseAnimation: trigger('collapseAnim', [
+		state('1', style({
+			height: '0',
+			display: 'none',
+		})),
+		state('0', style({
+			height: AUTO_STYLE,
+			display: AUTO_STYLE,
+		})),
+		transition('0 => 1', [
+			group([
+				query('@*', animateChild(), { optional: true }),
+				animate('150ms 0ms ease-in'),
+			]),
+		]),
+		transition('1 => 0', [
+			group([
+				query('@*', animateChild(), { optional: true }),
+				animate('150ms 0ms ease-out'),
+			]),
+		]),
 }

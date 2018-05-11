@@ -3,40 +3,14 @@ import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { SharedService } from '../../shared.service';
 import { TodoItem } from '../../interfaces';
-import { Component, OnInit } from '@angular/core';
-import { Platform } from '@angular/cdk/platform';
-import { trigger, style, animate, transition, state, group, query, animateChild, AUTO_STYLE } from '@angular/animations';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { EditContentDialogComponent } from '../edit-content-dialog/edit-content-dialog.component';
 import { MatChipInputEvent } from '@angular/material';
 import * as firebase from 'firebase';
 
 @Component({
 	selector: 'app-todo-dialog',
-	templateUrl: './todo-dialog.component.html',
-	animations: [
-		trigger('collapse', [
-			state('1', style({
-				height: '0',
-				display: 'none',
-			})),
-			state('0', style({
-				height: AUTO_STYLE,
-				display: AUTO_STYLE,
-			})),
-			transition('0 => 1', [
-				group([
-					query('@*', animateChild(), { optional: true }),
-					animate('150ms 0ms ease-in'),
-				]),
-			]),
-			transition('1 => 0', [
-				group([
-					query('@*', animateChild(), { optional: true }),
-					animate('150ms 0ms ease-out'),
-				]),
-			]),
-		])
-	]
+	templateUrl: './todo-dialog.component.html'
 })
 export class TodoDialogComponent implements OnInit {
 	todoItem: TodoItem;
@@ -45,17 +19,45 @@ export class TodoDialogComponent implements OnInit {
 	todoCollection: AngularFirestoreCollection<TodoItem>;
 	showUnsupportedNotice = true;
 	enableTags = false;
+	helpDialogRef: MatDialogRef<any>;
+	mkdnText = '**Bold**\n' +
+		'_Italics_\n' +
+		'**_Bold + Italics_**\n' +
+		'~strikethrough~\n' +
+		'[Link](https://google.com)\n' +
+		'[YouTube][test]\n\n' +
+		'[test]: https://youtube.com';
+	mkdnLists = 'Unordered:\n' +
+		'- List item #1\n' +
+		'- List item #2\n' +
+		'Ordered:\n' +
+		'1. Ordered item #1\n' +
+		'2. Ordered item #2\n' +
+		'3. Ordered item #3';
+	mkdnImg = '![Alternate text](https://example.com/myimg.jpg)';
+	mkdnHeaders = '# <h1>\n' +
+		'## <h2>\n' +
+		'### <h3>\n' +
+		'#### <h4>\n' +
+		'##### <h5>\n' +
+		'###### <h6>';
+	mkdnCode = '```\n' +
+		'Code blocks are typically in three backticks (\`)\n' +
+		'```\n' +
+		'```html\n' +
+		'<p>This is an example of syntax-highlighting! <em>wow</em><p>\n' +
+		'```';
+	@ViewChild('helpContentDialog') helpContentDialogTmpl: TemplateRef<any>;
 	constructor(
 		// TODO(Edric): Figure out a way to make this private
 		public shared: SharedService,
 		private afAuth: AngularFireAuth,
 		private dialogRef: MatDialogRef<TodoDialogComponent>,
-		private fs: AngularFirestore,
-		private platform: Platform,
+		private afFs: AngularFirestore,
 		private dialog: MatDialog
 	) {
 		if (afAuth.auth.currentUser) {
-			this.todoCollection = this.fs.collection(`users/${afAuth.auth.currentUser.uid}/todos`);
+			this.todoCollection = this.afFs.collection(`users/${afAuth.auth.currentUser.uid}/todos`);
 		} else {
 			// User isn't signed in! Add todo stuff to disable dialog
 			// tslint:disable-next-line:max-line-length
@@ -77,15 +79,26 @@ export class TodoDialogComponent implements OnInit {
 	/**
 	 * Checks if the browser is Firefox or Safari
 	 */
-	get isUnsupported(): boolean {
-		if ((this.platform.FIREFOX || this.platform.SAFARI) && this.showUnsupportedNotice) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+	// get isUnsupported(): boolean {
+	// 	if ((this.platform.FIREFOX || this.platform.SAFARI) && this.showUnsupportedNotice) {
+	// 		return true;
+	// 	} else {
+	// 		return false;
+	// 	}
+	// }
 	get isMobile(): boolean {
 		return this.shared.isMobile;
+	}
+	showHelp(help: 'content' | 'project' | 'dueDate') {
+		switch (help) {
+			case 'content':
+				this.helpDialogRef = this.shared.openHelpDialog(this.helpContentDialogTmpl);
+				break;
+		}
+	}
+	closeHelpDialog() {
+		this.helpDialogRef.close();
+		this.helpDialogRef = null;
 	}
 	addTag(event: MatChipInputEvent) {
 		let input = event.input;

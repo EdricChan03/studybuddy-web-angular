@@ -338,6 +338,10 @@ mat-sidenav.sidenav::-webkit-scrollbar-trac,
     outline: 1px solid #333;
 }
 
+.tab-content {
+	padding: 16px;
+}
+
 // This is to align with the Material spec
 mat-card {
     margin: 8px;

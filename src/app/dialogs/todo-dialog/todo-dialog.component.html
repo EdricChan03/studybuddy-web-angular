@@ -7,24 +7,63 @@
 			<mat-hint>The subject of your todo.</mat-hint>
 		</mat-form-field>
 		<mat-form-field class="app-form-field">
-			<textarea name="content" cols="3" matInput [(ngModel)]="todoItem.content" placeholder="Content" matTextareaAutosize
-			 (change)="checkWhitespace('content')"></textarea>
-			<a mat-icon-button matSuffix matTooltip="Learn more about Markdown" href="https://guides.github.com/features/mastering-markdown"
-			 target="_blank">
+			<textarea name="content" cols="3" matInput [(ngModel)]="todoItem.content" placeholder="Content" matTextareaAutosize (change)="checkWhitespace('content')"></textarea>
+			<button mat-icon-button matSuffix matTooltip="Learn more about Markdown" (click)="showHelp('content')">
 				<mat-icon>help</mat-icon>
-			</a>
+			</button>
 			<mat-hint>The content of your todo. Markdown is supported.</mat-hint>
 		</mat-form-field>
-		<div class="msg-container msg-danger" *ngIf="isUnsupported" @collapse>
-			<mat-icon class="msg-icon">warning</mat-icon>
-			<p>Using Markdown may not render properly on
-				<span *ngIf="platform.FIREFOX">Firefox</span>
-				<span *ngIf="platform.SAFARI">Safari</span>.</p>
-			<span fxFlex></span>
-			<button mat-icon-button (click)="toggleNotice()" matTooltip="Hide notice">
-				<mat-icon>close</mat-icon>
-			</button>
-		</div>
+		<ng-template #helpContentDialog>
+			<h2 matDialogTitle>Markdown Supported Features</h2>
+			<div matDialogContent fxLayout="column">
+				<mat-tab-group dynamicHeight>
+					<mat-tab label="Text">
+						<div class="tab-content">
+							<h3>Code</h3>
+							<pre><code>{{mkdnText}}</code></pre>
+							<h3>Result</h3>
+							<div [innerHTML]="mkdnText | markdown"></div>
+						</div>
+					</mat-tab>
+					<mat-tab label="Lists">
+						<div class="tab-content">
+							<h3>Code</h3>
+							<pre><code>{{mkdnLists}}</code></pre>
+							<h3>Result</h3>
+							<div [innerHTML]="mkdnLists | markdown"></div>
+						</div>
+					</mat-tab>
+					<mat-tab label="Images">
+						<div class="tab-content">
+							<h3>Code</h3>
+							<pre><code>{{mkdnImg}}</code></pre>
+							<h3>Result</h3>
+							<div [innerHTML]="mkdnImg | markdown"></div>
+						</div>
+					</mat-tab>
+					<mat-tab label="Headers">
+						<div class="tab-content">
+							<h3>Code</h3>
+							<pre><code>{{mkdnHeaders}}</code></pre>
+							<h3>Result</h3>
+							<div [innerHTML]="mkdnHeaders | markdown"></div>
+						</div>
+					</mat-tab>
+					<mat-tab label="Code">
+						<div class="tab-content">
+							<h3>Code</h3>
+							<pre><code>{{mkdnCode}}</code></pre>
+							<h3>Result</h3>
+							<div [innerHTML]="mkdnCode | markdown"></div>
+						</div>
+					</mat-tab>
+				</mat-tab-group>
+			</div>
+			<div matDialogActions align="end">
+				<!-- TODO: Find out a way to close this dialog -->
+				<button mat-button (click)="closeHelpDialog()" color="primary">Dismiss</button>
+			</div>
+		</ng-template>
 		<mat-form-field class="app-form-field">
 			<input matInput [(ngModel)]="todoItem.project" placeholder="Project" name="project">
 			<mat-hint>The workspace where the todo will be saved in. (optional)</mat-hint>
@@ -33,7 +72,7 @@
 			<input matInput [matDatepicker]="dueDatePicker" placeholder="Due date" [(ngModel)]="todoItem.dueDate" name="dueDate">
 			<mat-datepicker #dueDatePicker [touchUi]="shared.isMobile"></mat-datepicker>
 			<mat-datepicker-toggle matSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
-			<mat-hint>This app will give you reminders if the due date is nearing.</mat-hint>
+			<mat-hint>The date that this todo is due at.</mat-hint>
 		</mat-form-field>
 		<mat-checkbox [(ngModel)]="enableTags" [ngModelOptions]="{'standalone': true}">Enable tags?</mat-checkbox>
 		<mat-form-field class="app-form-field" *ngIf="enableTags">
@@ -43,11 +82,8 @@
 					{{tag}}
 					<mat-icon matChipRemove>cancel</mat-icon>
 				</mat-chip>
-				<input
-					placeholder="New Tag..."
-					[matChipInputFor]="tagsList"
-					matChipInputAddOnBlur
-					(matChipInputTokenEnd)="addTag($event)" />
+				<input placeholder="New Tag..." [matChipInputFor]="tagsList" matChipInputAddOnBlur (matChipInputTokenEnd)="addTag($event)"
+				/>
 			</mat-chip-list>
 			<button mat-icon-button (click)="todoItem.tags = []" matSuffix matTooltip="Clear tags">
 				<mat-icon>clear</mat-icon>
