@@ -7,7 +7,7 @@
 			<div class="strike">
 				<span>Or</span>
 			</div>
-			<mat-tab-group>
+			<mat-tab-group dynamicHeight>
 				<mat-tab label="Sign up">
 					<div fxLayout="column">
 						<form [formGroup]="signUpForm" fxLayout="column">
@@ -21,7 +21,7 @@
 								<mat-label>Password</mat-label>
 								<input matInput [type]="showSignUpFormPassword ? 'text' : 'password'" formControlName="password">
 								<button mat-icon-button (click)="toggleSignUpFormPassword()" [matTooltip]="(showSignUpFormPassword ? 'Hide' : 'Show') + ' Password'"
-								 matSuffix>
+								 matSuffix type="button">
 									<mat-icon>{{showSignUpFormPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
 								</button>
 								<mat-error *ngIf="signUpForm.get('password')?.hasError('required')">This is required.</mat-error>
@@ -30,11 +30,11 @@
 								<mat-label>Password</mat-label>
 								<input matInput [type]="showSignUpFormPassword ? 'text' : 'password'" formControlName="confirmPassword">
 								<button mat-icon-button (click)="toggleSignUpFormPassword()" [matTooltip]="(showSignUpFormPassword ? 'Hide' : 'Show') + ' Password'"
-								 matSuffix>
+								 matSuffix type="button">
 									<mat-icon>{{showSignUpFormPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
 								</button>
 								<mat-error *ngIf="signUpForm.get('confirmPassword')?.hasError('required')">This is required.</mat-error>
-								<mat-error *ngIf="signUpForm.get('confirmPassword')?.hasError('passwordNotSame')">The passwords do not match.</mat-error>
+								<mat-error *ngIf="signUpForm.get('confirmPassword')?.hasError('mismatchedPasswords')">The passwords do not match.</mat-error>
 							</mat-form-field>
 						</form>
 						<button mat-button (click)="signUpWithEmailAndPassword()" [disabled]="signUpForm.invalid">Sign up</button>
@@ -53,20 +53,10 @@
 								<mat-label>Password</mat-label>
 								<input matInput [type]="showLoginFormPassword ? 'text' : 'password'" formControlName="password">
 								<button mat-icon-button (click)="toggleLoginFormPassword()" [matTooltip]="(showLoginFormPassword ? 'Hide' : 'Show') + ' Password'"
-								 matSuffix>
+								 matSuffix type="button">
 									<mat-icon>{{showLoginFormPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
 								</button>
-								<mat-error *ngIf="loginForm.get('confirmPassword')?.hasError('required')">This is required.</mat-error>
-							</mat-form-field>
-							<mat-form-field>
-								<mat-label>Confirm password</mat-label>
-								<input matInput [type]="showLoginFormPassword ? 'text' : 'password'" formControlName="confirmPassword">
-								<button mat-icon-button (click)="toggleLoginFormPassword()" [matTooltip]="(showLoginFormPassword ? 'Hide' : 'Show') + ' Password'"
-								 matSuffix>
-									<mat-icon>{{showLoginFormPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-								</button>
-								<mat-error *ngIf="loginForm.get('confirmPassword')?.hasError('required')">This is required.</mat-error>
-								<mat-error *ngIf="loginForm.get('confirmPassword')?.hasError('passwordNotSame')">The passwords do not match.</mat-error>
+								<mat-error *ngIf="loginForm.get('password')?.hasError('required')">This is required.</mat-error>
 							</mat-form-field>
 						</form>
 						<button mat-button (click)="loginWithEmailAndPassword()" [disabled]="loginForm.invalid">Login</button>

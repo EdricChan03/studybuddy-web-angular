@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../shared.service';
-import { FormGroup, FormBuilder, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 
@@ -20,30 +20,27 @@ export class LoginComponent implements OnInit {
 		shared.title = 'Login';
 		this.loginForm = fb.group({
 			'email': ['', [Validators.required, Validators.email]],
-			'password': ['', Validators.required],
-			'confirmPassword': ['', [Validators.required, this.validatorCheckEqual]]
+			'password': ['', Validators.required]
 		});
 		this.signUpForm = fb.group({
 			'email': ['', [Validators.required, Validators.email]],
 			'password': ['', Validators.required],
-			'confirmPassword': ['', [Validators.required, this.validatorCheckEqual]]
-		});
+			'confirmPassword': ['', Validators.required]
+		}, { validator: this.matchingPasswords('password', 'confirmPassword') });
 	}
 	loginForm: FormGroup;
 	signUpForm: FormGroup;
 	showLoginFormPassword: boolean = false;
 	showSignUpFormPassword: boolean = false;
-	validatorCheckEqual: ValidatorFn = (control: AbstractControl) => {
-		console.log(control.parent);
-		console.log(typeof control.parent);
-		console.log(control.root);
-		console.log(typeof control.root.parent);
-		console.log(control.get('confirmPassword'));
-		// console.log(control.root.get('password'));
-		const password = control.root.get('password').value;
-		const secondPassword = control.root.get('confirmPassword').value;
-
-		return password == secondPassword ? null : { passwordNotSame: true };
+	// See https://stackoverflow.com/a/34582914
+	matchingPasswords = (passwordKey: string, confirmPasswordKey: string) => {
+		return (group: FormGroup): void => {
+			let password = group.controls[passwordKey];
+			let confirmPassword = group.controls[confirmPasswordKey];
+			if (password.value !== confirmPassword.value) {
+				confirmPassword.setErrors({ 'mismatchedPasswords': true });
+			}
+		}
 	}
 	ngOnInit() {
 		this.auth.getAuthState().subscribe(result => {
