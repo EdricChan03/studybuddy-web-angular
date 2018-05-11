@@ -1,3 +1,5 @@
+
+import { map, filter } from 'rxjs/operators';
 import { SharedService } from '../../shared.service';
 import { Component } from '@angular/core';
 import { AuthService } from '../../auth.service';
@@ -10,6 +12,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material';
 import { NewProjectDialogComponent } from '../../dialogs';
 import { transition, style, animate, trigger, keyframes } from '@angular/animations';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
 	selector: 'app-todo-dashboard',
@@ -38,15 +41,24 @@ export class TodoDashboardComponent {
 		private shared: SharedService,
 		private fs: AngularFirestore,
 		private dom: DomSanitizer,
-		private dialog: MatDialog
+		private dialog: MatDialog,
+		private route: ActivatedRoute,
+		private router: Router
 	) {
+		route.queryParams.pipe(
+			filter(params => params.new)).
+			subscribe(params => {
+				if (params.new) {
+					router.navigate(['/todo/dashboard-new'])
+				};
+			})
 		shared.title = 'Todo Dashboard';
 		this.authService.getAuthState().subscribe((user) => {
 			if (user) {
 				console.log(user);
 				this.currentUser = user.uid;
 				this.projectsCollection = this.fs.collection(`users/${this.currentUser}/todoProjects`);
-				this.projects$ = this.projectsCollection.snapshotChanges().map(result => {
+				this.projects$ = this.projectsCollection.snapshotChanges().pipe(map(result => {
 					return result.map(a => {
 						const data = a.payload.doc.data() as TodoProject;
 						data.id = a.payload.doc.id;
@@ -54,7 +66,7 @@ export class TodoDashboardComponent {
 						data.color = a.payload.doc.data().color ? a.payload.doc.data().color : shared.getRandomColor();
 						return data;
 					});
-				});
+				}));
 				this.projects$.subscribe(() => {
 					this.toolbarService.setProgress(false);
 				})
@@ -62,6 +74,9 @@ export class TodoDashboardComponent {
 				console.warn('Current user doesn\'t exist yet!');
 			}
 		});
+	}
+	get isMobile(): boolean {
+		return this.shared.isMobile;
 	}
 	getRandomColor(): string {
 		return this.shared.getRandomColor();

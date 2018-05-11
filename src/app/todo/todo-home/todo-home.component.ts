@@ -1,3 +1,5 @@
+
+import {map} from 'rxjs/operators';
 import { ToolbarService } from '../../toolbar.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
@@ -42,7 +44,7 @@ export class TodoHomeComponent implements OnInit {
 		private shared: SharedService,
 		private afAuth: AngularFireAuth,
 		private dialog: MatDialog,
-		private fs: AngularFirestore,
+		private afFs: AngularFirestore,
 		private dom: DomSanitizer,
 		public toolbarService: ToolbarService
 	) {
@@ -51,14 +53,14 @@ export class TodoHomeComponent implements OnInit {
 			if (user) {
 				console.log(user);
 				this.currentUser = user.uid;
-				this.todosCollection = this.fs.collection(`users/${this.currentUser}/todos`);
-				this.todos$ = this.todosCollection.snapshotChanges().map(actions => {
+				this.todosCollection = this.afFs.collection(`users/${this.currentUser}/todos`);
+				this.todos$ = this.todosCollection.snapshotChanges().pipe(map(actions => {
 					return actions.map(a => {
 						const data = a.payload.doc.data() as TodoItem;
 						data.id = a.payload.doc.id;
 						return data;
 					});
-				});
+				}));
 				this.todos$.subscribe(() => {
 					this.toolbarService.setProgress(false);
 				})
@@ -119,6 +121,7 @@ export class TodoHomeComponent implements OnInit {
 					})
 				Promise.all(promises).then(() => {
 					console.log('All documents of collection deleted.');
+					this.shared.openSnackBar({ msg: 'Successfully deleted all todos!', hasElevation: true, additionalOpts: { horizontalPosition: 'start', duration: 4000 } });
 				})
 					.catch((error: { message: string }) => {
 						let snackBarRef = this.shared.openErrorSnackBar({ action: 'Retry', hasElevation: 2, msg: `${error.message}`, additionalOpts: { horizontalPosition: 'start' } });
@@ -240,7 +243,7 @@ export class TodoHomeComponent implements OnInit {
 	 * @param {MatCheckboxChange} event The checkbox change event
 	 */
 	onSelectedChange(todo: TodoItem, event: MatCheckboxChange) {
-		this.fs.doc<TodoItem>(`users/${this.currentUser}/todos/${todo.id}`).update({
+		this.afFs.doc<TodoItem>(`users/${this.currentUser}/todos/${todo.id}`).update({
 			hasDone: event.checked
 		});
 	}
