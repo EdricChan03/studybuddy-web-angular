@@ -1,4 +1,4 @@
-import { Component, Injectable, NgModule, OnInit, ViewChild } from '@angular/core';
+import { Component, Injectable, NgModule, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import {
 	MatDialog,
 	MatDialogConfig,
@@ -11,7 +11,9 @@ import {
 	MatSnackBarConfig,
 	MatSnackBarModule,
 	MatSnackBarRef,
-	SimpleSnackBar
+	SimpleSnackBar,
+	MatSnackBarHorizontalPosition,
+	MatSnackBarVerticalPosition
 } from '@angular/material/snack-bar';
 import { SafeHtml, Title } from '@angular/platform-browser';
 
@@ -28,24 +30,45 @@ import { Observable } from 'rxjs';
 import { Settings } from './interfaces';
 import { ThemePalette } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
+import { AngularFirestore } from 'angularfire2/firestore';
 
 /**
  * This callback gets called when the action button has been clicked
  * @callback SharedService~actionBtnCallback
  */
 
+/**
+ * This callback gets called when the toolbar button has been clicked
+ * @callback SharedService~toolbarBtnCallback
+ * @param {Event} event The event of the button
+ */
+
+/**
+ * Extra toolbar
+ */
+export interface ExtraToolbarConfig {
+	text: string;
+	color?: ThemePalette;
+	btnText?: string;
+	btnType?: 'button' | 'raised-button' | 'flat-button' | 'stroked-button' | 'icon-button' | 'fab';
+	btnBadge?: number;
+	btnRouterLink?: string | string[] | any;
+	btnCallback?: (ev?: Event) => void;
+	showDismiss?: boolean;
+}
 // Shared service
 @Injectable()
 export class SharedService {
 	constructor(
-		private snackbar: MatSnackBar,
-		private dialog: MatDialog,
-		private documentTitle: Title,
-		private breakpointObserver: BreakpointObserver
+		public snackbar: MatSnackBar,
+		public dialog: MatDialog,
+		public documentTitle: Title,
+		public breakpointObserver: BreakpointObserver
 	) { }
 	private _settings: Settings = {};
-	_title = '';
-
+	private _title = '';
+	private _extraToolbarConfig: ExtraToolbarConfig;
+	// Getters and setters
 	get title(): string { return this._title };
 	set title(title: string) {
 		this._title = title;
@@ -54,7 +77,6 @@ export class SharedService {
 		}
 		this.documentTitle.setTitle(`${title}Study Buddy`);
 	}
-	// Getters and setters
 	/**
 	 * Getter to check if the user is online
 	 * @returns {boolean}
@@ -79,11 +101,20 @@ export class SharedService {
 	set settings(settings: Settings) {
 		this._settings = settings;
 	}
+	get extraToolbarConfig(): ExtraToolbarConfig {
+		return this._extraToolbarConfig;
+	}
+	get showExtraToolbar(): boolean {
+		return this._extraToolbarConfig !== null;
+	}
+	set extraToolbarConfig(extraToolbarConfig: ExtraToolbarConfig) {
+		this._extraToolbarConfig = extraToolbarConfig;
+	}
 	/**
-	 * Handles errors (opens in a snackbar)
-	 * @param {SnackBarConfig} snackBarConfig The snackbar config. Overrides all other params. Specify `null` to ignore this param.
-	 * @param {(string|boolean)} [icon] The icon of the snackbar
-	 * @returns The snackbar ref
+	 * Handles errors (opens in a snack-bar)
+	 * @param snackBarConfig The snack-bar config. Overrides all other params. Specify `null` to ignore this param.
+	 * @param icon The icon of the snack-bar
+	 * @returns The snack-bar ref
 	 */
 	openErrorSnackBar(snackBarConfig: ErrorSnackBarConfig, icon?: string): MatSnackBarRef<ErrorSnackBar> {
 		let snackBarRef: MatSnackBarRef<ErrorSnackBar>;
@@ -102,26 +133,82 @@ export class SharedService {
 		return snackBarRef;
 	}
 	/**
-	 * Opens a snackbar with the specified params and a return of the snackbar's ref (for component)
-	 * @param {SnackBarConfig} opts The options of the snackbar
-	 * @returns {MatSnackBarRef<any>}
+	 * Opens a snack-bar with the specified params and a return of the snackbar's ref (for component)
+	 * @param opts The options of the snack-bar
+	 * @returns The snack-bar's ref
 	 */
 	openSnackBarComponent(opts: SnackBarConfig): MatSnackBarRef<any> {
 		return this.handleSnackBarWithComponent(opts);
 	}
 	/**
-	 * Opens a snackbar with the specified params and a return of the snackbar's ref (not for component)
-	 * @param {SnackBarConfig} opts The options of the snackbar
-	 * @returns {MatSnackBar<SimpleSnackBar>}
+	 * Opens a snack-bar with the specified params and a return of the snackbar's ref (not for component)
+	 * @param opts The options of the snackbar
+	 * @returns The snackbar's ref
 	 */
 	openSnackBar(opts: SnackBarConfig): MatSnackBarRef<SimpleSnackBar> {
 		return this.handleSnackBar(opts);
 	}
 	/**
-	 * Handles a snackbar with a snackbarref if the developer needs a return
-	 * @param {SnackBarConfig} opts The config for the snackbar.
-	 * @returns {MatSnackBarRef<SimpleSnackBar>}
-	 * @private
+	 * Opens a snack-bar with arguments.
+	 * @param msg The message for the snack-bar.
+	 * @param action The action for the snack-bar. Leave as `null` to remove the action.
+	 * @param duration The duration for the snack-bar to appear.
+	 * @param hasElevation Whether to show the elevation. Specify a number for the elevation level.
+	 * @param showHorizontal Configuration on where to show the snack-barhorizontally.
+	 * @param showVertical Configuration on where to show the snack-bar vertically.
+	 * @returns The snack-bar's ref.
+	 */
+	openSnackBarWithOpts(
+		msg: string,
+		action?: string,
+		duration?: number,
+		hasElevation?: boolean | string,
+		showHorizontal?: MatSnackBarHorizontalPosition,
+		showVertical?: MatSnackBarVerticalPosition
+	): MatSnackBarRef<SimpleSnackBar> {
+		let snackBarRef: MatSnackBarRef<SimpleSnackBar>;
+		// Configuration options
+		if (hasElevation || showHorizontal || showVertical || duration) {
+			let snackBarConfig = new MatSnackBarConfig();
+			// Elevation options
+			if (hasElevation) {
+				if (typeof hasElevation == 'number') {
+					snackBarConfig.panelClass += `mat-elevation-z${hasElevation}`;
+				} else {
+					snackBarConfig.panelClass += 'mat-elevation-z3';
+				}
+			}
+			// Config option for horizontal
+			if (showHorizontal) {
+				snackBarConfig.horizontalPosition = showHorizontal;
+			}
+			// Config option for vertical
+			if (showVertical) {
+				snackBarConfig.verticalPosition = showVertical;
+			}
+			// Config option for duration
+			if (duration) {
+				snackBarConfig.duration = duration;
+			}
+			// Config option for action
+			if (action) {
+				snackBarRef = this.snackbar.open(msg, action, snackBarConfig);
+			} else {
+				snackBarRef = this.snackbar.open(msg, null, snackBarConfig);
+			}
+		} else {
+			if (action) {
+				snackBarRef = this.snackbar.open(msg, action);
+			} else {
+				snackBarRef = this.snackbar.open(msg);
+			}
+		}
+		return snackBarRef;
+	}
+	/**
+	 * Method for handling snack-bar related methods
+	 * @param opts The configuration options for the snackbar
+	 * @returns The snack-bar's ref
 	 */
 	private handleSnackBar(opts: SnackBarConfig): MatSnackBarRef<SimpleSnackBar> {
 		if (opts) {
@@ -191,9 +278,9 @@ export class SharedService {
 		}
 	}
 	/**
-	 * Handles a snackbar with a component
-	 * @param {SnackBarConfig} opts The config for the snackbar
-	 * @returns {MatSnackbarRef<any>}
+	 * Method for handling a component snack-bar
+	 * @param opts The configuration for the component snack-bar
+	 * @returns The snack-bar's ref
 	 */
 	private handleSnackBarWithComponent(opts: SnackBarConfig): MatSnackBarRef<any> {
 		if (opts) {
@@ -211,15 +298,15 @@ export class SharedService {
 		}
 	}
 	/**
-	 * Closes the current snackbar
+	 * Closes the currently opened snack-bar
 	 */
 	closeSnackBar() {
 		this.snackbar.dismiss();
 	}
 	/**
 	 * Opens an alert dialog with the specified parameters
-	 * @param {AlertDialogConfig} opts The options for the dialog
-	 * @returns {MatDialogRef<AlertDialog>}
+	 * @param opts The options for the dialog
+	 * @returns The dialog's ref
 	 */
 	openAlertDialog(opts: AlertDialogConfig): MatDialogRef<AlertDialog> {
 		if (opts) {
@@ -232,8 +319,8 @@ export class SharedService {
 	}
 	/**
 	 * Opens a confirm dialog with the specified parameters
-	 * @param {ConfirMatialogConfig} opts The options for the dialog
-	 * @return {MatDialogRef<ConfirMatialog>}
+	 * @param opts The options for the dialog
+	 * @returns The dialog's ref
 	 */
 	openConfirmDialog(opts: ConfirmDialogConfig): MatDialogRef<ConfirmDialog> {
 		if (opts) {
@@ -246,8 +333,8 @@ export class SharedService {
 	}
 	/**
 	 * Opens a prompt dialog with the specified parameters
-	 * @param {PromptDialogConfig} opts The options for the dialog
-	 * @return {MatDialogRef<PromptDialog>}
+	 * @param opts The options for the dialog
+	 * @returns The dialog ref
 	 */
 	openPromptDialog(opts: PromptDialogConfig): MatDialogRef<PromptDialog> {
 		if (opts) {
@@ -260,8 +347,8 @@ export class SharedService {
 	}
 	/**
 	 * Opens a selection dialog with the configured options
-	 * @param {SelectionDialogConfig} opts The options for the dialog
-	 * @returns {MatDialogRef<SelectionDialog>}
+	 * @param opts The options for the dialog
+	 * @returns The dialog ref
 	 */
 	openSelectionDialog(opts: SelectionDialogConfig): MatDialogRef<SelectionDialog> {
 		if (opts) {
@@ -273,8 +360,16 @@ export class SharedService {
 		}
 	}
 	/**
+	 * Opens a help dialog
+	 * @param templateRef ;The `TemplateRef` to open the dialog with.
+	 * @returns The dialog's ref
+	 */
+	openHelpDialog(templateRef: TemplateRef<any>): MatDialogRef<any> {
+		return this.dialog.open(templateRef);
+	}
+	/**
 	 * Gets all currently opened dialogs
-	 * @returns {MatDialogRef<any>[]}
+	 * @returns All currently opened dialogs
 	 */
 	getDialogs(): MatDialogRef<any>[] {
 		return this.dialog.openDialogs;
@@ -287,22 +382,22 @@ export class SharedService {
 	}
 	/**
 	 * Gets a dialog by its id
-	 * @param {string} id The ID of the dialog
-	 * @returns {MatDialogRef<any>}
+	 * @param id The ID of the dialog
+	 * @returns The dialog's ref
 	 */
 	getDialogById(id: string): MatDialogRef<any> {
 		return this.dialog.getDialogById(id);
 	}
 	/**
-	 * Observable for after all dialogs have been closed
-	 * @returns {Observable<void>}
+	 * `Observable` for after all dialogs have been closed
+	 * @returns The `Observable` stream
 	 */
 	afterAllClosed(): Observable<void> {
 		return this.dialog.afterAllClosed;
 	}
 	/**
 	 * Generates a random hex color
-	 * @returns A random hexdigit color
+	 * @returns A random hexadecimal color
 	 */
 	getRandomColor(): string {
 		let letters = '0123456789ABCDEF';
@@ -314,9 +409,8 @@ export class SharedService {
 	}
 	/**
 	 * Throws an error with the specified parameters
-	 * @param {string} variable The variable that was not specified
-	 * @param {string} type The type of variable
-	 * @private
+	 * @param variable The variable that was not specified
+	 * @param type The type of variable
 	 */
 	private throwError(variable: string, type: string) {
 		// tslint:disable-next-line:max-line-length
@@ -505,28 +599,23 @@ export class ErrorSnackBar implements OnInit {
 export class SnackBarConfig {
 	/**
 	 * The message for the snackbar
-	 * @type {string}
 	 */
 	msg: string;
 	/**
 	 * The action for the snackbar
-	 * @type {string}
 	 */
 	action?: string;
 	/**
-	 * The custom component for the snackbar to open in
-	 * @type {ComponentType<any>}
+	 * The custom component for the snack-bar to open in
 	 */
 	component?: ComponentType<any>;
 	/**
 	 * Additional options
-	 * @type {MatSnackBarConfig}
 	 */
 	additionalOpts?: MatSnackBarConfig;
 	/**
 	 * Whether to show an elevation on the snackbar
 	 * If a number is supplied, the elevation level will be the specified number. Or else it will be set to level 3
-	 * @type {(number|boolean)}
 	 */
 	hasElevation?: number | boolean;
 }
@@ -534,36 +623,30 @@ export class ErrorSnackBarConfig extends SnackBarConfig {
 	/**
 	 * The icon of the snackbar
 	 * Defaults to `error`
-	 * @type {string}
 	 */
 	icon?: string;
 }
 export class DialogConfig extends MatDialogConfig {
 	/**
 	 * The message of the dialog
-	 * @type {string|SafeHtml}
 	 */
 	msg?: string | SafeHtml;
 	/**
 	 * The title of the dialog
-	 * @type {string}
 	 */
 	title?: string;
 	/**
 	 * Whether the dialog's message is HTML
-	 * @type {boolean}
 	 */
 	isHtml?: boolean;
 	/**
 	 * The theme color for the dialog
-	 * @type {ThemePalette}
 	 */
 	themeColor?: ThemePalette;
 }
 export class AlertDialogConfig extends DialogConfig {
 	/**
 	 * The ok button text
-	 * @type {string}
 	 */
 	ok?: string;
 	/**
@@ -575,47 +658,38 @@ export class AlertDialogConfig extends DialogConfig {
 export class ConfirmDialogConfig extends DialogConfig {
 	/**
 	 * The ok button text
-	 * @type {string}
 	 */
 	ok?: string;
 	/**
 	 * The cancel button text
-	 * @type {string}
 	 */
 	cancel?: string;
 	/**
 	 * The ok button color
-	 * @type {ThemePalette}
 	 */
 	okColor?: ThemePalette;
 	/**
 	 * The cancel button color
-	 * @type {ThemePalette}
 	 */
 	cancelColor?: ThemePalette;
 	/**
 	 * Whether the confirm dialog should have a checkbox
-	 * @type {boolean}
 	 */
 	hasCheckbox?: boolean;
 	/**
 	 * The label pf the checkbox. Depends on `hasCheckbox`.
-	 * @type {string}
 	 */
 	checkboxLabel?: string;
 	/**
 	 * The color of the checkbox
-	 * @type {ThemePalette}
 	 */
 	checkboxColor?: ThemePalette;
 	/**
 	 * Whether the dialog must have the checkbox checked in order for the ok button to be enabled
-	 * @type {boolean}
 	 */
 	dialogRequiresCheckbox?: boolean;
 	/**
 	 * The initial value of the checkbox
-	 * @type {boolean}
 	 */
 	checkboxValue?: boolean;
 }
@@ -623,96 +697,78 @@ export class ConfirmDialogConfig extends DialogConfig {
 export class PromptDialogConfig extends DialogConfig {
 	/**
 	 * The ok button text
-	 * @type {string}
 	 */
 	ok?: string;
 	/**
 	 * The color of the ok button
-	 * @type {ThemePalette}
 	 */
 	okColor?: ThemePalette;
 	/**
 	 * The cancel button text
-	 * @type {string}
 	 */
 	cancel?: string;
 	/**
 	 * The color of the cancel button
-	 * @type {ThemePalette}
 	 */
 	cancelColor?: ThemePalette;
 	/**
 	 * The placeholder of the input
-	 * @type {string}
 	 */
 	placeholder: string;
 	/**
 	 * The input type
-	 * @type {'text'|'email'|'password'|'number'|string}
 	 */
-	inputType?: 'text' | 'email' | 'password' | 'number' | string;
+	inputType?: 'text' | 'email' | 'password' | 'number';
 	/**
 	 * The initial value of the input
-	 * @type {string|number}
 	 */
 	value?: string | number;
 	/**
 	 * The color of the input
-	 * @type {ThemePalette}
 	 */
 	inputColor?: ThemePalette;
 }
 export class SelectionDialogConfig extends DialogConfig {
 	/**
 	 * The ok button text
-	 * @type {string}
 	 */
 	ok?: string;
 	/**
 	 * The color of the ok button
-	 * @type {ThemePalette}
 	 */
 	okColor?: ThemePalette;
 	/**
 	 * The cancel button text
-	 * @type {string}
 	 */
 	cancel?: string;
 	/**
 	 * The color of the cancel button
-	 * @type {ThemePalette}
 	 */
 	cancelColor?: ThemePalette;
 	/**
 	 * The options for the selection dialog
-	 * @type {SelectionDialogOptions[]}
 	 */
 	options: SelectionDialogOptions[];
 }
 export class SelectionDialogOptions {
 	/**
 	 * The title of the selection list item
-	 * @type {string}
 	 */
 	content: string;
 	/**
 	 * Whether the selection list item is disabled
-	 * @type {boolean}
 	 */
 	disabled?: boolean;
 	/**
 	 * The value of the selection list item
-	 * @type {any}
 	 */
 	value: any;
 	/**
 	 * The checkbox position of the selection list item
-	 * @type {"before"|"after"}
 	 */
 	checkboxPosition?: 'before' | 'after';
 	/**
 	 * Whether the selection list item is initially selected
-	 * @type {boolean}
 	 */
 	selected?: boolean;
 }
