@@ -86,18 +86,19 @@ export const animations: Animations = {
 		})),
 		state('0', style({
 			height: AUTO_STYLE,
-			display: AUTO_STYLE,
+			display: AUTO_STYLE
 		})),
 		transition('0 => 1', [
 			group([
 				query('@*', animateChild(), { optional: true }),
-				animate('150ms 0ms ease-in'),
-			]),
+				animate('150ms 0ms ease-in')
+			])
 		]),
 		transition('1 => 0', [
 			group([
 				query('@*', animateChild(), { optional: true }),
-				animate('150ms 0ms ease-out'),
-			]),
+				animate('150ms 0ms ease-out')
+			])
 		]),
+	])
 }
