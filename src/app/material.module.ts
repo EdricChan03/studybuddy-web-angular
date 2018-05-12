@@ -9,7 +9,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -24,9 +24,14 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatGridListModule } from '@angular/material/grid-list';
+
 import { LayoutModule } from '@angular/cdk/layout';
 import { PlatformModule } from '@angular/cdk/platform';
+
 import { DomSanitizer } from '@angular/platform-browser';
+
 const MATERIAL_MODULES = [
 	MatButtonModule,
 	MatButtonToggleModule,
@@ -52,7 +57,9 @@ const MATERIAL_MODULES = [
 	MatPaginatorModule,
 	MatProgressSpinnerModule,
 	MatBadgeModule,
-	MatProgressBarModule
+	MatProgressBarModule,
+	MatTabsModule,
+	MatGridListModule
 ];
 const CDK_MODULES = [
 	LayoutModule,
@@ -62,6 +69,9 @@ const CDK_MODULES = [
 	exports: [
 		MATERIAL_MODULES,
 		CDK_MODULES
+	],
+	providers: [
+		{ provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'standard' } }
 	]
 })
 export class MaterialModule {
