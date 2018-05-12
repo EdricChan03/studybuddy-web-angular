@@ -14,17 +14,26 @@
 			<input matInput formControlName="color">
 			<mat-error *ngIf="options.get('color')?.hasError('required')">A color is required</mat-error>
 			<mat-error *ngIf="options.get('color')?.hasError('pattern')">The color is to be in the form #RRGGBB.</mat-error>
+			<button mat-icon-button matSuffix (click)="showHelpDialog(helpColorDialog)" aria-label="Get help" matTooltip="Get help" type="button"><mat-icon>help_circle</mat-icon></button>
 		</mat-form-field>
-		<p>Accepted color values: #RRGGBB</p>
-		<p>Where they denote the following:</p>
-		<ul>
-			<li>
-				<strong>RR</strong> denotes the red value of the color. Accepted values: 00 to FF.</li>
-			<li>
-				<strong>GG</strong> denotes the green value of the color. Accepted values: 00 to FF.</li>
-			<li>
-				<strong>BB</strong> denotes the blue value of the color. Accepted values: 00 to FF.</li>
-		</ul>
+		<ng-template #helpColorDialog>
+			<h2 matDialogTitle>Help</h2>
+			<div matDialogContent fxLayout="column">
+				<p>Accepted color values: #RRGGBB</p>
+				<p>Where they denote the following:</p>
+				<ul>
+					<li>
+						<strong>RR</strong> denotes the red value of the color. Accepted values: 00 to FF.</li>
+					<li>
+						<strong>GG</strong> denotes the green value of the color. Accepted values: 00 to FF.</li>
+					<li>
+						<strong>BB</strong> denotes the blue value of the color. Accepted values: 00 to FF.</li>
+				</ul>
+			</div>
+			<div matDialogActions align="end">
+				<button mat-button (click)="closeHelpDialog()" color="primary">Dismiss</button>
+			</div>
+		</ng-template>
 	</form>
 </div>
 <div matDialogActions align="end">

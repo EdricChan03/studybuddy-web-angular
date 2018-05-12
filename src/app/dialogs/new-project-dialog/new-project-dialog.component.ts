@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef } from '@angular/core';
 import { TodoProject } from '../../interfaces';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { AuthService } from '../../auth.service';
 import { Observable } from 'rxjs';
 import { SharedService } from '../../shared.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
 	selector: 'new-project-dialog',
@@ -15,6 +16,7 @@ export class NewProjectDialogComponent {
 	options: FormGroup;
 	currentUser: string;
 	projectsCollection: AngularFirestoreCollection<TodoProject>;
+	helpDialogRef: MatDialogRef<any>;
 	constructor(
 		private authService: AuthService,
 		private fs: AngularFirestore,
@@ -45,5 +47,12 @@ export class NewProjectDialogComponent {
 			this.shared.openSnackBar({ msg: `An error occured: ${error.message}`, additionalOpts: { duration: 6000, horizontalPosition: 'start' }, hasElevation: true });
 			console.error(`An error occured: ${error.message}`);
 		});
+	}
+	showHelpDialog(templateRef: TemplateRef<any>) {
+		this.helpDialogRef = this.shared.openHelpDialog(templateRef);
+	}
+	closeHelpDialog() {
+		this.helpDialogRef.close();
+		this.helpDialogRef = null;
 	}
 }
