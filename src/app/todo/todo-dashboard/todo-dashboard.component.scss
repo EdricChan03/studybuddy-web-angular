@@ -27,4 +27,13 @@
 			margin: 0;
 		}
 	}
+	.promo-new-dashboard-toolbar {
+		position: fixed;
+		z-index: 2;
+		p {
+			margin: 0;
+			font-size: 18px;
+			font-weight: normal;
+		}
+	}
 }

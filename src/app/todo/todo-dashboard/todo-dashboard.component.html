@@ -1,3 +1,9 @@
+<mat-toolbar class="promo-new-dashboard-toolbar mat-elevation-z3">
+	<span>Try the new dashboard!</span>
+	<span fxFlex></span>
+	<a mat-raised-button color="accent" routerLink="/todo/dashboard-new" *ngIf="!isMobile">Take me there</a>
+	<a mat-icon-button color="accent" routerLink="/todo/dashboard-new" *ngIf="isMobile"><mat-icon>navigate_next</mat-icon></a>
+</mat-toolbar>
 <div class="padding-percentage-container">
 	<h1>Todo Dashboard</h1>
 	<h2>Todos</h2>
@@ -14,7 +20,7 @@
 	<div class="todo-dashboard-projects-header" fxLayout="row" fxLayoutAlign="space-between center">
 		<h2 fxLayout="row" fxLayoutAlign="center center">
 			<mat-icon svgIcon="mdi:project"></mat-icon>
-			<span fxFlex="3"></span>
+			<span fxFlex="4"></span>
 			Projects
 		</h2>
 		<button mat-raised-button (click)="addNewProject()" color="primary"><mat-icon>add</mat-icon> New Project</button>

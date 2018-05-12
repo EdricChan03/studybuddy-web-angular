@@ -49,6 +49,7 @@ import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AuthService } from './auth.service';
 import { TodoOutletComponent } from './todo/todo-outlet/todo-outlet.component';
+import { TodoDashboardNewComponent } from './todo/todo-dashboard-new/todo-dashboard-new.component';
 
 @NgModule({
 	declarations: [
@@ -81,7 +82,8 @@ import { TodoOutletComponent } from './todo/todo-outlet/todo-outlet.component';
 		LoginComponent,
 		DashboardComponent,
 		TodoOutletComponent,
-		NewProjectDialogComponent
+		NewProjectDialogComponent,
+		TodoDashboardNewComponent
 	],
 	imports: [
 		BrowserModule,

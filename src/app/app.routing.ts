@@ -27,6 +27,7 @@ import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { TodoOutletComponent } from './todo/todo-outlet/todo-outlet.component';
 import { AuthGuardService } from './auth-guard.service';
+import { TodoDashboardNewComponent } from './todo/todo-dashboard-new/todo-dashboard-new.component';
 
 const SUPPORT_ROUTES: Route[] = [
 	{ path: 'home', component: SupportHomeComponent },
@@ -46,6 +47,7 @@ export const AppRoutes: Route[] = [
 			// Experimental, currently WIP
 			{ path: 'project/:projectId', component: TodoProjectComponent },
 			{ path: 'dashboard', component: TodoDashboardComponent },
+			{ path: 'dashboard-new', component: TodoDashboardNewComponent },
 			{ path: '**', redirectTo: '/todo/dashboard' }
 		]
 	},
@@ -77,7 +79,8 @@ export const AppRoutes: Route[] = [
 	// Login page
 	{ path: 'login', component: LoginComponent },
 	// Dashboard
-	{ path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardService] }
+	{ path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardService] },
+	{ path: '**', redirectTo: '/dashboard' }
 ];
 
 // The routing
