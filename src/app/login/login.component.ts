@@ -50,6 +50,7 @@ export class LoginComponent implements OnInit {
 				snackBarRef.onAction().subscribe(result => {
 					this.auth.logOut().then(() => {
 						this.shared.openSnackBar({ msg: 'Successfully logged out', hasElevation: true, additionalOpts: { duration: 3000, horizontalPosition: 'start' } });
+						this.router.navigate(['/login']);
 						localStorage.setItem('loggedIn', 'false');
 					})
 				})

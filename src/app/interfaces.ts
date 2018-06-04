@@ -1,3 +1,5 @@
+import { firestore } from "firebase";
+
 export interface SidenavLink {
 	link?: string;
 	icon?: string;
@@ -43,7 +45,11 @@ export interface TodoItem {
 	/**
 	 * The due date of the todo
 	 */
-	dueDate?: Date | string | number | any;
+	dueDateTimestamp?: firestore.Timestamp | any;
+	/**
+	 * The due date of the todo as a Date
+	 */
+	dueDate?: Date;
 	/**
 	 * Whether the todo has already been finished
 	 */

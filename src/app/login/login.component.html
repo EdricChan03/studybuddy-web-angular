@@ -37,7 +37,7 @@
 								<mat-error *ngIf="signUpForm.get('confirmPassword')?.hasError('mismatchedPasswords')">The passwords do not match.</mat-error>
 							</mat-form-field>
 						</form>
-						<button mat-button (click)="signUpWithEmailAndPassword()" [disabled]="signUpForm.invalid">Sign up</button>
+						<button mat-button color="primary" (click)="signUpWithEmailAndPassword()" [disabled]="signUpForm.invalid">Sign up</button>
 					</div>
 				</mat-tab>
 				<mat-tab label="Login">
@@ -59,7 +59,7 @@
 								<mat-error *ngIf="loginForm.get('password')?.hasError('required')">This is required.</mat-error>
 							</mat-form-field>
 						</form>
-						<button mat-button (click)="loginWithEmailAndPassword()" [disabled]="loginForm.invalid">Login</button>
+						<button mat-button color="primary" (click)="loginWithEmailAndPassword()" [disabled]="loginForm.invalid">Login</button>
 					</div>
 				</mat-tab>
 			</mat-tab-group>

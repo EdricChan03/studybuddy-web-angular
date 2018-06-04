@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { SharedService } from '../shared.service';
 import { AngularFirestore } from 'angularfire2/firestore';
-import * as firebase from 'firebase';
 import { AuthService } from '../auth.service';
+import * as firebase from 'firebase';
 
 @Component({
 	selector: 'app-account',

@@ -1,5 +1,5 @@
 
-import {map} from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { ToolbarService } from '../../toolbar.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
@@ -53,7 +53,7 @@ export class TodoHomeComponent implements OnInit {
 			if (user) {
 				console.log(user);
 				this.currentUser = user.uid;
-				this.todosCollection = this.afFs.collection(`users/${this.currentUser}/todos`);
+				this.todosCollection = this.afFs.collection<TodoItem>(`users/${this.currentUser}/todos`);
 				this.todos$ = this.todosCollection.snapshotChanges().pipe(map(actions => {
 					return actions.map(a => {
 						const data = a.payload.doc.data() as TodoItem;
@@ -70,7 +70,7 @@ export class TodoHomeComponent implements OnInit {
 		});
 	}
 	private _checkEmpty(statement: any): boolean {
-		return statement.length != 0;
+		return statement.length != 0 || statement !== null;
 	}
 	clearSelectedTodos() {
 		this.selectedTodos = [];
@@ -133,7 +133,7 @@ export class TodoHomeComponent implements OnInit {
 		})
 	}
 	toggleChecked(todo: TodoItem) {
-		todo.hasDone = !todo.hasDone;
+		// todo.hasDone = !todo.hasDone;
 		if (todo.hasDone) {
 			this.todosCollection.doc<TodoItem>(todo.id).update({
 				hasDone: true
@@ -186,9 +186,9 @@ export class TodoHomeComponent implements OnInit {
 		let dialogRef = this.dialog.open(TodoDialogComponent, { disableClose: true });
 		dialogRef.componentInstance.isNewTodo = true;
 	}
-	editTodo(todoItem: TodoItem, event?: KeyboardEvent | MouseEvent) {
+	editTodo(todoItem: TodoItem, event?: MouseEvent) {
 		if (event) {
-			event.stopImmediatePropagation();
+			this.stopPropogation(event);
 		}
 		let dialogRef = this.dialog.open(TodoDialogComponent, { disableClose: true });
 		let tempTodoItem = Object.assign({}, todoItem);
@@ -201,13 +201,17 @@ export class TodoHomeComponent implements OnInit {
 			this.shared.openSnackBar({ msg: 'Todo was removed', additionalOpts: { duration: 3000, horizontalPosition: 'start', panelClass: 'mat-elevation-z3' } });
 		});
 	}
-	stopPropogation(event: KeyboardEvent) {
-		event.stopImmediatePropagation();
-	}
-	removeTodo(id: string, bypassDialog?: boolean, event?: KeyboardEvent) {
-		if (event) {
+	stopPropogation(event: MouseEvent) {
+		if (typeof event.stopImmediatePropagation === 'function') {
 			event.stopImmediatePropagation();
-			// Check if shify key is pressed
+		} else if (typeof event.stopPropagation === 'function') {
+			event.stopPropagation();
+		}
+	}
+	removeTodo(id: string, bypassDialog?: boolean, event?: MouseEvent) {
+		if (event) {
+			this.stopPropogation(event);
+			// Check if shift key is pressed
 			if (event.shiftKey || bypassDialog) {
 				this._deleteTodo(id);
 			} else {

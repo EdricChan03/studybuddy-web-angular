@@ -44,8 +44,8 @@ export class AppComponent implements OnInit {
 		// TODO(Edric): Figure out a way to make this private
 		public messagingService: MessagingService
 	) {
-		this.userObservable = this.auth.getAuthState();
-		this.auth.getAuthState().subscribe((user) => {
+		this.userObservable = auth.getAuthState();
+		auth.getAuthState().subscribe((user) => {
 			if (user) {
 				this.user = user;
 				console.log(user);
@@ -185,6 +185,9 @@ export class AppComponent implements OnInit {
 	 */
 	get isSidenavOpened(): boolean {
 		return this.sidenav.opened;
+	}
+	get isAuthenticated(): boolean {
+		return this.auth.authenticated;
 	}
 	ngOnInit() {
 		this.sidenavLinks.forEach(item => {

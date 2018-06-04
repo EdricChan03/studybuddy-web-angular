@@ -117,7 +117,7 @@
 						/>
 					</svg>
 				</mat-icon>
-				<span>Due date: {{todo?.dueDate | date}}</span>
+				<span>Due date: {{todo?.dueDate.toDate() | date}}</span>
 			</span>
 			<span matLine *ngIf="todo?.project" style="vertical-align: middle; align-items: center; align-content: center; display: flex;">
 				<mat-icon color="primary" style="padding-right: 4px;">

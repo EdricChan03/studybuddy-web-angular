@@ -593,6 +593,7 @@ export class ErrorSnackBar implements OnInit {
 		this.snackBarRef.dismissWithAction();
 	}
 	ngOnInit() {
+		console.log(this.snackBarConfig);
 		this.hasAction = this.snackBarConfig.action ? true : false;
 	}
 }

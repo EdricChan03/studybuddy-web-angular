@@ -35,12 +35,12 @@ export class TodoDialogComponent implements OnInit {
 		'2. Ordered item #2\n' +
 		'3. Ordered item #3';
 	mkdnImg = '![Alternate text](https://example.com/myimg.jpg)';
-	mkdnHeaders = '# <h1>\n' +
-		'## <h2>\n' +
-		'### <h3>\n' +
-		'#### <h4>\n' +
-		'##### <h5>\n' +
-		'###### <h6>';
+	mkdnHeaders = '# Header 1\n' +
+		'## Header 2\n' +
+		'### Header 3\n' +
+		'#### Header 4\n' +
+		'##### Header 5\n' +
+		'###### Header 6';
 	mkdnCode = '```\n' +
 		'Code blocks are typically in three backticks (\`)\n' +
 		'```\n' +
@@ -148,6 +148,7 @@ export class TodoDialogComponent implements OnInit {
 			};
 		} else {
 			this.todoItem = this.todoToEdit;
+			this.todoItem.dueDate = this.todoItem.dueDateTimestamp.toDate();
 		}
 	}
 	resetForm() {
@@ -173,6 +174,7 @@ export class TodoDialogComponent implements OnInit {
 		if (this.isNewTodo) {
 			if (this.todoItem.dueDate) {
 				this.todoItem.dueDate = new Date(this.todoItem.dueDate);
+				this.todoItem.dueDateTimestamp = this.todoItem.dueDate;
 			}
 			this.todoCollection.add(this.todoItem).then(result => {
 				// tslint:disable-next-line:max-line-length
