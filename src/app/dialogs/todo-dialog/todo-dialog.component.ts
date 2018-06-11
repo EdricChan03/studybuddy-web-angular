@@ -7,18 +7,20 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { EditContentDialogComponent } from '../edit-content-dialog/edit-content-dialog.component';
 import { MatChipInputEvent } from '@angular/material';
 import * as firebase from 'firebase';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 
 @Component({
 	selector: 'app-todo-dialog',
-	templateUrl: './todo-dialog.component.html'
+	templateUrl: './todo-dialog.component.html',
+	styleUrls: ['./todo-dialog.component.scss']
 })
 export class TodoDialogComponent implements OnInit {
 	todoItem: TodoItem;
-	isNewTodo: boolean;
+	isNewTodo = true;
 	todoToEdit: TodoItem;
 	todoCollection: AngularFirestoreCollection<TodoItem>;
-	showUnsupportedNotice = true;
 	enableTags = false;
+	showDebug = false;
 	helpDialogRef: MatDialogRef<any>;
 	mkdnText = '**Bold**\n' +
 		'_Italics_\n' +
@@ -47,6 +49,7 @@ export class TodoDialogComponent implements OnInit {
 		'```html\n' +
 		'<p>This is an example of syntax-highlighting! <em>wow</em><p>\n' +
 		'```';
+	todoForm: FormGroup;
 	@ViewChild('helpContentDialog') helpContentDialogTmpl: TemplateRef<any>;
 	constructor(
 		// TODO(Edric): Figure out a way to make this private
@@ -54,8 +57,18 @@ export class TodoDialogComponent implements OnInit {
 		private afAuth: AngularFireAuth,
 		private dialogRef: MatDialogRef<TodoDialogComponent>,
 		private afFs: AngularFirestore,
-		private dialog: MatDialog
+		private dialog: MatDialog,
+		private fb: FormBuilder
 	) {
+		this.todoForm = fb.group({
+			title: ['', Validators.required],
+			content: '',
+			// projects: this.fb.array([]),
+			// tags: this.fb.array([]),
+			dueDate: null,
+			hasDone: false,
+			id: this.afFs.createId()
+		});
 		if (afAuth.auth.currentUser) {
 			this.todoCollection = this.afFs.collection(`users/${afAuth.auth.currentUser.uid}/todos`);
 		} else {
@@ -76,18 +89,20 @@ export class TodoDialogComponent implements OnInit {
 			});
 		}
 	}
-	/**
-	 * Checks if the browser is Firefox or Safari
-	 */
-	// get isUnsupported(): boolean {
-	// 	if ((this.platform.FIREFOX || this.platform.SAFARI) && this.showUnsupportedNotice) {
-	// 		return true;
-	// 	} else {
-	// 		return false;
-	// 	}
-	// }
 	get isMobile(): boolean {
 		return this.shared.isMobile;
+	}
+	get projectsArray(): FormArray {
+		return this.todoForm.get('projects') as FormArray;
+	}
+	get tagsArray(): FormArray {
+		return this.todoForm.get('tags') as FormArray;
+	}
+	get todoFormRawValue(): any {
+		return this.todoForm.getRawValue();
+	}
+	regenerateId() {
+		this.todoForm.get('id').setValue(this.afFs.createId());
 	}
 	showHelp(help: 'content' | 'project' | 'dueDate') {
 		switch (help) {
@@ -100,14 +115,20 @@ export class TodoDialogComponent implements OnInit {
 		this.helpDialogRef.close();
 		this.helpDialogRef = null;
 	}
-	addTag(event: MatChipInputEvent) {
+	addTag(event: MatChipInputEvent, type: 'tags' | 'projects') {
 		let input = event.input;
 		let value = event.value;
 
 		// Add a tag
 		if ((value || '').trim()) {
-			this.todoItem.tags.push(value.trim());
-			this.todoItem.tags.sort();
+			switch (type) {
+				case 'tags':
+					this.tagsArray.push(value);
+					break;
+				case 'projects':
+					this.projectsArray.push(value);
+					break;
+			}
 		}
 
 		// Reset the input value
@@ -115,52 +136,48 @@ export class TodoDialogComponent implements OnInit {
 			input.value = '';
 		}
 	}
-	removeTag(tag: string) {
-		let index = this.todoItem.tags.indexOf(tag);
-		if (index >= 0) {
-			this.todoItem.tags.splice(index, 1);
+	removeTag(tag: string, type: 'tags' | 'projects') {
+		let index: number;
+		switch (type) {
+			case 'tags':
+				index = this.tagsArray.value.indexOf(tag);
+				break;
+			case 'projects':
+				index = this.projectsArray.value.indexOf(tag);
+				break;
 		}
-	}
-	/**
-	 * Hides the notice
-	 * @param {boolean} toggleTo What to toggle the value to
-	 */
-	toggleNotice(toggleTo?: boolean) {
-		if (toggleTo) {
-			this.showUnsupportedNotice = toggleTo;
-		} else {
-			this.showUnsupportedNotice = !this.showUnsupportedNotice;
-			const snackBarRef = this.shared.openSnackBar({ msg: 'Notice dismissed', action: 'Undo', additionalOpts: { duration: 6000, panelClass: 'mat-elevation-z3', horizontalPosition: 'start' } });
-			snackBarRef.onAction().subscribe(() => {
-				this.showUnsupportedNotice = !this.showUnsupportedNotice;
-			});
+		if (index >= 0) {
+			switch (type) {
+				case 'tags':
+					this.tagsArray.value.splice(index, 1);
+					break;
+				case 'projects':
+					this.projectsArray.value.splice(index, 1);
+					break;
+			}
 		}
 	}
 	editContent() {
 		this.dialog.open(EditContentDialogComponent, { disableClose: true, panelClass: 'no-padding' });
 	}
 	ngOnInit() {
-		if (this.isNewTodo) {
-			this.todoItem = {
-				'content': '',
-				'title': '',
-				'tags': []
-			};
-		} else {
-			this.todoItem = this.todoToEdit;
-			this.todoItem.dueDate = this.todoItem.dueDateTimestamp.toDate();
+		if (!this.isNewTodo) {
+			const todoItem: any = Object.assign({}, this.todoToEdit);
+			if ('dueDate' in todoItem) {
+				todoItem.dueDate = todoItem.dueDate.toDate();
+			} else {
+				todoItem.dueDate = null;
+			}
+			this.todoForm.setValue(todoItem);
 		}
 	}
 	resetForm() {
-		this.todoItem = {
-			'title': '',
-			'content': ''
-		};
+		this.todoForm.reset();
 	}
 	cancel() {
 		this.dialogRef.close();
 	}
-	checkWhitespace(typeToCheck: 'content' | 'title') {
+	/*checkWhitespace(typeToCheck: 'content' | 'title') {
 		switch (typeToCheck) {
 			case 'content':
 				this.todoItem.content = this.todoItem.content.replace(/^\s+/, '').replace(/\s+$/, '');
@@ -169,14 +186,36 @@ export class TodoDialogComponent implements OnInit {
 				this.todoItem.title = this.todoItem.title.replace(/^\s+/, '').replace(/\s+$/, '');
 				break;
 		}
-	}
+	}*/
 	saveOrAddTodo() {
 		if (this.isNewTodo) {
-			if (this.todoItem.dueDate) {
-				this.todoItem.dueDate = new Date(this.todoItem.dueDate);
-				this.todoItem.dueDateTimestamp = this.todoItem.dueDate;
+			const itemToAdd: TodoItem = {};
+			for (const prop in this.todoFormRawValue) {
+				if (this.todoFormRawValue.hasOwnProperty(prop) && this.todoFormRawValue[prop] !== null) {
+					switch (prop) {
+						case 'title':
+							itemToAdd.title = this.todoFormRawValue[prop];
+							break;
+						case 'content':
+							itemToAdd.content = this.todoFormRawValue[prop];
+							break;
+						case 'dueDate':
+							console.log(this.todoFormRawValue[prop]);
+							itemToAdd.dueDate = firebase.firestore.Timestamp.fromDate(this.todoFormRawValue[prop] as Date);
+							break;
+						case 'hasDone':
+							console.log(this.todoFormRawValue[prop]);
+							itemToAdd.hasDone = this.todoFormRawValue[prop];
+							break;
+						case 'id':
+							itemToAdd.id = this.todoFormRawValue[prop];
+							break;
+						default:
+							throw new Error(`Property ${prop} doesn't exist!`);
+					}
+				}
 			}
-			this.todoCollection.add(this.todoItem).then(result => {
+			this.todoCollection.doc(itemToAdd.id).set(itemToAdd).then(result => {
 				// tslint:disable-next-line:max-line-length
 				this.shared.openSnackBar({ msg: 'Todo was added', additionalOpts: { duration: 5000, panelClass: 'mat-elevation-z3', horizontalPosition: 'start' } });
 				console.log(`Successfully written data with result: ${result}`);
@@ -187,7 +226,7 @@ export class TodoDialogComponent implements OnInit {
 			});
 		} else {
 			this.todoCollection.doc<TodoItem>(this.todoToEdit.id)
-				.update(this.todoToEdit)
+				.update(this.todoFormRawValue)
 				.then(result => {
 					// tslint:disable-next-line:max-line-length
 					this.shared.openSnackBar({ msg: 'Todo was updated', additionalOpts: { duration: 5000, horizontalPosition: 'start' }, hasElevation: true });

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { TodoItem } from '../interfaces';
 import { SharedService } from '../shared.service';
 
+import * as firebase from 'firebase';
+
 interface Dashboard {
 	todos: TodoItem[];
 	notes: any;
@@ -21,13 +23,13 @@ export class DashboardComponent implements OnInit {
 		todos: [
 			{
 				title: 'Todo #1',
-				dueDate: new Date(),
+				dueDate: firebase.firestore.Timestamp.now(),
 				tags: ['tag-1', 'my-tag'],
 				content: 'Content goes here'
 			},
 			{
 				title: 'Todo #2',
-				dueDate: new Date(),
+				dueDate: firebase.firestore.Timestamp.now(),
 				tags: ['tag-1', 'my-tag'],
 				content: '# Content goes here'
 			 	+ '\n**Bold**'
@@ -41,13 +43,13 @@ export class DashboardComponent implements OnInit {
 			},
 			{
 				title: 'Todo #3',
-				dueDate: new Date(),
+				dueDate: firebase.firestore.Timestamp.now(),
 				tags: ['tag-1', 'my-tag'],
 				content: 'Content goes here'
 			},
 			{
 				title: 'Todo #4',
-				dueDate: new Date(),
+				dueDate: firebase.firestore.Timestamp.now(),
 				tags: ['tag-1', 'my-tag'],
 				content: 'Content goes here'
 			}
@@ -57,7 +59,7 @@ export class DashboardComponent implements OnInit {
 
 			}
 		]
-	}
+	};
 	ngOnInit() {
 	}
 

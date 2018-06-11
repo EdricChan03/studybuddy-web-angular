@@ -167,7 +167,7 @@ export class AccountComponent {
 			// Log error to console
 			console.error(errorMsg);
 		}
-		this.shared.openErrorSnackBar({ msg: `Error: ${errorMsg}`, hasElevation: 2, additionalOpts: { horizontalPosition: 'start' } });
+		this.shared.openSnackBar({ msg: `Error: ${errorMsg}`, hasElevation: 2, additionalOpts: { horizontalPosition: 'start' } });
 	}
 
 }

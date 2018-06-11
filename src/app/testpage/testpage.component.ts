@@ -193,7 +193,7 @@ export class TestpageComponent implements OnInit {
 	 * Opens an error snackbar
 	 */
 	errorSnackBar() {
-		this.shared.openErrorSnackBar({ msg: this.setDefaultValue(this.snackbar.snackBarMsg, 'Error: Something happened'), additionalOpts: { duration: 5000, horizontalPosition: 'start' } })
+		this.shared.openSnackBar({ msg: this.setDefaultValue(this.snackbar.snackBarMsg, 'Error: Something happened'), additionalOpts: { duration: 5000, horizontalPosition: 'start' } });
 	}
 	/**
 	 * Opens a snackbar with a duration

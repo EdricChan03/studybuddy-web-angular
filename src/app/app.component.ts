@@ -1,6 +1,6 @@
 import * as firebase from 'firebase';
 
-import { Component, ViewChild, HostListener, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { Message, MessageImportance, MessagingService } from './messaging.service';
 import {
 	NavigationStart,
@@ -89,7 +89,7 @@ export class AppComponent implements OnInit {
 	user: firebase.User;
 	userObservable: Observable<firebase.User>;
 	todayDate = new Date();
-	showNotificationSettings: boolean = false;
+	showNotificationSettings = false;
 	toggleState = [];
 	toggleOtherState = [];
 	/**
@@ -194,7 +194,7 @@ export class AppComponent implements OnInit {
 			if (item.list) {
 				this.toggleState.push('notToggled');
 			}
-		})
+		});
 	}
 	navigationInterceptor(event: Event) {
 		if (event instanceof NavigationStart) {
@@ -222,7 +222,7 @@ export class AppComponent implements OnInit {
 		event.stopPropagation();
 		event.preventDefault();
 		if (this.toggleState[index]) {
-			if (this.toggleState[index] == 'notToggled') {
+			if (this.toggleState[index] === 'notToggled') {
 				this.toggleState[index] = 'toggled';
 			} else {
 				this.toggleState[index] = 'notToggled';
@@ -236,7 +236,7 @@ export class AppComponent implements OnInit {
 		event.stopPropagation();
 		event.preventDefault();
 		if (this.toggleOtherState[index]) {
-			if (this.toggleOtherState[index] == 'notToggled') {
+			if (this.toggleOtherState[index] === 'notToggled') {
 				this.toggleOtherState[index] = 'toggled';
 			} else {
 				this.toggleOtherState[index] = 'notToggled';
@@ -247,7 +247,7 @@ export class AppComponent implements OnInit {
 	}
 	logOut() {
 		// tslint:disable-next-line:max-line-length
-		let dialogRef = this.shared.openConfirmDialog({ title: 'Log out?', msg: 'Changes not saved will be lost.', ok: 'Log out', okColor: 'warn' });
+		const dialogRef = this.shared.openConfirmDialog({ title: 'Log out?', msg: 'Changes not saved will be lost.', ok: 'Log out', okColor: 'warn' });
 		dialogRef.afterClosed().subscribe(result => {
 			if (result === 'ok') {
 				this.auth.logOut().then((res) => {
@@ -261,7 +261,7 @@ export class AppComponent implements OnInit {
 					this.handleError(error.message);
 				});
 			}
-		})
+		});
 	}
 	closeLeftSidenav(ref: MatSidenav) {
 		if (this.shared.settings.closeSidenavOnClick) {
@@ -276,22 +276,22 @@ export class AppComponent implements OnInit {
 			console.error('Please run this app in developer mode for this method to function. Aborting..');
 		} else {
 			this.tempId++;
-			let random = Math.floor((Math.random() * 5) + 1);
+			const random = Math.floor((Math.random() * 5) + 1);
 			switch (random) {
 				case 1:
-					this.messagingService.addMessage({ category: 'Product announcements', title: 'Check out the all new XX feature which is available starting today!', date: this.todayDate, id: `debug-${this.tempId}`, importanceLevel: MessageImportance.Low, actions: [{ title: 'Read blogpost', onClickListener: (ev) => { window.location.href = 'https://example.com' } }] });
+					this.messagingService.addMessage({ category: 'Product announcements', title: 'Check out the all new XX feature which is available starting today!', date: this.todayDate, id: `debug-${this.tempId}`, importanceLevel: MessageImportance.Low, actions: [{ title: 'Read blogpost', onClickListener: (ev) => { window.location.href = 'https://example.com'; } }] });
 					break;
 				case 2:
-					this.messagingService.addMessage({ category: 'Critical alert', title: 'Feature xx is currently down. Please stand by for more updates.', date: this.todayDate, id: `debug-${this.tempId}`, importanceLevel: MessageImportance.Critical, actions: [{ title: 'Dismiss', onClickListener: (ev) => { window.location.href = 'https://example.com' } }] });
+					this.messagingService.addMessage({ category: 'Critical alert', title: 'Feature xx is currently down. Please stand by for more updates.', date: this.todayDate, id: `debug-${this.tempId}`, importanceLevel: MessageImportance.Critical, actions: [{ title: 'Dismiss', onClickListener: (ev) => { window.location.href = 'https://example.com'; } }] });
 					break;
 				case 3:
-					this.messagingService.addMessage({ category: 'Notification', title: 'Hi there!', date: this.todayDate, id: `debug-${this.tempId}`, importanceLevel: MessageImportance.Low, actions: [{ title: 'Dismiss', onClickListener: (ev) => { window.location.href = 'https://example.com' } }] });
+					this.messagingService.addMessage({ category: 'Notification', title: 'Hi there!', date: this.todayDate, id: `debug-${this.tempId}`, importanceLevel: MessageImportance.Low, actions: [{ title: 'Dismiss', onClickListener: (ev) => { window.location.href = 'https://example.com'; } }] });
 					break;
 				case 4:
-					this.messagingService.addMessage({ category: 'Newsletter', title: 'This week\'s newsletter', date: this.todayDate, id: `debug-${this.tempId}`, importanceLevel: MessageImportance.Medium, actions: [{ title: 'Dismiss', onClickListener: (ev) => { window.location.href = 'https://example.com' } }] });
+					this.messagingService.addMessage({ category: 'Newsletter', title: 'This week\'s newsletter', date: this.todayDate, id: `debug-${this.tempId}`, importanceLevel: MessageImportance.Medium, actions: [{ title: 'Dismiss', onClickListener: (ev) => { window.location.href = 'https://example.com'; } }] });
 					break;
 				case 5:
-					this.messagingService.addMessage({ category: 'Critical alert', title: 'Update: All features are back up!', date: this.todayDate, id: `debug-${this.tempId}`, importanceLevel: MessageImportance.Critical, actions: [{ title: 'Dismiss', onClickListener: (ev) => { window.location.href = 'https://example.com' } }] });
+					this.messagingService.addMessage({ category: 'Critical alert', title: 'Update: All features are back up!', date: this.todayDate, id: `debug-${this.tempId}`, importanceLevel: MessageImportance.Critical, actions: [{ title: 'Dismiss', onClickListener: (ev) => { window.location.href = 'https://example.com'; } }] });
 					break;
 				default:
 					break;
@@ -306,7 +306,7 @@ export class AppComponent implements OnInit {
 	 */
 	signOut() {
 		// tslint:disable-next-line:max-line-length
-		let dialogRef = this.shared.openConfirmDialog({ title: 'Log out?', msg: 'Changes not saved will be lost.', ok: 'Log out', okColor: 'warn' });
+		const dialogRef = this.shared.openConfirmDialog({ title: 'Log out?', msg: 'Changes not saved will be lost.', ok: 'Log out', okColor: 'warn' });
 		dialogRef.afterClosed().subscribe(result => {
 			if (result === 'ok') {
 				this.auth.logOut().then((res) => {
@@ -320,7 +320,7 @@ export class AppComponent implements OnInit {
 					this.handleError(error.message);
 				});
 			}
-		})
+		});
 	}
 	/**
 	 * @deprecated Use {@link AppComponent#signInWithGoogle} instead or {@link AppComponent#newSignIn}
@@ -380,11 +380,11 @@ export class AppComponent implements OnInit {
 	}
 	deleteUser() {
 		// tslint:disable-next-line:max-line-length
-		let confirmDialogRef = this.shared.openConfirmDialog({ title: 'Unregister?', msg: '<p>Unregistering will clear all data associated with your account.</p><p><strong>Take note that if you would like to save your data, you can do so by going to Account > Export data.</strong></p>', isHtml: true, ok: 'Unregister and delete data' });
+		const confirmDialogRef = this.shared.openConfirmDialog({ title: 'Unregister?', msg: '<p>Unregistering will clear all data associated with your account.</p><p><strong>Take note that if you would like to save your data, you can do so by going to Account > Export data.</strong></p>', isHtml: true, ok: 'Unregister and delete data' });
 		confirmDialogRef.afterClosed().subscribe(result => {
 			if (result === 'ok') {
 				// tslint:disable-next-line:max-line-length
-				let doubleConfirmDialogRef = this.shared.openConfirmDialog({ title: 'Really unregister?', msg: 'If you did not export your data, all of your data will be deleted! Continue?', ok: 'Unregister and delete data', okColor: 'warn', hasCheckbox: true, checkboxLabel: 'I confirm that I have backed up all data and that deleting my account will remove all data associated with my account.', checkboxColor: 'primary', dialogRequiresCheckbox: true });
+				const doubleConfirmDialogRef = this.shared.openConfirmDialog({ title: 'Really unregister?', msg: 'If you did not export your data, all of your data will be deleted! Continue?', ok: 'Unregister and delete data', okColor: 'warn', hasCheckbox: true, checkboxLabel: 'I confirm that I have backed up all data and that deleting my account will remove all data associated with my account.', checkboxColor: 'primary', dialogRequiresCheckbox: true });
 				doubleConfirmDialogRef.afterClosed().subscribe(result2 => {
 					console.log(result2);
 					console.log(this.user);
@@ -414,6 +414,6 @@ export class AppComponent implements OnInit {
 		});
 	}
 	private handleError(errorMsg: string) {
-		this.shared.openErrorSnackBar({ msg: `Error: ${errorMsg}`, hasElevation: 2, additionalOpts: { horizontalPosition: 'start', } });
+		this.shared.openSnackBar({ msg: `Error: ${errorMsg}`, hasElevation: 2, additionalOpts: { horizontalPosition: 'start', } });
 	}
 }

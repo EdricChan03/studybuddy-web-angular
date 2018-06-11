@@ -132,8 +132,11 @@
     }
 }
 
+$studybuddy-typography: mat-typography-config(
+	$font-family: 'Baloo, Roboto, Helvetica, Arial, sans-serif'
+);
 // @import 'assets/icons/material-icons.css';
-@include mat-core();
+@include mat-core($studybuddy-typography);
 $studybuddy-light-theme-primary: mat-palette($mat-indigo);
 $studybuddy-light-theme-accent: mat-palette($mat-pink, A200, A100, A400);
 $studybuddy-light-theme-theme: mat-light-theme($studybuddy-light-theme-primary, $studybuddy-light-theme-accent);
@@ -226,11 +229,13 @@ table.app-table {
 }
 
 .app-sidenav {
-    width: 256px;
+	min-width: 256px;
+	max-width: 100%;
 }
 
 .app-notify-sidenav {
-    width: 412px;
+	width: 412px;
+	max-width: 100%;
 }
 
 .app-android-download-btn,
@@ -458,4 +463,8 @@ blockquote {
 .strike>span:after {
     left: 100%;
     margin-left: 15px;
+}
+
+.mat-menu-item[disabled] mat-icon {
+	color: inherit !important;
 }

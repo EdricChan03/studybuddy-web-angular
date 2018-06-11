@@ -69,7 +69,7 @@ export class SharedService {
 	private _title = '';
 	private _extraToolbarConfig: ExtraToolbarConfig;
 	// Getters and setters
-	get title(): string { return this._title };
+	get title(): string { return this._title; }
 	set title(title: string) {
 		this._title = title;
 		if (title !== '') {
@@ -111,28 +111,6 @@ export class SharedService {
 		this._extraToolbarConfig = extraToolbarConfig;
 	}
 	/**
-	 * Handles errors (opens in a snack-bar)
-	 * @param snackBarConfig The snack-bar config. Overrides all other params. Specify `null` to ignore this param.
-	 * @param icon The icon of the snack-bar
-	 * @returns The snack-bar ref
-	 */
-	openErrorSnackBar(snackBarConfig: ErrorSnackBarConfig, icon?: string): MatSnackBarRef<ErrorSnackBar> {
-		let snackBarRef: MatSnackBarRef<ErrorSnackBar>;
-		snackBarRef = this.openSnackBarComponent({ component: ErrorSnackBar, msg: snackBarConfig.msg, additionalOpts: snackBarConfig.additionalOpts, action: snackBarConfig.action ? snackBarConfig.action : null });
-		if (snackBarConfig) {
-			if (!snackBarConfig.additionalOpts.panelClass) {
-				snackBarConfig.additionalOpts.panelClass = 'warning-snackbar';
-			}
-			if (typeof icon == 'string') {
-				snackBarConfig.icon = icon;
-			}
-			snackBarRef.instance.snackBarConfig = snackBarConfig;
-		} else {
-			throw new Error('A snack bar config is required for this method to work. Please specify a snack bar config.')
-		}
-		return snackBarRef;
-	}
-	/**
 	 * Opens a snack-bar with the specified params and a return of the snackbar's ref (for component)
 	 * @param opts The options of the snack-bar
 	 * @returns The snack-bar's ref
@@ -169,10 +147,10 @@ export class SharedService {
 		let snackBarRef: MatSnackBarRef<SimpleSnackBar>;
 		// Configuration options
 		if (hasElevation || showHorizontal || showVertical || duration) {
-			let snackBarConfig = new MatSnackBarConfig();
+			const snackBarConfig = new MatSnackBarConfig();
 			// Elevation options
 			if (hasElevation) {
-				if (typeof hasElevation == 'number') {
+				if (typeof hasElevation === 'number') {
 					snackBarConfig.panelClass += `mat-elevation-z${hasElevation}`;
 				} else {
 					snackBarConfig.panelClass += 'mat-elevation-z3';
@@ -216,7 +194,7 @@ export class SharedService {
 				if (opts.additionalOpts) {
 					if (opts.additionalOpts.panelClass) {
 						if (typeof opts.additionalOpts.panelClass === 'string') {
-							let tempArray = [];
+							const tempArray = [];
 							if (typeof opts.hasElevation === 'number') {
 								tempArray.push(`mat-elevation-z${opts.hasElevation}`);
 							} else {
@@ -246,7 +224,7 @@ export class SharedService {
 				if (opts.additionalOpts) {
 					if (opts.additionalOpts.panelClass) {
 						if (typeof opts.additionalOpts.panelClass === 'string') {
-							let tempArray = [];
+							const tempArray = [];
 							if (typeof opts.hasElevation === 'number') {
 								tempArray.push(`mat-elevation-z${opts.hasElevation}`);
 							} else {
@@ -400,7 +378,7 @@ export class SharedService {
 	 * @returns A random hexadecimal color
 	 */
 	getRandomColor(): string {
-		let letters = '0123456789ABCDEF';
+		const letters = '0123456789ABCDEF';
 		let color = '#';
 		for (let i = 0; i < 6; i++) {
 			color += letters[Math.floor(Math.random() * 16)];
@@ -573,28 +551,6 @@ export class SelectionDialog implements OnInit {
 	}
 	ok() {
 		this.dialogRef.close(this.selection.selectedOptions.selected);
-	}
-}
-@Component({
-	selector: 'error-snackbar',
-	template: `
-	<mat-icon>error</mat-icon>
-	{{snackBarConfig.msg}}
-	<div class="mat-simple-snackbar-action" *ngIf="hasAction">
-  		<button mat-button (click)="action()">{{snackBarConfig.action}}</button>
-	</div>
-	`
-})
-export class ErrorSnackBar implements OnInit {
-	snackBarConfig: SnackBarConfig;
-	hasAction: boolean;
-	constructor(private snackBarRef: MatSnackBarRef<ErrorSnackBar>) { }
-	action() {
-		this.snackBarRef.dismissWithAction();
-	}
-	ngOnInit() {
-		console.log(this.snackBarConfig);
-		this.hasAction = this.snackBarConfig.action ? true : false;
 	}
 }
 export class SnackBarConfig {
@@ -780,9 +736,6 @@ const SHARED_DIALOGS = [
 	PromptDialog,
 	SelectionDialog
 ];
-const SHARED_SNACKBARS = [
-	ErrorSnackBar
-];
 const SHARED_MODULES = [
 	BrowserModule,
 	BrowserAnimationsModule,
@@ -798,9 +751,9 @@ const SHARED_MODULES = [
 ];
 @NgModule({
 	imports: SHARED_MODULES,
-	declarations: [SHARED_DIALOGS, SHARED_SNACKBARS],
-	entryComponents: [SHARED_DIALOGS, SHARED_SNACKBARS],
-	exports: [SHARED_DIALOGS, SHARED_SNACKBARS],
+	declarations: SHARED_DIALOGS,
+	entryComponents: SHARED_DIALOGS,
+	exports: SHARED_DIALOGS,
 	providers: [SharedService]
 })
 export class SharedModule { }

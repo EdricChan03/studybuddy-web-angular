@@ -1,13 +1,16 @@
 <h2 matDialogTitle>{{isNewTodo ? 'New' : 'Edit'}} Todo</h2>
 <div mat-dialog-content>
-	<form #addForm="ngForm">
+	<form [formGroup]="todoForm">
 		<mat-form-field class="app-form-field">
-			<input matInput [(ngModel)]="todoItem.title" placeholder="Title" name="title" required (change)="checkWhitespace('title')">
+			<mat-label>Title</mat-label>
+			<input matInput formControlName="title">
 			<mat-error>This is required</mat-error>
 			<mat-hint>The subject of your todo.</mat-hint>
 		</mat-form-field>
+
 		<mat-form-field class="app-form-field">
-			<textarea name="content" cols="3" matInput [(ngModel)]="todoItem.content" placeholder="Content" matTextareaAutosize (change)="checkWhitespace('content')"></textarea>
+			<mat-label>Content</mat-label>
+			<textarea formControlName="content" cols="3" matInput matTextareaAutosize></textarea>
 			<button mat-icon-button matSuffix matTooltip="Learn more about Markdown" (click)="showHelp('content')">
 				<mat-icon>help</mat-icon>
 			</button>
@@ -60,21 +63,23 @@
 				</mat-tab-group>
 			</div>
 			<div matDialogActions align="end">
-				<!-- TODO: Find out a way to close this dialog -->
 				<button mat-button (click)="closeHelpDialog()" color="primary">Dismiss</button>
 			</div>
 		</ng-template>
-		<mat-form-field class="app-form-field">
-			<input matInput [(ngModel)]="todoItem.project" placeholder="Project" name="project">
+		<!--<mat-form-field class="app-form-field">
+			<input matInput placeholder="Project" formControlName="project">
 			<mat-hint>The workspace where the todo will be saved in. (optional)</mat-hint>
-		</mat-form-field>
+		</mat-form-field>-->
+
 		<mat-form-field class="app-form-field">
-			<input matInput [matDatepicker]="dueDatePicker" placeholder="Due date" [(ngModel)]="todoItem.dueDate" name="dueDate">
+			<mat-label>Due date</mat-label>
+			<input matInput [matDatepicker]="dueDatePicker" formControlName="dueDate">
 			<mat-datepicker #dueDatePicker [touchUi]="shared.isMobile"></mat-datepicker>
 			<mat-datepicker-toggle matSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
 			<mat-hint>The date that this todo is due at.</mat-hint>
 		</mat-form-field>
-		<mat-checkbox [(ngModel)]="enableTags" [ngModelOptions]="{'standalone': true}">Enable tags?</mat-checkbox>
+		<!--<mat-checkbox [(ngModel)]="enableTags" [ngModelOptions]="{'standalone': true}">Enable tags?</mat-checkbox>
+		
 		<mat-form-field class="app-form-field" *ngIf="enableTags">
 			<mat-icon matPrefix>local_offer</mat-icon>
 			<mat-chip-list #tagsList>
@@ -88,13 +93,23 @@
 			<button mat-icon-button (click)="todoItem.tags = []" matSuffix matTooltip="Clear tags">
 				<mat-icon>clear</mat-icon>
 			</button>
-		</mat-form-field>
+		</mat-form-field>-->
+		<mat-checkbox formControlName="hasDone">Mark as done</mat-checkbox>
 		<br>
-		<mat-checkbox [(ngModel)]="todoItem.hasDone" name="hasDone">Mark as done</mat-checkbox>
+		<mat-checkbox [(ngModel)]="showDebug" [ngModelOptions]="{'standalone': true}">Show debug options</mat-checkbox>
+		<div [style.display]="showDebug ? 'block' : 'none'" fxLayout="column">
+			<div fxLayout="row">
+				<mat-form-field class="app-form-field" fxFlex="70%">
+					<mat-label>Document ID</mat-label>
+					<input matInput formControlName="id" disabled>
+				</mat-form-field>
+				<button mat-button (click)="regenerateId()" fxFlex="30%">Regenerate ID</button>
+			</div>
+		</div>
 	</form>
 </div>
 <div mat-dialog-actions align="end">
 	<button mat-button (click)="cancel()" color="primary">Cancel</button>
 	<button mat-button (click)="resetForm()" color="warn" *ngIf="isNewTodo">Reset</button>
-	<button mat-button (click)="saveOrAddTodo()" color="primary" [disabled]="addForm.invalid">{{isNewTodo ? 'Add' : 'Save'}}</button>
+	<button mat-button (click)="saveOrAddTodo()" color="primary" [disabled]="todoForm.invalid">{{isNewTodo ? 'Add' : 'Save'}}</button>
 </div>

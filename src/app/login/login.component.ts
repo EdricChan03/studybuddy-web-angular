@@ -30,41 +30,45 @@ export class LoginComponent implements OnInit {
 	}
 	loginForm: FormGroup;
 	signUpForm: FormGroup;
-	showLoginFormPassword: boolean = false;
-	showSignUpFormPassword: boolean = false;
+	showLoginFormPassword = false;
+	showSignUpFormPassword = false;
+	showSignUpFormConfirmPassword = false;
 	// See https://stackoverflow.com/a/34582914
 	matchingPasswords = (passwordKey: string, confirmPasswordKey: string) => {
 		return (group: FormGroup): void => {
-			let password = group.controls[passwordKey];
-			let confirmPassword = group.controls[confirmPasswordKey];
+			const password = group.controls[passwordKey];
+			const confirmPassword = group.controls[confirmPasswordKey];
 			if (password.value !== confirmPassword.value) {
 				confirmPassword.setErrors({ 'mismatchedPasswords': true });
 			}
-		}
+		};
 	}
 	ngOnInit() {
 		this.auth.getAuthState().subscribe(result => {
 			if (result && JSON.parse(localStorage.getItem('loggedIn'))) {
 				console.log('User is already logged in. Redirecting...');
-				let snackBarRef = this.shared.openSnackBar({ msg: 'You\'re already logged in! Redirecting in 2 seconds...', action: 'Log out', hasElevation: true, additionalOpts: { duration: 5000, horizontalPosition: 'start' } });
-				snackBarRef.onAction().subscribe(result => {
+				const snackBarRef = this.shared.openSnackBar({ msg: 'You\'re already logged in! Redirecting in 2 seconds...', action: 'Log out', hasElevation: true, additionalOpts: { duration: 5000, horizontalPosition: 'start' } });
+				snackBarRef.onAction().subscribe(() => {
 					this.auth.logOut().then(() => {
 						this.shared.openSnackBar({ msg: 'Successfully logged out', hasElevation: true, additionalOpts: { duration: 3000, horizontalPosition: 'start' } });
 						this.router.navigate(['/login']);
 						localStorage.setItem('loggedIn', 'false');
-					})
-				})
+					});
+				});
 				setTimeout(() => {
 					this.router.navigate(['dashboard']);
-				}, 2000)
+				}, 2000);
 			}
-		})
+		});
 	}
 	toggleLoginFormPassword() {
 		this.showLoginFormPassword = !this.showLoginFormPassword;
 	}
 	toggleSignUpFormPassword() {
 		this.showSignUpFormPassword = !this.showSignUpFormPassword;
+	}
+	toggleSignUpFormConfirmPassword() {
+		this.showSignUpFormConfirmPassword = !this.showSignUpFormConfirmPassword;
 	}
 	loginWithGoogle() {
 		this.auth.logInWithGoogle().then((result) => {
@@ -81,16 +85,16 @@ export class LoginComponent implements OnInit {
 			this.shared.openSnackBar({ msg: `Signed in as ${result.user.email}`, hasElevation: true, additionalOpts: { duration: 4000, horizontalPosition: 'start' } });
 		}).catch((error) => {
 			this.handleError(error.message);
-		})
+		});
 	}
 	signUpWithEmailAndPassword() {
 		this.auth.signUpWithEmailAndPassword(this.signUpForm.get('email').value, this.loginForm.get('password').value).then((result) => {
 			this.shared.openSnackBar({ msg: `Successfully created account as ${result.user.email}`, hasElevation: true, additionalOpts: { duration: 4000, horizontalPosition: 'start' } });
 		}).catch((error) => {
 			this.handleError(error.message);
-		})
+		});
 	}
 	private handleError(errorMsg: string) {
-		this.shared.openErrorSnackBar({ msg: `Error: ${errorMsg}`, hasElevation: 2, additionalOpts: { horizontalPosition: 'start', } });
+		this.shared.openSnackBar({ msg: `Error: ${errorMsg}`, hasElevation: 2, additionalOpts: { horizontalPosition: 'start' } });
 	}
 }

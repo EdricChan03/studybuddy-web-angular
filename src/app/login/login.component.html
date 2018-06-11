@@ -7,9 +7,9 @@
 			<div class="strike">
 				<span>Or</span>
 			</div>
-			<mat-tab-group dynamicHeight>
+			<mat-tab-group dynamicHeight mat-stretch-tabs>
 				<mat-tab label="Sign up">
-					<div fxLayout="column">
+					<div fxLayout="column" class="tab-content">
 						<form [formGroup]="signUpForm" fxLayout="column">
 							<mat-form-field>
 								<mat-label>Email</mat-label>
@@ -27,11 +27,11 @@
 								<mat-error *ngIf="signUpForm.get('password')?.hasError('required')">This is required.</mat-error>
 							</mat-form-field>
 							<mat-form-field>
-								<mat-label>Password</mat-label>
-								<input matInput [type]="showSignUpFormPassword ? 'text' : 'password'" formControlName="confirmPassword">
-								<button mat-icon-button (click)="toggleSignUpFormPassword()" [matTooltip]="(showSignUpFormPassword ? 'Hide' : 'Show') + ' Password'"
+								<mat-label>Confirm Password</mat-label>
+								<input matInput [type]="showSignUpFormConfirmPassword ? 'text' : 'password'" formControlName="confirmPassword">
+								<button mat-icon-button (click)="toggleSignUpFormConfirmPassword()" [matTooltip]="(showSignUpFormConfirmPassword ? 'Hide' : 'Show') + ' Password'"
 								 matSuffix type="button">
-									<mat-icon>{{showSignUpFormPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+									<mat-icon>{{showSignUpFormConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
 								</button>
 								<mat-error *ngIf="signUpForm.get('confirmPassword')?.hasError('required')">This is required.</mat-error>
 								<mat-error *ngIf="signUpForm.get('confirmPassword')?.hasError('mismatchedPasswords')">The passwords do not match.</mat-error>
@@ -41,7 +41,7 @@
 					</div>
 				</mat-tab>
 				<mat-tab label="Login">
-					<div fxLayout="column">
+					<div fxLayout="column" class="tab-content">
 						<form [formGroup]="loginForm" fxLayout="column">
 							<mat-form-field>
 								<mat-label>Email</mat-label>
