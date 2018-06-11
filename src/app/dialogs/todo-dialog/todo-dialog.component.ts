@@ -74,7 +74,7 @@ export class TodoDialogComponent implements OnInit {
 		} else {
 			// User isn't signed in! Add todo stuff to disable dialog
 			// tslint:disable-next-line:max-line-length
-			let loginDialogRef = this.shared.openConfirmDialog({ title: 'Login before continuing', disableClose: true, isHtml: true, msg: '<p>To access this content, please login before continuing.</p><p>If you believe that this is an error and that you are already signed in, DM me on Twitter at @EdricChan03.</p><p><strong>Note: Please enable popups before clicking the Login button. This will be the only time popups will show.</strong></p>', ok: 'Login' });
+			const loginDialogRef = this.shared.openConfirmDialog({ title: 'Login before continuing', disableClose: true, isHtml: true, msg: '<p>To access this content, please login before continuing.</p><p>If you believe that this is an error and that you are already signed in, DM me on Twitter at @EdricChan03.</p><p><strong>Note: Please enable popups before clicking the Login button. This will be the only time popups will show.</strong></p>', ok: 'Login' });
 			loginDialogRef.afterClosed().subscribe(result => {
 				if (result === 'ok') {
 					this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then((a) => {
@@ -115,7 +115,7 @@ export class TodoDialogComponent implements OnInit {
 		this.helpDialogRef.close();
 		this.helpDialogRef = null;
 	}
-	addTag(event: MatChipInputEvent, type: 'tags' | 'projects') {
+	/*addTag(event: MatChipInputEvent, type: 'tags' | 'projects') {
 		let input = event.input;
 		let value = event.value;
 
@@ -159,7 +159,7 @@ export class TodoDialogComponent implements OnInit {
 	}
 	editContent() {
 		this.dialog.open(EditContentDialogComponent, { disableClose: true, panelClass: 'no-padding' });
-	}
+	}*/
 	ngOnInit() {
 		if (!this.isNewTodo) {
 			const todoItem: any = Object.assign({}, this.todoToEdit);
@@ -189,7 +189,7 @@ export class TodoDialogComponent implements OnInit {
 	}*/
 	saveOrAddTodo() {
 		if (this.isNewTodo) {
-			const itemToAdd: TodoItem = {};
+			const itemToAdd: TodoItem = {title: ''};
 			for (const prop in this.todoFormRawValue) {
 				if (this.todoFormRawValue.hasOwnProperty(prop) && this.todoFormRawValue[prop] !== null) {
 					switch (prop) {
