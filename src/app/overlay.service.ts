@@ -104,9 +104,6 @@ export class OverlayService {
 		OverlayModule,
 		PortalModule
 	],
-	exports: [
-		OverlayService
-	],
 	providers: [
 		OverlayService
 	]
