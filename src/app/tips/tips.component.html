@@ -25,6 +25,9 @@
 				</li>
 			</ol>
 		</mat-card-content>
+		<mat-card-footer *ngIf="wordOfDay == undefined">
+			<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+		</mat-card-footer>
 	</mat-card>
 	<div *ngFor="let quote of quoteOfDay?.contents?.quotes">
 		<mat-card>
@@ -42,6 +45,9 @@
 					<mat-chip *ngFor="let tag of quote?.tags">{{tag}}</mat-chip>
 				</mat-chip-list>
 			</mat-card-content>
+			<mat-card-footer *ngIf="quoteOfDay == undefined">
+				<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+			</mat-card-footer>
 		</mat-card>
 	</div>
 </div>
