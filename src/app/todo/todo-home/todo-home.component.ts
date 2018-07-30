@@ -5,16 +5,17 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { TodoDialogComponent } from '../../dialogs';
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import { MatPaginator } from '@angular/material/paginator';
+// import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { SharedService, SnackBarConfig } from '../../shared.service';
+import { SharedService } from '../../shared.service';
 import { TodoItem } from '../../interfaces';
-import { Component, OnInit, AfterViewInit, AfterContentInit, ViewChild } from '@angular/core';
-import { DataSource } from '@angular/cdk/collections';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { Observable, of } from 'rxjs';
+// tslint:disable-next-line:import-blacklist
+import { Observable } from 'rxjs';
 import { transition, style, animate, trigger, keyframes } from '@angular/animations';
+import { MatTableDataSource } from '@angular/material/table';
 // import { animations } from '../../animations';
 
 @Component({
@@ -33,13 +34,15 @@ import { transition, style, animate, trigger, keyframes } from '@angular/animati
 			)])
 	]
 })
-export class TodoHomeComponent implements OnInit {
+export class TodoHomeComponent implements OnInit, AfterViewInit {
 	@ViewChild(MatMenuTrigger) rightClickMenu: MatMenuTrigger;
 	currentUser: string;
 	todos$: Observable<TodoItem[]>;
 	todosCollection: AngularFirestoreCollection<TodoItem>;
-	todoTable = false;
+	todoView: 'list' | 'table' | 'agenda' = 'list';
 	selectedTodos: TodoItem[] = [];
+	dataSource: MatTableDataSource<TodoItem>;
+	columnsToDisplay = ['hasDone', 'title', 'content'];
 	constructor(
 		private shared: SharedService,
 		private afAuth: AngularFireAuth,
@@ -72,6 +75,14 @@ export class TodoHomeComponent implements OnInit {
 	private _checkEmpty(statement: any): boolean {
 		return statement.length !== 0 || statement !== null;
 	}
+	ngOnInit() {
+		this.toolbarService.setProgress(true, true);
+	}
+	ngAfterViewInit() {
+		this.todos$.subscribe(data => {
+			this.dataSource = new MatTableDataSource(data);
+		})
+	}
 	clearSelectedTodos() {
 		this.selectedTodos = [];
 		this.toolbarService.showToolbar = true;
@@ -103,7 +114,11 @@ export class TodoHomeComponent implements OnInit {
 	 * See https://stackoverflow.com/a/49161622 for more info
 	 */
 	deleteAllTodos() {
-		const dialogRef = this.shared.openConfirmDialog({ msg: 'Are you sure you want to delete all todos? Once deleted, it cannot be restored!', title: 'Delete all todos?' });
+		const dialogRef = this.shared.openConfirmDialog(
+			{
+				msg: 'Are you sure you want to delete all todos? Once deleted, it cannot be restored!',
+				title: 'Delete all todos?'
+			});
 		dialogRef.afterClosed().subscribe(result => {
 			if (result === 'ok') {
 				const promises = [];
@@ -114,17 +129,34 @@ export class TodoHomeComponent implements OnInit {
 						});
 					})
 					.catch((error: { message: string }) => {
-						const snackBarRef = this.shared.openSnackBar({ action: 'Retry', hasElevation: 2, msg: `${error.message}`, additionalOpts: { horizontalPosition: 'start' } });
+						const snackBarRef = this.shared.openSnackBar(
+							{
+								action: 'Retry',
+								hasElevation: 2,
+								msg: `${error.message}`,
+								additionalOpts: { horizontalPosition: 'start' }
+							});
 						snackBarRef.onAction().subscribe(() => {
 							this.deleteAllTodos();
 						});
 					});
 				Promise.all(promises).then(() => {
 					console.log('All documents of collection deleted.');
-					this.shared.openSnackBar({ msg: 'Successfully deleted all todos!', hasElevation: true, additionalOpts: { horizontalPosition: 'start', duration: 4000 } });
+					this.shared.openSnackBar(
+						{
+							msg: 'Successfully deleted all todos!',
+							hasElevation: true,
+							additionalOpts: { horizontalPosition: 'start', duration: 4000 }
+						});
 				})
 					.catch((error: { message: string }) => {
-						const snackBarRef = this.shared.openSnackBar({ action: 'Retry', hasElevation: 2, msg: `${error.message}`, additionalOpts: { horizontalPosition: 'start' } });
+						const snackBarRef = this.shared.openSnackBar(
+							{
+								action: 'Retry',
+								hasElevation: 2,
+								msg: `${error.message}`,
+								additionalOpts: { horizontalPosition: 'start' }
+							});
 						snackBarRef.onAction().subscribe(() => {
 							this.deleteAllTodos();
 						});
@@ -243,9 +275,6 @@ export class TodoHomeComponent implements OnInit {
 		this.afFs.doc<TodoItem>(`users/${this.currentUser}/todos/${todo.id}`).update({
 			hasDone: event.checked
 		});
-	}
-	ngOnInit() {
-		this.toolbarService.setProgress(true, true);
 	}
 
 }

@@ -14,75 +14,48 @@
 <ng-template #emptystate>
 	<div class="empty-state-container">
 		<div class="empty-state-div">
-			<h2>All todos have been done!</h2>
-			<p>Go reward yourself with exercising, reading or your favourite hobby.</p>
+			<img src="./assets/undraw/undraw_High_five_u364.svg" alt="High five">
+			<h2>All todos done!</h2>
+			<p>Go reward yourself!</p>
 			<button mat-raised-button (click)="newTodo()" color="primary">Create a new todo</button>
 		</div>
 	</div>
 </ng-template>
-<mat-checkbox [(ngModel)]="todoTable">Show table</mat-checkbox>
 <button mat-button (click)="deleteAllTodos()" color="warn">Delete all</button>
-<ng-container *ngIf="todos$ | async; let todos; else: emptystate">
-	<table *ngIf="todoTable" class="app-table">
-		<thead>
-			<tr>
-				<th class="checkbox-td">
-					<mat-checkbox></mat-checkbox>
-				</th>
-				<th>Title</th>
-				<th>Content</th>
-				<th>Actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr *ngFor="let todo of todos" @todoUpdateAnim>
-				<td class="checkbox-td">
-					<mat-checkbox
-						[checked]="todo.hasDone"
-						(change)="toggleChecked(todo)"></mat-checkbox>
-				</td>
-				<td>{{todo?.title}}</td>
-				<td [innerHTML]="todo?.content | markdown"></td>
-				<td>
-					<ng-container *ngIf="toolbarService.showToolbar">
-						<button [matMenuTriggerFor]="moreActionsMenu" mat-icon-button (click)="stopPropogation($event)">
-							<mat-icon class="mat-icon-foreground">more_vert</mat-icon>
-						</button>
-						<mat-menu #moreActionsMenu="matMenu">
-							<button mat-menu-item (click)="editTodo(todo, $event)">
-								<mat-icon>edit</mat-icon>
-								Edit todo
-							</button>
-							<button mat-menu-item>
-								<mat-icon>archive</mat-icon>
-								Archive todo
-							</button>
-							<button mat-menu-item (click)="toggleChecked(todo)">
-								<mat-icon>{{todo?.hasDone ? 'check_box_outline_blank' : 'check_box'}}</mat-icon>
-								Mark todo as {{todo?.hasDone ? 'undone' : 'done'}}
-							</button>
-						</mat-menu>
-						<button mat-icon-button matTooltip="Remove todo" (click)="removeTodo(todo?.id, false, $event)" *ngIf="toolbarService.showToolbar">
-							<mat-icon class="mat-icon-foreground">delete</mat-icon>
-						</button>
-					</ng-container>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="4">
-					<button mat-button (click)="newTodo()" class="new-todo-button" color="primary">
-						<div class="new-todo-label">
-							<mat-icon>add</mat-icon>
-							<p>New todo</p>
-						</div>
-					</button>
-				</td>
-			</tr>
-		</tbody>
-	</table>
-	<mat-nav-list *ngIf="!todoTable">
+<ng-container *ngIf="(todos$ | async)?.length > 0; let todos; else: emptystate">
+	<mat-button-toggle-group [(ngModel)]="todoView">
+		<mat-button-toggle value="list" matTooltip="List view">
+			<mat-icon>view_list</mat-icon>
+		</mat-button-toggle>
+		<mat-button-toggle value="table" matTooltip="Table view">
+			<mat-icon svgIcon="mdi:table"></mat-icon>
+		</mat-button-toggle>
+		<mat-button-toggle value="agenda" matTooltip="Agenda view" disabled>
+			<mat-icon>view_agenda</mat-icon>
+		</mat-button-toggle>
+	</mat-button-toggle-group>
+	<mat-table [style.display]="todoView === 'table' ? 'block' : 'none'" [dataSource]="dataSource">
+		<ng-container matColumnDef="hasDone">
+			<mat-header-cell *matHeaderCellDef>Done?</mat-header-cell>
+			<mat-cell *matCellDef="let todo"><mat-checkbox
+				[checked]="todo.hasDone"
+				(change)="stopPropogation($event); toggleChecked(todo)"
+				*ngIf="toolbarService.showToolbar"></mat-checkbox></mat-cell>
+		</ng-container>
+		<ng-container matColumnDef="title">
+			<mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
+			<mat-cell *matCellDef="let todo">{{ todo.title }}</mat-cell>
+		</ng-container>
+		<ng-container matColumnDef="content">
+			<mat-header-cell *matHeaderCellDef>Content</mat-header-cell>
+			<mat-cell *matCellDef="let todo"><span [innerHTML]="todo.content | markdown"></span></mat-cell>
+		</ng-container>
+		<mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+		<mat-row *matRowDef="let row; columns: columnsToDisplay;"></mat-row>
+	</mat-table>
+	<mat-nav-list [style.display]="todoView === 'list' ? 'block' : 'none'">
 		<mat-list-item
-			*ngFor="let todo of todos"
+			*ngFor="let todo of todos$ | async"
 			(click)="handleListClick(todo, $event)"
 			[ngClass]="{'currently-selected': hasListItemSelected(todo)}"
 			class="app-todo-list-item"
