@@ -1,48 +1,48 @@
 <h2 class="dialog-title">Edit</h2>
 <div mat-dialog-content>
-	<div class="markdown-container">
-		<div class="markdown-edit-actions">
-			<button mat-icon-button matTooltip="Header 1">
-				<mat-icon>
-					<svg width="24px" height="24px" viewBox="0 0 24 24">
-						<path fill="currentColor" d="M3,4H5V10H9V4H11V18H9V12H5V18H3V4M14,18V16H16V6.31L13.5,7.75V5.44L16,4H18V16H20V18H14Z" />
-					</svg>
-				</mat-icon>
-			</button>
-			<button mat-icon-button matTooltip="Header 2">
-				<mat-icon>
-					<svg width="24px" height="24px" viewBox="0 0 24 24">
-						<path fill="currentColor" d="M3,4H5V10H9V4H11V18H9V12H5V18H3V4M21,18H15A2,2 0 0,1 13,16C13,15.47 13.2,15 13.54,14.64L18.41,9.41C18.78,9.05 19,8.55 19,8A2,2 0 0,0 17,6A2,2 0 0,0 15,8H13A4,4 0 0,1 17,4A4,4 0 0,1 21,8C21,9.1 20.55,10.1 19.83,10.83L15,16H21V18Z"
-						/>
-					</svg>
-				</mat-icon>
-			</button>
-			<button mat-icon-button matTooltip="Header 3">
-				<mat-icon>
-					<svg width="24px" height="24px" viewBox="0 0 24 24">
-						<path fill="currentColor" d="M3,4H5V10H9V4H11V18H9V12H5V18H3V4M15,4H19A2,2 0 0,1 21,6V16A2,2 0 0,1 19,18H15A2,2 0 0,1 13,16V15H15V16H19V12H15V10H19V6H15V7H13V6A2,2 0 0,1 15,4Z"
-						/>
-					</svg>
-				</mat-icon>
-			</button>
-				<button mat-icon-button matTooltip="Toggle bold" [class.isToggled]="isToggled['bold']" (click)="toggleState('bold')">
-					<mat-icon>format_bold</mat-icon>
-				</button>
-				<button mat-icon-button matTooltip="Toggle italic" [class.isToggled]="isToggled['italic']" (click)="toggleState('italic')">
-					<mat-icon>format_italic</mat-icon>
-				</button>
-			<button mat-icon-button matTooltip="Insert quote" class="markdown-edit-btn">
-				<mat-icon>format_quote</mat-icon>
-			</button>
-		</div>
-		<div class="markdown-edit-textarea">
-			<mat-form-field fxFlex>
-				<textarea matInput matTextareaAutosize></textarea>
-			</mat-form-field>
-		</div>
-	</div>
+  <div class="markdown-container">
+    <div class="markdown-edit-actions">
+      <button mat-icon-button matTooltip="Header 1">
+        <mat-icon>
+          <svg width="24px" height="24px" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M3,4H5V10H9V4H11V18H9V12H5V18H3V4M14,18V16H16V6.31L13.5,7.75V5.44L16,4H18V16H20V18H14Z" />
+          </svg>
+        </mat-icon>
+      </button>
+      <button mat-icon-button matTooltip="Header 2">
+        <mat-icon>
+          <svg width="24px" height="24px" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M3,4H5V10H9V4H11V18H9V12H5V18H3V4M21,18H15A2,2 0 0,1 13,16C13,15.47 13.2,15 13.54,14.64L18.41,9.41C18.78,9.05 19,8.55 19,8A2,2 0 0,0 17,6A2,2 0 0,0 15,8H13A4,4 0 0,1 17,4A4,4 0 0,1 21,8C21,9.1 20.55,10.1 19.83,10.83L15,16H21V18Z"
+            />
+          </svg>
+        </mat-icon>
+      </button>
+      <button mat-icon-button matTooltip="Header 3">
+        <mat-icon>
+          <svg width="24px" height="24px" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M3,4H5V10H9V4H11V18H9V12H5V18H3V4M15,4H19A2,2 0 0,1 21,6V16A2,2 0 0,1 19,18H15A2,2 0 0,1 13,16V15H15V16H19V12H15V10H19V6H15V7H13V6A2,2 0 0,1 15,4Z"
+            />
+          </svg>
+        </mat-icon>
+      </button>
+        <button mat-icon-button matTooltip="Toggle bold" [class.isToggled]="isToggled['bold']" (click)="toggleState('bold')">
+          <mat-icon>format_bold</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Toggle italic" [class.isToggled]="isToggled['italic']" (click)="toggleState('italic')">
+          <mat-icon>format_italic</mat-icon>
+        </button>
+      <button mat-icon-button matTooltip="Insert quote" class="markdown-edit-btn">
+        <mat-icon>format_quote</mat-icon>
+      </button>
+    </div>
+    <div class="markdown-edit-textarea">
+      <mat-form-field fxFlex>
+        <textarea matInput matTextareaAutosize></textarea>
+      </mat-form-field>
+    </div>
+  </div>
 </div>
 <div mat-dialog-actions align="end">
-	<button mat-button (click)="cancel()" color="primary">Cancel</button>
-	<button mat-button (click)="updateVal()" color="primary">Update</button>
+  <button mat-button (click)="cancel()" color="primary">Cancel</button>
+  <button mat-button (click)="updateVal()" color="primary">Update</button>
 </div>

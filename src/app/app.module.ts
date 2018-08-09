@@ -19,19 +19,19 @@ import { HttpClientModule } from '@angular/common/http';
 import 'hammerjs';
 import { SettingsComponent } from './settings/settings.component';
 import {
-	TodoHomeComponent,
-	TodoProjectComponent,
-	TodoArchivedComponent,
-	TodoDashboardComponent
+  TodoHomeComponent,
+  TodoProjectComponent,
+  TodoArchivedComponent,
+  TodoDashboardComponent
 } from './todo';
 import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
 import { AboutComponent } from './about/about.component';
 import {
-	EditContentDialogComponent,
-	TodoDialogComponent,
-	SignInDialogComponent,
-	UserInfoDialogComponent,
-	NewProjectDialogComponent
+  EditContentDialogComponent,
+  TodoDialogComponent,
+  SignInDialogComponent,
+  UserInfoDialogComponent,
+  NewProjectDialogComponent
 } from './dialogs';
 import { SupportHomeComponent } from './support/support-home/support-home.component';
 import { SupportViewerComponent } from './support/shared/support-viewer/support-viewer.component';
@@ -52,78 +52,78 @@ import { TodoOutletComponent } from './todo/todo-outlet/todo-outlet.component';
 import { TodoDashboardNewComponent } from './todo/todo-dashboard-new/todo-dashboard-new.component';
 
 @NgModule({
-	declarations: [
-		AppComponent,
-		AppDownloadsComponent,
-		TodoHomeComponent,
-		TestpageComponent,
-		TipsComponent,
-		TodoDialogComponent,
-		SettingsComponent,
-		TodoProjectComponent,
-		TodoArchivedComponent,
-		TodoDashboardComponent,
-		EditContentDialogComponent,
-		AboutComponent,
-		SignInDialogComponent,
-		SupportHomeComponent,
-		SupportViewerComponent,
-		SupportSearchComponent,
-		UserInfoDialogComponent,
-		ChatsComponent,
-		ChatViewerComponent,
-		CheatsheetViewerComponent,
-		CheatsheetHomeComponent,
-		MessageCardComponent,
-		NotesHomeComponent,
-		NotesViewerComponent,
-		NoteNotFoundComponent,
-		AccountComponent,
-		LoginComponent,
-		DashboardComponent,
-		TodoOutletComponent,
-		NewProjectDialogComponent,
-		TodoDashboardNewComponent
-	],
-	imports: [
-		BrowserModule,
-		BrowserAnimationsModule,
-		FormsModule,
-		ReactiveFormsModule,
-		MaterialModule,
-		AppRouting,
-		HttpClientModule,
-		FlexLayoutModule,
-		AngularFireModule.initializeApp(environment.firebase),
-		AngularFireAuthModule,
-		AngularFirestoreModule.enablePersistence(),
-		SharedModule,
-		MarkdownModule.forRoot({
-			provide: MarkedOptions,
-			useValue: {
-				gfm: true,
-				tables: true,
-				breaks: false,
-				pedantic: false,
-				sanitize: false,
-				smartLists: true,
-				smartypants: false
-			}
-		})
-	],
-	bootstrap: [AppComponent],
-	providers: [
-		ToolbarService,
-		MessagingService,
-		AuthService,
-		NewProjectDialogComponent
-	],
-	entryComponents: [
-		TodoDialogComponent,
-		EditContentDialogComponent,
-		SignInDialogComponent,
-		UserInfoDialogComponent,
-		NewProjectDialogComponent
-	]
+  declarations: [
+    AppComponent,
+    AppDownloadsComponent,
+    TodoHomeComponent,
+    TestpageComponent,
+    TipsComponent,
+    TodoDialogComponent,
+    SettingsComponent,
+    TodoProjectComponent,
+    TodoArchivedComponent,
+    TodoDashboardComponent,
+    EditContentDialogComponent,
+    AboutComponent,
+    SignInDialogComponent,
+    SupportHomeComponent,
+    SupportViewerComponent,
+    SupportSearchComponent,
+    UserInfoDialogComponent,
+    ChatsComponent,
+    ChatViewerComponent,
+    CheatsheetViewerComponent,
+    CheatsheetHomeComponent,
+    MessageCardComponent,
+    NotesHomeComponent,
+    NotesViewerComponent,
+    NoteNotFoundComponent,
+    AccountComponent,
+    LoginComponent,
+    DashboardComponent,
+    TodoOutletComponent,
+    NewProjectDialogComponent,
+    TodoDashboardNewComponent
+  ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MaterialModule,
+    AppRouting,
+    HttpClientModule,
+    FlexLayoutModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule,
+    AngularFirestoreModule.enablePersistence(),
+    SharedModule,
+    MarkdownModule.forRoot({
+      provide: MarkedOptions,
+      useValue: {
+        gfm: true,
+        tables: true,
+        breaks: false,
+        pedantic: false,
+        sanitize: false,
+        smartLists: true,
+        smartypants: false
+      }
+    })
+  ],
+  bootstrap: [AppComponent],
+  providers: [
+    ToolbarService,
+    MessagingService,
+    AuthService,
+    NewProjectDialogComponent
+  ],
+  entryComponents: [
+    TodoDialogComponent,
+    EditContentDialogComponent,
+    SignInDialogComponent,
+    UserInfoDialogComponent,
+    NewProjectDialogComponent
+  ]
 })
 export class AppModule { }

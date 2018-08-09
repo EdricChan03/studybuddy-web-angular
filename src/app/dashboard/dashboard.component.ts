@@ -5,62 +5,62 @@ import { SharedService } from '../shared.service';
 import * as firebase from 'firebase';
 
 interface Dashboard {
-	todos: TodoItem[];
-	notes: any;
+  todos: TodoItem[];
+  notes: any;
 }
 @Component({
-	selector: 'app-dashboard',
-	templateUrl: './dashboard.component.html'
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent implements OnInit {
 
-	constructor(
-		private shared: SharedService
-	) {
-		shared.title = 'Dashboard';
-	}
-	dashboard: Dashboard = {
-		todos: [
-			{
-				title: 'Todo #1',
-				dueDate: firebase.firestore.Timestamp.now(),
-				tags: ['tag-1', 'my-tag'],
-				content: 'Content goes here'
-			},
-			{
-				title: 'Todo #2',
-				dueDate: firebase.firestore.Timestamp.now(),
-				tags: ['tag-1', 'my-tag'],
-				content: '# Content goes here'
-			 	+ '\n**Bold**'
-				+ '\n_Italics_'
-				+ '\n~Strikethrough~'
-				+ '\n**_Bold + Italics_**'
-				+ '\n> I\'m a cool blockquote! XD Check out the code for more info.'
-				+ '\n\n```css'
-				+ '\n@import \'~@angular/material/prebuilt-themes/indigo-pink.css\''
-				+ '\n```'
-			},
-			{
-				title: 'Todo #3',
-				dueDate: firebase.firestore.Timestamp.now(),
-				tags: ['tag-1', 'my-tag'],
-				content: 'Content goes here'
-			},
-			{
-				title: 'Todo #4',
-				dueDate: firebase.firestore.Timestamp.now(),
-				tags: ['tag-1', 'my-tag'],
-				content: 'Content goes here'
-			}
-		],
-		notes: [
-			{
+  constructor(
+    private shared: SharedService
+  ) {
+    shared.title = 'Dashboard';
+  }
+  dashboard: Dashboard = {
+    todos: [
+      {
+        title: 'Todo #1',
+        dueDate: firebase.firestore.Timestamp.now(),
+        tags: ['tag-1', 'my-tag'],
+        content: 'Content goes here'
+      },
+      {
+        title: 'Todo #2',
+        dueDate: firebase.firestore.Timestamp.now(),
+        tags: ['tag-1', 'my-tag'],
+        content: '# Content goes here'
+        + '\n**Bold**'
+        + '\n_Italics_'
+        + '\n~Strikethrough~'
+        + '\n**_Bold + Italics_**'
+        + '\n> I\'m a cool blockquote! XD Check out the code for more info.'
+        + '\n\n```css'
+        + '\n@import \'~@angular/material/prebuilt-themes/indigo-pink.css\''
+        + '\n```'
+      },
+      {
+        title: 'Todo #3',
+        dueDate: firebase.firestore.Timestamp.now(),
+        tags: ['tag-1', 'my-tag'],
+        content: 'Content goes here'
+      },
+      {
+        title: 'Todo #4',
+        dueDate: firebase.firestore.Timestamp.now(),
+        tags: ['tag-1', 'my-tag'],
+        content: 'Content goes here'
+      }
+    ],
+    notes: [
+      {
 
-			}
-		]
-	};
-	ngOnInit() {
-	}
+      }
+    ]
+  };
+  ngOnInit() {
+  }
 
 }

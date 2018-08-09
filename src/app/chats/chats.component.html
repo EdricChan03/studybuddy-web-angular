@@ -2,9 +2,9 @@
 <p>Coming soon!</p>
 
 <mat-nav-list>
-	<a mat-list-item *ngFor="let chat of chats" [routerLink]="['/chats/' + chat.id]">
-		<h3 matLine>{{chat.name}}</h3>
-		<p matLine>Conversation between you and {{chat.people.length - 1}} people</p>
-		<span class="notifications-badge" *ngIf="chat.notifications">{{chat.notifications}}</span>
-	</a>
+  <a mat-list-item *ngFor="let chat of chats" [routerLink]="['/chats/' + chat.id]">
+    <h3 matLine>{{chat.name}}</h3>
+    <p matLine>Conversation between you and {{chat.people.length - 1}} people</p>
+    <span class="notifications-badge" *ngIf="chat.notifications">{{chat.notifications}}</span>
+  </a>
 </mat-nav-list>

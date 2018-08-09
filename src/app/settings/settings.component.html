@@ -1,25 +1,25 @@
 <div>
-	<mat-card>
-		<mat-card-title>Settings</mat-card-title>
-		<mat-card-content>
-			<form #settingsForm="ngForm" fxLayout="column">
-				<h3 class="mat-subheader">General</h3>
-				<mat-checkbox [(ngModel)]="settings.darkTheme" name="darkTheme">Dark theme</mat-checkbox>
-				<mat-checkbox [(ngModel)]="settings.showTodosAsTable" name="showTodosAsTable">Show todos as a table</mat-checkbox>
-				<mat-checkbox [(ngModel)]="settings.closeSidenavOnClick" name="closeSidenavOnClick">Close sidenav when a link is clicked</mat-checkbox>
-				<h3 class="mat-subheader">Experimental</h3>
-				<mat-checkbox [(ngModel)]="settings.enableExperimental" name="enableExperimental">Enable experiments</mat-checkbox>
-				<mat-checkbox [(ngModel)]="settings.enableCalendar" [disabled]="!settings.enableExperimental" name="enableCalendar">Enable calendar</mat-checkbox>
-				<mat-checkbox [(ngModel)]="settings.enableNotifications" [disabled]="!settings.enableExperimental" name="enableNotifications">Enable notifications</mat-checkbox>
-			</form>
-		</mat-card-content>
-		<mat-card-actions align="end">
-			<button mat-button (click)="resetSettings()" color="warn">
-				Reset Settings
-			</button>
-			<button mat-button (click)="saveSettings()" color="primary" [disabled]="settingsForm.invalid">
-				Save
-			</button>
-		</mat-card-actions>
-	</mat-card>
+  <mat-card>
+    <mat-card-title>Settings</mat-card-title>
+    <mat-card-content>
+      <form #settingsForm="ngForm" fxLayout="column">
+        <h3 class="mat-subheader">General</h3>
+        <mat-checkbox [(ngModel)]="settings.darkTheme" name="darkTheme">Dark theme</mat-checkbox>
+        <mat-checkbox [(ngModel)]="settings.showTodosAsTable" name="showTodosAsTable">Show todos as a table</mat-checkbox>
+        <mat-checkbox [(ngModel)]="settings.closeSidenavOnClick" name="closeSidenavOnClick">Close sidenav when a link is clicked</mat-checkbox>
+        <h3 class="mat-subheader">Experimental</h3>
+        <mat-checkbox [(ngModel)]="settings.enableExperimental" name="enableExperimental">Enable experiments</mat-checkbox>
+        <mat-checkbox [(ngModel)]="settings.enableCalendar" [disabled]="!settings.enableExperimental" name="enableCalendar">Enable calendar</mat-checkbox>
+        <mat-checkbox [(ngModel)]="settings.enableNotifications" [disabled]="!settings.enableExperimental" name="enableNotifications">Enable notifications</mat-checkbox>
+      </form>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-button (click)="resetSettings()" color="warn">
+        Reset Settings
+      </button>
+      <button mat-button (click)="saveSettings()" color="primary" [disabled]="settingsForm.invalid">
+        Save
+      </button>
+    </mat-card-actions>
+  </mat-card>
 </div>

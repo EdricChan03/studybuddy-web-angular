@@ -1,39 +1,39 @@
 @mixin todo-dashboard-theme($theme) {
     $is-dark-theme: map-get($theme, is-dark);
-	$background: map-get($theme, background);
-	$foreground: map-get($theme, foreground);
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
     mat-card.todo-dashboard-card {
         padding: 0 !important;
-		.card-section {
-			align-items: center;
-			text-decoration: none;
-			color: map-get($foreground, text);
+    .card-section {
+      align-items: center;
+      text-decoration: none;
+      color: map-get($foreground, text);
             border-bottom: 1px solid map-get($foreground, divider);
-			padding: 16px 24px;
-			&:hover {
-				background-color: map-get($background, hover);
-			}
+      padding: 16px 24px;
+      &:hover {
+        background-color: map-get($background, hover);
+      }
             span {
                 font-size: 18px;
-			}
-			mat-icon {
-				color: map-get($foreground, icons);
-			}
+      }
+      mat-icon {
+        color: map-get($foreground, icons);
+      }
         }
-	}
-	.todo-dashboard-projects-header {
-		margin: 20px 0;
-		h2 {
-			margin: 0;
-		}
-	}
-	.promo-new-dashboard-toolbar {
-		position: fixed;
-		z-index: 2;
-		p {
-			margin: 0;
-			font-size: 18px;
-			font-weight: normal;
-		}
-	}
+  }
+  .todo-dashboard-projects-header {
+    margin: 20px 0;
+    h2 {
+      margin: 0;
+    }
+  }
+  .promo-new-dashboard-toolbar {
+    position: fixed;
+    z-index: 2;
+    p {
+      margin: 0;
+      font-size: 18px;
+      font-weight: normal;
+    }
+  }
 }

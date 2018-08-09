@@ -77,10 +77,10 @@
         color: map-get($foreground, icons);
     }
     /*
-	Code adapted from:
-	https://github.com/Teradata/covalent/blob/ce05fb682260262b4c4b7ff86f0e896ab3ed0192/src/platform/core/message/_message-theme.scss#L26-L40
-	https://github.com/Teradata/covalent/blob/develop/src/platform/core/message/message.component.scss
-	*/
+  Code adapted from:
+  https://github.com/Teradata/covalent/blob/ce05fb682260262b4c4b7ff86f0e896ab3ed0192/src/platform/core/message/_message-theme.scss#L26-L40
+  https://github.com/Teradata/covalent/blob/develop/src/platform/core/message/message.component.scss
+  */
     .msg-container {
         padding: 8px 16px;
         min-height: 52px;
@@ -133,7 +133,7 @@
 }
 
 $studybuddy-typography: mat-typography-config(
-	$font-family: 'Baloo, Roboto, Helvetica, Arial, sans-serif'
+  $font-family: 'Baloo, Roboto, Helvetica, Arial, sans-serif'
 );
 // @import 'assets/icons/material-icons.css';
 @include mat-core($studybuddy-typography);
@@ -229,13 +229,13 @@ table.app-table {
 }
 
 .app-sidenav {
-	min-width: 256px;
-	max-width: 100%;
+  min-width: 256px;
+  max-width: 100%;
 }
 
 .app-notify-sidenav {
-	width: 412px;
-	max-width: 100%;
+  width: 412px;
+  max-width: 100%;
 }
 
 .app-android-download-btn,
@@ -344,7 +344,7 @@ mat-sidenav.sidenav::-webkit-scrollbar-trac,
 }
 
 .tab-content {
-	padding: 16px;
+  padding: 16px;
 }
 
 // This is to align with the Material spec
@@ -384,6 +384,7 @@ mat-card {
     // height: -moz-fit-content;
     // Safari for iOS
     // height: -webkit-fit-content;
+    min-height: 40px;
 }
 
 // Sticky toolbar
@@ -396,7 +397,7 @@ mat-card {
 
 // Empty state
 .empty-state-container {
-	position: absolute;
+  position: absolute;
     top: 0;
     left: 0;
     right: 0;
@@ -404,15 +405,15 @@ mat-card {
     height: 100%;
     align-items: center;
     display: flex;
-	justify-content: center;
-	z-index: -1;
+  justify-content: center;
+  z-index: -1;
     .empty-state-div {
-		text-align: center;
-		img {
-			max-width: 100%;
-			width: 300px;
-		}
-	}
+    text-align: center;
+    img {
+      max-width: 100%;
+      width: 300px;
+    }
+  }
 }
 
 // Markdown
@@ -475,5 +476,5 @@ blockquote {
 }
 
 .mat-menu-item[disabled] mat-icon {
-	color: inherit !important;
+  color: inherit !important;
 }

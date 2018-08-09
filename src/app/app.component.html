@@ -1,152 +1,152 @@
 <mat-sidenav-container fullscreen>
-	<mat-sidenav #left [mode]="isMobile ? 'over':'side'" class="app-sidenav mat-elevation-z2">
-		<mat-toolbar>
-			Links
-			<span fxFlex></span>
-			<button mat-icon-button (click)="left.close()" matTooltip="Close sidenav" matTooltipPosition="right">
-				<mat-icon>keyboard_arrow_left</mat-icon>
-			</button>
-		</mat-toolbar>
-		<mat-nav-list>
-			<ng-container *ngFor="let link of sidenavLinks; let i = index">
-				<a mat-list-item [routerLink]="['/'+link.link]" routerLinkActive="active-link" (click)="closeLeftSidenav(left)">
-					<mat-icon matListIcon *ngIf="!link.svgIcon && link.icon">{{link.icon}}</mat-icon>
-					<mat-icon matListIcon *ngIf="link.svgIcon && !link.icon" [svgIcon]="link.svgIcon"></mat-icon>
-					<h3 matLine>{{link.title}}</h3>
-					<span fxFlex></span>
-					<button mat-icon-button (click)="toggleList($event, i)" aria-label="Toggle list" matTooltip="Toggle list" matTooltipPosition="right"
-					 *ngIf="link.list">
-						<mat-icon [@toggleIconAnim]="toggleState[i]">keyboard_arrow_right</mat-icon>
-					</button>
-				</a>
-				<div *ngIf="link.list" [@toggleItemsAnim]="toggleState[i]">
-					<a mat-list-item [routerLink]="['/'+listLink.link]" *ngFor="let listLink of link.list; let last = last" routerLinkActive="active-link" (click)="closeLeftSidenav(left)">
-						<mat-icon matListIcon *ngIf="!listLink.svgIcon && listLink.icon">{{listLink.icon}}</mat-icon>
-						<mat-icon matListIcon *ngIf="listLink.svgIcon && !listLink.icon" [svgIcon]="listLink.svgIcon"></mat-icon>
-						<h3 matLine>{{listLink.title}}</h3>
-						<mat-divider *ngIf="last"></mat-divider>
-					</a>
-				</div>
-			</ng-container>
-			<mat-divider></mat-divider>
-			<h3 matSubheader>Other</h3>
-			<ng-container *ngFor="let link of otherLinks; let i = index">
-				<a mat-list-item [routerLink]="['/'+link.link]" routerLinkActive="active-link" (click)="closeLeftSidenav(left)">
-					<mat-icon matListIcon *ngIf="!link.svgIcon && link.icon">{{link.icon}}</mat-icon>
-					<mat-icon matListIcon *ngIf="link.svgIcon && !link.icon" [svgIcon]="link.svgIcon"></mat-icon>
-					<h3 matLine>{{link.title}}</h3>
-					<span fxFlex></span>
-					<button mat-icon-button (click)="toggleOtherList($event, i)" aria-label="Toggle list" matTooltip="Toggle list" matTooltipPosition="right"
-					 *ngIf="link.list">
-						<mat-icon [@toggleIconAnim]="toggleOtherState[i]">keyboard_arrow_right</mat-icon>
-					</button>
-				</a>
-				<div *ngIf="link.list" [@toggleItemsAnim]="toggleOtherState[i]">
-					<a mat-list-item [routerLink]="['/'+listLink.link]" *ngFor="let listLink of link.list" routerLinkActive="active-link" (click)="closeLeftSidenav(left)">
-						<mat-icon matListIcon *ngIf="!listLink.svgIcon && listLink.icon">{{listLink.icon}}</mat-icon>
-						<mat-icon matListIcon *ngIf="listLink.svgIcon && !listLink.icon" [svgIcon]="listLink.svgIcon"></mat-icon>
-						<h3 matLine>{{listLink.title}}</h3>
-					</a>
-				</div>
-			</ng-container>
-		</mat-nav-list>
-		<footer style="bottom:0;position:absolute" fxLayout="row">
-			<mat-icon>info</mat-icon>
-			&nbsp;
-			<p>Version 1.0.0</p>
-		</footer>
-	</mat-sidenav>
-	<mat-sidenav #notifySidenav class="app-notify-sidenav mat-elevation-z2" position="end">
-		<mat-toolbar color="primary" class="sticky-toolbar mat-elevation-z3">
-			Notifications
-			<span fxFlex></span>
-			<button mat-icon-button *ngIf="!environment.production" (click)="addDebugMessage()" matTooltip="Add notification [DEBUG]">
-				<mat-icon>add</mat-icon>
-			</button>
-			<a mat-icon-button matTooltip="Notification settings" (click)="toggleNotificationSettings()">
-				<mat-icon>settings</mat-icon>
-			</a>
-			<button mat-icon-button matTooltip="Clear all notifications" (click)="messagingService.deleteMessages()" [disabled]="messages.length === 0">
-				<mat-icon>clear_all</mat-icon>
-			</button>
-			<button mat-icon-button (click)="notifySidenav.close()" matTooltip="Close sidenav">
-				<mat-icon>close</mat-icon>
-			</button>
-		</mat-toolbar>
-		<div *ngIf="!showNotificationSettings">
-			<message-card *ngFor="let message of messages; let i = index" [message]="message" [index]="i">
-			</message-card>
-			<div *ngIf="messages.length === 0" class="empty-state-container">
-				<div class="empty-state-div">
-					<p>All caught up!</p>
-					<button mat-raised-button color="primary">Notifications history</button>
-				</div>
-			</div>
-		</div>
-		<div *ngIf="showNotificationSettings">
-			Notification settings
-		</div>
-	</mat-sidenav>
-	<mat-sidenav-content>
-		<mat-progress-bar color="accent" [mode]="toolbarService.progressIndeterminate ? 'indeterminate' : 'determinate'" *ngIf="toolbarService.showProgress"
-		 [value]="toolbarService.progressPercentage"></mat-progress-bar>
-		<mat-toolbar color="primary" class="mat-elevation-z3 sticky-toolbar" *ngIf="toolbarService.showToolbar && isAuthenticated" id="topToolbar">
-			<button mat-icon-button (click)="left.toggle()" *ngIf="!isSidenavOpened">
-				<mat-icon>menu</mat-icon>
-			</button>
-			<span class="toolbar-title">Study Buddy - {{shared.title}}</span>
-			<span fxFlex></span>
-			<button mat-icon-button [matMenuTriggerFor]="accountMenu" matTooltip="Account">
-				<mat-icon>account_circle</mat-icon>
-			</button>
-			<mat-menu #accountMenu="matMenu" [overlapTrigger]="false">
-				<mat-nav-list>
-					<mat-list-item *ngIf="isSignedIn" disableRipple>
-						<img matListAvatar src="{{(userObservable | async)?.photoURL}}">
-						<h3 matLine>{{(userObservable | async)?.displayName}}</h3>
-						<span matLine style="overflow:initial">{{(userObservable | async)?.email}}</span>
-					</mat-list-item>
-					<a mat-list-item routerLink="/account">
-						<mat-icon matListIcon>account_box</mat-icon>
-						<h3 matLine>My account</h3>
-					</a>
-					<mat-list-item (click)="logOut()" *ngIf="isSignedIn">
-						<mat-icon matListIcon>exit_to_app</mat-icon>
-						<h3 matLine>Sign out</h3>
-					</mat-list-item>
-					<mat-list-item (click)="signIn()" *ngIf="!isSignedIn">
-						<mat-icon matListIcon svgIcon="mdi:login"></mat-icon>
-						<h3 matLine>Login</h3>
-					</mat-list-item>
-					<mat-divider></mat-divider>
-					<h3 matSubheader>Help</h3>
-					<a routerLink="/settings" mat-list-item>
-						<mat-icon matListIcon>settings</mat-icon>
-						<h3 matLine>Settings</h3>
-					</a>
-					<a href="https://goo.gl/forms/tz6cmNguIHuZMZIh2" mat-list-item>
-						<mat-icon matListIcon>feedback</mat-icon>
-						<h3 matLine>Send feedback</h3>
-					</a>
-					<a routerLink="." mat-list-item>
-						<mat-icon matListIcon>help</mat-icon>
-						<h3 matLine>Help</h3>
-					</a>
-					<!-- For debugging only -->
-					<div *ngIf="!environment.production">
-						<mat-divider></mat-divider>
-						<h3 matSubheader>Developer</h3>
-						<mat-list-item (click)="openUserInfoDialog()">
-							<mat-icon matListIcon>build</mat-icon>
-							<h3 matLine>Get user info</h3>
-						</mat-list-item>
-					</div>
-				</mat-nav-list>
-			</mat-menu>
-			<button mat-icon-button matTooltip="Notifications" (click)="notifySidenav.toggle()" *ngIf="!isMobile">
-				<mat-icon matBadge="10" matBadgeColor="accent">notifications</mat-icon>
-			</button>
-		</mat-toolbar>
-		<router-outlet></router-outlet>
-	</mat-sidenav-content>
+  <mat-sidenav #left [mode]="isMobile ? 'over':'side'" class="app-sidenav mat-elevation-z2">
+    <mat-toolbar>
+      Links
+      <span fxFlex></span>
+      <button mat-icon-button (click)="left.close()" matTooltip="Close sidenav" matTooltipPosition="right">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+      </button>
+    </mat-toolbar>
+    <mat-nav-list>
+      <ng-container *ngFor="let link of sidenavLinks; let i = index">
+        <a mat-list-item [routerLink]="['/'+link.link]" routerLinkActive="active-link" (click)="closeLeftSidenav(left)">
+          <mat-icon matListIcon *ngIf="!link.svgIcon && link.icon">{{link.icon}}</mat-icon>
+          <mat-icon matListIcon *ngIf="link.svgIcon && !link.icon" [svgIcon]="link.svgIcon"></mat-icon>
+          <h3 matLine>{{link.title}}</h3>
+          <span fxFlex></span>
+          <button mat-icon-button (click)="toggleList($event, i)" aria-label="Toggle list" matTooltip="Toggle list" matTooltipPosition="right"
+           *ngIf="link.list">
+            <mat-icon [@toggleIconAnim]="toggleState[i]">keyboard_arrow_right</mat-icon>
+          </button>
+        </a>
+        <div *ngIf="link.list" [@toggleItemsAnim]="toggleState[i]">
+          <a mat-list-item [routerLink]="['/'+listLink.link]" *ngFor="let listLink of link.list; let last = last" routerLinkActive="active-link" (click)="closeLeftSidenav(left)">
+            <mat-icon matListIcon *ngIf="!listLink.svgIcon && listLink.icon">{{listLink.icon}}</mat-icon>
+            <mat-icon matListIcon *ngIf="listLink.svgIcon && !listLink.icon" [svgIcon]="listLink.svgIcon"></mat-icon>
+            <h3 matLine>{{listLink.title}}</h3>
+            <mat-divider *ngIf="last"></mat-divider>
+          </a>
+        </div>
+      </ng-container>
+      <mat-divider></mat-divider>
+      <h3 matSubheader>Other</h3>
+      <ng-container *ngFor="let link of otherLinks; let i = index">
+        <a mat-list-item [routerLink]="['/'+link.link]" routerLinkActive="active-link" (click)="closeLeftSidenav(left)">
+          <mat-icon matListIcon *ngIf="!link.svgIcon && link.icon">{{link.icon}}</mat-icon>
+          <mat-icon matListIcon *ngIf="link.svgIcon && !link.icon" [svgIcon]="link.svgIcon"></mat-icon>
+          <h3 matLine>{{link.title}}</h3>
+          <span fxFlex></span>
+          <button mat-icon-button (click)="toggleOtherList($event, i)" aria-label="Toggle list" matTooltip="Toggle list" matTooltipPosition="right"
+           *ngIf="link.list">
+            <mat-icon [@toggleIconAnim]="toggleOtherState[i]">keyboard_arrow_right</mat-icon>
+          </button>
+        </a>
+        <div *ngIf="link.list" [@toggleItemsAnim]="toggleOtherState[i]">
+          <a mat-list-item [routerLink]="['/'+listLink.link]" *ngFor="let listLink of link.list" routerLinkActive="active-link" (click)="closeLeftSidenav(left)">
+            <mat-icon matListIcon *ngIf="!listLink.svgIcon && listLink.icon">{{listLink.icon}}</mat-icon>
+            <mat-icon matListIcon *ngIf="listLink.svgIcon && !listLink.icon" [svgIcon]="listLink.svgIcon"></mat-icon>
+            <h3 matLine>{{listLink.title}}</h3>
+          </a>
+        </div>
+      </ng-container>
+    </mat-nav-list>
+    <footer style="bottom:0;position:absolute" fxLayout="row">
+      <mat-icon>info</mat-icon>
+      &nbsp;
+      <p>Version 1.0.0</p>
+    </footer>
+  </mat-sidenav>
+  <mat-sidenav #notifySidenav class="app-notify-sidenav mat-elevation-z2" position="end">
+    <mat-toolbar color="primary" class="sticky-toolbar mat-elevation-z3">
+      Notifications
+      <span fxFlex></span>
+      <button mat-icon-button *ngIf="!environment.production" (click)="addDebugMessage()" matTooltip="Add notification [DEBUG]">
+        <mat-icon>add</mat-icon>
+      </button>
+      <a mat-icon-button matTooltip="Notification settings" (click)="toggleNotificationSettings()">
+        <mat-icon>settings</mat-icon>
+      </a>
+      <button mat-icon-button matTooltip="Clear all notifications" (click)="messagingService.deleteMessages()" [disabled]="messages.length === 0">
+        <mat-icon>clear_all</mat-icon>
+      </button>
+      <button mat-icon-button (click)="notifySidenav.close()" matTooltip="Close sidenav">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-toolbar>
+    <div *ngIf="!showNotificationSettings">
+      <message-card *ngFor="let message of messages; let i = index" [message]="message" [index]="i">
+      </message-card>
+      <div *ngIf="messages.length === 0" class="empty-state-container">
+        <div class="empty-state-div">
+          <p>All caught up!</p>
+          <button mat-raised-button color="primary">Notifications history</button>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="showNotificationSettings">
+      Notification settings
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-progress-bar color="accent" [mode]="toolbarService.progressIndeterminate ? 'indeterminate' : 'determinate'" *ngIf="toolbarService.showProgress"
+     [value]="toolbarService.progressPercentage"></mat-progress-bar>
+    <mat-toolbar color="primary" class="mat-elevation-z3 sticky-toolbar" *ngIf="toolbarService.showToolbar && isAuthenticated" id="topToolbar">
+      <button mat-icon-button (click)="left.toggle()" *ngIf="!isSidenavOpened">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="toolbar-title">Study Buddy - {{shared.title}}</span>
+      <span fxFlex></span>
+      <button mat-icon-button [matMenuTriggerFor]="accountMenu" matTooltip="Account">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #accountMenu="matMenu" [overlapTrigger]="false">
+        <mat-nav-list>
+          <mat-list-item *ngIf="isSignedIn" disableRipple>
+            <img matListAvatar src="{{(userObservable | async)?.photoURL}}">
+            <h3 matLine>{{(userObservable | async)?.displayName}}</h3>
+            <span matLine style="overflow:initial">{{(userObservable | async)?.email}}</span>
+          </mat-list-item>
+          <a mat-list-item routerLink="/account">
+            <mat-icon matListIcon>account_box</mat-icon>
+            <h3 matLine>My account</h3>
+          </a>
+          <mat-list-item (click)="logOut()" *ngIf="isSignedIn">
+            <mat-icon matListIcon>exit_to_app</mat-icon>
+            <h3 matLine>Sign out</h3>
+          </mat-list-item>
+          <mat-list-item (click)="signIn()" *ngIf="!isSignedIn">
+            <mat-icon matListIcon svgIcon="mdi:login"></mat-icon>
+            <h3 matLine>Login</h3>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <h3 matSubheader>Help</h3>
+          <a routerLink="/settings" mat-list-item>
+            <mat-icon matListIcon>settings</mat-icon>
+            <h3 matLine>Settings</h3>
+          </a>
+          <a href="https://goo.gl/forms/tz6cmNguIHuZMZIh2" mat-list-item>
+            <mat-icon matListIcon>feedback</mat-icon>
+            <h3 matLine>Send feedback</h3>
+          </a>
+          <a routerLink="." mat-list-item>
+            <mat-icon matListIcon>help</mat-icon>
+            <h3 matLine>Help</h3>
+          </a>
+          <!-- For debugging only -->
+          <div *ngIf="!environment.production">
+            <mat-divider></mat-divider>
+            <h3 matSubheader>Developer</h3>
+            <mat-list-item (click)="openUserInfoDialog()">
+              <mat-icon matListIcon>build</mat-icon>
+              <h3 matLine>Get user info</h3>
+            </mat-list-item>
+          </div>
+        </mat-nav-list>
+      </mat-menu>
+      <button mat-icon-button matTooltip="Notifications" (click)="notifySidenav.toggle()" *ngIf="!isMobile">
+        <mat-icon matBadge="10" matBadgeColor="accent">notifications</mat-icon>
+      </button>
+    </mat-toolbar>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
 </mat-sidenav-container>

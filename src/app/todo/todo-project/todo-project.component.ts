@@ -7,8 +7,8 @@ import { AngularFirestoreCollection } from 'angularfire2/firestore';
 import { ToolbarService } from '../../toolbar.service';
 
 @Component({
-	selector: 'app-todo-project',
-	templateUrl: './todo-project.component.html'
+  selector: 'app-todo-project',
+  templateUrl: './todo-project.component.html'
 })
 export class TodoProjectComponent {
 }

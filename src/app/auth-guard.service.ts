@@ -6,30 +6,30 @@ import { Observable } from 'rxjs';
 import { take, map, tap } from 'rxjs/operators';
 
 @Injectable({
-	providedIn: 'root'
+  providedIn: 'root'
 })
 export class AuthGuardService implements CanActivate {
 
-	constructor(
-		public auth: AuthService,
-		private shared: SharedService,
-		private router: Router
-	) { }
-	/**
-	 * Whether the route can be enabled
-	 */
-	canActivate(
-		next: ActivatedRouteSnapshot,
-		state: RouterStateSnapshot): Observable<boolean> | boolean {
-		return this.auth.afAuth.user.pipe(
-			take(1),
-			map(user => !!user),
-			tap((loggedIn: boolean) => {
-				if (!loggedIn) {
-					this.shared.openSnackBar({ msg: 'Please login before accessing this page', additionalOpts: { duration: 5000, horizontalPosition: 'start' } });
-					this.router.navigate(['/login']);
-				}
-			})
-		)
-	}
+  constructor(
+    public auth: AuthService,
+    private shared: SharedService,
+    private router: Router
+  ) { }
+  /**
+   * Whether the route can be enabled
+   */
+  canActivate(
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): Observable<boolean> | boolean {
+    return this.auth.afAuth.user.pipe(
+      take(1),
+      map(user => !!user),
+      tap((loggedIn: boolean) => {
+        if (!loggedIn) {
+          this.shared.openSnackBar({ msg: 'Please login before accessing this page', additionalOpts: { duration: 5000, horizontalPosition: 'start' } });
+          this.router.navigate(['/login']);
+        }
+      })
+    )
+  }
 }

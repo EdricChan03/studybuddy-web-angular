@@ -1,42 +1,42 @@
 <h2 matDialogTitle>New project</h2>
 <div matDialogContent fxLayout="column">
-	<form [formGroup]="options" fxLayout="column">
-		<mat-form-field>
-			<mat-label>Name</mat-label>
-			<input matInput formControlName="name">
-			<mat-error *ngIf="options.get('name')?.hasError('required')">A name is required.</mat-error>
-			<mat-error *ngIf="options.get('name')?.hasError('minlength')">A minimum of 3 characters is required.</mat-error>
-			<mat-error *ngIf="options.get('name')?.hasError('maxlength')">A maximum of 100 characters is allowed.</mat-error>
-			<mat-hint align="end">{{options.get('name').value.length}} / 100</mat-hint>
-		</mat-form-field>
-		<mat-form-field>
-			<mat-label>Color</mat-label>
-			<input matInput formControlName="color">
-			<mat-error *ngIf="options.get('color')?.hasError('required')">A color is required</mat-error>
-			<mat-error *ngIf="options.get('color')?.hasError('pattern')">The color is to be in the form #RRGGBB.</mat-error>
-			<button mat-icon-button matSuffix (click)="showHelpDialog(helpColorDialog)" aria-label="Get help" matTooltip="Get help" type="button"><mat-icon>help_circle</mat-icon></button>
-		</mat-form-field>
-		<ng-template #helpColorDialog>
-			<h2 matDialogTitle>Help</h2>
-			<div matDialogContent fxLayout="column">
-				<p>Accepted color values: #RRGGBB</p>
-				<p>Where they denote the following:</p>
-				<ul>
-					<li>
-						<strong>RR</strong> denotes the red value of the color. Accepted values: 00 to FF.</li>
-					<li>
-						<strong>GG</strong> denotes the green value of the color. Accepted values: 00 to FF.</li>
-					<li>
-						<strong>BB</strong> denotes the blue value of the color. Accepted values: 00 to FF.</li>
-				</ul>
-			</div>
-			<div matDialogActions align="end">
-				<button mat-button (click)="closeHelpDialog()" color="primary">Dismiss</button>
-			</div>
-		</ng-template>
-	</form>
+  <form [formGroup]="options" fxLayout="column">
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name">
+      <mat-error *ngIf="options.get('name')?.hasError('required')">A name is required.</mat-error>
+      <mat-error *ngIf="options.get('name')?.hasError('minlength')">A minimum of 3 characters is required.</mat-error>
+      <mat-error *ngIf="options.get('name')?.hasError('maxlength')">A maximum of 100 characters is allowed.</mat-error>
+      <mat-hint align="end">{{options.get('name').value.length}} / 100</mat-hint>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Color</mat-label>
+      <input matInput formControlName="color">
+      <mat-error *ngIf="options.get('color')?.hasError('required')">A color is required</mat-error>
+      <mat-error *ngIf="options.get('color')?.hasError('pattern')">The color is to be in the form #RRGGBB.</mat-error>
+      <button mat-icon-button matSuffix (click)="showHelpDialog(helpColorDialog)" aria-label="Get help" matTooltip="Get help" type="button"><mat-icon>help_circle</mat-icon></button>
+    </mat-form-field>
+    <ng-template #helpColorDialog>
+      <h2 matDialogTitle>Help</h2>
+      <div matDialogContent fxLayout="column">
+        <p>Accepted color values: #RRGGBB</p>
+        <p>Where they denote the following:</p>
+        <ul>
+          <li>
+            <strong>RR</strong> denotes the red value of the color. Accepted values: 00 to FF.</li>
+          <li>
+            <strong>GG</strong> denotes the green value of the color. Accepted values: 00 to FF.</li>
+          <li>
+            <strong>BB</strong> denotes the blue value of the color. Accepted values: 00 to FF.</li>
+        </ul>
+      </div>
+      <div matDialogActions align="end">
+        <button mat-button (click)="closeHelpDialog()" color="primary">Dismiss</button>
+      </div>
+    </ng-template>
+  </form>
 </div>
 <div matDialogActions align="end">
-	<button mat-button matDialogClose color="primary">Cancel</button>
-	<button mat-button matDialogClose (click)="onClose()" color="primary" [disabled]="options.invalid">Add</button>
+  <button mat-button matDialogClose color="primary">Cancel</button>
+  <button mat-button matDialogClose (click)="onClose()" color="primary" [disabled]="options.invalid">Add</button>
 </div>

@@ -1,215 +1,215 @@
 {
-	"version": 1,
-	"newProjectRoot": "projects",
-	"projects": {
-		"studybuddy-web": {
-			"root": "",
-			"projectType": "application",
-			"architect": {
-				"build": {
-					"builder": "@angular-devkit/build-angular:browser",
-					"options": {
-						"outputPath": "dist",
-						"index": "src/index.html",
-						"main": "src/main.ts",
-						"polyfills": "src/polyfills.ts",
-						"tsConfig": "src/tsconfig.app.json",
-						"assets": [
-							{
-								"glob": "**/*",
-								"input": "src/assets",
-								"output": "/assets"
-							},
-							{
-								"glob": "favicon.ico",
-								"input": "src",
-								"output": "/"
-							}
-						],
-						"styles": [
-							{
-								"input": "src/styles.scss"
-							},
-							{
-								"input": "node_modules/prismjs/themes/prism.css"
-							}
-						],
-						"scripts": [
-							{
-								"input": "node_modules/marked/lib/marked.js"
-							},
-							{
-								"input": "node_modules/prismjs/prism.js"
-							},
-							{
-								"input": "node_modules/prismjs/components/prism-css.min.js"
-							},
-							{
-								"input": "node_modules/prismjs/components/prism-javascript.min.js"
-							},
-							{
-								"input": "node_modules/prismjs/components/prism-json.min.js"
-							},
-							{
-								"input": "node_modules/prismjs/components/prism-markup.min.js"
-							},
-							{
-								"input": "node_modules/prismjs/components/prism-typescript.min.js"
-							}
-						]
-					},
-					"configurations": {
-						"dev": {
-							"fileReplacements": [
-								{
-									"src": "src/environments/environment.ts",
-									"replaceWith": "src/environments/environment.ts"
-								}
-							]
-						},
-						"production": {
-							"optimization": true,
-							"outputHashing": "all",
-							"sourceMap": false,
-							"extractCss": true,
-							"namedChunks": false,
-							"aot": true,
-							"extractLicenses": true,
-							"vendorChunk": false,
-							"buildOptimizer": true,
-							"fileReplacements": [
-								{
-									"src": "src/environments/environment.ts",
-									"replaceWith": "src/environments/environment.prod.ts"
-								}
-							]
-						}
-					}
-				},
-				"serve": {
-					"builder": "@angular-devkit/build-angular:dev-server",
-					"options": {
-						"browserTarget": "studybuddy-web:build"
-					},
-					"configurations": {
-						"dev": {
-							"browserTarget": "studybuddy-web:build:dev"
-						},
-						"production": {
-							"browserTarget": "studybuddy-web:build:production"
-						}
-					}
-				},
-				"extract-i18n": {
-					"builder": "@angular-devkit/build-angular:extract-i18n",
-					"options": {
-						"browserTarget": "studybuddy-web:build"
-					}
-				},
-				"test": {
-					"builder": "@angular-devkit/build-angular:karma",
-					"options": {
-						"main": "src/test.ts",
-						"polyfills": "src/polyfills.ts",
-						"karmaConfig": "./karma.conf.js",
-						"tsConfig": "src/tsconfig.spec.json",
-						"scripts": [
-							{
-								"input": "node_modules/marked/lib/marked.js"
-							},
-							{
-								"input": "node_modules/prismjs/prism.js"
-							},
-							{
-								"input": "node_modules/prismjs/components/prism-css.min.js"
-							},
-							{
-								"input": "node_modules/prismjs/components/prism-javascript.min.js"
-							},
-							{
-								"input": "node_modules/prismjs/components/prism-json.min.js"
-							},
-							{
-								"input": "node_modules/prismjs/components/prism-markup.min.js"
-							},
-							{
-								"input": "node_modules/prismjs/components/prism-typescript.min.js"
-							}
-						],
-						"styles": [
-							{
-								"input": "src/styles.scss"
-							},
-							{
-								"input": "node_modules/prismjs/themes/prism.css"
-							}
-						],
-						"assets": [
-							{
-								"glob": "**/*",
-								"input": "src/assets",
-								"output": "/assets"
-							},
-							{
-								"glob": "favicon.ico",
-								"input": "/src",
-								"output": "/"
-							}
-						]
-					}
-				},
-				"lint": {
-					"builder": "@angular-devkit/build-angular:tslint",
-					"options": {
-						"tsConfig": [
-							"src/tsconfig.app.json",
-							"src/tsconfig.spec.json"
-						],
-						"exclude": []
-					}
-				}
-			}
-		},
-		"studybuddy-web-e2e": {
-			"root": "",
-			"projectType": "application",
-			"cli": {},
-			"schematics": {},
-			"architect": {
-				"e2e": {
-					"builder": "@angular-devkit/build-angular:protractor",
-					"options": {
-						"protractorConfig": "./protractor.conf.js",
-						"devServerTarget": "studybuddy-web:serve"
-					}
-				},
-				"lint": {
-					"builder": "@angular-devkit/build-angular:tslint",
-					"options": {
-						"tsConfig": [
-							"e2e/tsconfig.e2e.json"
-						],
-						"exclude": []
-					}
-				}
-			}
-		}
-	},
-	"schematics": {
-		"@schematics/angular:component": {
-			"spec": false,
-			"inlineStyle": true,
-			"prefix": "app",
-			"styleext": "scss"
-		},
-		"@schematics/angular:pipe": {
-			"spec": false
-		},
-		"@schematics/angular:service": {
-			"spec": false
-		},
-		"@schematics/angular:directive": {
-			"prefix": "app"
-		}
-	}
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "studybuddy-web": {
+      "root": "",
+      "projectType": "application",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "src/tsconfig.app.json",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "src/assets",
+                "output": "/assets"
+              },
+              {
+                "glob": "favicon.ico",
+                "input": "src",
+                "output": "/"
+              }
+            ],
+            "styles": [
+              {
+                "input": "src/styles.scss"
+              },
+              {
+                "input": "node_modules/prismjs/themes/prism.css"
+              }
+            ],
+            "scripts": [
+              {
+                "input": "node_modules/marked/lib/marked.js"
+              },
+              {
+                "input": "node_modules/prismjs/prism.js"
+              },
+              {
+                "input": "node_modules/prismjs/components/prism-css.min.js"
+              },
+              {
+                "input": "node_modules/prismjs/components/prism-javascript.min.js"
+              },
+              {
+                "input": "node_modules/prismjs/components/prism-json.min.js"
+              },
+              {
+                "input": "node_modules/prismjs/components/prism-markup.min.js"
+              },
+              {
+                "input": "node_modules/prismjs/components/prism-typescript.min.js"
+              }
+            ]
+          },
+          "configurations": {
+            "dev": {
+              "fileReplacements": [
+                {
+                  "src": "src/environments/environment.ts",
+                  "replaceWith": "src/environments/environment.ts"
+                }
+              ]
+            },
+            "production": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "src": "src/environments/environment.ts",
+                  "replaceWith": "src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "studybuddy-web:build"
+          },
+          "configurations": {
+            "dev": {
+              "browserTarget": "studybuddy-web:build:dev"
+            },
+            "production": {
+              "browserTarget": "studybuddy-web:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "studybuddy-web:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "src/test.ts",
+            "polyfills": "src/polyfills.ts",
+            "karmaConfig": "./karma.conf.js",
+            "tsConfig": "src/tsconfig.spec.json",
+            "scripts": [
+              {
+                "input": "node_modules/marked/lib/marked.js"
+              },
+              {
+                "input": "node_modules/prismjs/prism.js"
+              },
+              {
+                "input": "node_modules/prismjs/components/prism-css.min.js"
+              },
+              {
+                "input": "node_modules/prismjs/components/prism-javascript.min.js"
+              },
+              {
+                "input": "node_modules/prismjs/components/prism-json.min.js"
+              },
+              {
+                "input": "node_modules/prismjs/components/prism-markup.min.js"
+              },
+              {
+                "input": "node_modules/prismjs/components/prism-typescript.min.js"
+              }
+            ],
+            "styles": [
+              {
+                "input": "src/styles.scss"
+              },
+              {
+                "input": "node_modules/prismjs/themes/prism.css"
+              }
+            ],
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "src/assets",
+                "output": "/assets"
+              },
+              {
+                "glob": "favicon.ico",
+                "input": "/src",
+                "output": "/"
+              }
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "src/tsconfig.app.json",
+              "src/tsconfig.spec.json"
+            ],
+            "exclude": []
+          }
+        }
+      }
+    },
+    "studybuddy-web-e2e": {
+      "root": "",
+      "projectType": "application",
+      "cli": {},
+      "schematics": {},
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "./protractor.conf.js",
+            "devServerTarget": "studybuddy-web:serve"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "e2e/tsconfig.e2e.json"
+            ],
+            "exclude": []
+          }
+        }
+      }
+    }
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "spec": false,
+      "inlineStyle": true,
+      "prefix": "app",
+      "styleext": "scss"
+    },
+    "@schematics/angular:pipe": {
+      "spec": false
+    },
+    "@schematics/angular:service": {
+      "spec": false
+    },
+    "@schematics/angular:directive": {
+      "prefix": "app"
+    }
+  }
 }

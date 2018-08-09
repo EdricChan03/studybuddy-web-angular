@@ -1,47 +1,47 @@
 <h2 matDialogTitle>User info</h2>
 <div mat-dialog-content>
-	<p *ngIf="!isSignedIn">User isn't logged in</p>
-	<div class="data-table" *ngIf="isSignedIn">
-		<table class="app-table">
-			<thead>
-				<tr>
-					<th>Property</th>
-					<th>Value</th>
-				</tr>
-			</thead>
-			<tr>
-				<td>Name</td>
-				<td>{{(userObservable | async)?.displayName}}</td>
-			</tr>
-			<tr>
-				<td>Email</td>
-				<td>{{(userObservable | async)?.email}}</td>
-			</tr>
-			<tr>
-				<td>Phone number</td>
-				<td>{{(userObservable | async)?.phoneNumber ? (userObservable | async)?.phoneNumber : 'null'}}</td>
-			</tr>
-			<tr>
-				<td>Photo URL</td>
-				<td>{{(userObservable | async)?.photoURL}}</td>
-			</tr>
-			<tr>
-				<td>UID (User ID)</td>
-				<td>{{(userObservable | async)?.uid}}</td>
-			</tr>
-			<tr>
-				<td>Last login</td>
-				<td>{{(userObservable | async)?.metadata?.lastSignInTime | date}}</td>
-			</tr>
-			<tr>
-				<td>Created at</td>
-				<td>{{(userObservable | async)?.metadata?.creationTime | date}}</td>
-			</tr>
-		</table>
-	</div>
-	<mat-checkbox [(ngModel)]="showJson">Show JSON?</mat-checkbox>
-	<pre *ngIf="showJson"><code>{{(userObservable | async)?.toJSON() | json}}</code></pre>
+  <p *ngIf="!isSignedIn">User isn't logged in</p>
+  <div class="data-table" *ngIf="isSignedIn">
+    <table class="app-table">
+      <thead>
+        <tr>
+          <th>Property</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tr>
+        <td>Name</td>
+        <td>{{(userObservable | async)?.displayName}}</td>
+      </tr>
+      <tr>
+        <td>Email</td>
+        <td>{{(userObservable | async)?.email}}</td>
+      </tr>
+      <tr>
+        <td>Phone number</td>
+        <td>{{(userObservable | async)?.phoneNumber ? (userObservable | async)?.phoneNumber : 'null'}}</td>
+      </tr>
+      <tr>
+        <td>Photo URL</td>
+        <td>{{(userObservable | async)?.photoURL}}</td>
+      </tr>
+      <tr>
+        <td>UID (User ID)</td>
+        <td>{{(userObservable | async)?.uid}}</td>
+      </tr>
+      <tr>
+        <td>Last login</td>
+        <td>{{(userObservable | async)?.metadata?.lastSignInTime | date}}</td>
+      </tr>
+      <tr>
+        <td>Created at</td>
+        <td>{{(userObservable | async)?.metadata?.creationTime | date}}</td>
+      </tr>
+    </table>
+  </div>
+  <mat-checkbox [(ngModel)]="showJson">Show JSON?</mat-checkbox>
+  <pre *ngIf="showJson"><code>{{(userObservable | async)?.toJSON() | json}}</code></pre>
 </div>
 <div mat-dialog-actions align="end">
-	<button mat-button color="primary" matDialogClose>Dismiss</button>
+  <button mat-button color="primary" matDialogClose>Dismiss</button>
 </div>
