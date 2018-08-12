@@ -1,6 +1,8 @@
 {
   "version": 1,
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "newProjectRoot": "projects",
+  "defaultProject": "studybuddy-web",
   "projects": {
     "studybuddy-web": {
       "root": "",
