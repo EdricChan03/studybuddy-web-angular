@@ -17,10 +17,16 @@ export class AuthService {
   ) {
     afAuth.authState.subscribe((result) => {
       this.authState = result;
-    })
+    });
   }
+  /**
+   * A gettor to check whether there is a currently authenticated user
+   */
   get authenticated(): boolean {
     return this.authState != null;
+  }
+  get firebaseAuth(): firebase.auth.Auth {
+    return this.afAuth.auth;
   }
   /**
    * Attemps to log in with a username and password
@@ -40,24 +46,25 @@ export class AuthService {
   }
   /**
    * Attempts to log in with Google
-   * @returns {Promise<any>} The promise of the login
+   * @return The promise of the login
    */
   logInWithGoogle(): Promise<any> {
     return this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
   }
   /**
    * Logs out the current user
-   * Note: Ideally, a confirmation dialog should be shown asking whether the user wishes to log out. In this case, developers have to implement their own functionality in their own apps.
-   * @returns {Promise<any>} The promise of the logout
+   * Note: Ideally, a confirmation dialog should be shown askingwhether the user wishes to log out.
+   * In this case, developers have to implement their own functionality in their own apps.
+   * @return The promise of the logout
    */
   logOut(): Promise<any> {
     return this.afAuth.auth.signOut();
   }
   /**
    * Gets the auth state
-   * @returns {Observable<firebase.User | null>} The obserable of the state
+   * @return The obserable of the state
    */
-  getAuthState(): Observable<firebase.User | null> { 
+  getAuthState(): Observable<firebase.User | null> {
     return this.afAuth.authState;
   }
   /**
