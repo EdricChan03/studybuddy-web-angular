@@ -144,7 +144,9 @@
         </mat-nav-list>
       </mat-menu>
       <button mat-icon-button matTooltip="Notifications" (click)="notifySidenav.toggle()" *ngIf="!isMobile">
-        <mat-icon matBadge="10" matBadgeColor="accent">notifications</mat-icon>
+        <!-- For now, don't use any badge as notifications haven't been implemented as of now -->
+        <!-- <mat-icon matBadge="10" matBadgeColor="accent">notifications</mat-icon> -->
+        <mat-icon>notifications</mat-icon>
       </button>
     </mat-toolbar>
     <router-outlet></router-outlet>
