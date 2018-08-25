@@ -1,11 +1,11 @@
 {
   "version": 1,
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "newProjectRoot": "projects",
+  "newProjectRoot": ".",
   "defaultProject": "studybuddy-web",
   "projects": {
     "studybuddy-web": {
-      "root": "",
+      "root": "src",
       "projectType": "application",
       "architect": {
         "build": {
@@ -27,7 +27,11 @@
                 "input": "src",
                 "output": "/"
               },
-              "src/manifest.json"
+              {
+                "glob": "manifest.json",
+                "input": "src",
+                "output": "/"
+              }
             ],
             "styles": [
               {
@@ -84,6 +88,10 @@
                 {
                   "src": "src/environments/environment.ts",
                   "replaceWith": "src/environments/environment.prod.ts"
+                },
+                {
+                  "src": "src/index.html",
+                  "replaceWith": "src/index.ngsw.html"
                 }
               ],
               "serviceWorker": true
@@ -159,7 +167,11 @@
                 "input": "/src",
                 "output": "/"
               },
-              "src/manifest.json"
+              {
+                "glob": "manifest.json",
+                "input": "src",
+                "output": "/"
+              }
             ]
           }
         },
