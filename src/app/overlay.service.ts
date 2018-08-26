@@ -1,5 +1,14 @@
 import { Injectable, NgModule, ElementRef } from '@angular/core';
-import { OverlayModule, Overlay, OverlayRef, OverlayConfig, OriginConnectionPosition, OverlayConnectionPosition, ConnectedPositionStrategy, GlobalPositionStrategy } from '@angular/cdk/overlay';
+import {
+  OverlayModule,
+  Overlay,
+  OverlayRef,
+  OverlayConfig,
+  OriginConnectionPosition,
+  OverlayConnectionPosition,
+  ConnectedPositionStrategy,
+  GlobalPositionStrategy
+} from '@angular/cdk/overlay';
 import { ComponentPortal, PortalModule } from '@angular/cdk/portal';
 import { cleanSession } from 'selenium-webdriver/safari';
 import { Observable } from 'rxjs';
@@ -44,10 +53,10 @@ export class OverlayService {
   }
   /**
    * Creates a below the position of an element position strategy
-   * @param {ElementRef} elementRef The element ref
-   * @param {OriginConnectionPosition} originPos The origin's positions
-   * @param {OverlayConnectionPosition} overlayPos The overlay's positions
-   * @returns {ConnectedPositionStrategy} The position strategy
+   * @param elementRef The element ref
+   * @param originPos The origin's positions
+   * @param overlayPos The overlay's positions
+   * @returns The position strategy
    */
   createBelowPosElPositionStrategy(
     elementRef: ElementRef,
