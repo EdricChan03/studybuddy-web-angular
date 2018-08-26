@@ -4,29 +4,25 @@ import { Injectable } from '@angular/core';
 export class ToolbarService {
   /**
    * Whether to show the toolbar
-   * @type {boolean}
    */
-  private _toolbarShown: boolean = true;
+  private _toolbarShow = true;
   /**
    * Whether to show a progress bar
-   * @type {boolean}
    */
-  private _progressShown: boolean = false;
+  private _progressShown = false;
   /**
    * The progress percentage of the progress bar
-   * @type {number}
    */
-  private _progressPercent: number = 0;
+  private _progressPercent = 0;
   /**
    * Whether to enable indeterminate mode for the progress bar
-   * @type {boolean}
    */
-  private _progressIndeterminate: boolean = true;
+  private _progressIndeterminate = true;
   set showToolbar(value: boolean) {
-    this._toolbarShown = value;
+    this._toolbarShow = value;
   }
   get showToolbar() {
-    return this._toolbarShown;
+    return this._toolbarShow;
   }
   get showProgress() {
     return this._progressShown;
@@ -39,16 +35,16 @@ export class ToolbarService {
   }
   /**
    * Sets the progress bar
-   * @param {boolean} shown Whether to show the progress bar
-   * @param {boolean} [indeterminate] Whether to enable indeterminate mode for the progress bar
-   * @param {number} [percentage] The percentage of the progress bar (only applies in determinate mode)
+   * @param shown Whether to show the progress bar
+   * @param indeterminate Whether to enable indeterminate mode for the progress bar
+   * @param percentage The percentage of the progress bar (only applies in determinate mode)
    */
   setProgress(shown: boolean, indeterminate?: boolean, percentage?: number) {
     this._progressShown = shown;
-    if (indeterminate != undefined && indeterminate != null) {
+    if (indeterminate !== undefined && indeterminate != null) {
       this._progressIndeterminate = indeterminate;
     }
-    if (percentage != undefined && percentage != null) {
+    if (percentage !== undefined && percentage != null) {
       if (percentage >= 0 && percentage <= 100) {
         this._progressPercent = percentage;
       } else {
