@@ -75,10 +75,20 @@ export class MessagingService {
     </mat-card-content>
     <mat-card-actions align="end" *ngIf="message.actions">
       <ng-template *ngFor="let action of message.actions">
-        <button mat-icon-button [matTooltip]="action.tooltipText" color="primary" *ngIf="action.icon !== null && action.title === null" (click)="action.onClickListener($event)">
+        <button
+          mat-icon-button
+          [matTooltip]="action.tooltipText"
+          color="primary"
+          *ngIf="action.icon !== null && action.title === null"
+          (click)="action.onClickListener($event)">
           <mat-icon *ngIf="action.icon">{{action.icon}}</mat-icon>
         </button>
-        <button mat-button [matTooltip]="action.tooltipText" color="primary" *ngIf="action.icon === null && action.title !== null" (click)="action.onClickListener($event)">
+        <button
+          mat-button
+          [matTooltip]="action.tooltipText"
+          color="primary"
+          *ngIf="action.icon === null && action.title !== null"
+          (click)="action.onClickListener($event)">
           {{action.title}}
         </button>
       </ng-template>
@@ -115,10 +125,10 @@ export interface Message {
    */
   img?: string;
   /**
-   * The action buttons of the message 
+   * The action buttons of the message
    */
   actions?: MessageAction[];
-  /** 
+  /**
    * Whether to disable the dismiss button
    */
   disableDismiss?: boolean;
@@ -144,7 +154,7 @@ export interface Message {
   importanceLevel: MessageImportance;
 }
 export interface MessageAction {
-  /** 
+  /**
    * Whether the action button is an icon button
    */
   isIconBtn?: boolean;
@@ -173,9 +183,29 @@ export interface MessageAction {
   onClickListener?: (ev: Event) => void;
 }
 
+/**
+ * Denotes the importance of a message.
+ */
 export enum MessageImportance {
+  /**
+   * A message that is of low importance.
+   * Example: weekly newsletters
+   */
   Low,
+  /**
+   * A message that is of medium importance.
+   * Example: invitation from someone else to collaborate on a todo
+   * Another example: A weekly todo summary
+   */
   Medium,
+  /**
+   * A message that is of high importance.
+   * Example: A feature is down
+   */
   High,
+  /**
+   * A message that is of high importance.
+   * @deprecated Use `MessageImportance.High` instead.
+   */
   Critical
 }
