@@ -46,6 +46,14 @@ export class TestpageComponent implements OnInit {
   ) {
     shared.title = 'Test page';
   }
+  /**
+   * Sets the default value
+   * @param varToSet The variable to set
+   * @param defaultVal Default variable
+   */
+  private setDefaultValue(varToSet: any, defaultVal: any): any {
+    return varToSet ? varToSet : defaultVal;
+  }
   ngOnInit() {
     this.dialog.dialogType = 'alert';
     this.buttons = [
@@ -84,7 +92,7 @@ export class TestpageComponent implements OnInit {
   }
   /**
    * Generates lorem ipsum text
-   * @param {boolean} isSnackBar Whether to generate lorem ipsum for the snackbar message
+   * @param isSnackBar Whether to generate lorem ipsum for the snackbar message
    */
   generateLoremIpsum(isSnackBar?: boolean) {
     // tslint:disable-next-line:max-line-length
@@ -115,45 +123,69 @@ export class TestpageComponent implements OnInit {
     }
   }
   alertDialog() {
-    // tslint:disable-next-line:max-line-length
-    this.shared.openAlertDialog({ title: this.dialog.title ? this.dialog.title : 'Alert', msg: this.dialog.message ? this.dialog.message : 'I\'m an alert message made with code!', ok: this.dialog.okBtn ? this.dialog.okBtn : 'Got it' });
+    this.shared.openAlertDialog({
+      title: this.setDefaultValue(this.dialog.title, 'Alert'),
+      msg: this.setDefaultValue(this.dialog.message, 'I\'m an alert message made with code!'),
+      ok: this.setDefaultValue(this.dialog.okBtn, 'OK')
+    });
     this.clearOptions(this.dialog);
   }
   confirmDialog() {
-    // tslint:disable-next-line:max-line-length
-    this.shared.openConfirmDialog({ title: this.dialog.title ? this.dialog.title : 'Confirmation', msg: this.dialog.message ? this.dialog.message : 'I\'m a confirm message made with code!', cancel: this.dialog.cancelBtn ? this.dialog.cancelBtn : 'Nah', ok: this.dialog.okBtn ? this.dialog.okBtn : 'Yeah' }).afterClosed().subscribe((result) => {
+    this.shared.openConfirmDialog({
+      title: this.setDefaultValue(this.dialog.title, 'Confirmation'),
+      msg: this.setDefaultValue(this.dialog.message, 'I\'m a confirm message made with code!'),
+      cancel: this.setDefaultValue(this.dialog.cancelBtn, 'Cancel'),
+      ok: this.dialog.okBtn ? this.dialog.okBtn : 'OK'
+    }).afterClosed().subscribe((result) => {
       this.outputResult(result);
     });
     this.clearOptions(this.dialog);
   }
   promptDialog() {
-    // tslint:disable-next-line:max-line-length
-    this.shared.openPromptDialog({ title: this.dialog.title ? this.dialog.title : 'Prompt', msg: this.dialog.message ? this.dialog.message : 'I\'m a prompt message prepopulated with a value!', cancel: this.dialog.cancelBtn ? this.dialog.cancelBtn : 'Nah', ok: this.dialog.okBtn ? this.dialog.okBtn : 'Yeah', inputType: 'text', placeholder: this.dialog.placeholder ? this.dialog.placeholder : 'A value goes here', value: this.dialog.value ? this.dialog.value : 'Something here', themeColor: 'accent' }).afterClosed().subscribe((result) => {
+    this.shared.openPromptDialog({
+      title: this.setDefaultValue(this.dialog.title, 'Prompt'),
+      msg: this.setDefaultValue(this.dialog.message, 'Enter your name:'),
+      cancel: this.setDefaultValue(this.dialog.cancelBtn, 'Cancel'),
+      ok: this.setDefaultValue(this.dialog.okBtn, 'OK'),
+      inputType: 'text',
+      placeholder: this.setDefaultValue(this.dialog.placeholder, 'Name'),
+      value: this.setDefaultValue(this.dialog.value, null),
+      themeColor: 'accent'
+    }).afterClosed().subscribe((result) => {
       this.outputResult(result);
     });
     this.clearOptions(this.dialog);
   }
   selectionDialog() {
-    const tempVar = [];
-    for (let i = 0; i < 10; i++) {
-      if (i === 1) {
-        tempVar.push({ content: 'Item 1', disabled: true, value: 'item-1' });
-      } else if (i === 8) {
-        tempVar.push({ content: 'Item 8', value: 'item-8', selected: true });
-      } else {
-        tempVar.push({ content: `Item ${i}`, value: `item-${i}` });
-      }
-    }
-    // tslint:disable-next-line:max-line-length
-    const dialogRef = this.shared.openSelectionDialog({ title: this.setDefaultValue(this.dialog.title, 'Select'), msg: this.dialog.message ? this.dialog.message : 'Select from tons of options', ok: this.dialog.okBtn ? this.dialog.okBtn : 'Yeah', cancel: this.dialog.cancelBtn ? this.dialog.cancelBtn : 'Nah', options: tempVar });
+    const selectionDialogOptions: SelectionDialogOptions[] = [];
+    // for (let i = 0; i < 10; i++) {
+    //   if (i === 1) {
+    //     tempVar.push({ content: 'Item 1', disabled: true, value: 'item-1' });
+    //   } else if (i === 8) {
+    //     tempVar.push({ content: 'Item 8', value: 'item-8', selected: true });
+    //   } else {
+    //     tempVar.push({ content: `Item ${i}`, value: `item-${i}` });
+    //   }
+    // }
+    selectionDialogOptions.push({ content: 'Critical alerts', value: 'critical_alerts', selected: true, disabled: true });
+    selectionDialogOptions.push({ content: 'Weekly summary', value: 'weekly_summary' });
+    selectionDialogOptions.push({ content: 'New features', value: 'new_features' });
+    selectionDialogOptions.push({ content: 'Uncategorised', value: 'uncategorised', selected: true, disabled: true });
+    const dialogRef = this.shared.openSelectionDialog({
+      title: this.setDefaultValue(this.dialog.title, 'Notification preferences'),
+      msg: this.setDefaultValue(this.dialog.message, 'Show preferences for the following'),
+      ok: this.setDefaultValue(this.dialog.okBtn, 'Save'),
+      cancel: this.setDefaultValue(this.dialog.cancelBtn, 'Cancel'),
+      options: selectionDialogOptions
+    });
     dialogRef.afterClosed().subscribe((result) => {
-      this.outputResult(result);
+      this.outputResult(JSON.stringify(result));
     });
     this.clearOptions(this.dialog);
   }
   /**
    * Outputs the result of a function
-   * @param {any} result The result of a function
+   * @param result The result of a function
    * @private
    */
   private outputResult(result: any) {
@@ -162,18 +194,10 @@ export class TestpageComponent implements OnInit {
   }
   /**
    * Resets a value to an undefined {@link Object}
-   * @param {(TestDialog|TestSnackBar|any)} opts The options to clear
+   * @param opts The options to clear
    */
   private clearOptions(opts: TestDialog | TestSnackBar | any) {
     opts = {};
-  }
-  /**
-   * Sets the default value
-   * @param {*} varToSet The variable to set
-   * @param {*} defaultVal Default variable
-   */
-  private setDefaultValue(varToSet: any, defaultVal: any): any {
-    return varToSet ? varToSet : defaultVal;
   }
   /**
    * Closes the current snackbar
@@ -185,30 +209,56 @@ export class TestpageComponent implements OnInit {
    * Opens a snackbar
    */
   snackBar() {
-    // tslint:disable-next-line:max-line-length
-    this.shared.openSnackBar({ msg: this.setDefaultValue(this.snackbar.snackBarMsg, 'I\'m a snackbar!'), additionalOpts: { horizontalPosition: this.snackbar.horizontalPosition, verticalPosition: this.snackbar.verticalPosition, panelClass: this.snackbar.panelClass } });
+    this.shared.openSnackBar({
+      msg: this.setDefaultValue(this.snackbar.snackBarMsg, 'I\'m a snackbar!'),
+      additionalOpts: {
+        horizontalPosition: this.snackbar.horizontalPosition,
+        verticalPosition: this.snackbar.verticalPosition,
+        panelClass: this.snackbar.panelClass
+      }
+    });
     this.clearOptions(this.snackbar);
   }
   /**
    * Opens an error snackbar
    */
   errorSnackBar() {
-    this.shared.openSnackBar({ msg: this.setDefaultValue(this.snackbar.snackBarMsg, 'Error: Something happened'), additionalOpts: { duration: 5000, horizontalPosition: 'start' } });
+    this.shared.openSnackBar({
+      msg: this.setDefaultValue(this.snackbar.snackBarMsg, 'Error: Something happened'),
+      additionalOpts: {
+        duration: 5000
+      }
+    });
   }
   /**
    * Opens a snackbar with a duration
    */
   durationSnackBar() {
-    // tslint:disable-next-line:max-line-length
-    this.shared.openSnackBar({ msg: this.setDefaultValue(this.snackbar.snackBarMsg, 'I\'m a duration snackbar!'), additionalOpts: { duration: this.snackbar.duration ? this.snackbar.duration : 5000, horizontalPosition: this.snackbar.horizontalPosition, verticalPosition: this.snackbar.verticalPosition, panelClass: this.snackbar.panelClass } });
+    this.shared.openSnackBar({
+      msg: this.setDefaultValue(this.snackbar.snackBarMsg, 'I\'m a duration snackbar!'),
+      additionalOpts: {
+        duration: this.snackbar.duration ? this.snackbar.duration : 5000,
+        horizontalPosition: this.snackbar.horizontalPosition,
+        verticalPosition: this.snackbar.verticalPosition,
+        panelClass: this.snackbar.panelClass
+      }
+    });
     this.clearOptions(this.snackbar);
   }
   /**
    * Opens a snackbar with a result
    */
   snackBarWithResult() {
-    // tslint:disable-next-line:max-line-length
-    const snackBarRef = this.shared.openSnackBar({ msg: this.setDefaultValue(this.snackbar.snackBarMsg, 'I\'m a snackbar with an action!'), action: this.snackbar.action, additionalOpts: { horizontalPosition: this.snackbar.horizontalPosition, verticalPosition: this.snackbar.verticalPosition, panelClass: this.snackbar.panelClass } });
+    const snackBarRef = this.shared.openSnackBar({
+      msg: this.setDefaultValue(this.snackbar.snackBarMsg, 'I\'m a snackbar with an action!'),
+      action: this.snackbar.action,
+      additionalOpts:
+      {
+        horizontalPosition: this.snackbar.horizontalPosition,
+        verticalPosition: this.snackbar.verticalPosition,
+        panelClass: this.snackbar.panelClass
+      }
+    });
     snackBarRef.onAction().subscribe(() => {
       this.shared.openAlertDialog({ msg: `You clicked on the "${this.snackbar.action}" button.` });
     });
