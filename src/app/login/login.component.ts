@@ -47,10 +47,14 @@ export class LoginComponent implements OnInit {
     this.auth.getAuthState().subscribe(result => {
       if (result && JSON.parse(localStorage.getItem('loggedIn'))) {
         console.log('User is already logged in. Redirecting...');
-        const snackBarRef = this.shared.openSnackBar({ msg: 'You\'re already logged in! Redirecting in 2 seconds...', action: 'Log out', hasElevation: true, additionalOpts: { duration: 5000, horizontalPosition: 'start' } });
+        const snackBarRef = this.shared.openSnackBar({
+            msg: 'You\'re already logged in! Redirecting in 2 seconds...',
+            action: 'Log out',
+            additionalOpts: { duration: 5000 }
+          });
         snackBarRef.onAction().subscribe(() => {
           this.auth.logOut().then(() => {
-            this.shared.openSnackBar({ msg: 'Successfully logged out', hasElevation: true, additionalOpts: { duration: 3000, horizontalPosition: 'start' } });
+            this.shared.openSnackBar({ msg: 'Successfully logged out!' });
             this.router.navigate(['/login']);
             localStorage.setItem('loggedIn', 'false');
           });
@@ -61,40 +65,64 @@ export class LoginComponent implements OnInit {
       }
     });
   }
+  // Used for toggling the state of the visibility icon in the password input
   toggleLoginFormPassword() {
     this.showLoginFormPassword = !this.showLoginFormPassword;
   }
-  toggleSignUpFormPassword() {
-    this.showSignUpFormPassword = !this.showSignUpFormPassword;
-  }
-  toggleSignUpFormConfirmPassword() {
-    this.showSignUpFormConfirmPassword = !this.showSignUpFormConfirmPassword;
+  resetPassword() {
+    const dialogRef = this.shared.openPromptDialog(
+      {
+        title: 'Reset password',
+        msg: 'Enter the email address to reset below:',
+        placeholder: 'Email address',
+        ok: 'Reset',
+        okColor: 'warn',
+        errorTypes: [
+          {
+            errorText: 'Please enter a valid email address!',
+            errorType: 'email',
+          },
+          {
+            errorText: 'This is required!',
+            errorType: 'required'
+          }
+        ]
+      }
+    );
+    dialogRef.afterClosed().subscribe(result => {
+      // Note: The dialog's result will return `undefined` if the user clicked
+      // outside of the dialog
+      if (result !== -1 && result !== undefined) {
+        this.auth.resetPassword(result).then(_ => {
+          this.shared.openSnackBar({
+            msg: `Successfully reset email ${result}! Please check your email for the password reset email.`,
+            additionalOpts: { duration: 6000 }
+          });
+        }).catch(error => {
+          this.shared.openSnackBar({ msg: `Error: ${error.message}` });
+        });
+      } else {
+        console.log('User clicked cancel!');
+      }
+    });
   }
   loginWithGoogle() {
     this.auth.logInWithGoogle().then((result) => {
-      // tslint:disable-next-line:max-line-length
-      this.shared.openSnackBar({ msg: `Signed in as ${result.user.email}`, hasElevation: true, additionalOpts: { duration: 4000, horizontalPosition: 'start' } });
+      this.shared.openSnackBar({ msg: `Signed in as ${result.user.email}` });
       localStorage.setItem('loggedIn', 'true');
     }).catch((error) => {
-      this.handleError(error.message);
+      this.handleError(error);
     });
   }
   loginWithEmailAndPassword() {
     this.auth.logInWithEmailAndPassword(this.loginForm.get('email').value, this.loginForm.get('password').value).then((result) => {
-      // tslint:disable-next-line:max-line-length
-      this.shared.openSnackBar({ msg: `Signed in as ${result.user.email}`, hasElevation: true, additionalOpts: { duration: 4000, horizontalPosition: 'start' } });
+      this.shared.openSnackBar({ msg: `Signed in as ${result.user.email}` });
     }).catch((error) => {
-      this.handleError(error.message);
+      this.handleError(error);
     });
   }
-  signUpWithEmailAndPassword() {
-    this.auth.signUpWithEmailAndPassword(this.signUpForm.get('email').value, this.loginForm.get('password').value).then((result) => {
-      this.shared.openSnackBar({ msg: `Successfully created account as ${result.user.email}`, hasElevation: true, additionalOpts: { duration: 4000, horizontalPosition: 'start' } });
-    }).catch((error) => {
-      this.handleError(error.message);
-    });
-  }
-  private handleError(errorMsg: string) {
-    this.shared.openSnackBar({ msg: `Error: ${errorMsg}`, hasElevation: 2, additionalOpts: { horizontalPosition: 'start' } });
+  private handleError(error: any) {
+    console.log(error);
+    this.shared.openSnackBar({ msg: `Error: ${error.message}` });
   }
 }
