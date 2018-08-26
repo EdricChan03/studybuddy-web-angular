@@ -34,7 +34,7 @@ export class TipsComponent implements OnInit {
         this.hideProgress();
         this.quoteOfDay = <QuoteOfTheDay>result;
         if (enableDebug) {
-          console.debug('[DEBUG] Result of quote of the day:', result);
+          console.log('[DEBUG] Result of quote of the day:', result);
         }
       }, error => this._handleHttpError(error));
   }
@@ -48,14 +48,16 @@ export class TipsComponent implements OnInit {
         this.hideProgress();
         this.wordOfDay = <WordOfTheDay>result;
         if (enableDebug) {
-          console.debug('[DEBUG] Result of quote of the day:', result);
+          console.log('[DEBUG] Result of quote of the day:', result);
         }
       }, error => this._handleHttpError(error));
   }
   private _handleHttpError(error: {message: string}) {
     this.hideProgress();
-    // tslint:disable-next-line:max-line-length
-    this.shared.openSnackBar({ msg: `Error: ${error.message}`, additionalOpts: { duration: 6000, horizontalPosition: 'start' }, hasElevation: true });
+    this.shared.openSnackBar({
+      msg: `Error: ${error.message}`,
+      additionalOpts: { duration: 6000 }
+    });
     console.error('Error: ', error.message);
   }
   ngOnInit() {
