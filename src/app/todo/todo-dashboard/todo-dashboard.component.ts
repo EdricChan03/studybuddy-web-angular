@@ -1,7 +1,7 @@
 
 import { map, filter } from 'rxjs/operators';
 import { SharedService } from '../../shared.service';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../auth.service';
 import { ToolbarService } from '../../toolbar.service';
 import { Observable } from 'rxjs';
@@ -31,7 +31,7 @@ import { ActivatedRoute, Router } from '@angular/router';
       )])
   ]
 })
-export class TodoDashboardComponent {
+export class TodoDashboardComponent implements OnInit {
   currentUser: string;
   projects$: Observable<TodoProject[]>;
   projectsCollection: AngularFirestoreCollection<TodoProject>;
@@ -49,9 +49,9 @@ export class TodoDashboardComponent {
       filter(params => params.new)).
       subscribe(params => {
         if (params.new) {
-          router.navigate(['/todo/dashboard-new'])
-        };
-      })
+          router.navigate(['/todo/dashboard-new']);
+        }
+      });
     shared.title = 'Todo Dashboard';
     this.authService.getAuthState().subscribe((user) => {
       if (user) {
@@ -69,7 +69,7 @@ export class TodoDashboardComponent {
         }));
         this.projects$.subscribe(() => {
           this.toolbarService.setProgress(false);
-        })
+        });
       } else {
         console.warn('Current user doesn\'t exist yet!');
       }
@@ -86,9 +86,10 @@ export class TodoDashboardComponent {
   }
   deleteProject(id: string) {
     this.projectsCollection.doc(id).delete().then(() => {
-      // tslint:disable-next-line:max-line-length
-      this.shared.openSnackBar({ msg: 'Project was removed', additionalOpts: { duration: 3000, horizontalPosition: 'start', panelClass: 'mat-elevation-z3' } });
-    })
+      this.shared.openSnackBar({ msg: 'Successfully deleted project!' });
+    }).catch(error => {
+      this.shared.openSnackBar({ msg: `Error: ${error.message}` });
+    });
   }
   removeProject(id: string, bypassDialog?: boolean, event?: KeyboardEvent) {
     if (event) {
@@ -111,16 +112,16 @@ export class TodoDashboardComponent {
     if (showHint) {
       dialogText += '<p><small>TIP: To bypass this dialog, hold the shift key when clicking the delete button.</small></p>';
     }
-    // tslint:disable-next-line:max-line-length
-    let dialogRef = this.shared.openConfirmDialog({ msg: this.dom.bypassSecurityTrustHtml(dialogText), title: 'Delete project?', isHtml: true, ok: 'Delete', okColor: 'warn' });
+    const dialogRef = this.shared.openConfirmDialog({
+      msg: this.dom.bypassSecurityTrustHtml(dialogText),
+      title: 'Delete project?',
+      isHtml: true,
+      ok: 'Delete',
+      okColor: 'warn'
+    });
     dialogRef.afterClosed().subscribe(res => {
       if (res === 'ok') {
         this.deleteProject(id);
-      } else {
-        // tslint:disable-next-line:max-line-length
-        this.shared.openSnackBar({ msg: 'Project was not deleted', action: 'Undo', additionalOpts: { duration: 6000, horizontalPosition: 'start', panelClass: 'mat-elevation-z3' } }).onAction().subscribe(() => {
-          this.removeProject(id, true);
-        });
       }
     });
   }
