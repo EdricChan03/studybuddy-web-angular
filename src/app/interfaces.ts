@@ -13,13 +13,13 @@ export interface Settings {
    */
   enableCalendar?: boolean;
   /**
-   * Whether to show todos in a table
+   * The default view to show the todos
    */
-  showTodosAsTable?: boolean;
+  todoView?: 'list' | 'table' | 'agenda';
   /**
    * Whether to enable dark theme
    */
-  darkTheme?: boolean;
+  enableDarkTheme?: boolean;
   /**
    * Whether to enable notifications
    */

@@ -19,25 +19,27 @@ export class SettingsComponent implements OnInit {
     enableCalendar: false,
     enableNotifications: false,
     enableExperimental: false,
-    darkTheme: false,
-    showTodosAsTable: false,
+    enableDarkTheme: false,
+    todoView: 'table',
     closeSidenavOnClick: true
   };
-  settings: Settings = {
-
-  };
+  settings: Settings = {};
   saveSettings() {
     if (this.settings) {
       let tempSettings: Settings;
-      if (window.localStorage['settings']) {
-        tempSettings = <Settings>JSON.parse(window.localStorage['settings']);
+      if (this.shared.settings !== null) {
+        tempSettings = this.shared.settings;
+      } else {
+        tempSettings = {};
       }
       window.localStorage['settings'] = JSON.stringify(this.settings);
-      const snackBarRef = this.shared.openSnackBar({ msg: 'Settings saved', action: 'Undo', additionalOpts: { duration: 6000, horizontalPosition: 'start' } });
-      this.settings = this.retrieveSettings();
-      // tslint:disable-next-line:max-line-length
+      const snackBarRef = this.shared.openSnackBar({
+        msg: 'Settings saved',
+        action: 'Undo',
+        additionalOpts: { duration: 6000 }
+      });
       snackBarRef.onAction().subscribe(() => {
-        window.localStorage['settings'] = JSON.stringify(tempSettings);
+        this.shared.settings = tempSettings;
         tempSettings = null;
         this.settings = this.retrieveSettings();
       });
@@ -45,12 +47,18 @@ export class SettingsComponent implements OnInit {
       console.error('Could not save settings as the variable is undefined.');
     }
   }
-  retrieveSettings(): Settings | any {
-    return <Settings>JSON.parse(window.localStorage.getItem('settings'));
+  retrieveSettings(): Settings {
+    if (this.shared.settings === null) {
+      return {};
+    } else {
+      return this.shared.settings;
+    }
   }
   resetSettings() {
-    // tslint:disable-next-line:max-line-length
-    const dialogRef = this.shared.openConfirmDialog({ title: 'Delete settings?', disableClose: true });
+    const dialogRef = this.shared.openConfirmDialog({
+      title: 'Delete settings?',
+      disableClose: true
+    });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         if (result === 'ok') {
