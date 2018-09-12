@@ -12,7 +12,7 @@ import { MatDialogRef } from '@angular/material/dialog';
   templateUrl: './new-project-dialog.component.html'
 })
 export class NewProjectDialogComponent {
-  colorError: string = '';
+  colorError = '';
   options: FormGroup;
   currentUser: string;
   projectsCollection: AngularFirestoreCollection<TodoProject>;
@@ -26,7 +26,7 @@ export class NewProjectDialogComponent {
     this.options = fb.group({
       'name': ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
       'color': ['#000000', [Validators.required, Validators.pattern(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i)]]
-    })
+    });
     this.authService.getAuthState().subscribe((user) => {
       if (user) {
         console.log(user);
@@ -38,13 +38,24 @@ export class NewProjectDialogComponent {
     });
   }
   onClose() {
-    this.projectsCollection.add({ name: this.options.get('name').value, color: this.options.get('color').value }).then(result => {
-      // tslint:disable-next-line:max-line-length
-      this.shared.openSnackBar({ msg: 'Project was added', additionalOpts: { duration: 5000, panelClass: 'mat-elevation-z3', horizontalPosition: 'start' } });
+    this.projectsCollection.add({
+      name: this.options.get('name').value,
+      color: this.options.get('color').value
+    }).then(result => {
+      this.shared.openSnackBar({
+        msg: 'Project was added',
+        additionalOpts: {
+          duration: 5000
+        }
+      });
       console.log(`Successfully written data with result: ${result}`);
     }, error => {
-      // tslint:disable-next-line:max-line-length
-      this.shared.openSnackBar({ msg: `An error occured: ${error.message}`, additionalOpts: { duration: 6000, horizontalPosition: 'start' }, hasElevation: true });
+      this.shared.openSnackBar({
+        msg: `An error occured: ${error.message}`,
+        additionalOpts: {
+          duration: 6000
+        }
+      });
       console.error(`An error occured: ${error.message}`);
     });
   }
