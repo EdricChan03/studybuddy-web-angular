@@ -1,6 +1,6 @@
 import * as firebase from 'firebase';
 
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, Inject } from '@angular/core';
 import { Message, MessageImportance, MessagingService } from './messaging.service';
 import {
   NavigationStart,
@@ -10,6 +10,7 @@ import {
   Router,
   Event
 } from '@angular/router';
+import { DOCUMENT } from '@angular/platform-browser';
 
 import { AngularFirestore } from 'angularfire2/firestore';
 import { MatDialog } from '@angular/material/dialog';
@@ -42,7 +43,8 @@ export class AppComponent implements OnInit {
     private afFs: AngularFirestore,
     private dialog: MatDialog,
     // TODO(Edric): Figure out a way to make this private
-    public messagingService: MessagingService
+    public messagingService: MessagingService,
+    @Inject(DOCUMENT) private document: Document
   ) {
     this.userObservable = auth.getAuthState();
     auth.getAuthState().subscribe((user) => {
@@ -57,8 +59,10 @@ export class AppComponent implements OnInit {
       }
     });
     if (!this.shared.isOnline) {
-      // tslint:disable-next-line:max-line-length
-      const snackBarRef = this.shared.openSnackBar({ msg: 'You are offline. Some actions will not be available.', action: 'Retry', additionalOpts: { panelClass: 'mat-elevation-z3', horizontalPosition: 'start' } });
+      const snackBarRef = this.shared.openSnackBar({
+        msg: 'You are offline. Some actions will not be available.',
+        action: 'Retry'
+      });
       snackBarRef.onAction().subscribe(() => {
         window.location.reload(true);
       });
@@ -71,6 +75,15 @@ export class AppComponent implements OnInit {
       }
       this.navigationInterceptor(event);
     });
+    if (this.shared.isDarkThemeEnabled) {
+      if (!this.document.body.classList.contains('studybuddy-dark')) {
+        this.document.body.classList.add('studybuddy-dark');
+      }
+    } else {
+      if (this.document.body.classList.contains('studybuddy-dark')) {
+        this.document.body.classList.remove('studybuddy-dark');
+      }
+    }
   }
   get messages(): Message[] {
     return this.messagingService.messages;
@@ -78,8 +91,22 @@ export class AppComponent implements OnInit {
   /**
    * Checks whether the user is using a mobile device
    */
-  get isMobile() {
+  get isMobile(): boolean {
     return this.shared.isMobile;
+  }
+  /**
+   * Whether to enable notifications
+   */
+  get isNotificationsEnabled(): boolean {
+    if (this.shared.settings === null) {
+      return false;
+    } else {
+      if (this.shared.settings.hasOwnProperty('enableNotifications')) {
+        return this.shared.settings['enableNotifications'];
+      } else {
+        return false;
+      }
+    }
   }
   /**
    * The sidenav
@@ -195,6 +222,11 @@ export class AppComponent implements OnInit {
         this.toggleState.push('notToggled');
       }
     });
+    if (this.shared.settings !== null && this.shared.settings.hasOwnProperty('showTodosAsTable')) {
+      const settingsStorage = this.shared.settings;
+      settingsStorage['todoView'] = this.shared.settings['showTodosAsTable'] ? 'table' : 'list';
+      this.shared.settings = settingsStorage;
+    }
   }
   navigationInterceptor(event: Event) {
     if (event instanceof NavigationStart) {
@@ -246,13 +278,23 @@ export class AppComponent implements OnInit {
     }
   }
   logOut() {
-    // tslint:disable-next-line:max-line-length
-    const dialogRef = this.shared.openConfirmDialog({ title: 'Log out?', msg: 'Changes not saved will be lost.', ok: 'Log out', okColor: 'warn' });
+    const dialogRef = this.shared.openConfirmDialog({
+      title: 'Log out?',
+      msg: 'Changes not saved will be lost.',
+      ok: 'Log out',
+      okColor: 'warn'
+    });
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'ok') {
         this.auth.logOut().then((res) => {
-          // tslint:disable-next-line:max-line-length
-          const snackbarRef = this.shared.openSnackBar({ msg: 'Signed out', action: 'Undo', additionalOpts: { duration: 4000, horizontalPosition: 'start' } });
+          const snackbarRef = this.shared.openSnackBar({
+            msg: 'Signed out',
+            action: 'Undo',
+            additionalOpts: {
+              duration: 4000,
+              horizontalPosition: 'start'
+            }
+          });
           snackbarRef.onAction().subscribe(() => {
             this.newSignIn('google');
           });
@@ -268,30 +310,94 @@ export class AppComponent implements OnInit {
       ref.close();
     }
   }
+  // TODO(Edric): Remove this method
   toggleNotificationSettings() {
     this.showNotificationSettings = !this.showNotificationSettings;
   }
+  // TODO(Edric): Remove this method
   addDebugMessage() {
     if (environment.production) {
-      console.error('Please run this app in developer mode for this method to function. Aborting..');
+      console.error('This functionality only works in developer mode.');
     } else {
       this.tempId++;
       const random = Math.floor((Math.random() * 5) + 1);
       switch (random) {
         case 1:
-          this.messagingService.addMessage({ category: 'Product announcements', title: 'Check out the all new XX feature which is available starting today!', date: this.todayDate, id: `debug-${this.tempId}`, importanceLevel: MessageImportance.Low, actions: [{ title: 'Read blogpost', onClickListener: (ev) => { window.location.href = 'https://example.com'; } }] });
+          this.messagingService.addMessage({
+            category: 'Product announcements',
+            title: 'Check out the all new XX feature which is available starting today!',
+            date: this.todayDate,
+            id: `debug-${this.tempId}`,
+            importanceLevel: MessageImportance.Low,
+            actions: [
+              {
+                title: 'Read blogpost',
+                onClickListener: (ev) => {
+                  window.location.href = 'https://example.com';
+                }
+              }
+            ]
+          });
           break;
         case 2:
-          this.messagingService.addMessage({ category: 'Critical alert', title: 'Feature xx is currently down. Please stand by for more updates.', date: this.todayDate, id: `debug-${this.tempId}`, importanceLevel: MessageImportance.Critical, actions: [{ title: 'Dismiss', onClickListener: (ev) => { window.location.href = 'https://example.com'; } }] });
+          this.messagingService.addMessage({
+            category: 'Critical alert',
+            title: 'Feature xx is currently down. Please stand by for more updates.',
+            date: this.todayDate,
+            id: `debug-${this.tempId}`,
+            importanceLevel: MessageImportance.High,
+            actions: [{
+              title: 'Dismiss',
+              onClickListener: (ev) => {
+                window.location.href = 'https://example.com';
+              }
+            }]
+          });
           break;
         case 3:
-          this.messagingService.addMessage({ category: 'Notification', title: 'Hi there!', date: this.todayDate, id: `debug-${this.tempId}`, importanceLevel: MessageImportance.Low, actions: [{ title: 'Dismiss', onClickListener: (ev) => { window.location.href = 'https://example.com'; } }] });
+          this.messagingService.addMessage({
+            category: 'Notification',
+            title: 'Hi there!',
+            date: this.todayDate,
+            id: `debug-${this.tempId}`,
+            importanceLevel: MessageImportance.Low,
+            actions: [{
+              title: 'Dismiss',
+              onClickListener: (ev) => {
+                window.location.href = 'https://example.com';
+              }
+            }]
+          });
           break;
         case 4:
-          this.messagingService.addMessage({ category: 'Newsletter', title: 'This week\'s newsletter', date: this.todayDate, id: `debug-${this.tempId}`, importanceLevel: MessageImportance.Medium, actions: [{ title: 'Dismiss', onClickListener: (ev) => { window.location.href = 'https://example.com'; } }] });
+          this.messagingService.addMessage({
+            category: 'Newsletter',
+            title: 'This week\'s newsletter',
+            date: this.todayDate,
+            id: `debug-${this.tempId}`,
+            importanceLevel: MessageImportance.Medium,
+            actions: [{
+              title: 'Dismiss',
+              onClickListener: (ev) => {
+                window.location.href = 'https://example.com';
+              }
+            }]
+          });
           break;
         case 5:
-          this.messagingService.addMessage({ category: 'Critical alert', title: 'Update: All features are back up!', date: this.todayDate, id: `debug-${this.tempId}`, importanceLevel: MessageImportance.Critical, actions: [{ title: 'Dismiss', onClickListener: (ev) => { window.location.href = 'https://example.com'; } }] });
+          this.messagingService.addMessage({
+            category: 'Critical alert',
+            title: 'Update: All features are back up!',
+            date: this.todayDate,
+            id: `debug-${this.tempId}`,
+            importanceLevel: MessageImportance.High,
+            actions: [{
+              title: 'Dismiss',
+              onClickListener: (ev) => {
+                window.location.href = 'https://example.com';
+              }
+            }]
+          });
           break;
         default:
           break;
@@ -302,16 +408,26 @@ export class AppComponent implements OnInit {
     this.dialog.open(UserInfoDialogComponent);
   }
   /**
-   * Signs out the user
+   * Shows a confirmation dialog before logging out the user.
    */
   signOut() {
-    // tslint:disable-next-line:max-line-length
-    const dialogRef = this.shared.openConfirmDialog({ title: 'Log out?', msg: 'Changes not saved will be lost.', ok: 'Log out', okColor: 'warn' });
+    const dialogRef = this.shared.openConfirmDialog({
+      title: 'Log out?',
+      msg: 'Changes not saved will be lost! Continue?',
+      ok: 'Log out',
+      okColor: 'warn'
+    });
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'ok') {
         this.auth.logOut().then((res) => {
-          // tslint:disable-next-line:max-line-length
-          const snackbarRef = this.shared.openSnackBar({ msg: 'Signed out', action: 'Undo', additionalOpts: { duration: 4000, horizontalPosition: 'start' } });
+          const snackbarRef = this.shared.openSnackBar({
+            msg: 'Signed out',
+            action: 'Undo',
+            additionalOpts: {
+              duration: 4000,
+              horizontalPosition: 'start'
+            }
+          });
           snackbarRef.onAction().subscribe(() => {
             this.newSignIn('google');
           });
@@ -323,25 +439,18 @@ export class AppComponent implements OnInit {
     });
   }
   /**
-   * @deprecated Use {@link AppComponent#signInWithGoogle} instead or {@link AppComponent#newSignIn}
-   */
-  signIn() {
-    this.signInWithGoogle();
-  }
-  /**
    * Signs in with Google
    */
   signInWithGoogle() {
     this.auth.logInWithGoogle().then((result) => {
-      // tslint:disable-next-line:max-line-length
-      this.shared.openSnackBar({ msg: `Signed in as ${result.user.email}`, additionalOpts: { duration: 4000, horizontalPosition: 'start', panelClass: 'mat-elevation-z3' } });
+      this.shared.openSnackBar({ msg: `Signed in as ${result.user.email}` });
     }).catch((error) => {
       this.handleError(error.message);
     });
   }
   /**
    * Uses new sign in
-   * @param {'google'|'anonymous'|'email'} authType The authentication type (optional, assumes default method is Google)
+   * @param authType The authentication type (optional, assumes default method is Google)
    */
   newSignIn(authType?: 'google' | 'anonymous' | 'email', params?: any) {
     // Checks if the authType argument is passed
@@ -364,10 +473,6 @@ export class AppComponent implements OnInit {
       this.signInWithGoogle();
     }
   }
-  exportData() {
-    // tslint:disable-next-line:max-line-length
-    this.shared.openAlertDialog({ title: 'Export data', msg: '<p>Unfortunately, there\'s currently no such support for exporting/ importing data from/ to the database.</p><p>You should probably keep a physical copy of your notes somewhere! :)</p>', isHtml: true, ok: 'Dismiss' });
-  }
   deleteData() {
     this.afFs.doc(`users/${this.user.uid}`)
       .delete()
@@ -379,36 +484,41 @@ export class AppComponent implements OnInit {
       });
   }
   deleteUser() {
-    // tslint:disable-next-line:max-line-length
-    const confirmDialogRef = this.shared.openConfirmDialog({ title: 'Unregister?', msg: '<p>Unregistering will clear all data associated with your account.</p><p><strong>Take note that if you would like to save your data, you can do so by going to Account > Export data.</strong></p>', isHtml: true, ok: 'Unregister and delete data' });
+    const confirmDialogRef = this.shared.openConfirmDialog({
+      title: 'Unregister?',
+      msg: `<p>Unregistering will clear all data associated with your account.</p>
+      <p><strong>Take note that if you would like to save your data, you can do so by going to Account > Export data.</strong></p>`,
+      isHtml: true,
+      ok: 'Unregister and delete data'
+    });
     confirmDialogRef.afterClosed().subscribe(result => {
-      if (result === 'ok') {
-        // tslint:disable-next-line:max-line-length
-        const doubleConfirmDialogRef = this.shared.openConfirmDialog({ title: 'Really unregister?', msg: 'If you did not export your data, all of your data will be deleted! Continue?', ok: 'Unregister and delete data', okColor: 'warn', hasCheckbox: true, checkboxLabel: 'I confirm that I have backed up all data and that deleting my account will remove all data associated with my account.', checkboxColor: 'primary', dialogRequiresCheckbox: true });
-        doubleConfirmDialogRef.afterClosed().subscribe(result2 => {
-          console.log(result2);
-          console.log(this.user);
-          if (result2 === 'ok' && this.user) {
-            this.deleteData();
-            this.user.delete().then(() => {
-              console.log('User successfully deleted!');
-              // tslint:disable-next-line:max-line-length
-              this.shared.openSnackBar({ msg: 'User successfully deleted from database', additionalOpts: { duration: 4000, panelClass: 'mat-elevation-z3', horizontalPosition: 'start' } });
-            }).catch((error) => {
-              console.error(error);
-              if (error === 'auth/requires-recent-login') {
-                // User has logged in for a while. Firebase needs the user to have a recent login in order for this to work.
-                this.user.reauthenticateWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => {
-                  this.deleteUser();
-                })
-                  .catch((error2) => {
-                    console.error(error2);
-                    this.handleError(error2.message);
-                  });
-              }
-              this.handleError(error.message);
+      if (result === 'ok' && this.user) {
+        this.deleteData();
+        this.user.delete().then(() => {
+          console.log('User successfully deleted!');
+          this.shared.openSnackBar({
+            msg: 'Successfully unregistered!'
+          });
+        }).catch((error) => {
+          console.error(error);
+          if (error === 'auth/requires-recent-login') {
+            const snackBarRef = this.shared.openSnackBar({
+              msg: 'Please relogin before unregistering first.',
+              action: 'Relogin'
+            });
+            snackBarRef.onAction().subscribe(_ => {
+              // User has not logged in for a while.
+              // Firebase auth needs the user to have a recent login in order for this to work.
+              this.user.reauthenticateWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => {
+                this.deleteUser();
+              })
+                .catch((snackBarError) => {
+                  console.error(snackBarError);
+                  this.handleError(snackBarError.message);
+                });
             });
           }
+          this.handleError(error.message);
         });
       }
     });
