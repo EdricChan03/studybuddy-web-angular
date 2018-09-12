@@ -21,7 +21,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { ComponentType } from '@angular/cdk/portal';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -31,6 +31,7 @@ import { Settings } from './interfaces';
 import { ThemePalette } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { AngularFirestore } from 'angularfire2/firestore';
+import { ToolbarService } from './toolbar.service';
 
 /**
  * This callback gets called when the action button has been clicked
@@ -40,7 +41,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 /**
  * This callback gets called when the toolbar button has been clicked
  * @callback SharedService~toolbarBtnCallback
- * @param {Event} event The event of the button
+ * @param event The event of the button
  */
 
 /**
@@ -65,7 +66,6 @@ export class SharedService {
     public documentTitle: Title,
     public breakpointObserver: BreakpointObserver
   ) { }
-  private _settings: Settings = {};
   private _title = '';
   private _extraToolbarConfig: ExtraToolbarConfig;
   // Getters and setters
@@ -95,11 +95,29 @@ export class SharedService {
       return false;
     }
   }
+  /**
+   * Returns the settings saved to LocalStorage.
+   * Note: If the settings haven't been set yet, it will return `null`.
+   */
   get settings(): Settings {
-    return <Settings>JSON.parse(window.localStorage.getItem('settings'));
+    return window.localStorage.getItem('settings') === null ? null : <Settings>JSON.parse(window.localStorage.getItem('settings'));
   }
   set settings(settings: Settings) {
-    this._settings = settings;
+    window.localStorage.setItem('settings', JSON.stringify(settings));
+  }
+  /**
+   * Checks if dark theme mode is enabled
+   */
+  get isDarkThemeEnabled() {
+    if (this.settings === null) {
+      return false;
+    } else {
+      if (this.settings.hasOwnProperty('enableDarkTheme')) {
+        return this.settings.enableDarkTheme;
+      } else {
+        return false;
+      }
+    }
   }
   get extraToolbarConfig(): ExtraToolbarConfig {
     return this._extraToolbarConfig;
@@ -127,7 +145,7 @@ export class SharedService {
     return this.handleSnackBar(opts);
   }
   /**
-   * Opens a snack-bar with arguments.
+   * Opens a snack-bar with arguments. (A simplified version of {@link #openSnackBar})
    * @param msg The message for the snack-bar.
    * @param action The action for the snack-bar. Leave as `null` to remove the action.
    * @param duration The duration for the snack-bar to appear.
@@ -406,7 +424,12 @@ export class SharedService {
     <span *ngIf="alertConfig.isHtml" [innerHTML]="alertConfig.msg"></span>
   </mat-dialog-content>
   <mat-dialog-actions align="end">
-    <button mat-button [color]="alertConfig.okColor ? alertConfig.okColor : 'primary'" (click)="close()">{{alertConfig.ok ? alertConfig.ok : 'Dismiss'}}</button>
+    <button
+      mat-button
+      [color]="alertConfig.okColor ? alertConfig.okColor : 'primary'"
+      (click)="close()">
+      {{alertConfig.ok ? alertConfig.ok : 'Dismiss'}}
+    </button>
   </mat-dialog-actions>
   `
 })
@@ -431,19 +454,34 @@ export class AlertDialog implements OnInit {
     <p class="mat-body" *ngIf="!confirmConfig.isHtml">{{confirmConfig.msg}}</p>
     <span *ngIf="confirmConfig.isHtml" [innerHTML]="confirmConfig.msg"></span>
     <div class="checkbox-box" *ngIf="confirmConfig.hasCheckbox">
-      <mat-checkbox [color]="confirmConfig.checkboxColor" [(ngModel)]="confirmConfig.checkboxValue">{{confirmConfig.checkboxLabel}}</mat-checkbox>
+      <mat-checkbox
+        [color]="confirmConfig.checkboxColor"
+        [(ngModel)]="confirmConfig.checkboxValue">
+        {{confirmConfig.checkboxLabel}}
+      </mat-checkbox>
     </div>
   </mat-dialog-content>
   <mat-dialog-actions align="end">
-    <button mat-button (click)="cancel()" [color]="confirmConfig.cancelColor ? confirmConfig.cancelColor : 'primary'">{{confirmConfig.cancel ? confirmConfig.cancel : 'Cancel'}}</button>
-    <button mat-button (click)="ok()" [color]="confirmConfig.okColor ? confirmConfig.okColor : 'primary'" [disabled]="okBtnDisabled">{{confirmConfig.ok ? confirmConfig.ok : 'OK'}}</button>
+    <button
+      mat-button
+      (click)="cancel()"
+      [color]="confirmConfig.cancelColor ? confirmConfig.cancelColor : 'primary'">
+      {{confirmConfig.cancel ? confirmConfig.cancel : 'Cancel'}}
+    </button>
+    <button
+      mat-button
+      (click)="ok()"
+      [color]="confirmConfig.okColor ? confirmConfig.okColor : 'primary'"
+      [disabled]="okBtnDisabled">
+      {{confirmConfig.ok ? confirmConfig.ok : 'OK'}}
+    </button>
   </mat-dialog-actions>
   `,
   styles: [
     `
     .checkbox-box {
       padding: 8px;
-      background-color: grey;
+      border: 1px solid grey;
       overflow-wrap: break-word;
       word-wrap: break-word;
       hyphens: auto;
@@ -482,40 +520,92 @@ export class ConfirmDialog implements OnInit {
 @Component({
   selector: 'prompt-dialog',
   template: `
-  <h2 matDialogTitle>{{promptConfig.title ? promptConfig.title : 'Prompt'}}</h2>
+  <h2 matDialogTitle>{{_returnIfValid(promptConfig.title, 'Prompt')}}</h2>
   <mat-dialog-content fxLayout="column" class="mat-typography">
     <p class="mat-body" *ngIf="!promptConfig.isHtml">{{promptConfig.msg}}</p>
     <span *ngIf="promptConfig.isHtml" [innerHTML]="promptConfig.msg"></span>
-    <form #form="ngForm">
-      <mat-form-field [color]="promptConfig.inputColor ? promptConfig.inputColor : 'primary'" style="width:100%">
-        <input matInput [(ngModel)]="input" [placeholder]="promptConfig.placeholder" [type]="promptConfig.inputType ? promptConfig.inputType : 'text'" required name="input">
-        <mat-error>This is required.</mat-error>
-      </mat-form-field>
-    </form>
+    <mat-form-field [color]="_returnIfValid(promptConfig.inputColor, 'primary')" style="width:100%">
+      <mat-label>{{promptConfig.placeholder}}</mat-label>
+      <input
+        matInput
+        [type]="_returnIfValid(promptConfig.inputType, 'text')"
+        required
+        [formControl]="input">
+      <ng-container *ngIf="promptConfig?.errorTypes">
+        <ng-container *ngFor="let error of promptConfig?.errorTypes">
+          <mat-error *ngIf="input?.hasError(error?.errorType)">{{error?.errorText}}</mat-error>
+        </ng-container>
+      </ng-container>
+    </mat-form-field>
   </mat-dialog-content>
   <mat-dialog-actions align="end">
-    <button mat-button (click)="cancel()" [color]="promptConfig.cancelColor ? promptConfig.cancelColor : 'primary'">{{promptConfig.cancel ? promptConfig.cancel : 'Cancel'}}</button>
-    <button mat-button (click)="ok()" [color]="promptConfig.okColor ? promptConfig.okColor : 'primary'" [disabled]="form.invalid">{{promptConfig.ok ? promptConfig.ok : 'OK'}}</button>
+    <button mat-button
+      (click)="cancel()"
+      [color]="_returnIfValid(promptConfig.cancelColor, 'primary')">
+      {{_returnIfValid(promptConfig.cancel, 'Cancel')}}
+      </button>
+    <button mat-button
+      (click)="ok()"
+      [color]="_returnIfValid(promptConfig.okColor, 'primary')"
+      [disabled]="input?.invalid">
+      {{_returnIfValid(promptConfig.ok, 'OK')}}
+      </button>
   </mat-dialog-actions>
   `
 })
 export class PromptDialog implements OnInit {
-  constructor(private dialogRef: MatDialogRef<PromptDialog>) {
-  }
+  constructor(private dialogRef: MatDialogRef<PromptDialog>) { }
+  /**
+   * The configuration of the dialog
+   */
   promptConfig: PromptDialogConfig;
-  input: string | number;
+  /**
+   * The input of the dialog's prompt
+   */
+  input: FormControl = new FormControl();
+  // Since this is used often in the HTML template, it'll be much easier if this
+  // was extracted a method that could be used instead of having to do a null check
+  // for checking if the property is non-null. If the property is null, return a default
+  // value as specified in the second parameter.
+  _returnIfValid(propertyToCheck: any, defaultValue: any): any {
+    return propertyToCheck ? propertyToCheck : defaultValue;
+  }
   cancel() {
-    this.dialogRef.close('cancel');
+    // Close the dialog with a result of 'cancel'. Developers can check for this event by
+    // doing a check if the result of the dialog is 'cancel' when the input's type is set
+    // to number, or by checking it the result ofthe dialog is `-1` when the input's type
+    // is set to string.
+    if (typeof this.input.value === 'number') {
+      this.dialogRef.close('cancel');
+    } else {
+      this.dialogRef.close(-1);
+    }
   }
   ok() {
-    this.dialogRef.close(this.input);
+    // Close the dialog with the value of the input. The value of the input can then be
+    // accessed by accessing the result of the `afterClosed` event.
+    this.dialogRef.close(this.input.value);
   }
   ngOnInit() {
+    // Check if the devleoper has set the initial value for the prompt
     if (this.promptConfig.value) {
-      this.input = this.promptConfig.value;
+      this.input.setValue(this.promptConfig.value);
     }
+    // Check if the developer has enabled the `disableClose` config setting which prevents the
+    // user from clicking outside the dialog to close it.
     if (this.promptConfig.disableClose) {
       this.dialogRef.disableClose = true;
+    }
+    // HAndler for error types
+    if (this.promptConfig.errorTypes) {
+      const configErrorTypes = this.promptConfig.errorTypes;
+      const errorTypes = [];
+      // Loop through
+      for (let errorTypeI = 0; errorTypeI < configErrorTypes.length; errorTypeI++) {
+        errorTypes.push(configErrorTypes[errorTypeI].errorType);
+      }
+      console.log(errorTypes);
+      this.input.setErrors(errorTypes);
     }
   }
 }
@@ -525,14 +615,23 @@ export class PromptDialog implements OnInit {
   <h2 matDialogTitle>{{selectionConfig.title ? selectionConfig.title : 'Select options from the list'}}</h2>
   <mat-dialog-content fxLayout="column" class="mat-typography">
     <mat-selection-list #selection>
-      <mat-list-option *ngFor="let option of selectionConfig.options" [disabled]="option.disabled" [value]="option.value" [checkboxPosition]="option.checkboxPosition ? option.checkboxPosition : 'before'" [selected]="option.selected">
+      <mat-list-option
+        *ngFor="let option of selectionConfig.options"
+        [disabled]="option.disabled"
+        [value]="option.value"
+        [checkboxPosition]="option.checkboxPosition ? option.checkboxPosition : 'before'"
+        [selected]="option.selected">
         {{option.content}}
       </mat-list-option>
     </mat-selection-list>
   </mat-dialog-content>
   <mat-dialog-actions align="end">
     <button mat-button color="primary" (click)="cancel()">{{selectionConfig.cancel ? selectionConfig.cancel : 'Cancel'}}</button>
-    <button mat-button color="primary" (click)="ok()" [disabled]="selection.selectedOptions.selected.length < 1">{{selectionConfig.ok ? selectionConfig.ok : 'OK'}}</button>
+    <button
+      mat-button
+      [color]="selectionConfig.okColor ? selectionConfig.okColor : 'primary'"
+      (click)="ok()"
+      [disabled]="selection.selectedOptions.selected.length < 1">{{selectionConfig.ok ? selectionConfig.ok : 'OK'}}</button>
   </mat-dialog-actions>
   `
 })
@@ -651,6 +750,17 @@ export class ConfirmDialogConfig extends DialogConfig {
   checkboxValue?: boolean;
 }
 
+export interface PromptDialogConfigErrorType {
+  /**
+   * The text to show when the error occurs
+   */
+  errorText: string;
+  /**
+   * The type of error.
+   */
+  errorType: string;
+}
+
 export class PromptDialogConfig extends DialogConfig {
   /**
    * The ok button text
@@ -684,6 +794,10 @@ export class PromptDialogConfig extends DialogConfig {
    * The color of the input
    */
   inputColor?: ThemePalette;
+  /**
+   * Error types to show on the input
+   */
+  errorTypes?: PromptDialogConfigErrorType[];
 }
 export class SelectionDialogConfig extends DialogConfig {
   /**
@@ -740,6 +854,7 @@ const SHARED_MODULES = [
   BrowserModule,
   BrowserAnimationsModule,
   FormsModule,
+  ReactiveFormsModule,
   MatButtonModule,
   MatDialogModule,
   MatFormFieldModule,
