@@ -73,16 +73,21 @@ export class TodoDialogComponent implements OnInit {
       this.todoCollection = this.afFs.collection(`users/${afAuth.auth.currentUser.uid}/todos`);
     } else {
       // User isn't signed in! Add todo stuff to disable dialog
-      // tslint:disable-next-line:max-line-length
-      const loginDialogRef = this.shared.openConfirmDialog({ title: 'Login before continuing', disableClose: true, isHtml: true, msg: '<p>To access this content, please login before continuing.</p><p>If you believe that this is an error and that you are already signed in, DM me on Twitter at @EdricChan03.</p><p><strong>Note: Please enable popups before clicking the Login button. This will be the only time popups will show.</strong></p>', ok: 'Login' });
+      const loginDialogRef = this.shared.openConfirmDialog({
+        title: 'Login before continuing',
+        disableClose: true,
+        isHtml: true,
+        msg: `<p>To access this content, please login before continuing.</p>
+        <p><strong>Note: Please enable popups before clicking the Login button.</strong></p>`,
+        ok: 'Login'
+      });
       loginDialogRef.afterClosed().subscribe(result => {
         if (result === 'ok') {
-          this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then((a) => {
-            // tslint:disable-next-line:max-line-length
-            this.shared.openSnackBar({ msg: `Signed in as ${a.user.email}`, additionalOpts: { duration: 4000, horizontalPosition: 'start', panelClass: 'mat-elevation-z3' } });
+          // tslint:disable-next-line:no-shadowed-variable
+          this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then((result) => {
+            this.shared.openSnackBar({ msg: `Signed in as ${result.user.email}` });
           }, err => {
-            // tslint:disable-next-line:max-line-length
-            this.shared.openSnackBar({ msg: `Error: ${err.message}`, additionalOpts: { duration: 4000, horizontalPosition: 'start', panelClass: 'mat-elevation-z3' } });
+            this.shared.openSnackBar({ msg: `Error: ${err.message}` });
           });
         }
         this.dialogRef.close();
@@ -189,7 +194,7 @@ export class TodoDialogComponent implements OnInit {
   }*/
   saveOrAddTodo() {
     if (this.isNewTodo) {
-      const itemToAdd: TodoItem = {title: ''};
+      const itemToAdd: TodoItem = { title: '' };
       for (const prop in this.todoFormRawValue) {
         if (this.todoFormRawValue.hasOwnProperty(prop) && this.todoFormRawValue[prop] !== null) {
           switch (prop) {
@@ -216,24 +221,30 @@ export class TodoDialogComponent implements OnInit {
         }
       }
       this.todoCollection.doc(itemToAdd.id).set(itemToAdd).then(result => {
-        // tslint:disable-next-line:max-line-length
-        this.shared.openSnackBar({ msg: 'Todo was added', additionalOpts: { duration: 5000, panelClass: 'mat-elevation-z3', horizontalPosition: 'start' } });
+        this.shared.openSnackBar({ msg: 'Todo was added' });
         console.log(`Successfully written data with result: ${result}`);
       }, error => {
-        // tslint:disable-next-line:max-line-length
-        this.shared.openSnackBar({ msg: `An error occured: ${error.message}`, additionalOpts: { duration: 6000, horizontalPosition: 'start' }, hasElevation: true });
+        this.shared.openSnackBar({
+          msg: `An error occured: ${error.message}`,
+          additionalOpts: {
+            duration: 6000
+          }
+        });
         console.error(`An error occured: ${error.message}`);
       });
     } else {
       this.todoCollection.doc<TodoItem>(this.todoToEdit.id)
         .update(this.todoFormRawValue)
         .then(result => {
-          // tslint:disable-next-line:max-line-length
-          this.shared.openSnackBar({ msg: 'Todo was updated', additionalOpts: { duration: 5000, horizontalPosition: 'start' }, hasElevation: true });
+          this.shared.openSnackBar({
+            msg: 'Successfully updated todo!'
+          });
           console.log(`Successfully updated data with result: ${result}`);
         }, error => {
-          // tslint:disable-next-line:max-line-length
-          this.shared.openSnackBar({ msg: `An error occured: ${error.message}`, additionalOpts: { duration: 6000, horizontalPosition: 'start' }, hasElevation: true });
+          this.shared.openSnackBar({
+            msg: `An error occured: ${error.message}`,
+            additionalOpts: { duration: 6000 }
+          });
           console.error(`An error occured: ${error.message}`);
         });
     }
