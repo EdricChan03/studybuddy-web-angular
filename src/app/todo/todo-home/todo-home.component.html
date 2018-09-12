@@ -1,4 +1,4 @@
-<mat-toolbar *ngIf="!toolbarService.showToolbar" class="mat-elevation-z3 overlay-toolbar">
+<mat-toolbar *ngIf="!toolbar.showToolbar" class="mat-elevation-z3 overlay-toolbar">
   <button mat-icon-button (click)="clearSelectedTodos()" matTooltip="Clear selection">
     <mat-icon>close</mat-icon>
   </button>
@@ -30,7 +30,7 @@
     <mat-button-toggle value="table" matTooltip="Table view">
       <mat-icon svgIcon="mdi:table"></mat-icon>
     </mat-button-toggle>
-    <mat-button-toggle value="agenda" matTooltip="Agenda view" disabled>
+    <mat-button-toggle value="agenda" matTooltip="Agenda view">
       <mat-icon>view_agenda</mat-icon>
     </mat-button-toggle>
   </mat-button-toggle-group>
@@ -40,7 +40,7 @@
       <mat-cell *matCellDef="let todo"><mat-checkbox
         [checked]="todo.hasDone"
         (change)="stopPropogation($event); toggleChecked(todo)"
-        *ngIf="toolbarService.showToolbar"></mat-checkbox></mat-cell>
+        *ngIf="toolbar.showToolbar"></mat-checkbox></mat-cell>
     </ng-container>
     <ng-container matColumnDef="title">
       <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
@@ -61,7 +61,7 @@
       class="app-todo-list-item"
       disableRipple
       @todoUpdateAnim>
-      <mat-icon matListIcon *ngIf="!toolbarService.showToolbar">
+      <mat-icon matListIcon *ngIf="!toolbar.showToolbar">
         <svg width="24px" height="24px" viewBox="0 0 24 24" *ngIf="hasListItemSelected(todo)" fill="#673ab7">
           <path d="M10,17L5,12L6.41,10.58L10,14.17L17.59,6.58L19,8M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"
           />
@@ -74,7 +74,7 @@
       <mat-checkbox
         [checked]="todo.hasDone"
         (change)="stopPropogation($event); toggleChecked(todo)"
-        *ngIf="toolbarService.showToolbar"
+        *ngIf="toolbar.showToolbar"
         matListIcon></mat-checkbox>
       <h3 matLine>{{todo?.title}}</h3>
       <span matLine [innerHTML]="todo?.content | markdown"></span>
@@ -102,7 +102,7 @@
         <span>Project: {{todo?.project}}</span>
       </span>
       <span fxFlex></span>
-      <ng-container *ngIf="toolbarService.showToolbar">
+      <ng-container *ngIf="toolbar.showToolbar">
         <button [matMenuTriggerFor]="moreActionsMenu" mat-icon-button (click)="stopPropogation($event)">
           <mat-icon>more_vert</mat-icon>
         </button>
@@ -120,13 +120,31 @@
             Mark todo as {{todo?.hasDone ? 'undone' : 'done'}}
           </button>
         </mat-menu>
-        <button mat-icon-button matTooltip="Remove todo" (click)="removeTodo(todo?.id, false, $event)" *ngIf="toolbarService.showToolbar">
+        <button mat-icon-button matTooltip="Remove todo" (click)="removeTodo(todo?.id, false, $event)" *ngIf="toolbar.showToolbar">
           <mat-icon>delete</mat-icon>
         </button>
       </ng-container>
       <mat-divider></mat-divider>
     </mat-list-item>
   </mat-nav-list>
+  <ng-container [style.display]="todoView === 'agenda' ? 'block' : 'none'">
+    <mat-card *ngFor="let todo of todos$ | async">
+      <mat-card-title>{{ todo?.title }}</mat-card-title>
+      <mat-card-content>
+        <div [innerHTML]="todo?.content | markdown"></div>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button mat-button color="primary" (click)="toggleChecked(todo)">
+          <mat-icon>{{todo?.hasDone ? 'check_box_outline_blank' : 'check_box'}}</mat-icon>
+          Mark todo as {{todo?.hasDone ? 'undone' : 'done'}}
+        </button>
+        <button mat-button color="warn" disabled>
+          <mat-icon>archive</mat-icon>
+          Archive todo
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </ng-container>
 </ng-container>
 <!-- <mat-table #table [dataSource]="dataSource" *ngIf="todoTable">
     <ng-container matColumnDef="title">
@@ -175,6 +193,6 @@
   <mat-paginator #paginator [length]="dataLength?.length" [pageIndex]="0" [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]"
    *ngIf="todoTable">
   </mat-paginator> -->
-<button mat-fab (click)="newTodo()" matTooltip="New todo" matTooltipPosition="left" class="new-todo-fab" *ngIf="toolbarService.showToolbar">
+<button mat-fab (click)="newTodo()" matTooltip="New todo" matTooltipPosition="left" class="new-todo-fab" *ngIf="toolbar.showToolbar">
   <mat-icon>add</mat-icon>
 </button>

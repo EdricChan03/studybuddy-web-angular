@@ -10,9 +10,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { SharedService } from '../../shared.service';
 import { TodoItem } from '../../interfaces';
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
-// tslint:disable-next-line:import-blacklist
 import { Observable } from 'rxjs';
 import { transition, style, animate, trigger, keyframes } from '@angular/animations';
 import { MatTableDataSource } from '@angular/material/table';
@@ -34,7 +33,7 @@ import { MatTableDataSource } from '@angular/material/table';
       )])
   ]
 })
-export class TodoHomeComponent implements OnInit, AfterViewInit {
+export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatMenuTrigger) rightClickMenu: MatMenuTrigger;
   currentUser: string;
   todos$: Observable<TodoItem[]>;
@@ -45,28 +44,25 @@ export class TodoHomeComponent implements OnInit, AfterViewInit {
   columnsToDisplay = ['hasDone', 'title', 'content'];
   constructor(
     private shared: SharedService,
-    private afAuth: AngularFireAuth,
+    public toolbar: ToolbarService,
     private dialog: MatDialog,
-    private afFs: AngularFirestore,
     private dom: DomSanitizer,
-    public toolbarService: ToolbarService
+    private afFs: AngularFirestore,
+    private afAuth: AngularFireAuth
   ) {
     shared.title = 'Todos';
     afAuth.auth.onAuthStateChanged((user) => {
       if (user) {
-        console.log(user);
         this.currentUser = user.uid;
         this.todosCollection = this.afFs.collection<TodoItem>(`users/${this.currentUser}/todos`);
         this.todos$ = this.todosCollection.snapshotChanges().pipe(map(actions => {
           return actions.map(a => {
+            // tslint:disable-next-line:no-shadowed-variable
             const data = a.payload.doc.data() as TodoItem;
             data.id = a.payload.doc.id;
             return data;
           });
         }));
-        this.todos$.subscribe(() => {
-          this.toolbarService.setProgress(false);
-        });
       } else {
         console.warn('Current user doesn\'t exist yet!');
       }
@@ -76,16 +72,22 @@ export class TodoHomeComponent implements OnInit, AfterViewInit {
     return statement.length !== 0 || statement !== null;
   }
   ngOnInit() {
-    this.toolbarService.setProgress(true, true);
+    this.toolbar.setProgress(true, true);
   }
   ngAfterViewInit() {
     this.todos$.subscribe(data => {
       this.dataSource = new MatTableDataSource(data);
     });
   }
+  ngOnDestroy() {
+    // Try to prevent memory leaks here by nullifying the data source.
+    this.dataSource = null;
+    // Also prevent memory leaks here
+    this.todos$ = null;
+  }
   clearSelectedTodos() {
     this.selectedTodos = [];
-    this.toolbarService.showToolbar = true;
+    this.toolbar.showToolbar = true;
   }
   markSelectedTodosAsDone() {
     for (let i = 0; i < this.selectedTodos.length; i++) {
@@ -96,14 +98,15 @@ export class TodoHomeComponent implements OnInit, AfterViewInit {
     this.clearSelectedTodos();
   }
   deleteSelectedTodos() {
-    // tslint:disable-next-line:max-line-length
-    this.shared.openConfirmDialog({ title: 'Delete todos?', msg: 'Once deleted, it will be lost forever and cannot be retrieved again.' }).afterClosed().subscribe(result => {
+    this.shared.openConfirmDialog({
+      title: `Delete ${this.selectedTodos.length} todos?`,
+      msg: 'Once deleted, it will be lost forever and cannot be retrieved again.'
+    }).afterClosed().subscribe(result => {
       if (result === 'ok') {
         for (let i = 0; i < this.selectedTodos.length; i++) {
           this._deleteTodo(this.selectedTodos[i].id);
         }
-        // tslint:disable-next-line:max-line-length
-        this.shared.openSnackBar({ msg: 'Todos deleted', additionalOpts: { duration: 4000, panelClass: 'mat-elevation-z3', horizontalPosition: 'start' } });
+        this.shared.openSnackBar({ msg: 'Successfully deleted todos!' });
         // Reset selected todos
         this.clearSelectedTodos();
       }
@@ -170,35 +173,35 @@ export class TodoHomeComponent implements OnInit, AfterViewInit {
     });
   }
   handleListClick(todo: TodoItem, event: MouseEvent) {
-    if (!this.toolbarService.showToolbar) {
+    if (!this.toolbar.showToolbar) {
       if (this.selectedTodos.indexOf(todo) === -1) {
         this.selectedTodos.push(todo);
-        console.debug('[DEBUG] Selected items pushed:', this.selectedTodos);
+        console.log('[DEBUG] Selected items pushed:', this.selectedTodos);
       } else {
         this.selectedTodos = this.selectedTodos.filter((filteredTodo) => {
           return filteredTodo.id !== todo.id;
         });
-        console.debug('[DEBUG] Item removed:', this.selectedTodos);
+        console.log('[DEBUG] Item removed:', this.selectedTodos);
       }
     } else {
       if (event.ctrlKey || event.metaKey) {
         if (this.selectedTodos.indexOf(todo) === -1) {
           this.selectedTodos.push(todo);
-          console.debug('[DEBUG] Selected items pushed:', this.selectedTodos);
+          console.log('[DEBUG] Selected items pushed:', this.selectedTodos);
         } else {
           this.selectedTodos = this.selectedTodos.filter((filteredTodo) => {
             return filteredTodo.id !== todo.id;
           });
-          console.debug('[DEBUG] Item removed:', this.selectedTodos);
+          console.log('[DEBUG] Item removed:', this.selectedTodos);
         }
       } else {
         this.toggleChecked(todo);
       }
     }
     if (this.selectedTodos.length > 0) {
-      this.toolbarService.showToolbar = false;
+      this.toolbar.showToolbar = false;
     } else {
-      this.toolbarService.showToolbar = true;
+      this.toolbar.showToolbar = true;
     }
   }
   checkboxOnClick(event: MouseEvent) {
@@ -222,8 +225,7 @@ export class TodoHomeComponent implements OnInit, AfterViewInit {
   }
   private _deleteTodo(id: string) {
     this.todosCollection.doc(id).delete().then(() => {
-      // tslint:disable-next-line:max-line-length
-      this.shared.openSnackBar({ msg: 'Todo was removed', additionalOpts: { duration: 3000, horizontalPosition: 'start', panelClass: 'mat-elevation-z3' } });
+      this.shared.openSnackBar({ msg: 'Successfully deleted todo!' });
     });
   }
   stopPropogation(event: MouseEvent) {
@@ -253,23 +255,23 @@ export class TodoHomeComponent implements OnInit, AfterViewInit {
     if (showHint) {
       dialogText += '<p><small>TIP: To bypass this dialog, hold the shift key when clicking the delete button.</small></p>';
     }
-    // tslint:disable-next-line:max-line-length
-    const dialogRef = this.shared.openConfirmDialog({ msg: this.dom.bypassSecurityTrustHtml(dialogText), title: 'Delete todo?', isHtml: true, ok: 'Delete', okColor: 'warn' });
+    const dialogRef = this.shared.openConfirmDialog({
+      msg: this.dom.bypassSecurityTrustHtml(dialogText),
+      title: 'Delete todo?',
+      isHtml: true,
+      ok: 'Delete',
+      okColor: 'warn'
+    });
     dialogRef.afterClosed().subscribe(res => {
       if (res === 'ok') {
         this._deleteTodo(id);
-      } else {
-        // tslint:disable-next-line:max-line-length
-        this.shared.openSnackBar({ msg: 'Todo was not deleted', action: 'Undo', additionalOpts: { duration: 6000, horizontalPosition: 'start', panelClass: 'mat-elevation-z3' } }).onAction().subscribe(() => {
-          this.removeTodo(id, true);
-        });
       }
     });
   }
   /**
    * The on change for a checkbox
-   * @param {TodoItem} todo The todo item
-   * @param {MatCheckboxChange} event The checkbox change event
+   * @param todo The todo item
+   * @param event The checkbox change event
    */
   onSelectedChange(todo: TodoItem, event: MatCheckboxChange) {
     this.afFs.doc<TodoItem>(`users/${this.currentUser}/todos/${todo.id}`).update({
