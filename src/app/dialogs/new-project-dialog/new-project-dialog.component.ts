@@ -1,6 +1,6 @@
 import { Component, TemplateRef } from '@angular/core';
 import { TodoProject } from '../../interfaces';
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { AuthService } from '../../auth.service';
 import { Observable } from 'rxjs';
 import { SharedService } from '../../shared.service';

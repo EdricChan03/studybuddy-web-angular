@@ -6,7 +6,7 @@ import { AuthService } from '../../auth.service';
 import { ToolbarService } from '../../toolbar.service';
 import { Observable } from 'rxjs';
 import { TodoProject } from '../../interfaces';
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { animations } from '../../animations';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material';

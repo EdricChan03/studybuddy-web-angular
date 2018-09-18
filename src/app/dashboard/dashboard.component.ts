@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { TodoItem } from '../interfaces';
 import { SharedService } from '../shared.service';
 
-import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { MatDialog } from '@angular/material';
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ToolbarService } from '../toolbar.service';
 import { Observable } from 'rxjs';

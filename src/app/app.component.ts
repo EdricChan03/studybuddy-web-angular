@@ -12,7 +12,7 @@ import {
 } from '@angular/router';
 import { DOCUMENT } from '@angular/platform-browser';
 
-import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Observable } from 'rxjs';

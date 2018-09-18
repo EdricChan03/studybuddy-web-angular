@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../auth.service';
 import { TodoProject } from '../../interfaces';
 import { Observable } from 'rxjs';
-import { AngularFirestoreCollection } from 'angularfire2/firestore';
+import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { ToolbarService } from '../../toolbar.service';
 
 @Component({

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { SharedService } from '../shared.service';
-import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from '../auth.service';
 import * as firebase from 'firebase';
 

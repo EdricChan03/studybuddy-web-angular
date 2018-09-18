@@ -30,7 +30,7 @@ import { Observable } from 'rxjs';
 import { Settings } from './interfaces';
 import { ThemePalette } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
-import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { ToolbarService } from './toolbar.service';
 
 /**

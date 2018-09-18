@@ -2,12 +2,12 @@
 import { map } from 'rxjs/operators';
 import { ToolbarService } from '../../toolbar.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { TodoDialogComponent } from '../../dialogs';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 // import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
-import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { SharedService } from '../../shared.service';
 import { TodoItem } from '../../interfaces';
 import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';

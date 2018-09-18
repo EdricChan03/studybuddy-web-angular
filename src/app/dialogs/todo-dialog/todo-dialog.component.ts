@@ -1,6 +1,6 @@
-import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
 import { MatDialogRef, MatDialog } from '@angular/material/dialog';
-import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { SharedService } from '../../shared.service';
 import { TodoItem } from '../../interfaces';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';

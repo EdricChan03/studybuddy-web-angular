@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   /**
-   * The Firebase config to be used with AngularFire2.
+   * The Firebase config to be used with @angular/fire.
    */
   firebase: {
     apiKey: 'AIzaSyBUoDJ_EL5ht9E4Dj9g5IjyjL4U8DTlyDU',

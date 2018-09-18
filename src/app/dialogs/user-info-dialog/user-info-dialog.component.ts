@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Component } from '@angular/core';
 import * as firebase from 'firebase';
