@@ -1,10 +1,27 @@
 import { firestore } from 'firebase';
 
 export interface SidenavLink {
+  /**
+   * The link of the navigation item
+   */
   link?: string;
+  /**
+   * The icon of the navigation icon
+   */
   icon?: string;
+  /**
+   * The icon of the navigation icon as an SVG icon
+   */
   svgIcon?: string;
+  /**
+   * The title of the navigation item
+   */
   title?: string;
+  /**
+   * A sublist of the navigation item
+   *
+   * Note: Only one sublist can be created.
+   */
   list?: SidenavLink[];
 }
 export interface Settings {
