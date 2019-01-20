@@ -41,10 +41,10 @@ export class ToolbarService {
    */
   setProgress(shown: boolean, indeterminate?: boolean, percentage?: number) {
     this._progressShown = shown;
-    if (indeterminate !== undefined && indeterminate != null) {
+    if (indeterminate !== undefined && indeterminate !== null) {
       this._progressIndeterminate = indeterminate;
     }
-    if (percentage !== undefined && percentage != null) {
+    if (percentage !== undefined && percentage !== null) {
       if (percentage >= 0 && percentage <= 100) {
         this._progressPercent = percentage;
       } else {
