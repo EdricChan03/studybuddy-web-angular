@@ -374,9 +374,10 @@ export class SharedService {
    * Opens a help dialog
    * @param templateRef ;The `TemplateRef` to open the dialog with.
    * @returns The dialog's ref
+   * @deprecated Use {@link MatDialog#open}
    */
-  openHelpDialog(templateRef: TemplateRef<any>): MatDialogRef<any> {
-    return this.dialog.open(templateRef);
+  openHelpDialog<T = any>(templateRef: TemplateRef<T>): MatDialogRef<T> {
+    return this.dialog.open<T>(templateRef);
   }
   /**
    * Gets all currently opened dialogs
