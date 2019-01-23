@@ -327,9 +327,9 @@ export class SharedService {
    * @param opts The options for the dialog
    * @returns The dialog's ref
    */
-  openConfirmDialog(opts: ConfirmDialogConfig): MatDialogRef<ConfirmDialog> {
+  openConfirmDialog(opts: ConfirmDialogConfig): MatDialogRef<ConfirmDialog, string | null> {
     if (opts) {
-      const dialogRef = this.dialog.open(ConfirmDialog);
+      const dialogRef = this.dialog.open<ConfirmDialog, any, string | null>(ConfirmDialog);
       dialogRef.componentInstance.confirmConfig = opts;
       return dialogRef;
     } else {
