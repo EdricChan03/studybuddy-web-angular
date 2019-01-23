@@ -341,9 +341,9 @@ export class SharedService {
    * @param opts The options for the dialog
    * @returns The dialog ref
    */
-  openPromptDialog(opts: PromptDialogConfig): MatDialogRef<PromptDialog> {
+  openPromptDialog(opts: PromptDialogConfig): MatDialogRef<PromptDialog, string | null> {
     if (opts) {
-      const dialogRef = this.dialog.open(PromptDialog);
+      const dialogRef = this.dialog.open<PromptDialog, any, string | null>(PromptDialog);
       dialogRef.componentInstance.promptConfig = opts;
       return dialogRef;
     } else {
