@@ -432,8 +432,9 @@ export class SharedService {
    * @param type The type of variable
    */
   private throwError(variable: string, type: string) {
-    // tslint:disable-next-line:max-line-length
-    throw new Error(`"${variable}" was not specified. Please ensure that the "${variable}" property is specified and that it is of type "${type}".`);
+    throw new Error(`"${variable}" was not specified. `
+      + `Please ensure that the "${variable}" property is specified and that `
+      + `it is of type "${type}".`);
   }
 }
 
