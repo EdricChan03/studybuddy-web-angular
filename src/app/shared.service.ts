@@ -420,6 +420,13 @@ export class SharedService {
     return color;
   }
   /**
+   * Generates a random hex colour. (An alias of {@link SharedService#getRandomColor})
+   * @returns A random hexadecimal colour
+   */
+  getRandomColour(): string {
+    return this.getRandomColor();
+  }
+  /**
    * Throws an error with the specified parameters
    * @param variable The variable that was not specified
    * @param type The type of variable
