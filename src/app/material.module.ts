@@ -82,7 +82,6 @@ const CDK_MODULES = [
       provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
       useValue: {
         duration: 4000,
-        panelClass: 'mat-elevation-z3',
         horizontalPosition: 'start'
       }
     }
