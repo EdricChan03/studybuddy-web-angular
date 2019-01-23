@@ -355,9 +355,15 @@ export class SharedService {
    * @param opts The options for the dialog
    * @returns The dialog ref
    */
-  openSelectionDialog(opts: SelectionDialogConfig): MatDialogRef<SelectionDialog> {
+  openSelectionDialog(opts: SelectionDialogConfig): MatDialogRef<SelectionDialog, any> {
     if (opts) {
-      const dialogRef = this.dialog.open(SelectionDialog, { disableClose: true, panelClass: 'selection-dialog' });
+      const dialogRef = this.dialog.open<SelectionDialog, any, any>(
+        SelectionDialog,
+        {
+          disableClose: true,
+          panelClass: 'selection-dialog'
+        }
+      );
       dialogRef.componentInstance.selectionConfig = opts;
       return dialogRef;
     } else {
