@@ -92,7 +92,7 @@ export class LoginComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       // Note: The dialog's result will return `undefined` if the user clicked
       // outside of the dialog
-      if (result !== -1 && result !== undefined) {
+      if (result !== undefined) {
         this.auth.resetPassword(result).then(_ => {
           this.shared.openSnackBar({
             msg: `Successfully reset email ${result}! Please check your email for the password reset email.`,
