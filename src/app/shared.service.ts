@@ -442,17 +442,17 @@ export class SharedService {
 @Component({
   selector: 'alert-dialog',
   template: `
-  <h2 matDialogTitle>{{alertConfig.title ? alertConfig.title : 'Alert'}}</h2>
-  <mat-dialog-content fxLayout="column" class="mat-typography">
-    <p class="mat-body" *ngIf="!alertConfig.isHtml">{{alertConfig.msg}}</p>
-    <span *ngIf="alertConfig.isHtml" [innerHTML]="alertConfig.msg"></span>
+  <h2 matDialogTitle>{{alertConfig?.title ? alertConfig?.title : 'Alert'}}</h2>
+  <mat-dialog-content fxLayout="column" class="mat-typography" *ngIf="alertConfig?.msg">
+    <p class="mat-body" *ngIf="!alertConfig?.isHtml">{{alertConfig?.msg}}</p>
+    <span *ngIf="alertConfig?.isHtml" [innerHTML]="alertConfig?.msg"></span>
   </mat-dialog-content>
   <mat-dialog-actions align="end">
     <button
       mat-button
-      [color]="alertConfig.okColor ? alertConfig.okColor : 'primary'"
+      [color]="alertConfig?.okColor ? alertConfig?.okColor : 'primary'"
       (click)="close()">
-      {{alertConfig.ok ? alertConfig.ok : 'Dismiss'}}
+      {{alertConfig?.ok ? alertConfig?.ok : 'Dismiss'}}
     </button>
   </mat-dialog-actions>
   `
@@ -473,15 +473,15 @@ export class AlertDialog implements OnInit {
 @Component({
   selector: 'confirm-dialog',
   template: `
-  <h2 matDialogTitle>{{confirmConfig.title ? confirmConfig.title : 'Confirm'}}</h2>
-  <mat-dialog-content fxLayout="column" class="mat-typography">
-    <p class="mat-body" *ngIf="!confirmConfig.isHtml">{{confirmConfig.msg}}</p>
-    <span *ngIf="confirmConfig.isHtml" [innerHTML]="confirmConfig.msg"></span>
-    <div class="checkbox-box" *ngIf="confirmConfig.hasCheckbox">
+  <h2 matDialogTitle>{{confirmConfig?.title ? confirmConfig?.title : 'Confirm'}}</h2>
+  <mat-dialog-content fxLayout="column" class="mat-typography" *ngIf="confirmConfig?.msg">
+    <p class="mat-body" *ngIf="!confirmConfig?.isHtml">{{confirmConfig?.msg}}</p>
+    <span *ngIf="confirmConfig?.isHtml" [innerHTML]="confirmConfig?.msg"></span>
+    <div class="checkbox-box" *ngIf="confirmConfig?.hasCheckbox">
       <mat-checkbox
-        [color]="confirmConfig.checkboxColor"
+        [color]="confirmConfig?.checkboxColor"
         [(ngModel)]="confirmConfig.checkboxValue">
-        {{confirmConfig.checkboxLabel}}
+        {{confirmConfig?.checkboxLabel}}
       </mat-checkbox>
     </div>
   </mat-dialog-content>
@@ -489,15 +489,15 @@ export class AlertDialog implements OnInit {
     <button
       mat-button
       (click)="cancel()"
-      [color]="confirmConfig.cancelColor ? confirmConfig.cancelColor : 'primary'">
-      {{confirmConfig.cancel ? confirmConfig.cancel : 'Cancel'}}
+      [color]="confirmConfig?.cancelColor ? confirmConfig?.cancelColor : 'primary'">
+      {{confirmConfig?.cancel ? confirmConfig?.cancel : 'Cancel'}}
     </button>
     <button
       mat-button
       (click)="ok()"
-      [color]="confirmConfig.okColor ? confirmConfig.okColor : 'primary'"
+      [color]="confirmConfig?.okColor ? confirmConfig?.okColor : 'primary'"
       [disabled]="okBtnDisabled">
-      {{confirmConfig.ok ? confirmConfig.ok : 'OK'}}
+      {{confirmConfig?.ok ? confirmConfig?.ok : 'OK'}}
     </button>
   </mat-dialog-actions>
   `,
@@ -545,7 +545,7 @@ export class ConfirmDialog implements OnInit {
   selector: 'prompt-dialog',
   template: `
   <h2 matDialogTitle>{{_returnIfValid(promptConfig.title, 'Prompt')}}</h2>
-  <mat-dialog-content fxLayout="column" class="mat-typography">
+  <mat-dialog-content fxLayout="column" class="mat-typography" *ngIf="promptConfig.msg">
     <p class="mat-body" *ngIf="!promptConfig.isHtml">{{promptConfig.msg}}</p>
     <span *ngIf="promptConfig.isHtml" [innerHTML]="promptConfig.msg"></span>
     <mat-form-field [color]="_returnIfValid(promptConfig.inputColor, 'primary')" style="width:100%">
@@ -637,7 +637,7 @@ export class PromptDialog implements OnInit {
   selector: 'selection-dialog',
   template: `
   <h2 matDialogTitle>{{selectionConfig.title ? selectionConfig.title : 'Select options from the list'}}</h2>
-  <mat-dialog-content fxLayout="column" class="mat-typography">
+  <mat-dialog-content fxLayout="column" class="mat-typography" *ngIf="selectionConfig.options">
     <mat-selection-list #selection>
       <mat-list-option
         *ngFor="let option of selectionConfig.options"
