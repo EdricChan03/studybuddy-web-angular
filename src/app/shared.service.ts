@@ -149,7 +149,7 @@ export class SharedService {
    * @param msg The message for the snack-bar.
    * @param action The action for the snack-bar. Leave as `null` to remove the action.
    * @param duration The duration for the snack-bar to appear.
-   * @param hasElevation Whether to show the elevation. Specify a number for the elevation level.
+   * @param hasElevation (Now deprecated!) Whether to show the elevation. Specify a number for the elevation level.
    * @param showHorizontal Configuration on where to show the snack-barhorizontally.
    * @param showVertical Configuration on where to show the snack-bar vertically.
    * @returns The snack-bar's ref.
@@ -164,9 +164,13 @@ export class SharedService {
   ): MatSnackBarRef<SimpleSnackBar> {
     let snackBarRef: MatSnackBarRef<SimpleSnackBar>;
     // Configuration options
-    if (hasElevation || showHorizontal || showVertical || duration) {
+    if (showHorizontal || showVertical || duration) {
       const snackBarConfig = new MatSnackBarConfig();
       // Elevation options
+      // Note: Since Angular Material v7, the snackbar styling was revamped to the new Material
+      // Design spec.
+      // Thus, this feature will be deprecated.
+      /*
       if (hasElevation) {
         if (typeof hasElevation === 'number') {
           snackBarConfig.panelClass += `mat-elevation-z${hasElevation}`;
@@ -174,6 +178,7 @@ export class SharedService {
           snackBarConfig.panelClass += 'mat-elevation-z3';
         }
       }
+      */
       // Config option for horizontal
       if (showHorizontal) {
         snackBarConfig.horizontalPosition = showHorizontal;
@@ -213,26 +218,30 @@ export class SharedService {
           if (opts.additionalOpts.panelClass) {
             if (typeof opts.additionalOpts.panelClass === 'string') {
               const tempArray = [];
+              /*
               if (typeof opts.hasElevation === 'number') {
                 tempArray.push(`mat-elevation-z${opts.hasElevation}`);
               } else {
                 tempArray.push('mat-elevation-z3');
               }
+              */
               tempArray.push(opts.additionalOpts.panelClass);
               opts.additionalOpts.panelClass = tempArray;
             } else {
+              /*
               if (typeof opts.hasElevation === 'number') {
                 opts.additionalOpts.panelClass = `mat-elevation-z${opts.hasElevation}`;
               } else {
                 opts.additionalOpts.panelClass = 'mat-elevation-z3';
               }
+              */
             }
           } else {
-            if (typeof opts.hasElevation === 'number') {
+            /* if (typeof opts.hasElevation === 'number') {
               opts.additionalOpts.panelClass = `mat-elevation-z${opts.hasElevation}`;
             } else {
               opts.additionalOpts.panelClass = 'mat-elevation-z3';
-            }
+            } */
           }
           return this.snackbar.open(opts.msg, opts.action, opts.additionalOpts);
         } else {
@@ -243,26 +252,26 @@ export class SharedService {
           if (opts.additionalOpts.panelClass) {
             if (typeof opts.additionalOpts.panelClass === 'string') {
               const tempArray = [];
-              if (typeof opts.hasElevation === 'number') {
+              /* if (typeof opts.hasElevation === 'number') {
                 tempArray.push(`mat-elevation-z${opts.hasElevation}`);
               } else {
                 tempArray.push('mat-elevation-z3');
-              }
+              } */
               tempArray.push(opts.additionalOpts.panelClass);
               opts.additionalOpts.panelClass = tempArray;
             } else {
-              if (typeof opts.hasElevation === 'number') {
+              /* if (typeof opts.hasElevation === 'number') {
                 opts.additionalOpts.panelClass = `mat-elevation-z${opts.hasElevation}`;
               } else {
                 opts.additionalOpts.panelClass = 'mat-elevation-z3';
-              }
+              } */
             }
           } else {
-            if (typeof opts.hasElevation === 'number') {
+            /* if (typeof opts.hasElevation === 'number') {
               opts.additionalOpts.panelClass = `mat-elevation-z${opts.hasElevation}`;
             } else {
               opts.additionalOpts.panelClass = 'mat-elevation-z3';
-            }
+            } */
           }
           return this.snackbar.open(opts.msg, undefined, opts.additionalOpts);
         } else {
