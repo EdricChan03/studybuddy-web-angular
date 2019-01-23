@@ -695,7 +695,7 @@ export class SnackBarConfig {
   /**
    * Whether to show an elevation on the snackbar
    * If a number is supplied, the elevation level will be the specified number. Or else it will be set to level 3
-   */
+   * @deprecated
   hasElevation?: number | boolean;
 }
 export class ErrorSnackBarConfig extends SnackBarConfig {
