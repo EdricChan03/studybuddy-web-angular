@@ -1,5 +1,6 @@
+import { LayoutModule } from '@angular/cdk/layout';
+import { PlatformModule } from '@angular/cdk/platform';
 import { NgModule } from '@angular/core';
-
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,6 +11,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
@@ -21,46 +23,43 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTabsModule } from '@angular/material/tabs';
-
-import { LayoutModule } from '@angular/cdk/layout';
-import { PlatformModule } from '@angular/cdk/platform';
-
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { DomSanitizer } from '@angular/platform-browser';
 
 const MATERIAL_MODULES = [
+  MatAutocompleteModule,
+  MatBadgeModule,
   MatButtonModule,
   MatButtonToggleModule,
-  MatToolbarModule,
-  MatSidenavModule,
-  MatAutocompleteModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatChipsModule,
+  MatDatepickerModule,
+  MatDialogModule,
+  MatExpansionModule,
+  MatFormFieldModule,
+  MatGridListModule,
   MatIconModule,
+  MatInputModule,
   MatListModule,
   MatMenuModule,
-  MatCardModule,
-  MatChipsModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatDatepickerModule,
   MatNativeDateModule,
-  MatSnackBarModule,
-  MatTooltipModule,
-  MatDialogModule,
+  MatPaginatorModule,
+  MatProgressBarModule,
+  MatProgressSpinnerModule,
   MatRadioModule,
   MatSelectModule,
-  MatCheckboxModule,
+  MatSidenavModule,
+  MatSnackBarModule,
   MatTableModule,
-  MatPaginatorModule,
-  MatProgressSpinnerModule,
-  MatBadgeModule,
-  MatProgressBarModule,
   MatTabsModule,
-  MatGridListModule
+  MatToolbarModule,
+  MatTooltipModule
 ];
 const CDK_MODULES = [
   LayoutModule,
