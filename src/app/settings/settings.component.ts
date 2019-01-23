@@ -64,7 +64,7 @@ export class SettingsComponent implements OnInit {
         if (result === 'ok') {
           window.localStorage.setItem('settings', JSON.stringify(this.defaultSettings));
           this.settings = this.retrieveSettings();
-          this.shared.openSnackBar({ msg: 'Settings were reset', hasElevation: true, additionalOpts: { horizontalPosition: 'start' } });
+          this.shared.openSnackBar({ msg: 'Settings were reset' });
         }
       }
     });
