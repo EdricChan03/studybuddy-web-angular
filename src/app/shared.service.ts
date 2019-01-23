@@ -26,7 +26,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Settings } from './interfaces';
 import { ThemePalette } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
@@ -60,14 +60,69 @@ export interface ExtraToolbarConfig {
 // Shared service
 @Injectable()
 export class SharedService {
+  /**
+   * Keydown events to the page
+   */
+  keydownEvents = new Subject<KeyboardEvent>();
+  /**
+   * Keydown events as an observable
+   */
+  keydownEvents$ = this.keydownEvents.asObservable();
+  /**
+   * Keyup events to the page
+   */
+  keyupEvents = new Subject<KeyboardEvent>();
+  /**
+   * Keyup events as an observable
+   */
+  keyupEvents$ = this.keyupEvents.asObservable();
+  /**
+   * Keypress events to the page
+   */
+  keypressEvents = new Subject<KeyboardEvent>();
+  /**
+   * Keypress events as an observable
+   */
+  keypressEvents$ = this.keypressEvents.asObservable();
+  /**
+   * Key events to the page
+   */
+  keyEvents = new Subject<KeyboardEvent>();
+  /**
+   * Key events as an observable
+   */
+  keyEvents$ = this.keyEvents.asObservable();
+  /**
+   * Keydown & keyup events to the page
+   */
+  keyDownUpEvents = new Subject<KeyboardEvent>();
+  /**
+   * Keydown & keyup events as an observable
+   */
+  keyDownUpEvents$ = this.keyDownUpEvents.asObservable();
+  private _title = '';
+  private _extraToolbarConfig: ExtraToolbarConfig;
   constructor(
     public snackbar: MatSnackBar,
     public dialog: MatDialog,
     public documentTitle: Title,
     public breakpointObserver: BreakpointObserver
-  ) { }
-  private _title = '';
-  private _extraToolbarConfig: ExtraToolbarConfig;
+  ) {
+    window.addEventListener('keydown', (event) => {
+      this.keydownEvents.next(event);
+      this.keyEvents.next(event);
+      this.keyDownUpEvents.next(event);
+    });
+    window.addEventListener('keyup', (event) => {
+      this.keyupEvents.next(event);
+      this.keyEvents.next(event);
+      this.keyDownUpEvents.next(event);
+    });
+    window.addEventListener('keypress', (event) => {
+      this.keypressEvents.next(event);
+      this.keyEvents.next(event);
+    });
+  }
   // Getters and setters
   get title(): string { return this._title; }
   set title(title: string) {
