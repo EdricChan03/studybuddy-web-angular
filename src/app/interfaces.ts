@@ -92,8 +92,30 @@ export interface Chat {
 }
 
 export interface TodoProject {
+  /**
+   * The name of the project
+   */
   name: string;
-  todos?: any;
+  /**
+   * The project document's ID
+   */
   id?: string;
+  /**
+   * The color of the project in hexadecimal color
+   */
   color?: string;
+  /** The Material icon used to represent this todo */
+  icon?: string;
+  /**
+   * The due date of the project
+   */
+  dueDate?: firestore.Timestamp;
+  /**
+   * The list of todos assigned to this project as document references
+   */
+  todos?: DocumentReference[];
+  /**
+   * The list of todos assigned to this projecct which are marked as done
+   */
+  todosDone?: DocumentReference[];
 }

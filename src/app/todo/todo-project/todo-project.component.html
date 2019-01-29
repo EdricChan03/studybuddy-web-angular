@@ -1,3 +1,16 @@
-<p>
-  todo-project works!
-</p>
+<div class="padding-percentage-container">
+  <h1>Project name: "{{ (project | async)?.name }}"</h1>
+  <ng-container *ngIf="(project | async); else: invalidProjectId">
+    <h2>Status</h2>
+    <circle-progress
+      [percent]="percentageComplete | async"
+      [subtitle]="'complete'"
+  ></circle-progress>
+  </ng-container>
+  <ng-template #invalidProjectId>
+    <div class="container container-center">
+      <h2>Error</h2>
+      <p>Invalid project ID! Please check again later.</p>
+    </div>
+  </ng-template>
+</div>
