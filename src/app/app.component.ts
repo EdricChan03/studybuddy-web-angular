@@ -299,9 +299,10 @@ export class AppComponent implements OnInit {
             this.newSignIn('google');
           });
           console.log(res);
-        }, (error) => {
-          this.handleError(error.message);
-        });
+        })
+          .catch((error) => {
+            this.handleError(error.message);
+          });
       }
     });
   }
@@ -432,9 +433,10 @@ export class AppComponent implements OnInit {
             this.newSignIn('google');
           });
           console.log(res);
-        }, (error) => {
-          this.handleError(error.message);
-        });
+        })
+          .catch((error) => {
+            this.handleError(error.message);
+          });
       }
     });
   }
