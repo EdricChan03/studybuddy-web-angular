@@ -517,8 +517,9 @@ export class AppComponent implements OnInit {
                   this.handleError(snackBarError.message);
                 });
             });
+          } else {
+            this.handleError(error.message);
           }
-          this.handleError(error.message);
         });
       }
     });
