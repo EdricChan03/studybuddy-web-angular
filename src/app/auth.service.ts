@@ -25,6 +25,7 @@ export class AuthService {
   get authenticated(): boolean {
     return this.authState !== null;
   }
+  /** Returns the current instance of Firebase's Auth object */
   get firebaseAuth(): firebase.auth.Auth {
     return this.afAuth.auth;
   }
@@ -32,6 +33,7 @@ export class AuthService {
    * Attemps to log in with a username and password
    * @param email The email to login as
    * @param password The password to login as
+   * @return A promise with the user's credentials
    */
   logInWithEmailAndPassword(email: string, password: string): Promise<any> {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password);
@@ -40,13 +42,14 @@ export class AuthService {
    * Attempts to sign up with a username and password
    * @param email The email to sign up with
    * @param password The password to sign up with
+   * @return A promise with the user's credentials
    */
   signUpWithEmailAndPassword(email: string, password: string): Promise<any> {
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password);
   }
   /**
    * Attempts to log in with Google
-   * @return The promise of the login
+   * @return A promise with the user's credentials
    */
   logInWithGoogle(): Promise<any> {
     return this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
@@ -71,13 +74,15 @@ export class AuthService {
    * Checks if the user has been logged in
    * Note: Ideally, this should be used once Angular has loaded the component's view.
    * Note: Consider using {@link AuthService#getAuthState} instead.
-   * @returns {boolean} Whether there is a logged in user
+   * @return `true` if there is a logged-in user, `false` otherwise
    */
   isLoggedIn(): boolean {
     return this.afAuth.auth.currentUser !== null;
   }
   /**
    * Resets the password of an account
+   * @param email The email to reset the password
+   * @return A promise
    */
   resetPassword(email: string) {
     return this.afAuth.auth.sendPasswordResetEmail(email);
