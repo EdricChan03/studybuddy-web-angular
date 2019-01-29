@@ -2,12 +2,14 @@ import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/fire
 import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { SharedService } from '../../shared.service';
-import { TodoItem } from '../../interfaces';
+import { TodoItem, TodoProject } from '../../interfaces';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { EditContentDialogComponent } from '../edit-content-dialog/edit-content-dialog.component';
 import { MatChipInputEvent } from '@angular/material';
 import * as firebase from 'firebase';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { NewProjectDialogComponent } from '../new-project-dialog/new-project-dialog.component';
 
 @Component({
   selector: 'app-todo-dialog',
@@ -50,6 +52,8 @@ export class TodoDialogComponent implements OnInit {
     '<p>This is an example of syntax-highlighting! <em>wow</em><p>\n' +
     '```';
   todoForm: FormGroup;
+  projectsCollection: AngularFirestoreCollection<TodoProject>;
+  projects$: Observable<TodoProject[]>;
   @ViewChild('helpContentDialog') helpContentDialogTmpl: TemplateRef<any>;
   constructor(
     // TODO(Edric): Figure out a way to make this private
@@ -68,9 +72,12 @@ export class TodoDialogComponent implements OnInit {
       dueDate: null,
       isDone: false,
       id: { value: this.afFs.createId(), disabled: true },
+      project: null
     });
     if (afAuth.auth.currentUser) {
       this.todoCollection = this.afFs.collection(`users/${afAuth.auth.currentUser.uid}/todos`);
+      this.projectsCollection = this.afFs.collection(`users/${afAuth.auth.currentUser.uid}/todoProjects`);
+      this.projects$ = this.projectsCollection.valueChanges();
     } else {
       // User isn't signed in! Add todo stuff to disable dialog
       const loginDialogRef = this.shared.openConfirmDialog({
@@ -97,15 +104,10 @@ export class TodoDialogComponent implements OnInit {
   get isMobile(): boolean {
     return this.shared.isMobile;
   }
-  get projectsArray(): FormArray {
-    return this.todoForm.get('projects') as FormArray;
-  }
-  get tagsArray(): FormArray {
-    return this.todoForm.get('tags') as FormArray;
-  }
   get todoFormRawValue(): any {
     return this.todoForm.getRawValue();
   }
+  /** @deprecated The document ID is automatically generated */
   regenerateId() {
     this.todoForm.get('id').setValue(this.afFs.createId());
   }
@@ -192,6 +194,9 @@ export class TodoDialogComponent implements OnInit {
         break;
     }
   }*/
+  createProject() {
+    this.dialog.open(NewProjectDialogComponent);
+  }
   saveOrAddTodo() {
     if (this.isNewTodo) {
       const itemToAdd: TodoItem = { title: '' };
