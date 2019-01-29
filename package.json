@@ -28,6 +28,7 @@
     "core-js": "^2.6.3",
     "firebase": "^5.8.1",
     "hammerjs": "^2.0.8",
+    "ng-circle-progress": "^1.4.0",
     "ngx-markdown": "^7.1.2",
     "prismjs": "^1.15.0",
     "rxjs": "^6.3.3",

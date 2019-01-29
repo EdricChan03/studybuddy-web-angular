@@ -1,10 +1,30 @@
-
-<h1>Todos</h1>
-<mat-card *ngFor="let todo of todos$ | async">
-  <mat-card-title>{{todo?.title}}</mat-card-title>
-  <mat-card-content *ngIf="todo?.content">
-    <p [innerHTML]="todo?.content | markdown"></p>
-  </mat-card-content>
-</mat-card>
-<h2>Overdue todos</h2>
-<h1>Notes</h1>
+<div class="padding-percentage-container">
+  <div class="header dashboard-todos-header" fxLayout="row" fxLayoutAlign="space-between center">
+    <h1 fxLayout="row" fxLayoutAlign="center center">
+      Todos
+    </h1>
+    <button mat-raised-button (click)="newTodo()" color="primary">
+      <mat-icon>add</mat-icon> New Todo
+    </button>
+  </div>
+  <mat-card *ngFor="let todo of todos$ | async">
+    <mat-card-title>{{todo?.title}}</mat-card-title>
+    <mat-card-content *ngIf="todo?.content">
+      <p [innerHTML]="todo?.content | markdown"></p>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-button color="primary" (click)="toggleChecked(todo)">
+        <span *ngIf="!todo.isDone">Mark as done</span>
+        <span *ngIf="todo.isDone">Mark as undone</span>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+  <div class="header dashboard-notes-header" fxLayout="row" fxLayoutAlign="space-between center">
+    <h1 fxLayout="row" fxLayoutAlign="center center">
+      Notes
+    </h1>
+    <button mat-raised-button (click)="newNote()" color="primary" disabled>
+      <mat-icon>add</mat-icon> New Note
+    </button>
+  </div>
+</div>

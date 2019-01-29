@@ -9,6 +9,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ToolbarService } from '../toolbar.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { TodoDialogComponent } from '../dialogs';
 
 @Component({
   selector: 'app-dashboard',
@@ -48,4 +49,14 @@ export class DashboardComponent {
     });
   }
 
+  toggleChecked(todo: TodoItem) {
+    this.todosCollection.doc<TodoItem>(todo.id).update({
+      isDone: !todo.isDone
+    });
+  }
+
+  newTodo() {
+    const dialogRef = this.dialog.open(TodoDialogComponent, { disableClose: true });
+    dialogRef.componentInstance.isNewTodo = true;
+  }
 }
