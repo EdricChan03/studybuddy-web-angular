@@ -100,15 +100,18 @@ import { TodoDashboardNewComponent } from './todo/todo-dashboard-new/todo-dashbo
     AngularFirestoreModule.enablePersistence(),
     SharedModule,
     MarkdownModule.forRoot({
-      provide: MarkedOptions,
-      useValue: {
-        gfm: true,
-        tables: true,
-        breaks: false,
-        pedantic: false,
-        sanitize: false,
-        smartLists: true,
-        smartypants: false
+      markedOptions: {
+        provide: MarkedOptions,
+        useValue: {
+          gfm: true,
+          tables: true,
+          breaks: false,
+          headerIds: true,
+          pedantic: false,
+          sanitize: false,
+          smartLists: true,
+          smartypants: false
+        }
       }
     })
   ],
