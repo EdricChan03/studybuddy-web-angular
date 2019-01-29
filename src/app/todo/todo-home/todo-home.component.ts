@@ -41,7 +41,7 @@ export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
   todoView: 'list' | 'table' | 'agenda' = 'list';
   selectedTodos: TodoItem[] = [];
   dataSource: MatTableDataSource<TodoItem>;
-  columnsToDisplay = ['hasDone', 'title', 'content'];
+  columnsToDisplay = ['isDone', 'title', 'content', 'actions'];
   constructor(
     private shared: SharedService,
     public toolbar: ToolbarService,
@@ -92,7 +92,7 @@ export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
   markSelectedTodosAsDone() {
     for (let i = 0; i < this.selectedTodos.length; i++) {
       this.todosCollection.doc<TodoItem>(this.selectedTodos[i].id).update({
-        hasDone: true
+        isDone: true
       });
     }
     this.clearSelectedTodos();
@@ -132,34 +132,25 @@ export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
             });
           })
           .catch((error: { message: string }) => {
-            const snackBarRef = this.shared.openSnackBar(
-              {
-                action: 'Retry',
-                hasElevation: 2,
-                msg: `${error.message}`,
-                additionalOpts: { horizontalPosition: 'start' }
-              });
+            const snackBarRef = this.shared.openSnackBar({
+              action: 'Retry',
+              msg: `${error.message}`
+            });
             snackBarRef.onAction().subscribe(() => {
               this.deleteAllTodos();
             });
           });
         Promise.all(promises).then(() => {
           console.log('All documents of collection deleted.');
-          this.shared.openSnackBar(
-            {
-              msg: 'Successfully deleted all todos!',
-              hasElevation: true,
-              additionalOpts: { horizontalPosition: 'start', duration: 4000 }
-            });
+          this.shared.openSnackBar({
+            msg: 'Successfully deleted all todos!'
+          });
         })
           .catch((error: { message: string }) => {
-            const snackBarRef = this.shared.openSnackBar(
-              {
-                action: 'Retry',
-                hasElevation: 2,
-                msg: `${error.message}`,
-                additionalOpts: { horizontalPosition: 'start' }
-              });
+            const snackBarRef = this.shared.openSnackBar({
+              action: 'Retry',
+              msg: `An error occurred: ${error.message}`,
+            });
             snackBarRef.onAction().subscribe(() => {
               this.deleteAllTodos();
             });
@@ -169,7 +160,7 @@ export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   toggleChecked(todo: TodoItem) {
     this.todosCollection.doc<TodoItem>(todo.id).update({
-      hasDone: !todo.hasDone
+      isDone: !todo.isDone
     });
   }
   handleListClick(todo: TodoItem, event: MouseEvent) {
@@ -275,7 +266,7 @@ export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   onSelectedChange(todo: TodoItem, event: MatCheckboxChange) {
     this.afFs.doc<TodoItem>(`users/${this.currentUser}/todos/${todo.id}`).update({
-      hasDone: event.checked
+      isDone: event.checked
     });
   }
 
