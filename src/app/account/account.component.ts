@@ -151,8 +151,9 @@ export class AccountComponent {
                   this.handleError(snackBarError.message);
                 });
             });
+          } else {
+            this.handleError(error.message);
           }
-          this.handleError(error.message);
         });
       }
     });
