@@ -67,7 +67,7 @@ export interface TodoItem {
   /**
    * Whether the todo has already been finished
    */
-  hasDone?: boolean;
+  isDone?: boolean;
   /**
    * The tags to assign to the todo
    */

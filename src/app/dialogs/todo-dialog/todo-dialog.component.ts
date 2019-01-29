@@ -66,8 +66,8 @@ export class TodoDialogComponent implements OnInit {
       // projects: this.fb.array([]),
       // tags: this.fb.array([]),
       dueDate: null,
-      hasDone: false,
-      id: this.afFs.createId()
+      isDone: false,
+      id: { value: this.afFs.createId(), disabled: true },
     });
     if (afAuth.auth.currentUser) {
       this.todoCollection = this.afFs.collection(`users/${afAuth.auth.currentUser.uid}/todos`);
@@ -198,22 +198,17 @@ export class TodoDialogComponent implements OnInit {
       for (const prop in this.todoFormRawValue) {
         if (this.todoFormRawValue.hasOwnProperty(prop) && this.todoFormRawValue[prop] !== null) {
           switch (prop) {
-            case 'title':
-              itemToAdd.title = this.todoFormRawValue[prop];
-              break;
+            case 'id':
+            case 'isDone':
             case 'content':
-              itemToAdd.content = this.todoFormRawValue[prop];
+            case 'title':
+              itemToAdd[prop] = this.todoFormRawValue[prop];
               break;
             case 'dueDate':
-              console.log(this.todoFormRawValue[prop]);
               itemToAdd.dueDate = firebase.firestore.Timestamp.fromDate(this.todoFormRawValue[prop] as Date);
               break;
-            case 'hasDone':
-              console.log(this.todoFormRawValue[prop]);
-              itemToAdd.hasDone = this.todoFormRawValue[prop];
-              break;
-            case 'id':
-              itemToAdd.id = this.todoFormRawValue[prop];
+            case 'project':
+              itemToAdd[prop] = this.afFs.doc(`users/${this.afAuth.auth.currentUser.uid}/todoProjects/${this.todoFormRawValue[prop]}`).ref;
               break;
             default:
               throw new Error(`Property ${prop} doesn't exist!`);

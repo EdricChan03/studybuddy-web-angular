@@ -94,7 +94,7 @@
         <mat-icon>clear</mat-icon>
       </button>
     </mat-form-field>-->
-    <mat-checkbox formControlName="hasDone">Mark as done</mat-checkbox>
+    <mat-checkbox formControlName="isDone">Mark as done</mat-checkbox>
     <br>
     <mat-checkbox [(ngModel)]="showDebug" [ngModelOptions]="{'standalone': true}">Show debug options</mat-checkbox>
     <div [style.display]="showDebug ? 'block' : 'none'" fxLayout="column">
