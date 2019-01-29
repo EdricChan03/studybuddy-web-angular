@@ -13,7 +13,7 @@ import {
 })
 export class SupportSearchComponent {
 
-  keywords: string = '';
+  keywords = '';
   isInputFocused = false;
 
   /**
@@ -23,15 +23,15 @@ export class SupportSearchComponent {
   /**
    * Whether to allow blurring of the search input
    */
-  @Input() blur: boolean = true;
+  @Input() blur = true;
   /**
    * Whether to enable type to search
    */
-  @Input() typeToSearch: boolean = false;
+  @Input() typeToSearch = false;
   /**
    * Whether to show a clear button
    */
-  @Input() showClearBtn: boolean = true;
+  @Input() showClearBtn = true;
   onInputChange() {
     this.keywordsChange.emit(this.keywords);
   }
