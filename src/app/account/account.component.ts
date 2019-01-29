@@ -133,7 +133,7 @@ export class AccountComponent {
           });
         }).catch((error) => {
           console.error(error);
-          if (error === 'auth/requires-recent-login') {
+          if (error.code === 'auth/requires-recent-login') {
             const snackBarRef = this.shared.openSnackBar({
               msg: 'Please relogin before unregistering first.',
               action: 'Relogin'
