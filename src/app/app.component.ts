@@ -1,113 +1,31 @@
-import * as firebase from 'firebase';
-
-import { Component, ViewChild, OnInit, Inject } from '@angular/core';
-import { Message, MessageImportance, MessagingService } from './messaging.service';
-import {
-  NavigationStart,
-  NavigationEnd,
-  NavigationCancel,
-  NavigationError,
-  Router,
-  Event
-} from '@angular/router';
-import { DOCUMENT } from '@angular/platform-browser';
-
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSidenav } from '@angular/material/sidenav';
+import { DOCUMENT } from '@angular/platform-browser';
+import { Event, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
+import * as firebase from 'firebase';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
+import { animations } from './animations';
+import { AuthService } from './auth.service';
+import { UserInfoDialogComponent } from './dialogs';
+import { SidenavLink } from './interfaces';
+import { Message, MessageImportance, MessagingService } from './messaging.service';
 import { SharedService } from './shared.service';
 import { ToolbarService } from './toolbar.service';
-import { UserInfoDialogComponent } from './dialogs';
-import { environment } from '../environments/environment';
-import { AuthService } from './auth.service';
-import { SidenavLink } from './interfaces';
-import { animations } from './animations';
+
+
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  host: { '(window:keydown)': 'onKeydown($event)' },
   animations: [
     animations.toggleIconAnimation,
     animations.toggleItemsAnimation
   ]
 })
 export class AppComponent implements OnInit {
-  constructor(
-    public shared: SharedService,
-    public auth: AuthService,
-    // TODO(Edric): Figure out a way to make this private
-    public toolbarService: ToolbarService,
-    private router: Router,
-    private afFs: AngularFirestore,
-    private dialog: MatDialog,
-    // TODO(Edric): Figure out a way to make this private
-    public messagingService: MessagingService,
-    @Inject(DOCUMENT) private document: Document
-  ) {
-    this.userObservable = auth.getAuthState();
-    auth.getAuthState().subscribe((user) => {
-      if (user) {
-        this.user = user;
-        console.log(user);
-        this.isSignedIn = true;
-      } else {
-        // User is signed out! Show sign in dialog here
-        this.isSignedIn = false;
-
-      }
-    });
-    if (!this.shared.isOnline) {
-      const snackBarRef = this.shared.openSnackBar({
-        msg: 'You are offline. Some actions will not be available.',
-        action: 'Retry'
-      });
-      snackBarRef.onAction().subscribe(() => {
-        window.location.reload(true);
-      });
-    }
-    router.events.subscribe(event => {
-      if (event instanceof NavigationStart) {
-        if (router.url === '/todo') {
-          this.toolbarService.showToolbar = true;
-        }
-      }
-      this.navigationInterceptor(event);
-    });
-    if (this.shared.isDarkThemeEnabled) {
-      if (!this.document.body.classList.contains('studybuddy-dark')) {
-        this.document.body.classList.add('studybuddy-dark');
-      }
-    } else {
-      if (this.document.body.classList.contains('studybuddy-dark')) {
-        this.document.body.classList.remove('studybuddy-dark');
-      }
-    }
-  }
-  get messages(): Message[] {
-    return this.messagingService.messages;
-  }
-  /**
-   * Checks whether the user is using a mobile device
-   */
-  get isMobile(): boolean {
-    return this.shared.isMobile;
-  }
-  /**
-   * Whether to enable notifications
-   */
-  get isNotificationsEnabled(): boolean {
-    if (this.shared.settings === null) {
-      return false;
-    } else {
-      if (this.shared.settings.hasOwnProperty('enableNotifications')) {
-        return this.shared.settings['enableNotifications'];
-      } else {
-        return false;
-      }
-    }
-  }
   /**
    * The sidenav
    */
@@ -206,6 +124,85 @@ export class AppComponent implements OnInit {
    * Whether the user is signed in
    */
   isSignedIn = false;
+  keyMaps = {};
+  constructor(
+    public shared: SharedService,
+    public auth: AuthService,
+    // TODO(Edric): Figure out a way to make this private
+    public toolbarService: ToolbarService,
+    private router: Router,
+    private afFs: AngularFirestore,
+    private dialog: MatDialog,
+    // TODO(Edric): Figure out a way to make this private
+    public messagingService: MessagingService,
+    @Inject(DOCUMENT) private document: Document
+  ) {
+    shared.keyDownUpEvents$.subscribe(e => {
+      this.keyMaps[e.keyCode] = e.type === 'keydown';
+      this.keyboardShortcutHandler(e);
+    });
+    this.userObservable = auth.getAuthState();
+    auth.getAuthState().subscribe((user) => {
+      if (user) {
+        this.user = user;
+        console.log(user);
+        this.isSignedIn = true;
+      } else {
+        // User is signed out! Show sign in dialog here
+        this.isSignedIn = false;
+
+      }
+    });
+    if (!this.shared.isOnline) {
+      const snackBarRef = this.shared.openSnackBar({
+        msg: 'You are offline. Some actions will not be available.',
+        action: 'Retry'
+      });
+      snackBarRef.onAction().subscribe(() => {
+        window.location.reload(true);
+      });
+    }
+    router.events.subscribe(event => {
+      if (event instanceof NavigationStart) {
+        if (router.url === '/todo') {
+          this.toolbarService.showToolbar = true;
+        }
+      }
+      this.navigationInterceptor(event);
+    });
+    if (this.shared.isDarkThemeEnabled) {
+      if (!this.document.body.classList.contains('studybuddy-dark')) {
+        this.document.body.classList.add('studybuddy-dark');
+      }
+    } else {
+      if (this.document.body.classList.contains('studybuddy-dark')) {
+        this.document.body.classList.remove('studybuddy-dark');
+      }
+    }
+  }
+  get messages(): Message[] {
+    return this.messagingService.messages;
+  }
+  /**
+   * Checks whether the user is using a mobile device
+   */
+  get isMobile(): boolean {
+    return this.shared.isMobile;
+  }
+  /**
+   * Whether to enable notifications
+   */
+  get isNotificationsEnabled(): boolean {
+    if (this.shared.settings === null) {
+      return false;
+    } else {
+      if (this.shared.settings.hasOwnProperty('enableNotifications')) {
+        return this.shared.settings['enableNotifications'];
+      } else {
+        return false;
+      }
+    }
+  }
   /**
    * Checks whether the sidenav is currently opened
    * @returns {boolean}
@@ -215,6 +212,11 @@ export class AppComponent implements OnInit {
   }
   get isAuthenticated(): boolean {
     return this.auth.authenticated;
+  }
+  keyboardShortcutHandler(event: KeyboardEvent) {
+    if (!['input', 'textarea'].includes(event.srcElement.nodeName.toLowerCase())) {
+      console.log(event);
+    }
   }
   ngOnInit() {
     this.sidenavLinks.forEach(item => {

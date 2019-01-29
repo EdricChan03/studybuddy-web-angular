@@ -121,7 +121,7 @@
             <mat-icon matListIcon>exit_to_app</mat-icon>
             <h3 matLine>Sign out</h3>
           </mat-list-item>
-          <mat-list-item (click)="signIn()" *ngIf="!isSignedIn">
+          <mat-list-item (click)="newSignIn()" *ngIf="!isSignedIn">
             <mat-icon matListIcon svgIcon="mdi:login"></mat-icon>
             <h3 matLine>Login</h3>
           </mat-list-item>
