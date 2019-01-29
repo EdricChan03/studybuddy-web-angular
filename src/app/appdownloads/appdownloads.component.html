@@ -1,1 +1,31 @@
-<p>Coming soon</p>
+<div class="padding-percentage-container">
+  <h1>App downloads</h1>
+  <h2>Android</h2>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Click to expand
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-nav-list>
+      <ng-container *ngFor="let url of androidDownloadUrls">
+        <a mat-list-item [href]="url?.downloadUrl" download *ngIf="url?.downloadUrl">
+          <h2 matLine>{{url?.version}}</h2>
+          <p matLine>{{url?.releaseName}}</p>
+          <button mat-icon-button (click)="showChangesDialog($event, url)"><mat-icon>new_releases</mat-icon></button>
+        </a>
+        <!--
+          Note that there's currently not a way to disable a list item
+          See this issue for more info: https://github.com/angular/material2/issues/763
+        -->
+        <mat-list-item disableRipple *ngIf="!url?.downloadUrl" [style.cursor]="'not-allowed'">
+          <mat-icon matListIcon>warning</mat-icon>
+          <h2 matLine>{{url?.version}}</h2>
+          <p matLine>{{url?.releaseName}}</p>
+          <span matLine>Note: There are no available files.</span>
+          <button mat-icon-button (click)="showChangesDialog($event, url)"><mat-icon>new_releases</mat-icon></button>
+        </mat-list-item>
+      </ng-container>
+    </mat-nav-list>
+  </mat-expansion-panel>
+</div>
