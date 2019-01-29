@@ -1,0 +1,18 @@
+<h2 matDialogTitle>Create a group chat</h2>
+<mat-dialog-content>
+  <form [formGroup]="createChatForm" fxLayout="column">
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name">
+      <mat-error>This is required.</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button matDialogClose="cancel" color="primary">Cancel</button>
+  <button mat-button matDialogClose="ok" [disabled]="createChatForm.invalid" color="primary">Create</button>
+</mat-dialog-actions>

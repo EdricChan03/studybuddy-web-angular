@@ -1,0 +1,20 @@
+<h2 matDialogTitle>Join chat</h2>
+<mat-dialog-content>
+  <form [formGroup]="joinChatForm">
+    <mat-form-field>
+      <mat-label>Chat ID</mat-label>
+      <input matInput formControlName="id">
+      <mat-error *ngIf="joinChatForm.get('id')?.hasError('required')">This is required.</mat-error>
+      <mat-error *ngIf="joinChatForm.get('id')?.hasError('invalidChatId')">Invalid chat ID!</mat-error>
+    </mat-form-field>
+  </form>
+  <div id="errors" *ngIf="!errors.initial && errors">
+    <h4>An error occurred:</h4>
+    <p *ngIf="errors['invalidChatId']">The ID that you supplied is invalid! Please try again.</p>
+    <p *ngIf="errors['userAlreadyJoined']">You've already joined the chat!</p>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button matDialogClose="cancel" color="primary">Cancel</button>
+  <button mat-button color="primary" [disabled]="joinChatForm.invalid" (click)="validateForm()">Join</button>
+</mat-dialog-actions>

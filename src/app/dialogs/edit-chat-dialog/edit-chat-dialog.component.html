@@ -1,0 +1,20 @@
+<h2 matDialogTitle>Edit chat details</h2>
+<mat-dialog-content fxLayout="column">
+  <form [formGroup]="chatForm">
+    <mat-form-field class="app-form-field">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name">
+      <mat-error *ngIf="chatForm.get('name')?.hasError('required')">This is required.</mat-error>
+    </mat-form-field>
+    <mat-form-field class="app-form-field">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description"></textarea>
+      <mat-hint align="end">{{ chatForm.get('description')?.value.length }} / 300</mat-hint>
+      <mat-error *ngIf="chatForm.get('description')?.hasError('maxlength')">A maximum of 300 characters are allowed.</mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button color="primary" matDialogClose="cancel">Cancel</button>
+  <button mat-button color="primary" matDialogClose="ok" [disabled]="chatForm.invalid">Save</button>
+</mat-dialog-actions>
