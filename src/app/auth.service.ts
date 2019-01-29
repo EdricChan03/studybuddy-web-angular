@@ -35,7 +35,7 @@ export class AuthService {
    * @param password The password to login as
    * @return A promise with the user's credentials
    */
-  logInWithEmailAndPassword(email: string, password: string): Promise<any> {
+  logInWithEmailAndPassword(email: string, password: string): Promise<firebase.auth.UserCredential> {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password);
   }
   /**
@@ -44,14 +44,14 @@ export class AuthService {
    * @param password The password to sign up with
    * @return A promise with the user's credentials
    */
-  signUpWithEmailAndPassword(email: string, password: string): Promise<any> {
+  signUpWithEmailAndPassword(email: string, password: string): Promise<firebase.auth.UserCredential> {
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password);
   }
   /**
    * Attempts to log in with Google
    * @return A promise with the user's credentials
    */
-  logInWithGoogle(): Promise<any> {
+  logInWithGoogle(): Promise<firebase.auth.UserCredential> {
     return this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
   }
   /**
@@ -60,7 +60,7 @@ export class AuthService {
    * In this case, developers have to implement their own functionality in their own apps.
    * @return The promise of the logout
    */
-  logOut(): Promise<any> {
+  logOut(): Promise<void> {
     return this.afAuth.auth.signOut();
   }
   /**
@@ -84,7 +84,7 @@ export class AuthService {
    * @param email The email to reset the password
    * @return A promise
    */
-  resetPassword(email: string) {
+  resetPassword(email: string): Promise<void> {
     return this.afAuth.auth.sendPasswordResetEmail(email);
   }
 }
