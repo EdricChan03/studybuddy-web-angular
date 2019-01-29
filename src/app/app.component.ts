@@ -525,6 +525,6 @@ export class AppComponent implements OnInit {
     });
   }
   private handleError(errorMsg: string) {
-    this.shared.openSnackBar({ msg: `Error: ${errorMsg}`, hasElevation: 2, additionalOpts: { horizontalPosition: 'start', } });
+    this.shared.openSnackBar({ msg: `Error: ${errorMsg}` });
   }
 }
