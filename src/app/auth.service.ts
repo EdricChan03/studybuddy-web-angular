@@ -20,7 +20,7 @@ export class AuthService {
     });
   }
   /**
-   * A gettor to check whether there is a currently authenticated user
+   * A getter to check whether there is a currently authenticated user
    */
   get authenticated(): boolean {
     return this.authState !== null;
