@@ -23,7 +23,7 @@ export class AuthService {
    * A gettor to check whether there is a currently authenticated user
    */
   get authenticated(): boolean {
-    return this.authState != null;
+    return this.authState !== null;
   }
   get firebaseAuth(): firebase.auth.Auth {
     return this.afAuth.auth;
