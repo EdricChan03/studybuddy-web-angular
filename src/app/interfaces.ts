@@ -83,15 +83,49 @@ export interface TodoItem {
 }
 
 export interface Chat {
-  id: string;
+  /**
+   * The name of the chat
+   */
   name: string;
-  people: string[];
-  lastModified?: Date;
-  createdAt: Date;
-  owner: string;
-  notifications?: number | string;
+  /** A description of the chat */
+  description?: string;
+  /**
+   * A list of members in the chat as document references to the UIDs
+   */
+  members: DocumentReference[] | firestore.FieldValue;
+  /**
+   * A list of admins in the chat as document references to the UIDs
+   */
+  admins: DocumentReference[] | firestore.FieldValue;
+  /**
+   * The date that the chat was last modified at
+   */
+  lastModified?: firestore.Timestamp;
+  /**
+   * The date that the chat was created at
+   */
+  createdAt?: firestore.Timestamp;
+  /**
+   * The owner of the chat (aka. the person who created the chat)
+   */
+  owner: DocumentReference;
+  /** The pinned message in the chat */
+  pinnedMessage?: DocumentReference;
 }
 
+/** Represents a message in a chat group */
+export interface ChatMessage {
+  /** The author of the message */
+  author: DocumentReference;
+  /** The message's content */
+  message: string;
+  /** The message that this message is replying to */
+  replyTo?: DocumentReference;
+  /** The date that the message was last modified on */
+  lastModified?: firestore.Timestamp;
+  /** The date that the message was sent on */
+  createdAt?: firestore.Timestamp;
+}
 export interface TodoProject {
   /**
    * The name of the project
