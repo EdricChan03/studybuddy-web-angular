@@ -27,13 +27,6 @@ import {
 } from './todo';
 import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
 import { AboutComponent } from './about/about.component';
-import {
-  EditContentDialogComponent,
-  TodoDialogComponent,
-  SignInDialogComponent,
-  UserInfoDialogComponent,
-  NewProjectDialogComponent
-} from './dialogs';
 import { SupportHomeComponent } from './support/support-home/support-home.component';
 import { SupportViewerComponent } from './support/shared/support-viewer/support-viewer.component';
 import { SupportSearchComponent } from './support/shared/support-search/support-search.component';
@@ -42,6 +35,7 @@ import { ChatViewerComponent } from './chats/chat-viewer/chat-viewer.component';
 import { CheatsheetViewerComponent } from './cheatsheets/shared/cheatsheet-viewer/cheatsheet-viewer.component';
 import { CheatsheetHomeComponent } from './cheatsheets/cheatsheet-home/cheatsheet-home.component';
 import { MessagingService, MessageCardComponent } from './messaging.service';
+import { DialogsModule } from './dialogs/dialogs.module';
 import { NotesHomeComponent } from './notes/notes-home/notes-home.component';
 import { NotesViewerComponent } from './notes/notes-viewer/notes-viewer.component';
 import { NoteNotFoundComponent } from './notes/note-not-found/note-not-found.component';
@@ -59,18 +53,14 @@ import { TodoDashboardNewComponent } from './todo/todo-dashboard-new/todo-dashbo
     TodoHomeComponent,
     TestpageComponent,
     TipsComponent,
-    TodoDialogComponent,
     SettingsComponent,
     TodoProjectComponent,
     TodoArchivedComponent,
     TodoDashboardComponent,
-    EditContentDialogComponent,
     AboutComponent,
-    SignInDialogComponent,
     SupportHomeComponent,
     SupportViewerComponent,
     SupportSearchComponent,
-    UserInfoDialogComponent,
     ChatsComponent,
     ChatViewerComponent,
     CheatsheetViewerComponent,
@@ -83,8 +73,8 @@ import { TodoDashboardNewComponent } from './todo/todo-dashboard-new/todo-dashbo
     LoginComponent,
     DashboardComponent,
     TodoOutletComponent,
-    NewProjectDialogComponent,
     TodoDashboardNewComponent
+    TodoDashboardNewComponent,
   ],
   imports: [
     BrowserModule,
@@ -113,21 +103,14 @@ import { TodoDashboardNewComponent } from './todo/todo-dashboard-new/todo-dashbo
           smartypants: false
         }
       }
-    })
+    }),
+    DialogsModule
   ],
   bootstrap: [AppComponent],
   providers: [
     ToolbarService,
     MessagingService,
-    AuthService,
-    NewProjectDialogComponent
-  ],
-  entryComponents: [
-    TodoDialogComponent,
-    EditContentDialogComponent,
-    SignInDialogComponent,
-    UserInfoDialogComponent,
-    NewProjectDialogComponent
+    AuthService
   ]
 })
 export class AppModule { }
