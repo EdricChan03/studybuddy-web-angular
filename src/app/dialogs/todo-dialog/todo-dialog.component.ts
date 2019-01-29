@@ -225,12 +225,12 @@ export class TodoDialogComponent implements OnInit {
         console.log(`Successfully written data with result: ${result}`);
       }, error => {
         this.shared.openSnackBar({
-          msg: `An error occured: ${error.message}`,
+          msg: `An error occurred: ${error.message}`,
           additionalOpts: {
             duration: 6000
           }
         });
-        console.error(`An error occured: ${error.message}`);
+        console.error(`An error occurred: ${error.message}`);
       });
     } else {
       this.todoCollection.doc<TodoItem>(this.todoToEdit.id)
@@ -242,10 +242,10 @@ export class TodoDialogComponent implements OnInit {
           console.log(`Successfully updated data with result: ${result}`);
         }, error => {
           this.shared.openSnackBar({
-            msg: `An error occured: ${error.message}`,
+            msg: `An error occurred: ${error.message}`,
             additionalOpts: { duration: 6000 }
           });
-          console.error(`An error occured: ${error.message}`);
+          console.error(`An error occurred: ${error.message}`);
         });
     }
     this.dialogRef.close();
