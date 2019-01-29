@@ -137,7 +137,8 @@ export class AccountComponent {
           if (error.code === 'auth/requires-recent-login') {
             const snackBarRef = this.shared.openSnackBar({
               msg: 'Please relogin before unregistering first.',
-              action: 'Relogin'
+              action: 'Relogin',
+              additionalOpts: { duration: 8000 }
             });
             snackBarRef.onAction().subscribe(_ => {
               // User has not logged in for a while.
