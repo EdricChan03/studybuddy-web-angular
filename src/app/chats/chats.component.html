@@ -1,10 +1,47 @@
-<h1>Chats</h1>
-<p>Coming soon!</p>
+<div class="padding-percentage-container">
+  <h1>Chats</h1>
 
-<mat-nav-list>
-  <a mat-list-item *ngFor="let chat of chats" [routerLink]="['/chats/' + chat.id]">
-    <h3 matLine>{{chat.name}}</h3>
-    <p matLine>Conversation between you and {{chat.people.length - 1}} people</p>
-    <span class="notifications-badge" *ngIf="chat.notifications">{{chat.notifications}}</span>
-  </a>
-</mat-nav-list>
+  <mat-nav-list>
+    <mat-list-item (click)="newChat()">
+      <h3 matLine>New chat</h3>
+      <mat-icon matListIcon>add</mat-icon>
+    </mat-list-item>
+    <mat-list-item (click)="joinChat()">
+      <h3 matLine>Join chat</h3>
+      <mat-icon matListIcon>group_add</mat-icon>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <h3 matSubheader>Chats</h3>
+    <a mat-list-item *ngFor="let chat of chats$ | async" [routerLink]="['/chats/' + chat?.id]">
+      <mat-icon matListIcon>chat</mat-icon>
+      <h3 matLine>{{chat?.name}}</h3>
+      <p matLine *ngIf="chat?.description">{{chat?.description}}</p>
+      <span fxFlex></span>
+      <mat-menu #moreMenu="matMenu">
+        <button mat-menu-item (click)="editChatDetails(chat, $event)" *ngIf="isAdmin(chat)">
+          <mat-icon>edit</mat-icon>
+          <span>Edit chat details</span>
+        </button>
+        <button mat-menu-item (click)="deleteChat(chat, $event)" *ngIf="isAdmin(chat)">
+          <mat-icon>delete</mat-icon>
+          <span>Delete chat</span>
+        </button>
+        <button mat-menu-item (click)="archiveChat(chat, $event)" *ngIf="isAdmin(chat)">
+          <mat-icon>archive</mat-icon>
+          <span>Archive chat</span>
+        </button>
+        <button mat-menu-item (click)="leaveChat(chat, $event)" [disabled]="isAdmin(chat)">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Leave chat</span>
+        </button>
+        <button mat-menu-item (click)="reportChatAsSpam(chat, $event)">
+          <mat-icon>report</mat-icon>
+          <span>Report chat as spam</span>
+        </button>
+      </mat-menu>
+      <button mat-icon-button [matMenuTriggerFor]="moreMenu" (click)="onClickMenu($event)">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+    </a>
+  </mat-nav-list>
+</div>
