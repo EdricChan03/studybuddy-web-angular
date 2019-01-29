@@ -28,6 +28,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { TodoOutletComponent } from './todo/todo-outlet/todo-outlet.component';
 import { AuthGuardService } from './auth-guard.service';
 import { TodoDashboardNewComponent } from './todo/todo-dashboard-new/todo-dashboard-new.component';
+import { SignupComponent } from './signup/signup.component';
 
 const SUPPORT_ROUTES: Route[] = [
   { path: 'home', component: SupportHomeComponent },
@@ -36,8 +37,41 @@ const SUPPORT_ROUTES: Route[] = [
 
 // The routes
 export const AppRoutes: Route[] = [
+  // About StudyBuddy
+  { path: 'about', component: AboutComponent },
+  // Account
+  { path: 'account', component: AccountComponent, canActivate: [AuthGuardService] },
+  // Chatrooms! Coming soon.
+  { path: 'chats', component: ChatsComponent, canActivate: [AuthGuardService] },
+  { path: 'chats/:id', component: ChatViewerComponent, canActivate: [AuthGuardService] },
+  // Cheat sheet page
+  { path: 'cheatsheets', component: CheatsheetHomeComponent },
+  { path: 'cheatsheets/:id', component: CheatsheetViewerComponent },
+  // Dashboard
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardService] },
   // Downloads for the app. Currently a bit empty
   { path: 'downloads', component: AppDownloadsComponent },
+  // Login page
+  { path: 'login', component: LoginComponent },
+  // Notes
+  { path: 'notes', component: NotesHomeComponent, canActivate: [AuthGuardService] },
+  { path: 'notes/note-not-found', component: NoteNotFoundComponent, canActivate: [AuthGuardService] },
+  { path: 'notes/:id', component: NotesViewerComponent, canActivate: [AuthGuardService] },
+  // Reroutes those going to the old route to the new 'tips' route
+  // Note: This **may** be removed in a future release
+  { path: 'resources', redirectTo: '/tips' },
+  // Settings page. Currently a bit broken
+  { path: 'settings', component: SettingsComponent, canActivate: [AuthGuardService] },
+  // Sign up page
+  { path: 'signup', component: SignupComponent },
+  // An alias for signing up
+  { path: 'sign-up', redirectTo: '/signup' },
+  // Support page
+  { path: 'support', children: SUPPORT_ROUTES },
+  // Test links for developers.
+  { path: 'test', component: TestpageComponent },
+  // Tips page.
+  { path: 'tips', component: TipsComponent },
   {
     path: 'todo', component: TodoOutletComponent, canActivate: [AuthGuardService], children: [
       // All todos
@@ -51,35 +85,6 @@ export const AppRoutes: Route[] = [
       { path: '**', redirectTo: '/todo/dashboard' }
     ]
   },
-  // Test links for developers.
-  { path: 'test', component: TestpageComponent },
-  // Settings page. Currently a bit broken
-  { path: 'settings', component: SettingsComponent, canActivate: [AuthGuardService] },
-  // Tips page.
-  { path: 'tips', component: TipsComponent },
-  // Reroutes those going to the old route to the new 'tips' route
-  // Note: This **may** be removed in a future release
-  { path: 'resources', redirectTo: '/tips' },
-  // About StudyBuddy
-  { path: 'about', component: AboutComponent },
-  // Support page
-  { path: 'support', children: SUPPORT_ROUTES },
-  // Cheat sheet page
-  { path: 'cheatsheets', component: CheatsheetHomeComponent },
-  { path: 'cheatsheets/:id', component: CheatsheetViewerComponent },
-  // Chatrooms! Coming soon.
-  { path: 'chats', component: ChatsComponent, canActivate: [AuthGuardService] },
-  { path: 'chats/:id', component: ChatViewerComponent, canActivate: [AuthGuardService] },
-  // Notes
-  { path: 'notes', component: NotesHomeComponent, canActivate: [AuthGuardService] },
-  { path: 'notes/note-not-found', component: NoteNotFoundComponent, canActivate: [AuthGuardService] },
-  { path: 'notes/:id', component: NotesViewerComponent, canActivate: [AuthGuardService] },
-  // Account
-  { path: 'account', component: AccountComponent },
-  // Login page
-  { path: 'login', component: LoginComponent },
-  // Dashboard
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardService] },
   { path: '**', redirectTo: '/dashboard' }
 ];
 
