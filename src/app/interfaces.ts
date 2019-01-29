@@ -1,4 +1,5 @@
 import { firestore } from 'firebase';
+import { DocumentReference } from '@angular/fire/firestore';
 
 export interface SidenavLink {
   /**
@@ -74,7 +75,7 @@ export interface TodoItem {
   /**
    * The project that the todo is in
    */
-  project?: string;
+  project?: DocumentReference;
   /**
    * The id of the todo
    */
