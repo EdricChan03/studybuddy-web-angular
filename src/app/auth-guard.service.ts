@@ -26,7 +26,7 @@ export class AuthGuardService implements CanActivate {
       map(user => !!user),
       tap((loggedIn: boolean) => {
         if (!loggedIn) {
-          this.shared.openSnackBar({ msg: 'Please login before accessing this page', additionalOpts: { duration: 5000, horizontalPosition: 'start' } });
+          this.shared.openSnackBar({ msg: 'Please login before accessing this page' });
           this.router.navigate(['/login']);
         }
       })
