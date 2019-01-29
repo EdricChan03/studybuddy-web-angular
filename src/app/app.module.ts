@@ -8,6 +8,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ServiceWorkerModule } from '@angular/service-worker';
 import 'hammerjs';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
@@ -102,6 +103,7 @@ import { ToolbarService } from './toolbar.service';
       }
     }),
     NgCircleProgressModule.forRoot(),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     DialogsModule
   ],
   bootstrap: [AppComponent],
