@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection, DocumentReference } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection, DocumentReference, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, Subscription } from 'rxjs';
 import { map, debounceTime } from 'rxjs/operators';
@@ -12,6 +12,7 @@ import { ToolbarService } from '../toolbar.service';
 import { firestore } from 'firebase';
 import { DomSanitizer } from '@angular/platform-browser';
 import { EditChatDialogComponent } from '../dialogs/edit-chat-dialog/edit-chat-dialog.component';
+import { ChatInfoDialogComponent } from '../dialogs';
 
 @Component({
   selector: 'app-chats',
@@ -88,6 +89,11 @@ export class ChatsComponent {
   onClickMenu(event: MouseEvent) {
     event.stopImmediatePropagation();
     event.preventDefault();
+  }
+  showChatInfo(chat: Chat, event: MouseEvent) {
+    this.dialog.open<ChatInfoDialogComponent, AngularFirestoreDocument<Chat>>(ChatInfoDialogComponent, {
+      data: this.afFs.doc<Chat>(`chats/${chat['id']}`)
+    });
   }
   editChatDetails(chat: Chat, event: MouseEvent) {
     const dialogRef = this.dialog.open<EditChatDialogComponent, string>(EditChatDialogComponent, {
