@@ -1,0 +1,12 @@
+<h2 matDialogTitle>About {{ (chatDoc$ | async)?.name }}</h2>
+<mat-dialog-content fxLayout="column">
+  <h3>Description</h3>
+  <p>{{ (chatDoc$ | async)?.description }}</p>
+  <h3>Owner</h3>
+  <p>{{ (chatDoc$ | async)?.owner.id }}</p>
+  <h3>Chat ID</h3>
+  <p>{{ chatDoc.ref.id }}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button matDialogClose color="primary">Dismiss</button>
+</mat-dialog-actions>
