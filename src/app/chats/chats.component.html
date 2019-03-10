@@ -38,7 +38,7 @@
           <mat-icon>exit_to_app</mat-icon>
           <span>Leave chat</span>
         </button>
-        <button mat-menu-item (click)="reportChatAsSpam(chat, $event)">
+        <button mat-menu-item (click)="reportChatAsSpam(chat, $event)" [disabled]="isAdmin(chat)">
           <mat-icon>report</mat-icon>
           <span>Report chat as spam</span>
         </button>
