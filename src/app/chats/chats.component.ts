@@ -220,7 +220,7 @@ export class ChatsComponent {
         });
     } else {
       this.shared.openSnackBar({ msg: 'Error: You must be an admin to delete the chat! ' });
-      console.error('Admin privileges required!');
+      console.error(`Admin privileges required to delete the chat "${chat.name}"!`);
     }
   }
   deleteChat(chat: Chat, event: MouseEvent) {
