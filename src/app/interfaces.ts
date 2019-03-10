@@ -37,7 +37,7 @@ export interface Settings {
   /**
    * Whether to enable dark theme
    */
-  enableDarkTheme?: boolean;
+  darkTheme?: boolean;
   /**
    * Whether to enable notifications
    */

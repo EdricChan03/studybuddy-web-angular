@@ -167,11 +167,7 @@ export class SharedService {
     if (this.settings === null) {
       return false;
     } else {
-      if (this.settings.hasOwnProperty('enableDarkTheme')) {
-        return this.settings.enableDarkTheme;
-      } else {
-        return false;
-      }
+      return this.settings['enableDarkTheme'] || this.settings['darkTheme'] || false;
     }
   }
   get extraToolbarConfig(): ExtraToolbarConfig {

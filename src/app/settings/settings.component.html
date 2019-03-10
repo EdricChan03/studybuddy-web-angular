@@ -1,11 +1,69 @@
 <div class="padding-percentage-container">
   <mat-card>
-    <mat-card-title>Settings</mat-card-title>
+    <mat-card-content>
+      <ng-container *ngIf="!shared.isMobile">
+        <mat-action-list fxFlex="40">
+          <mat-list-item (click)="showSettingsPanel(panel?.id)" *ngFor="let panel of settingsPanels"
+            [class.active-link]="currentSettingPanel === panel?.id">
+            <h2 matLine>{{ panel?.name }}</h2>
+            <p matLine>{{ panel?.description }}</p>
+          </mat-list-item>
+        </mat-action-list>
+      </ng-container>
+      <div class="setting-panel" fxFlex>
+        <div [style.display]="(shared.isMobile || currentSettingPanel === 'account') ? 'block' : 'none'"
+          class="setting-panel-section" fxLayout="column">
+          <form [formGroup]="updateUserForm" fxLayout="column">
+            <h2 [style.display]="shared.isMobile ? 'block' : 'none'">Account</h2>
+            <h3>Update particulars</h3>
+            <mat-form-field>
+              <mat-label>New name</mat-label>
+              <input matInput formControlName="displayName" autocomplete="name">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>New email</mat-label>
+              <input matInput type="email" formControlName="email" autocomplete="email">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>New password</mat-label>
+              <input matInput type="password" formControlName="password" autocomplete="new-password">
+            </mat-form-field>
+            <div class="setting-panel-button-row" [style.display]="(shared.isMobile || currentSettingPanel === 'account') ? 'block' : 'none'"
+              (click)="updateUserParticulars()">
+              <button mat-button color="primary">Update particulars</button>
+            </div>
+          </form>
+        </div>
+        <form [formGroup]="settingsForm" fxLayout="column">
+          <div class="setting-panel-section"
+            [style.display]="(shared.isMobile || currentSettingPanel === 'appearance') ? 'block' : 'none'">
+            <h2 [style.display]="shared.isMobile ? 'block' : 'none'">Appearance</h2>
+            <mat-checkbox formControlName="darkTheme">Enable dark theme</mat-checkbox>
+          </div>
+          <div class="setting-panel-section"
+            [style.display]="(shared.isMobile || currentSettingPanel === 'experiments') ? 'block' : 'none'">
+            <h2 [style.display]="shared.isMobile ? 'block' : 'none'">Experiments</h2>
+            <p>Coming soon!</p>
+          </div>
+          <div class="setting-panel-section"
+            [style.display]="(shared.isMobile || currentSettingPanel === 'behaviour') ? 'block' : 'none'"
+            [style.marginBottom]="shared.isMobile ? '50px' : 'inherit'">
+            <h2 [style.display]="shared.isMobile ? 'block' : 'none'">Behaviour</h2>
+            <mat-checkbox formControlName="closeSidenavOnClick">Close sidenav on click</mat-checkbox>
+          </div>
+          <div class="setting-panel-actions-row" [style.display]="(shared.isMobile || currentSettingPanel !== 'account') ? 'block' : 'none'">
+            <button mat-button color="warn" (click)="resetSettings()">Reset settings</button>
+            <button mat-button color="primary" (click)="saveSettings()">Save changes</button>
+          </div>
+        </form>
+      </div>
+    </mat-card-content>
+    <!-- <mat-card-title>Settings</mat-card-title>
     <mat-card-content>
       <form #settingsForm="ngForm" fxLayout="column">
         <h3 class="mat-subheader">General</h3>
         <mat-checkbox [(ngModel)]="settings.enableDarkTheme" name="enableDarkTheme">Enable dark theme</mat-checkbox>
-        <!-- <mat-checkbox [(ngModel)]="settings.showTodosAsTable" name="showTodosAsTable">Show todos as a table</mat-checkbox> -->
+        <mat-checkbox [(ngModel)]="settings.showTodosAsTable" name="showTodosAsTable">Show todos as a table</mat-checkbox>
         <h4>Default todo view</h4>
         <mat-radio-group [(ngModel)]="settings.todoView" name="todoView">
           <mat-radio-button value="list">List view</mat-radio-button>
@@ -29,6 +87,6 @@
       <button mat-button (click)="saveSettings()" color="primary" [disabled]="settingsForm.invalid">
         Save
       </button>
-    </mat-card-actions>
+    </mat-card-actions> -->
   </mat-card>
 </div>
