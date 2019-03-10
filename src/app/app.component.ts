@@ -44,7 +44,7 @@ export class AppComponent implements OnInit {
     {
       link: 'dashboard',
       title: 'Dashboard',
-      icon: 'view_quiltc'
+      icon: 'view_quilt'
     },
     {
       link: 'todo',
