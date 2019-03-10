@@ -812,7 +812,7 @@ export class ConfirmDialogConfig extends DialogConfig {
    */
   hasCheckbox?: boolean;
   /**
-   * The label pf the checkbox. Depends on `hasCheckbox`.
+   * The label of the checkbox. Depends on `hasCheckbox`.
    */
   checkboxLabel?: string;
   /**
