@@ -29,7 +29,7 @@
     "firebase": "^5.8.6",
     "hammerjs": "^2.0.8",
     "ng-circle-progress": "^1.4.0",
-    "ngx-markdown": "^7.1.3",
+    "ngx-markdown": "^7.1.4",
     "prismjs": "^1.15.0",
     "rxjs": "^6.4.0",
     "zone.js": "^0.8.29"
