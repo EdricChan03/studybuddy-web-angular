@@ -8,6 +8,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 The website is available [here](https://studybuddy-e5f46.firebaseapp.com).
 
 ## Android
+
 For Android builds, see this [Github repo](https://github.com/Chan4077/StudyBuddy) and its [Releases](https://github.com/Chan4077/StudyBuddy/releases).
 
 ---
@@ -26,7 +27,7 @@ For Android builds, see this [Github repo](https://github.com/Chan4077/StudyBudd
 To build the source code, follow these steps:
 
 1. Clone this repository locally.
-   
+
    ```bash
    cd path/to/dir
    git clone https://github.com/Chan4077/StudyBuddy
