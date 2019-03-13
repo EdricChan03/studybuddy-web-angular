@@ -1,6 +1,11 @@
 import { firestore } from 'firebase';
 import { DocumentReference } from '@angular/fire/firestore';
 
+/** Interface to indicate that an AngularFire interface should have a document ID */
+export interface HasId {
+  /** The document ID */
+  id?: string;
+}
 export interface SidenavLink {
   /**
    * The link of the navigation item
@@ -51,7 +56,7 @@ export interface Settings {
    */
   closeSidenavOnClick?: boolean;
 }
-export interface TodoItem {
+export interface TodoItem extends HasId {
   /**
    * The content of the todo
    */
@@ -76,13 +81,9 @@ export interface TodoItem {
    * The project that the todo is in
    */
   project?: DocumentReference;
-  /**
-   * The id of the todo
-   */
-  id?: string | any;
 }
 
-export interface Chat {
+export interface Chat extends HasId {
   /**
    * The name of the chat
    */
@@ -114,7 +115,7 @@ export interface Chat {
 }
 
 /** Represents a message in a chat group */
-export interface ChatMessage {
+export interface ChatMessage extends HasId {
   /** The author of the message */
   author: DocumentReference;
   /** The message's content */
@@ -126,15 +127,11 @@ export interface ChatMessage {
   /** The date that the message was sent on */
   createdAt?: firestore.Timestamp;
 }
-export interface TodoProject {
+export interface TodoProject extends HasId {
   /**
    * The name of the project
    */
   name: string;
-  /**
-   * The project document's ID
-   */
-  id?: string;
   /**
    * The color of the project in hexadecimal color
    */
