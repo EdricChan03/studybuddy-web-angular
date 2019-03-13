@@ -236,7 +236,8 @@ export class ChatsComponent {
         title: `Delete "${chat.name}"?`,
         msg: this.dom.bypassSecurityTrustHtml(dialogText),
         isHtml: true,
-        ok: 'Delete'
+        ok: 'Delete',
+        okColor: 'warn'
       });
       dialogRef.afterClosed().subscribe((result) => {
         if (result === 'ok') {
