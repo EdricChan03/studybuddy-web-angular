@@ -152,20 +152,20 @@ export class SettingsComponent implements OnInit {
       }
       if (displayNameVal) {
         if (displayNameVal === this.currentUser.displayName)
-        this.currentUser.updateProfile({
-          displayName: displayNameVal
-        })
-          .then(() => {
-            this.shared.openSnackBar({ msg: `Successfully updated display name to "${displayNameVal}"!` });
+          this.currentUser.updateProfile({
+            displayName: displayNameVal
           })
-          .catch((error) => {
-            this.shared.openSnackBar({
-              msg: `An error occurred while attempting to update the display name to "${displayNameVal}": ${error.message}`,
-              additionalOpts: {
-                duration: 8000
-              }
-            });
-          })
+            .then(() => {
+              this.shared.openSnackBar({ msg: `Successfully updated display name to "${displayNameVal}"!` });
+            })
+            .catch((error) => {
+              this.shared.openSnackBar({
+                msg: `An error occurred while attempting to update the display name to "${displayNameVal}": ${error.message}`,
+                additionalOpts: {
+                  duration: 8000
+                }
+              });
+            })
       }
       if (emailVal) {
         if (emailVal !== this.currentUser.email) {
@@ -205,10 +205,10 @@ export class SettingsComponent implements OnInit {
           duration: 8000
         }
       })
-      .onAction()
-      .subscribe(() => {
-        this.router.navigate(['/login']);
-      })
+        .onAction()
+        .subscribe(() => {
+          this.router.navigate(['/login']);
+        })
     }
   }
   deleteAccount() {
