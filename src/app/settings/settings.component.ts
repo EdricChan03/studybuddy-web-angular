@@ -20,6 +20,7 @@ export class SettingsComponent implements OnInit {
     private afAuth: AngularFireAuth,
     private fb: FormBuilder,
     private router: Router,
+    private route: ActivatedRoute,
     public shared: SharedService
   ) {
     shared.title = 'Settings';
@@ -37,6 +38,24 @@ export class SettingsComponent implements OnInit {
         this.currentUser = user;
       }
     })
+    route.queryParams
+      .pipe(
+        filter(params => params.panel || params.settingPanel)
+      ).subscribe(params => {
+        if (params.panel) {
+          if (this.settingsPanelIds.includes(params.panel)) {
+            this.currentSettingPanel = params.panel;
+          } else {
+            console.warn(`The currentSettingPanel query parameter is set to an invalid setting panel ID.\nThe available settings panel IDs are ${this.settingsPanelIds.join()}`);
+          }
+        } else if (params.settingPanel) {
+          if (this.settingsPanelIds.includes(params.settingPanel)) {
+            this.currentSettingPanel = params.settingPanel;
+          } else {
+            console.warn(`The settingPanel query parameter is set to an invalid setting panel ID.\nThe available settings panel IDs are ${this.settingsPanelIds.join()}`);
+          }
+        }
+      })
   }
   currentSettingPanel = 'appearance';
   settingsPanels = [
@@ -61,6 +80,7 @@ export class SettingsComponent implements OnInit {
       description: 'Configure the behaviour of the site'
     }
   ];
+  settingsPanelIds = this.settingsPanels.map(panel => panel.id);
   defaultSettings: Settings = {
     enableCalendar: false,
     enableNotifications: false,
@@ -69,6 +89,7 @@ export class SettingsComponent implements OnInit {
     todoView: 'table',
     closeSidenavOnClick: true
   };
+
   showSettingsPanel(panelId: string) {
     this.currentSettingPanel = panelId;
   }
@@ -113,6 +134,7 @@ export class SettingsComponent implements OnInit {
       }
     });
   }
+
   updateUserParticulars() {
     if (this.currentUser) {
       const displayNameVal = this.updateUserForm.get('displayName').value;
