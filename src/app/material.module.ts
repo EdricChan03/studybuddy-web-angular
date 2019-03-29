@@ -88,6 +88,8 @@ const CDK_MODULES = [
 })
 export class MaterialModule {
   constructor(private dom: DomSanitizer, private iconRegistry: MatIconRegistry) {
-    iconRegistry.addSvgIconSetInNamespace('mdi', dom.bypassSecurityTrustResourceUrl('assets/mdi-icons.svg'));
+    // iconRegistry.addSvgIconSetInNamespace('mdi', dom.bypassSecurityTrustResourceUrl('assets/mdi-icons.svg'));
+    iconRegistry.addSvgIconSetInNamespace('mdi', dom.bypassSecurityTrustResourceUrl('assets/mdi-icons-outlined.svg'));
+    iconRegistry.setDefaultFontSetClass('material-icons-outlined');
   }
 }

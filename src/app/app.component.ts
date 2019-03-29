@@ -116,7 +116,7 @@ export class AppComponent implements OnInit {
     {
       link: 'support/home',
       title: 'Help',
-      icon: 'help'
+      icon: 'help_outline'
     }
   ];
   tempId = 0;
