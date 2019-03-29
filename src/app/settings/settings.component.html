@@ -28,9 +28,9 @@
               <mat-label>New password</mat-label>
               <input matInput type="password" formControlName="password" autocomplete="new-password">
             </mat-form-field>
-            <div class="setting-panel-button-row" [style.display]="(shared.isMobile || currentSettingPanel === 'account') ? 'block' : 'none'"
-              (click)="updateUserParticulars()">
-              <button mat-button color="primary">Update particulars</button>
+            <div class="setting-panel-button-row" [style.display]="(shared.isMobile || currentSettingPanel === 'account') ? 'block' : 'none'">
+              <button mat-button color="primary" (click)="updateUserParticulars()">Update particulars</button>
+              <button mat-button color="warn" (click)="deleteAccount()">Delete account</button>
             </div>
           </form>
         </div>

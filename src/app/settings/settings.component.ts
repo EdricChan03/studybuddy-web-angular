@@ -211,6 +211,56 @@ export class SettingsComponent implements OnInit {
       })
     }
   }
+  deleteAccount() {
+    this.shared.openConfirmDialog({
+      title: 'Delete account?',
+      msg: `Are you sure you want to delete your account?
+      This is permanent and cannot be reversed!`,
+      okColor: 'warn'
+    })
+    .afterClosed()
+    .subscribe(result => {
+      if (result === 'ok') {
+        this.currentUser.delete()
+          .then(() => {
+            this.shared.openSnackBar({
+              msg: 'Successfully deleted account!'
+            });
+          })
+          .catch((error) => {
+            if (error['code'] === 'auth/requires-recent-login') {
+              // Reauthenticate the user
+              this.shared.openSnackBar({
+                msg: 'Please reauthenticate before deleting your account',
+                action: 'Reauthenticate',
+                additionalOpts: {
+                  duration: 8000
+                }
+              })
+              .onAction()
+              .subscribe(() => {
+                this.currentUser.reauthenticateWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => {
+                  this.deleteAccount();
+                })
+                  .catch((snackBarError) => {
+                    console.error(snackBarError);
+                    this.shared.openSnackBar({
+                      msg: `An error occurred while attempting to reauthenticate: ${snackBarError.message}`,
+                      action: 'Retry',
+                      additionalOpts: {
+                        duration: 8000
+                      }
+                    })
+                    .onAction()
+                    .subscribe(this.deleteAccount);
+                  });
+              });
+            }
+          })
+      }
+    })
+  }
+
   ngOnInit() {
     const settings = this.retrieveSettings();
     const formVal = {};
