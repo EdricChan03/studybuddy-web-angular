@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { Settings } from '../interfaces';
 import { SharedService } from '../shared.service';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import * as firebase from 'firebase';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-settings',
