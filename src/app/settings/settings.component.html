@@ -2,13 +2,13 @@
   <mat-card>
     <mat-card-content>
       <ng-container *ngIf="!shared.isMobile">
-        <mat-action-list fxFlex="40">
+        <mat-nav-list fxFlex="40">
           <mat-list-item (click)="showSettingsPanel(panel?.id)" *ngFor="let panel of settingsPanels"
             [class.active-link]="currentSettingPanel === panel?.id">
             <h2 matLine>{{ panel?.name }}</h2>
             <p matLine>{{ panel?.description }}</p>
           </mat-list-item>
-        </mat-action-list>
+        </mat-nav-list>
       </ng-container>
       <div class="setting-panel" fxFlex>
         <div [style.display]="(shared.isMobile || currentSettingPanel === 'account') ? 'block' : 'none'"
