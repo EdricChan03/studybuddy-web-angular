@@ -50,7 +50,7 @@
           <div class="setting-panel-section"
             [style.display]="(shared.isMobile || currentSettingPanel === 'experiments') ? 'block' : 'none'">
             <h2 [style.display]="shared.isMobile ? 'block' : 'none'">Experiments</h2>
-            <p>Coming soon!</p>
+            <mat-checkbox formControlName="enableNewUi">Show new UI</mat-checkbox>
           </div>
           <div class="setting-panel-section"
             [style.display]="(shared.isMobile || currentSettingPanel === 'behaviour') ? 'block' : 'none'"
