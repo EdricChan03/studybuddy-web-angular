@@ -72,7 +72,7 @@ export class SettingsComponent implements OnInit {
     {
       name: 'Experiments',
       id: 'experiments',
-      description: 'Enable feature flags'
+      description: 'Enable experimental features'
     },
     {
       name: 'Behaviour',
