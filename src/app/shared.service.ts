@@ -1,37 +1,21 @@
-import { Component, Injectable, NgModule, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import {
-  MatDialog,
-  MatDialogConfig,
-  MatDialogModule,
-  MatDialogRef
-} from '@angular/material/dialog';
-import { MatListModule, MatSelectionList } from '@angular/material/list';
-import {
-  MatSnackBar,
-  MatSnackBarConfig,
-  MatSnackBarModule,
-  MatSnackBarRef,
-  SimpleSnackBar,
-  MatSnackBarHorizontalPosition,
-  MatSnackBarVerticalPosition
-} from '@angular/material/snack-bar';
-import { SafeHtml, Title } from '@angular/platform-browser';
-
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { BrowserModule } from '@angular/platform-browser';
 import { ComponentType } from '@angular/cdk/portal';
-import { FormsModule, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { Component, Injectable, NgModule, OnInit, TemplateRef, ViewChild, SecurityContext } from '@angular/core';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ThemePalette } from '@angular/material/core';
+import { MatDialog, MatDialogConfig, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatListModule, MatSelectionList } from '@angular/material/list';
+import { MatSnackBar, MatSnackBarConfig, MatSnackBarHorizontalPosition, MatSnackBarModule, MatSnackBarRef, MatSnackBarVerticalPosition, SimpleSnackBar } from '@angular/material/snack-bar';
+import { BrowserModule, DomSanitizer, SafeHtml, SafeValue, Title } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Observable, Subject } from 'rxjs';
 import { Settings } from './interfaces';
-import { ThemePalette } from '@angular/material/core';
-import { MatIconModule } from '@angular/material/icon';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { ToolbarService } from './toolbar.service';
+
 
 /**
  * This callback gets called when the action button has been clicked
@@ -106,7 +90,8 @@ export class SharedService {
     public snackbar: MatSnackBar,
     public dialog: MatDialog,
     public documentTitle: Title,
-    public breakpointObserver: BreakpointObserver
+    public breakpointObserver: BreakpointObserver,
+    public dom: DomSanitizer
   ) {
     window.addEventListener('keydown', (event) => {
       this.keydownEvents.next(event);
@@ -477,6 +462,19 @@ export class SharedService {
   getRandomColour(): string {
     return this.getRandomColor();
   }
+
+  /**
+   * Sanitizes a HTML string
+   *
+   * Note: It's preferred to use {@link DomSanitizer#sanitize} instead of {@link DomSanitizer#bypassSecurityTrustHtml}
+   * as the former sanitizes the HTML-like string while the latter completely skips sanitizing
+   * @param value The value to sanitize
+   * @returns A sanitized HTML string
+   */
+  sanitizeHtml(value: string | SafeValue): string {
+    return this.dom.sanitize(SecurityContext.HTML, value);
+  }
+
   /**
    * Throws an error with the specified parameters
    * @param variable The variable that was not specified
@@ -754,6 +752,8 @@ export class SnackBarConfig {
 export class DialogConfig extends MatDialogConfig {
   /**
    * The message of the dialog
+   *
+   * Note: Please consider using {@link DomSanitizer#sanitize} instead of {@link DomSanitizer#bypassSecurityTrustHtml} as the latter does not actually sanitize the HTML, while the former does
    */
   msg?: string | SafeHtml;
   /**
@@ -762,6 +762,8 @@ export class DialogConfig extends MatDialogConfig {
   title?: string;
   /**
    * Whether the dialog's message is HTML
+   *
+   * Required to be set if you're passing in HTML.
    */
   isHtml?: boolean;
   /**
