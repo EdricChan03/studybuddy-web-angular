@@ -1,15 +1,61 @@
-<h2 matDialogTitle>Create a group chat</h2>
+<h2 matDialogTitle>Create a chat group</h2>
 <mat-dialog-content>
   <form [formGroup]="createChatForm" fxLayout="column">
-    <mat-form-field>
+    <mat-form-field class="app-form-field">
       <mat-label>Name</mat-label>
       <input matInput formControlName="name">
       <mat-error>This is required.</mat-error>
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field class="app-form-field">
       <mat-label>Description</mat-label>
       <textarea matInput formControlName="description"></textarea>
+      <mat-hint align="end">{{ createChatForm.get('description')?.value.length }} / 300</mat-hint>
+      <mat-error *ngIf="createChatForm.get('description')?.hasError('maxlength')">A maximum of 300 characters are allowed.</mat-error>
     </mat-form-field>
+    <mat-form-field class="app-form-field">
+      <mat-label>Visibility</mat-label>
+      <mat-select formControlName="visibility">
+        <mat-select-trigger>{{ createChatForm.get('visibility')?.value | titlecase }}</mat-select-trigger>
+        <mat-option value="public">
+          <mat-icon aria-hidden="true" aria-label="Public icon">public</mat-icon>
+          Public
+        </mat-option>
+        <mat-option value="private">
+          <mat-icon aria-hidden="true" aria-label="Private icon">lock</mat-icon>
+          Private
+        </mat-option>
+        <mat-option value="unlisted">
+          <mat-icon aria-hidden="true" aria-label="Unlisted icon">link</mat-icon>
+          Unlisted
+        </mat-option>
+      </mat-select>
+      <button mat-icon-button matSuffix (click)="showHelpDialog(helpVisibilityDialog, $event)">
+        <mat-icon>help_outline</mat-icon>
+      </button>
+    </mat-form-field>
+    <ng-template #helpVisibilityDialog>
+      <h2 matDialogTitle>Help - Chat group visibility</h2>
+      <mat-dialog-content fxLayout="column">
+        <h3>Public</h3>
+        <ul>
+          <li>Chat group publicly visible to everyone</li>
+          <li>Anyone can join even without chat group ID</li>
+        </ul>
+        <h3>Private</h3>
+        <ul>
+          <li>Not publicly visible to anyone</li>
+          <li>Invitation-only (admins/existing members can send invites)</li>
+        </ul>
+        <h3>Unlisted</h3>
+        <ul>
+          <li>Not publicly visible to anyone</li>
+          <li>Anyone with the chat group's ID can join</li>
+        </ul>
+      </mat-dialog-content>
+      <mat-dialog-actions align="end">
+        <button mat-button (click)="closeHelpDialog()" color="primary">Dismiss</button>
+      </mat-dialog-actions>
+    </ng-template>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">

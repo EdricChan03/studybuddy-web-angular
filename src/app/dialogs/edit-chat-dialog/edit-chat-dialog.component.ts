@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, TemplateRef } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, DocumentReference } from '@angular/fire/firestore';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
@@ -14,7 +14,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 export class EditChatDialogComponent implements OnInit {
   chatDoc: AngularFirestoreDocument<Chat>;
   chatDoc$: Observable<Chat>;
-  chatForm: FormGroup;
+  editChatForm: FormGroup;
+  helpDialogRef: MatDialogRef<any>;
   constructor(
     @Inject(MAT_DIALOG_DATA) private id: string,
     private auth: AuthService,
@@ -25,9 +26,10 @@ export class EditChatDialogComponent implements OnInit {
   ) {
     this.chatDoc = afFs.doc(`chats/${id}`);
     this.chatDoc$ = this.chatDoc.valueChanges();
-    this.chatForm = fb.group({
+    this.editChatForm = fb.group({
       name: ['', Validators.required],
-      description: ['', Validators.maxLength(300)]
+      description: ['', Validators.maxLength(300)],
+      visibility: 'private'
     });
   }
 
@@ -43,14 +45,31 @@ export class EditChatDialogComponent implements OnInit {
           this.shared.openSnackBar({ msg: 'You\'re not allowed to edit the chat\'s details as you are not an admin of the chat!' });
         }
         const _formData = {};
+        const formControlNames = Object.keys(this.editChatForm.controls);
+        console.log(formControlNames);
         for (const key in doc.data()) {
           if (doc.data().hasOwnProperty(key)) {
-            if (key === 'name' || key === 'description') {
+            if (formControlNames.includes(key)) {
               _formData[key] = doc.data()[key];
             }
           }
         }
-        this.chatForm.setValue(_formData);
+        if (!_formData['visibility']) {
+          // Set existing chat groups to be public
+          _formData['visibility'] = 'public';
+        }
+        this.editChatForm.setValue(_formData);
       });
+  }
+
+  showHelpDialog(templateRef: TemplateRef<any>, event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation();
+    }
+    this.helpDialogRef = this.shared.openHelpDialog(templateRef);
+  }
+  closeHelpDialog() {
+    this.helpDialogRef.close();
+    this.helpDialogRef = null;
   }
 }

@@ -86,35 +86,43 @@ export interface TodoItem extends HasId {
 }
 
 export interface Chat extends HasId {
-  /**
-   * The name of the chat
-   */
+  /** The name of the chat */
   name: string;
-  /** A description of the chat */
-  description?: string;
-  /**
-   * A list of members in the chat as document references to the UIDs
-   */
+  /** A list of admins in the chat as document references to the UIDs */
+  admins: DocumentReference[] | firestore.FieldValue;
+  /** A list of members in the chat as document references to the user IDs */
   members: DocumentReference[] | firestore.FieldValue;
   /**
-   * A list of admins in the chat as document references to the UIDs
+   * The owner of the chat (aka. the person who created the chat)
+   * as a document document reference to the user ID
    */
-  admins: DocumentReference[] | firestore.FieldValue;
+  owner: DocumentReference;
+  /** A description of the chat */
+  description?: string;
+  /** The pinned message in the chat */
+  pinnedMessage?: DocumentReference;
+
   /**
    * The date that the chat was last modified at
    */
-  lastModified?: firestore.Timestamp;
+  lastModified?: firestore.Timestamp | firestore.FieldValue;
   /**
    * The date that the chat was created at
    */
-  createdAt?: firestore.Timestamp;
-  /**
-   * The owner of the chat (aka. the person who created the chat)
-   */
-  owner: DocumentReference;
-  /** The pinned message in the chat */
-  pinnedMessage?: DocumentReference;
+  createdAt?: firestore.Timestamp | firestore.FieldValue;
+  visibility?: ChatVisibility;
 }
+
+/**
+ * Indicates the visibility of a chat group
+ *
+ * Description of accepted values:
+ * - `public`: Indicates that the chat group is publicly available (aka it will be listed in the list of public chats)
+ * - `private`: Indicates that the chat group is private
+ * (aka it can only be accessed with the chat's ID and the user has been invited by an existing user in the chat group)
+ * - `unlisted`: Indicates that the chat group is only accessible with the ID
+*/
+export type ChatVisibility = 'public' | 'private' | 'unlisted';
 
 /** Represents a message in a chat group */
 export interface ChatMessage extends HasId {
@@ -125,9 +133,9 @@ export interface ChatMessage extends HasId {
   /** The message that this message is replying to */
   replyTo?: DocumentReference;
   /** The date that the message was last modified on */
-  lastModified?: firestore.Timestamp;
+  lastModified?: firestore.Timestamp | firestore.FieldValue;
   /** The date that the message was sent on */
-  createdAt?: firestore.Timestamp;
+  createdAt?: firestore.Timestamp | firestore.FieldValue;
 }
 export interface TodoProject extends HasId {
   /**

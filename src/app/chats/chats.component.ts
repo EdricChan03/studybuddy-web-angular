@@ -102,7 +102,7 @@ export class ChatsComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'ok') {
         this.afFs.doc(`chats/${chat['id']}`)
-          .update(dialogRef.componentInstance.chatForm.value)
+          .update(dialogRef.componentInstance.editChatForm.value)
           .then(() => {
             const snackBarRef = this.shared.openSnackBar({ msg: 'Successfully saved edits to the chat\' s details!', action: 'Undo' });
             snackBarRef.onAction()
@@ -291,10 +291,12 @@ export class ChatsComponent {
     const dialogRef = this.dialog.open(NewChatDialogComponent);
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'ok') {
-        const formVal = dialogRef.componentInstance.createChatForm.value;
+        const formVal: Chat = dialogRef.componentInstance.createChatForm.value;
         formVal['members'] = [this.afFs.doc(`users/${this.auth.authState.uid}`).ref];
         formVal['admins'] = [this.afFs.doc(`users/${this.auth.authState.uid}`).ref];
         formVal['owner'] = this.afFs.doc(`users/${this.auth.authState.uid}`).ref;
+        // Set the created at date as the server's timestamp
+        formVal['createdAt'] = firestore.FieldValue.serverTimestamp();
         this.afFs.collection<Chat>(`chats`)
           .add(formVal)
           .then(() => {
