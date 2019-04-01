@@ -35,8 +35,8 @@ import { NotesHomeComponent } from './notes/notes-home/notes-home.component';
 import { NotesViewerComponent } from './notes/notes-viewer/notes-viewer.component';
 import { SettingsComponent } from './settings/settings.component';
 import { SharedModule } from './shared.service';
+import { SearchInputComponent } from './shared/search-input/search-input.component';
 import { SignupComponent } from './signup/signup.component';
-import { SupportSearchComponent } from './support/shared/support-search/support-search.component';
 import { SupportViewerComponent } from './support/shared/support-viewer/support-viewer.component';
 import { SupportHomeComponent } from './support/support-home/support-home.component';
 import { TestpageComponent } from './testpage/testpage.component';
@@ -60,7 +60,7 @@ import { ToolbarService } from './toolbar.service';
     AboutComponent,
     SupportHomeComponent,
     SupportViewerComponent,
-    SupportSearchComponent,
+    SearchInputComponent,
     ChatsComponent,
     ChatExploreComponent,
     ChatViewerComponent,

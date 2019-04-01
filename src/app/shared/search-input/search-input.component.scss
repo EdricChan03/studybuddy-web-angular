@@ -1,0 +1,48 @@
+@mixin search-input-theme($theme) {
+  $background: map-get($theme, background);
+  // Code adapted from Google Play Newsstand's search bar in the toolbar
+  .search-input {
+    @include mat-elevation-transition;
+    flex-grow: 1;
+    flex-shrink: 1;
+    width: 100%;
+    transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1) 0s;
+    border-radius: .4rem;
+    padding: 0.8rem;
+    padding-left: 0;
+    background-color: map-get($background, app-bar);
+    display: flex;
+    position: relative;
+    input {
+      padding-left: 4.7rem;
+      height: 20px;
+      line-height: 20px;
+      margin: 10px 0;
+      font: inherit;
+      box-sizing: border-box;
+      border: none;
+      box-shadow: none;
+      outline: none;
+      background: transparent;
+      width: 100%;
+      padding: 0 15px;
+      transition: color 0.28s cubic-bezier(0.4, 0, 0.2, 1) 0s;
+      color: #000;
+      flex: 1 1 0%;
+      box-sizing: border-box;
+      min-width: 0;
+      -webkit-appearance: textfield;
+    }
+    input[type="search"]::-webkit-search-cancel-button {
+      display: none;
+    }
+    &.search-input-focused {
+      background-color: map-get($background, hover);
+      @include mat-elevation(2);
+    }
+    .search-btn-left {
+      margin-left: 12px;
+      padding: 8px;
+    }
+  }
+}

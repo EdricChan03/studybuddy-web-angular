@@ -7,11 +7,11 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'app-support-search',
-  templateUrl: './support-search.component.html',
-  styleUrls: ['./support-search.component.scss']
+  selector: 'app-search-input',
+  templateUrl: './search-input.component.html',
+  styleUrls: ['./search-input.component.scss']
 })
-export class SupportSearchComponent {
+export class SearchInputComponent {
 
   keywords = '';
   isInputFocused = false;
@@ -32,6 +32,8 @@ export class SupportSearchComponent {
    * Whether to show a clear button
    */
   @Input() showClearBtn = true;
+  /** Placeholder for the input */
+  @Input() placeholder = 'Search everything';
   onInputChange() {
     this.keywordsChange.emit(this.keywords);
   }

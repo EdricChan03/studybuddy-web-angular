@@ -3,7 +3,7 @@
   <input
     type="search"
     [(ngModel)]="keywords"
-    placeholder="Search everything"
+    [attr.placeholder]="placeholder"
     (blur)="isInputFocused = false"
     (focus)="isInputFocused = true"
     (input)="onInputChange()">
