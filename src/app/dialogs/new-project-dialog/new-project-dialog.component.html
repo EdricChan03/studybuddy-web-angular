@@ -23,7 +23,9 @@
       <mat-label>Due date</mat-label>
       <input matInput formControlName="dueDate" [matDatepicker]="dueDatePicker">
       <mat-datepicker #dueDatePicker [touchUi]="shared.isMobile"></mat-datepicker>
-      <mat-datepicker-toggle [for]="dueDatePicker" matSuffix></mat-datepicker-toggle>
+      <mat-datepicker-toggle [for]="dueDatePicker" matSuffix>
+        <mat-icon matDatepickerToggleIcon>today</mat-icon>
+      </mat-datepicker-toggle>
     </mat-form-field>
     <mat-form-field>
       <mat-label>Icon</mat-label>

@@ -89,7 +89,9 @@
       <mat-label>Due date</mat-label>
       <input matInput [matDatepicker]="dueDatePicker" formControlName="dueDate">
       <mat-datepicker #dueDatePicker [touchUi]="shared.isMobile"></mat-datepicker>
-      <mat-datepicker-toggle matSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker-toggle matSuffix [for]="dueDatePicker">
+        <mat-icon matDatepickerToggleIcon>today</mat-icon>
+      </mat-datepicker-toggle>
       <mat-hint>The date that this todo is due at.</mat-hint>
     </mat-form-field>
     <!--<mat-checkbox [(ngModel)]="enableTags" [ngModelOptions]="{'standalone': true}">Enable tags?</mat-checkbox>
