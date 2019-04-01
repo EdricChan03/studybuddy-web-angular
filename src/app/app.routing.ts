@@ -82,6 +82,8 @@ export const AppRoutes: Route[] = [
       { path: '**', redirectTo: '/todo/dashboard' }
     ]
   },
+  { path: 'user/:userId', component: UserViewerComponent },
+  { path: 'u/:userId', component: UserViewerComponent },
   { path: '**', redirectTo: '/dashboard' }
 ];
 

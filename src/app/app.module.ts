@@ -44,6 +44,7 @@ import { TodoArchivedComponent, TodoDashboardComponent, TodoHomeComponent, TodoP
 import { TodoDashboardNewComponent } from './todo/todo-dashboard-new/todo-dashboard-new.component';
 import { TodoOutletComponent } from './todo/todo-outlet/todo-outlet.component';
 import { ToolbarService } from './toolbar.service';
+import { UserViewerComponent } from './user-viewer/user-viewer.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { ToolbarService } from './toolbar.service';
     DashboardComponent,
     TodoOutletComponent,
     TodoDashboardNewComponent,
-    SignupComponent
+    SignupComponent,
+    UserViewerComponent
   ],
   imports: [
     BrowserModule,
