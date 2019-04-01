@@ -60,7 +60,7 @@
             <mat-icon>edit</mat-icon>
             Edit todo
           </button>
-          <button mat-menu-item disabled>
+          <button mat-menu-item (click)="archiveTodo(todo)">
             <mat-icon>archive</mat-icon>
             Archive todo
           </button>
@@ -119,7 +119,7 @@
             <mat-icon>edit</mat-icon>
             Edit todo
           </button>
-          <button mat-menu-item disabled>
+          <button mat-menu-item (click)="archiveTodo(todo)">
             <mat-icon>archive</mat-icon>
             Archive todo
           </button>
@@ -146,7 +146,7 @@
           <mat-icon>{{todo?.isDone ? 'check_box_outline_blank' : 'check_box'}}</mat-icon>
           Mark todo as {{todo?.isDone ? 'undone' : 'done'}}
         </button>
-        <button mat-button color="warn" disabled>
+        <button mat-button color="warn" (click)="archiveTodo(todo)">
           <mat-icon>archive</mat-icon>
           Archive todo
         </button>

@@ -48,7 +48,7 @@ export interface Settings {
    */
   enableNotifications?: boolean;
   /**
-   * Whether to enable experimental stuff
+   * Whether to enable experimental features
    */
   enableExperimental?: boolean;
   /**
@@ -83,6 +83,8 @@ export interface TodoItem extends HasId {
    * The project that the todo is in
    */
   project?: DocumentReference;
+  /** Whether the todo has been archived */
+  isArchived?: boolean;
 }
 
 export interface Chat extends HasId {

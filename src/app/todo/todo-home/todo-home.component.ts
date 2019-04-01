@@ -54,7 +54,8 @@ export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
     afAuth.auth.onAuthStateChanged((user) => {
       if (user) {
         this.currentUser = user.uid;
-        this.todosCollection = this.afFs.collection<TodoItem>(`users/${this.currentUser}/todos`);
+        // Skip archived todos
+        this.todosCollection = this.afFs.collection<TodoItem>(`users/${this.currentUser}/todos`, ref => ref.where('isArchived', '==', false));
         this.todos$ = this.todosCollection.snapshotChanges().pipe(map(actions => {
           return actions.map(a => {
             // tslint:disable-next-line:no-shadowed-variable
@@ -71,24 +72,29 @@ export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
   private _checkEmpty(statement: any): boolean {
     return statement.length !== 0 || statement !== null;
   }
+
   ngOnInit() {
     this.toolbar.setProgress(true, true);
   }
+
   ngAfterViewInit() {
     this.todos$.subscribe(data => {
       this.dataSource = new MatTableDataSource(data);
     });
   }
+
   ngOnDestroy() {
     // Try to prevent memory leaks here by nullifying the data source.
     this.dataSource = null;
     // Also prevent memory leaks here
     this.todos$ = null;
   }
+
   clearSelectedTodos() {
     this.selectedTodos = [];
     this.toolbar.showToolbar = true;
   }
+
   markSelectedTodosAsDone() {
     for (let i = 0; i < this.selectedTodos.length; i++) {
       this.todosCollection.doc<TodoItem>(this.selectedTodos[i].id).update({
@@ -97,6 +103,7 @@ export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     this.clearSelectedTodos();
   }
+
   deleteSelectedTodos() {
     this.shared.openConfirmDialog({
       title: `Delete ${this.selectedTodos.length} todos?`,
@@ -112,16 +119,16 @@ export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
   }
+
   /**
    * Deletes all todos
    * See https://stackoverflow.com/a/49161622 for more info
    */
   deleteAllTodos() {
-    const dialogRef = this.shared.openConfirmDialog(
-      {
-        msg: 'Are you sure you want to delete all todos? Once deleted, it cannot be restored!',
-        title: 'Delete all todos?'
-      });
+    const dialogRef = this.shared.openConfirmDialog({
+      msg: 'Are you sure you want to delete all todos? Once deleted, it cannot be restored!',
+      title: 'Delete all todos?'
+    });
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'ok') {
         const promises = [];
@@ -158,11 +165,13 @@ export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
   }
+
   toggleChecked(todo: TodoItem) {
     this.todosCollection.doc<TodoItem>(todo.id).update({
       isDone: !todo.isDone
     });
   }
+
   handleListClick(todo: TodoItem, event: MouseEvent) {
     if (!this.toolbar.showToolbar) {
       if (this.selectedTodos.indexOf(todo) === -1) {
@@ -195,16 +204,20 @@ export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.toolbar.showToolbar = true;
     }
   }
+
   checkboxOnClick(event: MouseEvent) {
     event.preventDefault();
   }
+
   hasListItemSelected(todoItem: TodoItem): boolean {
     return this.selectedTodos.includes(todoItem);
   }
+
   newTodo() {
     const dialogRef = this.dialog.open(TodoDialogComponent, { disableClose: true });
     dialogRef.componentInstance.isNewTodo = true;
   }
+
   editTodo(todoItem: TodoItem, event?: MouseEvent) {
     if (event) {
       this.stopPropogation(event);
@@ -219,13 +232,37 @@ export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.shared.openSnackBar({ msg: 'Successfully deleted todo!' });
     });
   }
-  stopPropogation(event: MouseEvent) {
-    if (typeof event.stopImmediatePropagation === 'function') {
+
+  stopPropogation(event: MouseEvent, stopImmediatePropagation = false) {
+    if (event.stopImmediatePropagation && stopImmediatePropagation) {
       event.stopImmediatePropagation();
-    } else if (typeof event.stopPropagation === 'function') {
+    }
+    if (event.stopPropagation && !stopImmediatePropagation) {
       event.stopPropagation();
     }
   }
+
+  archiveTodo(todo: TodoItem) {
+    this.todosCollection.doc(todo.id).update({
+      isArchived: true
+    })
+    .then(() => {
+      console.log(`Successfully archived todo (document ID: ${todo.id})`);
+      this.shared.openSnackBar({ msg: 'Successfully archived todo!' });
+    })
+    .catch((error) => {
+      console.error(`An error occurred while attempting to archive the todo (document ID: ${todo.id}):`, error);
+      this.shared.openSnackBar({
+        msg: `An error occurred while attempting to archive the todo: ${error.message}`,
+        action: 'Retry',
+        additionalOpts: {
+          duration: 8000
+        }
+      })
+      .onAction().subscribe(() => this.archiveTodo(todo));
+    })
+  }
+
   removeTodo(id: string, bypassDialog?: boolean, event?: MouseEvent) {
     if (event) {
       this.stopPropogation(event);
