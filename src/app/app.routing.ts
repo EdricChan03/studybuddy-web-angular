@@ -1,34 +1,30 @@
+import { ModuleWithProviders } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
-import {
-  TodoArchivedComponent,
-  TodoDashboardComponent,
-  TodoHomeComponent,
-  TodoProjectComponent
-} from './todo';
-
 import { AboutComponent } from './about/about.component';
 import { AccountComponent } from './account/account.component';
-import { AppComponent } from './app.component';
 import { AppDownloadsComponent } from './appdownloads/appdownloads.component';
+import { AuthGuardService } from './auth-guard.service';
+import { ChatExploreComponent } from './chats/chat-explore/chat-explore.component';
 import { ChatViewerComponent } from './chats/chat-viewer/chat-viewer.component';
 import { ChatsComponent } from './chats/chats.component';
 import { CheatsheetHomeComponent } from './cheatsheets/cheatsheet-home/cheatsheet-home.component';
 import { CheatsheetViewerComponent } from './cheatsheets/shared/cheatsheet-viewer/cheatsheet-viewer.component';
-import { ModuleWithProviders } from '@angular/core';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { LoginComponent } from './login/login.component';
 import { NoteNotFoundComponent } from './notes/note-not-found/note-not-found.component';
 import { NotesHomeComponent } from './notes/notes-home/notes-home.component';
 import { NotesViewerComponent } from './notes/notes-viewer/notes-viewer.component';
 import { SettingsComponent } from './settings/settings.component';
-import { SupportHomeComponent } from './support/support-home/support-home.component';
+import { SignupComponent } from './signup/signup.component';
 import { SupportViewerComponent } from './support/shared/support-viewer/support-viewer.component';
+import { SupportHomeComponent } from './support/support-home/support-home.component';
 import { TestpageComponent } from './testpage/testpage.component';
 import { TipsComponent } from './tips/tips.component';
-import { LoginComponent } from './login/login.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { TodoOutletComponent } from './todo/todo-outlet/todo-outlet.component';
-import { AuthGuardService } from './auth-guard.service';
+import { TodoArchivedComponent, TodoDashboardComponent, TodoHomeComponent, TodoProjectComponent } from './todo';
 import { TodoDashboardNewComponent } from './todo/todo-dashboard-new/todo-dashboard-new.component';
-import { SignupComponent } from './signup/signup.component';
+import { TodoOutletComponent } from './todo/todo-outlet/todo-outlet.component';
+import { UserViewerComponent } from './user-viewer/user-viewer.component';
+
 
 const SUPPORT_ROUTES: Route[] = [
   { path: 'home', component: SupportHomeComponent },
@@ -43,6 +39,7 @@ export const AppRoutes: Route[] = [
   { path: 'account', component: AccountComponent, canActivate: [AuthGuardService] },
   // Chatrooms! Coming soon.
   { path: 'chats', component: ChatsComponent, canActivate: [AuthGuardService] },
+  { path: 'chats/explore', component: ChatExploreComponent, canActivate: [AuthGuardService] },
   { path: 'chats/:id', component: ChatViewerComponent, canActivate: [AuthGuardService] },
   // Cheat sheet page
   { path: 'cheatsheets', component: CheatsheetHomeComponent },

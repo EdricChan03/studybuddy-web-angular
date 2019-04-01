@@ -15,10 +15,12 @@ import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
 import { environment } from '../environments/environment';
 import { AboutComponent } from './about/about.component';
 import { AccountComponent } from './account/account.component';
+import { ApiService } from './api.service';
 import { AppComponent } from './app.component';
 import { AppRouting } from './app.routing';
 import { AppDownloadsComponent } from './appdownloads/appdownloads.component';
 import { AuthService } from './auth.service';
+import { ChatExploreComponent } from './chats/chat-explore/chat-explore.component';
 import { ChatViewerComponent } from './chats/chat-viewer/chat-viewer.component';
 import { ChatsComponent } from './chats/chats.component';
 import { CheatsheetHomeComponent } from './cheatsheets/cheatsheet-home/cheatsheet-home.component';
@@ -60,6 +62,7 @@ import { ToolbarService } from './toolbar.service';
     SupportViewerComponent,
     SupportSearchComponent,
     ChatsComponent,
+    ChatExploreComponent,
     ChatViewerComponent,
     CheatsheetViewerComponent,
     CheatsheetHomeComponent,
