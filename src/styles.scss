@@ -2,6 +2,8 @@
 
 @import '~@angular/material/theming';
 @import './app/todo/todo-dashboard/todo-dashboard.component';
+@import './app/shared/search-input/search-input.component';
+
 @mixin tables-theme($theme) {
   $primary: map-get($theme, primary);
   $accent: map-get($theme, accent);
@@ -24,6 +26,7 @@
 @mixin studybuddy-theme($theme) {
   @include tables-theme($theme);
   @include todo-dashboard-theme($theme);
+  @include search-input-theme($theme);
   $primary: map-get($theme, primary);
   $accent: map-get($theme, accent);
   $warn: map-get($theme, warn);
