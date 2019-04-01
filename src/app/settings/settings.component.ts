@@ -29,7 +29,8 @@ export class SettingsComponent implements OnInit {
     this.settingsForm = fb.group({
       darkTheme: false,
       closeSidenavOnClick: false,
-      enableNewUi: false
+      enableNewUi: false,
+      enableNotifications: false
     });
     this.updateUserForm = fb.group({
       displayName: null,

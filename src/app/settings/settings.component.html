@@ -28,7 +28,8 @@
               <mat-label>New password</mat-label>
               <input matInput type="password" formControlName="password" autocomplete="new-password">
             </mat-form-field>
-            <div class="setting-panel-button-row" [style.display]="(shared.isMobile || currentSettingPanel === 'account') ? 'block' : 'none'">
+            <div class="setting-panel-button-row"
+              [style.display]="(shared.isMobile || currentSettingPanel === 'account') ? 'block' : 'none'">
               <button mat-button color="primary" (click)="updateUserParticulars()">Update particulars</button>
               <button mat-button color="warn" (click)="deleteAccount()">Delete account</button>
             </div>
@@ -43,14 +44,17 @@
         </div>
         <form [formGroup]="settingsForm" fxLayout="column">
           <div class="setting-panel-section"
-            [style.display]="(shared.isMobile || currentSettingPanel === 'appearance') ? 'block' : 'none'">
+            [style.display]="(shared.isMobile || currentSettingPanel === 'appearance') ? 'block' : 'none'"
+            fxLayout="column">
             <h2 [style.display]="shared.isMobile ? 'block' : 'none'">Appearance</h2>
             <mat-checkbox formControlName="darkTheme">Enable dark theme</mat-checkbox>
           </div>
           <div class="setting-panel-section"
-            [style.display]="(shared.isMobile || currentSettingPanel === 'experiments') ? 'block' : 'none'">
+            [style.display]="(shared.isMobile || currentSettingPanel === 'experiments') ? 'block' : 'none'"
+            fxLayout="column">
             <h2 [style.display]="shared.isMobile ? 'block' : 'none'">Experiments</h2>
             <mat-checkbox formControlName="enableNewUi">Show new UI</mat-checkbox>
+            <mat-checkbox formControlName="enableNotifications">Show notifications</mat-checkbox>
           </div>
           <div class="setting-panel-section"
             [style.display]="(shared.isMobile || currentSettingPanel === 'behaviour') ? 'block' : 'none'"
@@ -58,7 +62,8 @@
             <h2 [style.display]="shared.isMobile ? 'block' : 'none'">Behaviour</h2>
             <mat-checkbox formControlName="closeSidenavOnClick">Close sidenav on click</mat-checkbox>
           </div>
-          <div class="setting-panel-actions-row" [style.display]="(shared.isMobile || currentSettingPanel !== 'account') ? 'block' : 'none'">
+          <div class="setting-panel-actions-row"
+            [style.display]="(shared.isMobile || currentSettingPanel !== 'account') ? 'block' : 'none'">
             <button mat-button color="warn" (click)="resetSettings()">Reset settings</button>
             <button mat-button color="primary" (click)="saveSettings()">Save changes</button>
           </div>
