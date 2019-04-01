@@ -110,7 +110,8 @@ import { ToolbarService } from './toolbar.service';
   providers: [
     ToolbarService,
     MessagingService,
-    AuthService
+    AuthService,
+    ApiService
   ]
 })
 export class AppModule { }
