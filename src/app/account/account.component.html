@@ -26,6 +26,10 @@
           <mat-icon matListIcon>exit_to_app</mat-icon>
           <h3 matLine>Log out</h3>
         </mat-list-item>
+        <a mat-list-item routerLink="/settings" [queryParams]="{ panel: 'account' }">
+          <mat-icon matListIcon>settings</mat-icon>
+          <h3 matLine>Update particulars</h3>
+        </a>
       </mat-nav-list>
     </mat-card-content>
   </mat-card>
