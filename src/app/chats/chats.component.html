@@ -10,6 +10,10 @@
       <h3 matLine>Join chat</h3>
       <mat-icon matListIcon>group_add</mat-icon>
     </mat-list-item>
+    <a mat-list-item routerLink="explore">
+      <h3 matLine>Explore chats</h3>
+      <mat-icon matListIcon>explore</mat-icon>
+    </a>
     <mat-divider></mat-divider>
     <h3 matSubheader>Chats</h3>
     <a mat-list-item *ngFor="let chat of chats$ | async" [routerLink]="['/chats/' + chat?.id]">
