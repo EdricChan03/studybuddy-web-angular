@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, SecurityContext } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, DocumentReference, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, Subscription } from 'rxjs';
@@ -33,7 +33,6 @@ export class ChatsComponent {
     shared.title = 'Chats';
     auth.getAuthState().subscribe((user) => {
       if (user) {
-        console.log(user);
         this.chatsCollection = afFs.collection<Chat>(
           'chats',
           ref => ref.where(
@@ -129,7 +128,7 @@ export class ChatsComponent {
     `;
     const dialogRef = this.shared.openConfirmDialog({
       title: `Archive "${chat.name}"?`,
-      msg: this.dom.bypassSecurityTrustHtml(dialogText),
+      msg: this.dom.sanitize(SecurityContext.HTML, dialogText),
       isHtml: true,
       ok: 'Archive chat',
       okColor: 'warn'
