@@ -26,15 +26,15 @@
           <mat-icon>information</mat-icon>
           <span>Show chat info</span>
         </button>
-        <button mat-menu-item (click)="editChatDetails(chat, $event)" *ngIf="isAdmin(chat)">
+        <button mat-menu-item (click)="editChatDetails(chat, $event)" [disabled]="!isAdmin(chat)">
           <mat-icon>edit</mat-icon>
           <span>Edit chat details</span>
         </button>
-        <button mat-menu-item (click)="deleteChat(chat, $event)" *ngIf="isAdmin(chat)">
+        <button mat-menu-item (click)="deleteChat(chat, $event)" [disabled]="!isAdmin(chat)">
           <mat-icon>delete</mat-icon>
           <span>Delete chat</span>
         </button>
-        <button mat-menu-item (click)="archiveChat(chat, $event)" *ngIf="isAdmin(chat)">
+        <button mat-menu-item (click)="archiveChat(chat, $event)" [disabled]="!isAdmin(chat)">
           <mat-icon>archive</mat-icon>
           <span>Archive chat</span>
         </button>
