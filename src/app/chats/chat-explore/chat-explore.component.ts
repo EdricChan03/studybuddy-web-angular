@@ -7,7 +7,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { AuthService } from '../../auth.service';
 import { Chat } from '../../interfaces';
 import { SharedService } from '../../shared.service';
-import { auth, firestore } from 'firebase';
+import { firestore } from 'firebase';
 import { ApiService } from '../../api.service';
 
 @Component({
@@ -27,7 +27,7 @@ export class ChatExploreComponent {
     private auth: AuthService,
     private dialog: MatDialog,
     private fb: FormBuilder,
-    private shared: SharedService
+    public shared: SharedService
   ) {
     shared.title = 'Explore chats';
     this.filterOptionsForm = fb.group({
@@ -50,16 +50,16 @@ export class ChatExploreComponent {
               return data;
             });
           })))
-        )
+        );
       }
-    })
+    });
   }
 
   openFilterOptionsDialog() {
     const dialogRef = this.dialog.open(this.filterOptionsDialog);
     dialogRef.afterClosed().subscribe(() => {
       this.chatShowAlreadyJoinedGrps$.next(this.filterOptionsForm.get('showAlreadyJoinedGroups').value);
-    })
+    });
   }
 
   hasJoinedChat(chat: Chat): boolean {

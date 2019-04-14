@@ -23,7 +23,7 @@ export class AppDownloadsComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private http: HttpClient,
-    private shared: SharedService,
+    public shared: SharedService
   ) {
     shared.title = 'App downloads';
   }

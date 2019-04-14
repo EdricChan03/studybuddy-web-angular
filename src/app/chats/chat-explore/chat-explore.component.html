@@ -1,37 +1,47 @@
-<div class="padding-percentage-container">
-  <!-- TODO: Readd search input -->
-  <!-- <app-search-input></app-search-input> -->
-  <div fxLayout="row">
-    <h2>All public chat groups</h2>
-    <span fxFlex></span>
-    <button mat-icon-button (click)="openFilterOptionsDialog()" matTooltip="Filter options">
-      <mat-icon>tune</mat-icon>
-    </button>
+<ng-container *ngIf="shared.isOnline; else: nointernet">
+  <div class="padding-percentage-container">
+    <!-- TODO: Readd search input -->
+    <!-- <app-search-input></app-search-input> -->
+    <div fxLayout="row">
+      <h2>All public chat groups</h2>
+      <span fxFlex></span>
+      <button mat-icon-button (click)="openFilterOptionsDialog()" matTooltip="Filter options">
+        <mat-icon>tune</mat-icon>
+      </button>
+    </div>
+    <div gdColumns="auto auto auto">
+      <mat-card *ngFor="let chat of publicChats$ | async">
+        <mat-card-title>{{ chat?.name }}</mat-card-title>
+        <mat-card-content>
+          <p>{{ chat?.description }}</p>
+          <p><mat-icon inline>account_circle</mat-icon> Owner: {{ (getOwnerName(chat?.owner) | async)?.displayName }}</p>
+          <p><mat-icon inline></mat-icon></p>
+        </mat-card-content>
+        <mat-card-actions align="end">
+          <a mat-button *ngIf="hasJoinedChat(chat)" [routerLink]="['/chats', chat?.id]" color="primary">Enter</a>
+          <button mat-button color="primary" (click)="joinChat(chat)" *ngIf="!hasJoinedChat(chat)">Join</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+    <ng-template #filterOptionsDialog>
+      <h2 matDialogTitle>Filter options</h2>
+      <mat-dialog-content fxLayout="column">
+        <form [formGroup]="filterOptionsForm">
+          <mat-checkbox formControlName="showAlreadyJoinedGroups">Show already joined chat groups</mat-checkbox>
+        </form>
+      </mat-dialog-content>
+      <mat-dialog-actions align="end">
+        <button mat-button (click)="filterOptionsForm.reset()" color="warn">Reset</button>
+        <button mat-button matDialogClose color="primary">Save</button>
+      </mat-dialog-actions>
+    </ng-template>
   </div>
-  <div gdColumns="auto auto auto">
-    <mat-card *ngFor="let chat of publicChats$ | async">
-      <mat-card-title>{{ chat?.name }}</mat-card-title>
-      <mat-card-content>
-        <p>{{ chat?.description }}</p>
-        <p><mat-icon inline>account_circle</mat-icon> Owner: {{ (getOwnerName(chat?.owner) | async)?.displayName }}</p>
-        <p><mat-icon inline></mat-icon></p>
-      </mat-card-content>
-      <mat-card-actions align="end">
-        <a mat-button *ngIf="hasJoinedChat(chat)" [routerLink]="['/chats', chat?.id]" color="primary">Enter</a>
-        <button mat-button color="primary" (click)="joinChat(chat)" *ngIf="!hasJoinedChat(chat)">Join</button>
-      </mat-card-actions>
-    </mat-card>
+</ng-container>
+<ng-template #nointernet>
+  <div class="center-container">
+    <div class="center-div">
+      <h2>No internet</h2>
+      <p>An internet connection is required to view public chat groups.</p>
+    </div>
   </div>
-  <ng-template #filterOptionsDialog>
-    <h2 matDialogTitle>Filter options</h2>
-    <mat-dialog-content fxLayout="column">
-      <form [formGroup]="filterOptionsForm">
-        <mat-checkbox formControlName="showAlreadyJoinedGroups">Show already joined chat groups</mat-checkbox>
-      </form>
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button mat-button (click)="filterOptionsForm.reset()" color="warn">Reset</button>
-      <button mat-button matDialogClose color="primary">Save</button>
-    </mat-dialog-actions>
-  </ng-template>
-</div>
+</ng-template>

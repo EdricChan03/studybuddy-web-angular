@@ -13,7 +13,7 @@ export class TipsComponent implements OnInit {
   wordOfDay: WordOfTheDay;
   constructor(
     private http: HttpClient,
-    private shared: SharedService,
+    public shared: SharedService,
     private toolbarService: ToolbarService
   ) {
     shared.title = 'Tips';
@@ -61,8 +61,10 @@ export class TipsComponent implements OnInit {
     console.error('Error: ', error.message);
   }
   ngOnInit() {
-    this.getWordOfDay();
-    this.getQuoteOfDay();
+    if (this.shared.isOnline) {
+      this.getWordOfDay();
+      this.getQuoteOfDay();
+    }
   }
 
 }
