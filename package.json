@@ -31,7 +31,7 @@
     "ng-circle-progress": "^1.4.0",
     "ngx-markdown": "^7.1.5",
     "prismjs": "^1.16.0",
-    "rxjs": "^6.4.0",
+    "rxjs": "^6.5.2",
     "zone.js": "^0.8.29"
   },
   "devDependencies": {
