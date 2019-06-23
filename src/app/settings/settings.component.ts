@@ -41,7 +41,7 @@ export class SettingsComponent implements OnInit {
       if (user) {
         this.currentUser = user;
       }
-    })
+    });
     route.queryParams
       .pipe(
         filter(params => params.panel || params.settingPanel)
@@ -50,16 +50,18 @@ export class SettingsComponent implements OnInit {
           if (this.settingsPanelIds.includes(params.panel)) {
             this.currentSettingPanel = params.panel;
           } else {
-            console.warn(`The currentSettingPanel query parameter is set to an invalid setting panel ID.\nThe available settings panel IDs are ${this.settingsPanelIds.join()}`);
+            console.warn(`The currentSettingPanel query parameter is set to an invalid setting panel ID.` +
+              `\nThe available settings panel IDs are ${this.settingsPanelIds.join()}`);
           }
         } else if (params.settingPanel) {
           if (this.settingsPanelIds.includes(params.settingPanel)) {
             this.currentSettingPanel = params.settingPanel;
           } else {
-            console.warn(`The settingPanel query parameter is set to an invalid setting panel ID.\nThe available settings panel IDs are ${this.settingsPanelIds.join()}`);
+            console.warn(`The settingPanel query parameter is set to an invalid setting panel ID.` +
+              `\nThe available settings panel IDs are ${this.settingsPanelIds.join()}`);
           }
         }
-      })
+      });
   }
   currentSettingPanel = 'appearance';
   settingsPanels = [
@@ -155,7 +157,7 @@ export class SettingsComponent implements OnInit {
         });
       }
       if (displayNameVal) {
-        if (displayNameVal === this.currentUser.displayName)
+        if (displayNameVal === this.currentUser.displayName) {
           this.currentUser.updateProfile({
             displayName: displayNameVal
           })
@@ -169,7 +171,8 @@ export class SettingsComponent implements OnInit {
                   duration: 8000
                 }
               });
-            })
+            });
+        }
       }
       if (emailVal) {
         if (emailVal !== this.currentUser.email) {
@@ -184,7 +187,7 @@ export class SettingsComponent implements OnInit {
                   duration: 8000
                 }
               });
-            })
+            });
         }
       }
       if (passwordVal) {
@@ -199,7 +202,7 @@ export class SettingsComponent implements OnInit {
                 duration: 8000
               }
             });
-          })
+          });
       }
     } else {
       this.shared.openSnackBar({
@@ -212,7 +215,7 @@ export class SettingsComponent implements OnInit {
         .onAction()
         .subscribe(() => {
           this.router.navigate(['/login']);
-        })
+        });
     }
   }
   deleteAccount() {
@@ -222,52 +225,53 @@ export class SettingsComponent implements OnInit {
       This is permanent and cannot be reversed!`,
       okColor: 'warn'
     })
-    .afterClosed()
-    .subscribe(result => {
-      if (result === 'ok') {
-        this.currentUser.delete()
-          .then(() => {
-            this.shared.openSnackBar({
-              msg: 'Successfully deleted account!'
-            });
-          })
-          .catch((error) => {
-            if (error['code'] === 'auth/requires-recent-login') {
-              // Reauthenticate the user
+      .afterClosed()
+      .subscribe(result => {
+        if (result === 'ok') {
+          this.currentUser.delete()
+            .then(() => {
               this.shared.openSnackBar({
-                msg: 'Please reauthenticate before deleting your account',
-                action: 'Reauthenticate',
-                additionalOpts: {
-                  duration: 8000
-                }
-              })
-              .onAction()
-              .subscribe(() => {
-                this.currentUser.reauthenticateWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => {
-                  this.deleteAccount();
-                })
-                  .catch((snackBarError) => {
-                    console.error(snackBarError);
-                    this.shared.openSnackBar({
-                      msg: `An error occurred while attempting to reauthenticate: ${snackBarError.message}`,
-                      action: 'Retry',
-                      additionalOpts: {
-                        duration: 8000
-                      }
-                    })
-                    .onAction()
-                    .subscribe(this.deleteAccount);
-                  });
+                msg: 'Successfully deleted account!'
               });
-            }
-          })
-      }
-    })
+            })
+            .catch((error) => {
+              if (error['code'] === 'auth/requires-recent-login') {
+                // Reauthenticate the user
+                this.shared.openSnackBar({
+                  msg: 'Please reauthenticate before deleting your account',
+                  action: 'Reauthenticate',
+                  additionalOpts: {
+                    duration: 8000
+                  }
+                })
+                  .onAction()
+                  .subscribe(() => {
+                    this.currentUser.reauthenticateWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => {
+                      this.deleteAccount();
+                    })
+                      .catch((snackBarError) => {
+                        console.error(snackBarError);
+                        this.shared.openSnackBar({
+                          msg: `An error occurred while attempting to reauthenticate: ${snackBarError.message}`,
+                          action: 'Retry',
+                          additionalOpts: {
+                            duration: 8000
+                          }
+                        })
+                          .onAction()
+                          .subscribe(this.deleteAccount);
+                      });
+                  });
+              }
+            });
+        }
+      });
   }
 
   ngOnInit() {
     const settings = this.retrieveSettings();
     const formVal = {};
+    // tslint:disable-next-line: forin
     for (const key in settings) {
       switch (key) {
         case 'darkTheme':
