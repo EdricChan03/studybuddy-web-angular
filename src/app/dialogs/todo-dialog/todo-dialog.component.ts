@@ -73,6 +73,8 @@ export class TodoDialogComponent implements OnInit {
       // tags: this.fb.array([]),
       dueDate: null,
       isDone: false,
+      isArchived: false,
+      // TODO: Remove ID property
       id: { value: this.afFs.createId(), disabled: true },
       project: null
     });
@@ -206,13 +208,14 @@ export class TodoDialogComponent implements OnInit {
         if (this.todoFormRawValue.hasOwnProperty(prop) && this.todoFormRawValue[prop] !== null) {
           switch (prop) {
             case 'id':
+            case 'isArchived':
             case 'isDone':
             case 'content':
             case 'title':
               itemToAdd[prop] = this.todoFormRawValue[prop];
               break;
             case 'dueDate':
-              itemToAdd.dueDate = firebase.firestore.Timestamp.fromDate(this.todoFormRawValue[prop] as Date);
+              itemToAdd[prop] = firebase.firestore.Timestamp.fromDate(this.todoFormRawValue[prop] as Date);
               break;
             case 'project':
               itemToAdd[prop] = this.afFs.doc(`users/${this.afAuth.auth.currentUser.uid}/todoProjects/${this.todoFormRawValue[prop]}`).ref;
