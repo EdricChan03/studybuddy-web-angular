@@ -24,33 +24,35 @@ export class TodoDialogComponent implements OnInit {
   enableTags = false;
   showDebug = false;
   helpDialogRef: MatDialogRef<any>;
-  mkdnText = '**Bold**\n' +
-    '_Italics_\n' +
-    '**_Bold + Italics_**\n' +
-    '~strikethrough~\n' +
-    '[Link](https://google.com)\n' +
-    '[YouTube][test]\n\n' +
-    '[test]: https://youtube.com';
-  mkdnLists = 'Unordered:\n' +
-    '- List item #1\n' +
-    '- List item #2\n' +
-    'Ordered:\n' +
-    '1. Ordered item #1\n' +
-    '2. Ordered item #2\n' +
-    '3. Ordered item #3';
+  // Only allow due dates today and after to be selected
+  minDueDate = new Date();
+  mkdnText = `**Bold**
+    _Italics_
+    **_Bold + Italics_**
+    ~strikethrough~
+    [Link](https://google.com)
+    [YouTube][test]
+    [test]: https://youtube.com'`;
+  mkdnLists = `Unordered:
+    - List item #1
+    - List item #2
+    Ordered:
+    1. Ordered item #1
+    2. Ordered item #2
+    3. Ordered item #3`;
   mkdnImg = '![Alternate text](https://example.com/myimg.jpg)';
-  mkdnHeaders = '# Header 1\n' +
-    '## Header 2\n' +
-    '### Header 3\n' +
-    '#### Header 4\n' +
-    '##### Header 5\n' +
-    '###### Header 6';
-  mkdnCode = '```\n' +
-    'Code blocks are typically in three backticks (\`)\n' +
-    '```\n' +
-    '```html\n' +
-    '<p>This is an example of syntax-highlighting! <em>wow</em><p>\n' +
-    '```';
+  mkdnHeaders = `# Header 1
+    ## Header 2
+    ### Header 3
+    #### Header 4
+    ##### Header 5
+    ###### Header 6`;
+  mkdnCode = `\`\`\`
+    Code blocks are typically in three backticks (\`)
+    \`\`\`
+    \`\`\`html
+    <p>This is an example of syntax-highlighting! <em>wow</em><p>
+    \`\`\``;
   todoForm: FormGroup;
   projectsCollection: AngularFirestoreCollection<TodoProject>;
   projects$: Observable<TodoProject[]>;
