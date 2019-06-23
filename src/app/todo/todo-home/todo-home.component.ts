@@ -55,7 +55,11 @@ export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
       if (user) {
         this.currentUser = user.uid;
         // Skip archived todos
-        this.todosCollection = this.afFs.collection<TodoItem>(`users/${this.currentUser}/todos`, ref => ref.where('isArchived', '==', false));
+        this.todosCollection = this.afFs.collection<TodoItem>(
+          `users/${this.currentUser}/todos`,
+          ref => ref.where('isArchived', '==', null)
+            .where('isArchived', '==', false)
+        );
         this.todos$ = this.todosCollection.snapshotChanges().pipe(map(actions => {
           return actions.map(a => {
             // tslint:disable-next-line:no-shadowed-variable
@@ -246,21 +250,21 @@ export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.todosCollection.doc(todo.id).update({
       isArchived: true
     })
-    .then(() => {
-      console.log(`Successfully archived todo (document ID: ${todo.id})`);
-      this.shared.openSnackBar({ msg: 'Successfully archived todo!' });
-    })
-    .catch((error) => {
-      console.error(`An error occurred while attempting to archive the todo (document ID: ${todo.id}):`, error);
-      this.shared.openSnackBar({
-        msg: `An error occurred while attempting to archive the todo: ${error.message}`,
-        action: 'Retry',
-        additionalOpts: {
-          duration: 8000
-        }
+      .then(() => {
+        console.log(`Successfully archived todo (document ID: ${todo.id})`);
+        this.shared.openSnackBar({ msg: 'Successfully archived todo!' });
       })
-      .onAction().subscribe(() => this.archiveTodo(todo));
-    })
+      .catch((error) => {
+        console.error(`An error occurred while attempting to archive the todo (document ID: ${todo.id}):`, error);
+        this.shared.openSnackBar({
+          msg: `An error occurred while attempting to archive the todo: ${error.message}`,
+          action: 'Retry',
+          additionalOpts: {
+            duration: 8000
+          }
+        })
+          .onAction().subscribe(() => this.archiveTodo(todo));
+      })
   }
 
   removeTodo(id: string, bypassDialog?: boolean, event?: MouseEvent) {
