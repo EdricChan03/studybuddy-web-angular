@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, AbstractControl, Validators } from '@angular/fo
 import { AuthService } from '../../auth.service';
 import { Chat } from '../../interfaces';
 import { debounceTime, take, map } from 'rxjs/operators';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-join-chat-dialog',

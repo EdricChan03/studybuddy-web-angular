@@ -5,7 +5,7 @@ import { SharedService } from '../../shared.service';
 import { TodoItem, TodoProject } from '../../interfaces';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { EditContentDialogComponent } from '../edit-content-dialog/edit-content-dialog.component';
-import { MatChipInputEvent } from '@angular/material';
+import { MatChipInputEvent } from '@angular/material/chips';
 import * as firebase from 'firebase';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { Observable } from 'rxjs';

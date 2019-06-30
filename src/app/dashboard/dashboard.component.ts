@@ -3,7 +3,7 @@ import { TodoItem } from '../interfaces';
 import { SharedService } from '../shared.service';
 
 import { AngularFireAuth } from '@angular/fire/auth';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ToolbarService } from '../toolbar.service';
