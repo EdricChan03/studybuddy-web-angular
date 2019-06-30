@@ -45,6 +45,7 @@ import { TodoDashboardNewComponent } from './todo/todo-dashboard-new/todo-dashbo
 import { TodoOutletComponent } from './todo/todo-outlet/todo-outlet.component';
 import { ToolbarService } from './toolbar.service';
 import { UserViewerComponent } from './user-viewer/user-viewer.component';
+import { HotkeysModule } from './hotkeys/hotkeys.module';
 
 @NgModule({
   declarations: [
@@ -108,7 +109,8 @@ import { UserViewerComponent } from './user-viewer/user-viewer.component';
     }),
     NgCircleProgressModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
-    DialogsModule
+    DialogsModule,
+    HotkeysModule
   ],
   bootstrap: [AppComponent],
   providers: [

@@ -137,10 +137,6 @@ export class AppComponent implements OnInit {
     public messagingService: MessagingService,
     @Inject(DOCUMENT) private document: Document
   ) {
-    shared.keyDownUpEvents$.subscribe(e => {
-      this.keyMaps[e.keyCode] = e.type === 'keydown';
-      this.keyboardShortcutHandler(e);
-    });
     this.userObservable = auth.getAuthState();
     auth.getAuthState().subscribe((user) => {
       if (user) {
@@ -212,11 +208,6 @@ export class AppComponent implements OnInit {
   }
   get isAuthenticated(): boolean {
     return this.auth.authenticated;
-  }
-  keyboardShortcutHandler(event: KeyboardEvent) {
-    if (!['input', 'textarea'].includes(event.srcElement.nodeName.toLowerCase())) {
-      console.log(event);
-    }
   }
   ngOnInit() {
     this.sidenavLinks.forEach(item => {
