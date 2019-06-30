@@ -709,7 +709,7 @@ export class PromptDialog implements OnInit {
   `
 })
 export class SelectionDialog implements OnInit {
-  @ViewChild('selection') selection: MatSelectionList;
+  @ViewChild('selection', { static: false }) selection: MatSelectionList;
   constructor(private dialogRef: MatDialogRef<SelectionDialog>) {
   }
   selectionConfig: SelectionDialogConfig;

@@ -56,7 +56,7 @@ export class TodoDialogComponent implements OnInit {
   todoForm: FormGroup;
   projectsCollection: AngularFirestoreCollection<TodoProject>;
   projects$: Observable<TodoProject[]>;
-  @ViewChild('helpContentDialog') helpContentDialogTmpl: TemplateRef<any>;
+  @ViewChild('helpContentDialog', { static: true }) helpContentDialogTmpl: TemplateRef<any>;
   constructor(
     // TODO(Edric): Figure out a way to make this private
     public shared: SharedService,

@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
   /**
    * The sidenav
    */
-  @ViewChild('left') sidenav: MatSidenav;
+  @ViewChild('left', { static: true }) sidenav: MatSidenav;
   environment = environment;
   user: firebase.User;
   userObservable: Observable<firebase.User>;

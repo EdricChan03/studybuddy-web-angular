@@ -20,7 +20,7 @@ export class ChatExploreComponent {
   chatShowAlreadyJoinedGrps$ = new Subject<boolean>();
   publicChats$: Observable<Chat[]>;
   filterOptionsForm: FormGroup;
-  @ViewChild('filterOptionsDialog') filterOptionsDialog: TemplateRef<any>;
+  @ViewChild('filterOptionsDialog', { static: false }) filterOptionsDialog: TemplateRef<any>;
   constructor(
     private afFs: AngularFirestore,
     private api: ApiService,

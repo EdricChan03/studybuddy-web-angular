@@ -34,7 +34,7 @@ import { MatTableDataSource } from '@angular/material/table';
   ]
 })
 export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild(MatMenuTrigger) rightClickMenu: MatMenuTrigger;
+  @ViewChild(MatMenuTrigger, { static: false }) rightClickMenu: MatMenuTrigger;
   currentUser: string;
   todos$: Observable<TodoItem[]>;
   todosCollection: AngularFirestoreCollection<TodoItem>;
