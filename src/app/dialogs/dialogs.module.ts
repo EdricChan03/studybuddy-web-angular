@@ -70,6 +70,3 @@ const DIALOGS = [
   ]
 })
 export class DialogsModule { }
-
-/** @deprecated Use {@link DialogsModule} */
-export class DialogModule extends DialogsModule { }
