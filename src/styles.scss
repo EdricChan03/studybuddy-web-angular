@@ -3,6 +3,7 @@
 @import '~@angular/material/theming';
 @import './app/todo/todo-dashboard/todo-dashboard.component';
 @import './app/shared/search-input/search-input.component';
+@import './custom-typography';
 
 @mixin tables-theme($theme) {
   $primary: map-get($theme, primary);
@@ -142,7 +143,10 @@
 }
 
 $studybuddy-typography: mat-typography-config(
-  $font-family: 'Baloo, Roboto, Helvetica, Arial, sans-serif'
+  $font-family: 'Baloo, Roboto, "Helvetica Neue", Arial, sans-serif'
+);
+$studybuddy-custom-typography: studybuddy-typography-config(
+  $font-family: 'Baloo, Roboto, "Helvetica Neue", Arial, sans-serif'
 );
 // @import 'assets/icons/material-icons.css';
 @include mat-core($studybuddy-typography);
@@ -151,6 +155,7 @@ $studybuddy-light-theme-accent: mat-palette($mat-pink, A200, A100, A400);
 $studybuddy-light-theme-theme: mat-light-theme($studybuddy-light-theme-primary, $studybuddy-light-theme-accent);
 @include angular-material-theme($studybuddy-light-theme-theme);
 @include studybuddy-theme($studybuddy-light-theme-theme);
+@include studybuddy-typography($studybuddy-custom-typography);
 .studybuddy-dark {
   $studybuddy-dark-theme-primary: mat-palette($mat-purple);
   $studybuddy-dark-theme-accent: mat-palette($mat-green, A200, A100, A400);
@@ -159,8 +164,14 @@ $studybuddy-light-theme-theme: mat-light-theme($studybuddy-light-theme-primary, 
   @include studybuddy-theme($studybuddy-dark-theme-theme);
 }
 
+// app-root {
+//   top: 64px;
+//   @media (max-width: 599px) {
+//     top: 56px;
+//   }
+// }
 body {
-  overflow: hidden;
+  margin: 0;
 }
 
 // Styles for table
@@ -332,26 +343,6 @@ table.app-table {
   padding: 0;
 }
 
-// TODO: Change styles of scrollbar
-app-root::-webkit-scrollbar,
-mat-sidenav.sidenav::-webkit-scrollbar,
-.mat-sidenav-content::-webkit-scrollbar {
-  height: 6px;
-  width: 6px;
-}
-
-app-root::-webkit-scrollbar-track,
-mat-sidenav.sidenav::-webkit-scrollbar-trac,
-.mat-sidenav-content::-webkit-scrollbar-trac {
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-}
-
-.app-content::-webkit-scrollbar-thumb {
-  background-color: #6e6e6e;
-  outline: 1px solid #333;
-}
-
 .tab-content {
   padding: 16px;
 }
@@ -404,7 +395,7 @@ mat-card {
   z-index: 9999;
 }
 // Empty state
-.empty-state-container {
+.empty-state-container, .center-container {
   position: absolute;
   top: 0;
   left: 0;
@@ -415,12 +406,12 @@ mat-card {
   display: flex;
   justify-content: center;
   z-index: -1;
-}
-.empty-state-div {
-  text-align: center;
-  img {
-    max-width: 100%;
-    width: 300px;
+  .empty-state-div, .center-container-div {
+    text-align: center;
+    img {
+      max-width: 100%;
+      width: 300px;
+    }
   }
 }
 
@@ -492,6 +483,14 @@ blockquote {
   h1, h2, h3, h4, h5, h6 {
     margin: 0;
   }
+}
+
+cdk-virtual-scroll-viewport {
+  height: 100vh;
+}
+
+.text-center {
+  text-align: center;
 }
 
 // CSS hack to position the leading icon in a button
