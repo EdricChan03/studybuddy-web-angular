@@ -112,6 +112,7 @@ export interface Chat extends HasId, HasTimestampMetadata {
   description?: string;
   /** The pinned message in the chat */
   pinnedMessage?: DocumentReference;
+  /** The visibility of the chat */
   visibility?: ChatVisibility;
 }
 
