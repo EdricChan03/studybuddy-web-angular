@@ -72,7 +72,7 @@
       <message-card *ngFor="let message of messages; let i = index" [message]="message" [index]="i">
       </message-card>
       <div *ngIf="messages.length === 0" class="empty-state-container">
-        <div class="empty-state-div">
+        <div class="empty-state-container-div">
           <p>All caught up!</p>
           <button mat-raised-button color="primary">Notification history</button>
         </div>
