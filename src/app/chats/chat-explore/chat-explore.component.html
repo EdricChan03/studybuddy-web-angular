@@ -4,10 +4,6 @@
     <!-- <app-search-input></app-search-input> -->
     <div fxLayout="row">
       <h2>All public chat groups</h2>
-      <span fxFlex></span>
-      <button mat-icon-button (click)="openFilterOptionsDialog()" matTooltip="Filter options">
-        <mat-icon>tune</mat-icon>
-      </button>
     </div>
     <div gdColumns="auto auto auto">
       <mat-card *ngFor="let chat of publicChats$ | async">
@@ -23,18 +19,6 @@
         </mat-card-actions>
       </mat-card>
     </div>
-    <ng-template #filterOptionsDialog>
-      <h2 matDialogTitle>Filter options</h2>
-      <mat-dialog-content fxLayout="column">
-        <form [formGroup]="filterOptionsForm">
-          <mat-checkbox formControlName="showAlreadyJoinedGroups">Show already joined chat groups</mat-checkbox>
-        </form>
-      </mat-dialog-content>
-      <mat-dialog-actions align="end">
-        <button mat-button (click)="filterOptionsForm.reset()" color="warn">Reset</button>
-        <button mat-button matDialogClose color="primary">Save</button>
-      </mat-dialog-actions>
-    </ng-template>
   </div>
 </ng-container>
 <ng-template #nointernet>
