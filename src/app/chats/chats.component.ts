@@ -124,6 +124,9 @@ export class ChatsComponent {
   archiveChat(chat: Chat, event: MouseEvent) {
     const dialogText = `
     <p>Are you sure you want to archive "${chat.name}"?</p>
+    <p>Archiving chats only disables the ability for anyone
+    (except administrators and the owner) to send messages to the chat.
+    Existing messages are kept intact.</p>
     <p>Note: You can unarchive "${chat.name}" at any time.</p>
     `;
     const dialogRef = this.shared.openConfirmDialog({
