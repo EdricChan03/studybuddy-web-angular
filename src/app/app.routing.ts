@@ -1,4 +1,5 @@
 import { ModuleWithProviders } from '@angular/core';
+import { canActivate, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { Route, RouterModule } from '@angular/router';
 import { AboutComponent } from './about/about.component';
 import { AccountComponent } from './account/account.component';
@@ -31,34 +32,36 @@ const SUPPORT_ROUTES: Route[] = [
   { path: ':id', component: SupportViewerComponent }
 ];
 
+const redirectUnauthorizedToLogin = redirectUnauthorizedTo(['login']);
+
 // The routes
 export const AppRoutes: Route[] = [
   // About StudyBuddy
   { path: 'about', component: AboutComponent },
   // Account
-  { path: 'account', component: AccountComponent, canActivate: [AuthGuardService] },
+  { path: 'account', component: AccountComponent, ...canActivate(redirectUnauthorizedToLogin) },
   // Chatrooms! Coming soon.
-  { path: 'chats', component: ChatsComponent, canActivate: [AuthGuardService] },
-  { path: 'chats/explore', component: ChatExploreComponent, canActivate: [AuthGuardService] },
-  { path: 'chats/:id', component: ChatViewerComponent, canActivate: [AuthGuardService] },
+  { path: 'chats', component: ChatsComponent, ...canActivate(redirectUnauthorizedToLogin) },
+  { path: 'chats/explore', component: ChatExploreComponent, ...canActivate(redirectUnauthorizedToLogin) },
+  { path: 'chats/:id', component: ChatViewerComponent, ...canActivate(redirectUnauthorizedToLogin) },
   // Cheat sheet page
   { path: 'cheatsheets', component: CheatsheetHomeComponent },
   { path: 'cheatsheets/:id', component: CheatsheetViewerComponent },
   // Dashboard
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardService] },
+  { path: 'dashboard', component: DashboardComponent, ...canActivate(redirectUnauthorizedToLogin) },
   // Downloads for the app. Currently a bit empty
   { path: 'downloads', component: AppDownloadsComponent },
   // Login page
   { path: 'login', component: LoginComponent },
   // Notes
-  { path: 'notes', component: NotesHomeComponent, canActivate: [AuthGuardService] },
-  { path: 'notes/note-not-found', component: NoteNotFoundComponent, canActivate: [AuthGuardService] },
-  { path: 'notes/:id', component: NotesViewerComponent, canActivate: [AuthGuardService] },
+  { path: 'notes', component: NotesHomeComponent, ...canActivate(redirectUnauthorizedToLogin) },
+  { path: 'notes/note-not-found', component: NoteNotFoundComponent, ...canActivate(redirectUnauthorizedToLogin) },
+  { path: 'notes/:id', component: NotesViewerComponent, ...canActivate(redirectUnauthorizedToLogin) },
   // Reroutes those going to the old route to the new 'tips' route
   // Note: This **may** be removed in a future release
   { path: 'resources', redirectTo: '/tips' },
   // Settings page. Currently a bit broken
-  { path: 'settings', component: SettingsComponent, canActivate: [AuthGuardService] },
+  { path: 'settings', component: SettingsComponent, ...canActivate(redirectUnauthorizedToLogin) },
   // Sign up page
   { path: 'signup', component: SignupComponent },
   // An alias for signing up
@@ -70,7 +73,7 @@ export const AppRoutes: Route[] = [
   // Tips page.
   { path: 'tips', component: TipsComponent },
   {
-    path: 'todo', component: TodoOutletComponent, canActivate: [AuthGuardService], children: [
+    path: 'todo', component: TodoOutletComponent, ...canActivate(redirectUnauthorizedToLogin), children: [
       // All todos
       { path: 'home', component: TodoHomeComponent },
       // Not working as of now
