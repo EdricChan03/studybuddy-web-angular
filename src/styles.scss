@@ -406,7 +406,7 @@ mat-card {
   display: flex;
   justify-content: center;
   z-index: -1;
-  .empty-state-div, .center-container-div {
+  .empty-state-container-div, .center-container-div {
     text-align: center;
     img {
       max-width: 100%;
