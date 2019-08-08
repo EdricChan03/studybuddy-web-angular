@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { AngularFirestoreDocument } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
+import { firestore } from 'firebase';
 
 @Component({
   selector: 'app-chat-info-dialog',
@@ -19,4 +20,11 @@ export class ChatInfoDialogComponent implements OnInit {
   ngOnInit() {
   }
 
+  toDate(timestamp): Date {
+    let result: Date = null;
+    if (timestamp instanceof firestore.Timestamp) {
+      result = timestamp.toDate();
+    }
+    return result;
+  }
 }

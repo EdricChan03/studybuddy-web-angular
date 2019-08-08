@@ -2,9 +2,9 @@
 <mat-dialog-content fxLayout="column">
   <h3>Description</h3>
   <p>{{ (chatDoc$ | async)?.description }}</p>
-  <ng-container *ngIf="(chatDoc$ | async)?.createdAt">
+  <ng-container *ngIf="(chatDoc$ | async)?.createdAt as createdAt">
     <h3>Created at</h3>
-    <p>{{ (chatDoc$ | async)?.createdAt.toDate() | date }}</p>
+    <p>{{ (toDate(createdAt) | date:'medium') || '&lt;No date specified&gt;' }}</p>
   </ng-container>
   <h3>Owner</h3>
   <p>{{ (chatDoc$ | async)?.owner.id }}</p>
