@@ -6,6 +6,15 @@ export interface HasId {
   /** The document ID */
   id?: string;
 }
+
+/** Interface to indicate that a document object should have timestamp metadata. */
+export interface HasTimestampMetadata {
+  /** The date that the document was last modified at. */
+  lastModified?: firestore.Timestamp | firestore.FieldValue;
+  /** The date that the document was created at. */
+  createdAt?: firestore.Timestamp | firestore.FieldValue;
+}
+
 export interface SidenavLink {
   /**
    * The link of the navigation item
@@ -87,7 +96,7 @@ export interface TodoItem extends HasId {
   isArchived?: boolean;
 }
 
-export interface Chat extends HasId {
+export interface Chat extends HasId, HasTimestampMetadata {
   /** The name of the chat */
   name: string;
   /** A list of admins in the chat as document references to the UIDs */
@@ -103,15 +112,6 @@ export interface Chat extends HasId {
   description?: string;
   /** The pinned message in the chat */
   pinnedMessage?: DocumentReference;
-
-  /**
-   * The date that the chat was last modified at
-   */
-  lastModified?: firestore.Timestamp | firestore.FieldValue;
-  /**
-   * The date that the chat was created at
-   */
-  createdAt?: firestore.Timestamp | firestore.FieldValue;
   visibility?: ChatVisibility;
 }
 
