@@ -57,8 +57,7 @@ export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
         // Skip archived todos
         this.todosCollection = this.afFs.collection<TodoItem>(
           `users/${this.currentUser}/todos`,
-          ref => ref.where('isArchived', '==', null)
-            .where('isArchived', '==', false)
+          ref => ref.where('isArchived', '==', false)
         );
         this.todos$ = this.todosCollection.snapshotChanges().pipe(map(actions => {
           return actions.map(a => {
