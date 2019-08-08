@@ -1,7 +1,7 @@
 <h2 matDialogTitle>About {{ (chatDoc$ | async)?.name }}</h2>
 <mat-dialog-content fxLayout="column">
   <h3>Description</h3>
-  <p>{{ (chatDoc$ | async)?.description }}</p>
+  <p>{{ (chatDoc$ | async)?.description || '&lt;No description provided&gt;' }}</p>
   <ng-container *ngIf="(chatDoc$ | async)?.createdAt as createdAt">
     <h3>Created at</h3>
     <p>{{ (toDate(createdAt) | date:'medium') || '&lt;No date specified&gt;' }}</p>
