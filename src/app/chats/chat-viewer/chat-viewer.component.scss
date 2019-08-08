@@ -1,0 +1,12 @@
+.chat-input-container {
+  width: 100%;
+  position: absolute;
+  
+}
+
+.chat-viewer-container {
+  height: calc(100% - 64px);
+  @media (max-width: 599px) {
+    height: calc(100% - 56px);
+  }
+}

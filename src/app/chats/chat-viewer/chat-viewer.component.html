@@ -1,3 +1,43 @@
-<p>
-  chat-viewer works!
-</p>
+<div class="chat-viewer-container" fxLayout="column" fxLayoutAlign="end">
+  <div class="chat-messages-container" fxFlex>
+    <ng-container *ngIf="messages$ | async; let messages; else: emptystate">
+      <!-- <mat-list dense>
+        <cdk-virtual-scroll-viewport itemSize="100">
+          <mat-list-item *cdkVirtualFor="let message of messages">
+            <ng-container *ngIf="getUserPhotoUrlByDocRef(message?.author) | async as photoUrl">
+              <mat-icon matListAvatar *ngIf="!photoUrl">account_circle</mat-icon>
+              <img *ngIf="photoUrl" matListAvatar [src]="photoUrl" />
+            </ng-container>
+            <h2 matLine>
+              {{ getUserDisplayNameByDocRef(message?.author) | async }}</h2>
+            <p matLine>{{ message?.message }}</p>
+          </mat-list-item>
+        </cdk-virtual-scroll-viewport>
+      </mat-list> -->
+      <mat-list dense>
+        <mat-list-item *ngFor="let message of messages">
+          <ng-container *ngIf="message?.authorData?.photoUrl as photoUrl">
+            <mat-icon matListAvatar *ngIf="!photoUrl">account_circle</mat-icon>
+            <img *ngIf="photoUrl" matListAvatar [src]="photoUrl" />
+          </ng-container>
+          <h2 matLine>
+            {{ message?.authorData?.displayName || 'User' }}</h2>
+          <p matLine>{{ message?.message }}</p>
+        </mat-list-item>
+      </mat-list>
+    </ng-container>
+    <ng-template #emptystate>
+      <div class="empty-state-container">
+        <div class="empty-state-container-div">
+          <h2>No messages</h2>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+  <form class="chat-input-container" [formGroup]="newMessageForm" (ngSubmit)="sendMessage()" fxFlex>
+    <input placeholder="Enter message" formControlName="message" required class="chat-input-container__input" fxFlex>
+    <button type="submit" mat-icon-button [disabled]="newMessageForm.invalid" matTooltip="Send message">
+      <mat-icon>send</mat-icon>
+    </button>
+  </form>
+</div>
