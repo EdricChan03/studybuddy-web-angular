@@ -21,7 +21,7 @@
     </div>
   </div>
 </ng-template>
-<div *ngIf="(todos$ | async)?.length >= 0; else: emptystate" class="padding-percentage-container">
+<div *ngIf="(todos$ | async)?.length > 0; else: emptystate" class="padding-percentage-container">
   <button mat-button (click)="deleteAllTodos()" color="warn">Delete all</button>
   <mat-button-toggle-group [(ngModel)]="todoView">
     <mat-button-toggle value="list" matTooltip="List view">
