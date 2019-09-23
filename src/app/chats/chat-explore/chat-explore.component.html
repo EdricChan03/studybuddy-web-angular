@@ -5,7 +5,7 @@
     <div fxLayout="row">
       <h2>All public chat groups</h2>
     </div>
-    <div gdColumns="auto auto auto">
+    <div gdColumns="1fr 1fr 1fr">
       <mat-card *ngFor="let chat of publicChats$ | async">
         <mat-card-title>{{ chat?.name }}</mat-card-title>
         <mat-card-content>
