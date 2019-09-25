@@ -38,6 +38,8 @@ export interface SidenavLink {
    * Note: Only one sublist can be created.
    */
   list?: SidenavLink[];
+  /** Whether the navigation item should be hidden. */
+  hidden?: boolean;
 }
 export interface Settings {
   /**

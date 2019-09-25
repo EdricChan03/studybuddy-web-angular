@@ -9,18 +9,20 @@
     </mat-toolbar>
     <mat-nav-list>
       <ng-container *ngFor="let link of sidenavLinks; let i = index">
-        <a mat-list-item [routerLink]="['/'+link.link]" routerLinkActive="active-link" (click)="closeLeftSidenav(left)">
+        <a mat-list-item [routerLink]="['/'+link.link]" routerLinkActive="active-link" (click)="closeLeftSidenav(left)"
+          *ngIf="!link.hidden">
           <mat-icon matListIcon *ngIf="!link.svgIcon && link.icon">{{link.icon}}</mat-icon>
           <mat-icon matListIcon *ngIf="link.svgIcon && !link.icon" [svgIcon]="link.svgIcon"></mat-icon>
           <h3 matLine>{{link.title}}</h3>
           <span fxFlex></span>
-          <button mat-icon-button (click)="toggleList($event, i)" aria-label="Toggle list" matTooltip="Toggle list" matTooltipPosition="right"
-           *ngIf="link.list">
+          <button mat-icon-button (click)="toggleList($event, i)" aria-label="Toggle list" matTooltip="Toggle list"
+            matTooltipPosition="right" *ngIf="link.list">
             <mat-icon [@toggleIconAnim]="toggleState[i]">keyboard_arrow_right</mat-icon>
           </button>
         </a>
         <div *ngIf="link.list" [@toggleItemsAnim]="toggleState[i]">
-          <a mat-list-item [routerLink]="['/'+listLink.link]" *ngFor="let listLink of link.list; let last = last" routerLinkActive="active-link" (click)="closeLeftSidenav(left)">
+          <a mat-list-item [routerLink]="['/'+listLink.link]" *ngFor="let listLink of link.list; let last = last"
+            routerLinkActive="active-link" (click)="closeLeftSidenav(left)">
             <mat-icon matListIcon *ngIf="!listLink.svgIcon && listLink.icon">{{listLink.icon}}</mat-icon>
             <mat-icon matListIcon *ngIf="listLink.svgIcon && !listLink.icon" [svgIcon]="listLink.svgIcon"></mat-icon>
             <h3 matLine>{{listLink.title}}</h3>
@@ -36,13 +38,14 @@
           <mat-icon matListIcon *ngIf="link.svgIcon && !link.icon" [svgIcon]="link.svgIcon"></mat-icon>
           <h3 matLine>{{link.title}}</h3>
           <span fxFlex></span>
-          <button mat-icon-button (click)="toggleOtherList($event, i)" aria-label="Toggle list" matTooltip="Toggle list" matTooltipPosition="right"
-           *ngIf="link.list">
+          <button mat-icon-button (click)="toggleOtherList($event, i)" aria-label="Toggle list" matTooltip="Toggle list"
+            matTooltipPosition="right" *ngIf="link.list">
             <mat-icon [@toggleIconAnim]="toggleOtherState[i]">keyboard_arrow_right</mat-icon>
           </button>
         </a>
         <div *ngIf="link.list" [@toggleItemsAnim]="toggleOtherState[i]">
-          <a mat-list-item [routerLink]="['/'+listLink.link]" *ngFor="let listLink of link.list" routerLinkActive="active-link" (click)="closeLeftSidenav(left)">
+          <a mat-list-item [routerLink]="['/'+listLink.link]" *ngFor="let listLink of link.list"
+            routerLinkActive="active-link" (click)="closeLeftSidenav(left)">
             <mat-icon matListIcon *ngIf="!listLink.svgIcon && listLink.icon">{{listLink.icon}}</mat-icon>
             <mat-icon matListIcon *ngIf="listLink.svgIcon && !listLink.icon" [svgIcon]="listLink.svgIcon"></mat-icon>
             <h3 matLine>{{listLink.title}}</h3>
@@ -55,13 +58,15 @@
     <mat-toolbar color="primary" class="sticky-toolbar mat-elevation-z3">
       Notifications
       <span fxFlex></span>
-      <button mat-icon-button *ngIf="!environment.production" (click)="addDebugMessage()" matTooltip="Add notification [DEBUG]">
+      <button mat-icon-button *ngIf="!environment.production" (click)="addDebugMessage()"
+        matTooltip="Add notification [DEBUG]">
         <mat-icon>add</mat-icon>
       </button>
       <a mat-icon-button matTooltip="Notification settings" (click)="toggleNotificationSettings()">
         <mat-icon>settings</mat-icon>
       </a>
-      <button mat-icon-button matTooltip="Clear all notifications" (click)="messagingService.deleteMessages()" [disabled]="messages.length === 0">
+      <button mat-icon-button matTooltip="Clear all notifications" (click)="messagingService.deleteMessages()"
+        [disabled]="messages.length === 0">
         <mat-icon>clear_all</mat-icon>
       </button>
       <button mat-icon-button (click)="notifySidenav.close()" matTooltip="Close sidenav">
@@ -83,16 +88,10 @@
     </div>
   </mat-sidenav>
   <mat-sidenav-content>
-    <mat-progress-bar
-      color="accent"
-      [mode]="toolbarService?.progressIndeterminate ? 'indeterminate' : 'determinate'"
-      *ngIf="toolbarService?.showProgress"
-      [value]="toolbarService?.progressPercentage"></mat-progress-bar>
-    <mat-toolbar
-      color="primary"
-      class="mat-elevation-z3 sticky-toolbar"
-      *ngIf="toolbarService?.showToolbar && isAuthenticated"
-      id="topToolbar">
+    <mat-progress-bar color="accent" [mode]="toolbarService?.progressIndeterminate ? 'indeterminate' : 'determinate'"
+      *ngIf="toolbarService?.showProgress" [value]="toolbarService?.progressPercentage"></mat-progress-bar>
+    <mat-toolbar color="primary" class="mat-elevation-z3 sticky-toolbar"
+      *ngIf="toolbarService?.showToolbar && isAuthenticated" id="topToolbar">
       <button mat-icon-button (click)="left.toggle()" *ngIf="!isSidenavOpened">
         <mat-icon>menu</mat-icon>
       </button>
@@ -145,7 +144,8 @@
           </div>
         </mat-nav-list>
       </mat-menu>
-      <button mat-icon-button matTooltip="Notifications" (click)="notifySidenav.toggle()" *ngIf="isNotificationsEnabled">
+      <button mat-icon-button matTooltip="Notifications" (click)="notifySidenav.toggle()"
+        *ngIf="isNotificationsEnabled">
         <!-- For now, don't use any badge as notifications haven't been implemented as of now -->
         <!-- <mat-icon matBadge="10" matBadgeColor="accent">notifications</mat-icon> -->
         <mat-icon>notifications</mat-icon>

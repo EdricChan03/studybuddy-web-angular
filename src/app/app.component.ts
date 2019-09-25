@@ -86,12 +86,14 @@ export class AppComponent implements OnInit {
     {
       link: 'cheatsheets',
       title: 'Cheatsheets',
-      icon: 'library_books'
+      icon: 'library_books',
+      hidden: true
     },
     {
       link: 'notes',
       title: 'Notes',
-      icon: 'subject'
+      icon: 'subject',
+      hidden: true
     },
   ];
   /**
