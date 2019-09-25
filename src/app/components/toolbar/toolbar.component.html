@@ -1,0 +1,53 @@
+<mat-toolbar [color]="color">
+  <button mat-icon-button (click)="handleMenuButtonClick($event)" *ngIf="!hideMenuButton" [matTooltip]="menuButtonConfig.title"
+    [matTooltipDisabled]="!menuButtonConfig.showTooltip"
+    [attr.aria-label]="getAriaLabel(menuButtonConfig)">
+    <mat-icon *ngIf="menuButtonShouldUseFontIcon && menuButtonHasCustomIcon">{{ menuButtonConfig.icon }}</mat-icon>
+    <mat-icon *ngIf="menuButtonShouldUseSvgIcon && menuButtonHasCustomIcon" [svgIcon]="menuButtonConfig.svgIcon">
+    </mat-icon>
+  </button>
+  <span>{{ toolbarTitle }}</span>
+  <span fxFlex *ngIf="actionItems"></span>
+  <ng-container *ngIf="actionItems">
+    <ng-container *ngFor="let item of nonOverflowActionItems">
+      <button mat-button *ngIf="item.type === 'button'" (click)="item.onItemClickListener($event)"
+        [disabled]="item.disabled">
+        {{ item.title }}
+      </button>
+      <button mat-icon-button *ngIf="item.type === 'icon-button' && (item.icon || item.svgIcon)"
+        [matTooltip]="item.title" [attr.aria-label]="getAriaLabel(item)" (click)="item.onItemClickListener($event)"
+        [disabled]="item.disabled">
+        <mat-icon *ngIf="shouldUseFontIcon(item)">{{ item.icon }}</mat-icon>
+        <mat-icon *ngIf="shouldUseSvgIcon(item)" [svgIcon]="item.svgIcon"></mat-icon>
+      </button>
+      <ng-container *ngIf="item.type === 'menu-button' || item.type === 'menu-icon-button'">
+        <button mat-button *ngIf="item.type === 'menu-button'" [matMenuTriggerFor]="subMenu">{{ item.title }}</button>
+        <button mat-icon-button *ngIf="item.type === 'menu-icon-button' && (item.icon || item.svgIcon)"
+          [matTooltip]="item.title" [matMenuTriggerFor]="subMenu" [attr.aria-label]="getAriaLabel(item)">
+          <mat-icon *ngIf="shouldUseFontIcon(item)">{{ item.icon }}</mat-icon>
+          <mat-icon *ngIf="shouldUseSvgIcon(item)" [svgIcon]="item.svgIcon"></mat-icon>
+        </button>
+        <mat-menu #subMenu="matMenu">
+          <button mat-menu-item *ngFor="let childItem of item.children" (click)="childItem.onItemClickListener($event)"
+            [disabled]="childItem.disabled">
+            <mat-icon *ngIf="shouldUseFontIcon(childItem)">{{ childItem.icon }}</mat-icon>
+            <mat-icon *ngIf="shouldUseSvgIcon(childItem)" [svgIcon]="childItem.svgIcon"></mat-icon>
+            <span>{{ childItem.title }}</span>
+          </button>
+        </mat-menu>
+      </ng-container>
+    </ng-container>
+    <mat-menu #overflowMenu="matMenu">
+      <button mat-menu-item *ngFor="let item of overflowActionItems" (click)="item.onItemClickListener($event)"
+        [disabled]="item.disabled">
+        <mat-icon *ngIf="shouldUseFontIcon(item)">{{ item.icon }}</mat-icon>
+        <mat-icon *ngIf="shouldUseSvgIcon(item)" [svgIcon]="item.svgIcon"></mat-icon>
+        <span>{{ item.title }}</span>
+      </button>
+    </mat-menu>
+    <button mat-icon-button [matMenuTriggerFor]="overflowMenu" *ngIf="shouldShowOverflow" aria-label="More options"
+      matTooltip="More options">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+  </ng-container>
+</mat-toolbar>

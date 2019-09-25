@@ -24,6 +24,7 @@ import { ChatViewerComponent } from './chats/chat-viewer/chat-viewer.component';
 import { ChatsComponent } from './chats/chats.component';
 import { CheatsheetHomeComponent } from './cheatsheets/cheatsheet-home/cheatsheet-home.component';
 import { CheatsheetViewerComponent } from './cheatsheets/shared/cheatsheet-viewer/cheatsheet-viewer.component';
+import { ComponentsModule } from './components/components.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DialogsModule } from './dialogs/dialogs.module';
 import { LoginComponent } from './login/login.component';
@@ -110,7 +111,8 @@ import { HotkeysModule } from './hotkeys/hotkeys.module';
     NgCircleProgressModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     DialogsModule,
-    HotkeysModule
+    HotkeysModule,
+    ComponentsModule
   ],
   bootstrap: [AppComponent],
   providers: [

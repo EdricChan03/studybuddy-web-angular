@@ -1,0 +1,29 @@
+<div fxLayout="column" fxLayoutAlign="center center">
+  <img [src]="emptyStateImageSrc" [alt]="emptyStateImageAlt"
+    *ngIf="emptyStateImageSrc && !emptyStateIcon && !emptyStateSvgIcon" [ngClass]="emptyStateImageClass">
+  <mat-icon *ngIf="emptyStateIcon && !emptyStateSvgIcon && !emptyStateImageSrc" [ngClass]="emptyStateIconClass">
+    {{ emptyStateIcon }}</mat-icon>
+  <mat-icon *ngIf="emptyStateSvgIcon && !emptyStateIcon && !emptyStateImageSrc" [svgIcon]="emptyStateSvgIcon"
+    [ngClass]="emptyStateIconClass"></mat-icon>
+  <h3>{{ emptyStateTitle }}</h3>
+  <p *ngIf="emptyStateMsg">{{ emptyStateMsg }}</p>
+  <ng-container *ngIf="!hasCustomActions">
+    <ng-container *ngIf="ctaBtnRouterLink">
+      <a mat-raised-button [routerLink]="ctaBtnRouterLink" *ngIf="showCtaBtn && ctaBtnText" [color]="ctaBtnColor">
+        <mat-icon *ngIf="ctaBtnIcon && !ctaBtnSvgIcon">{{ ctaBtnIcon }}</mat-icon>
+        <mat-icon *ngIf="ctaBtnSvgIcon && !ctaBtnIcon" [svgIcon]="ctaBtnSvgIcon"></mat-icon>
+        {{ ctaBtnText }}
+      </a>
+    </ng-container>
+    <ng-container *ngIf="!ctaBtnRouterLink">
+      <button mat-raised-button (click)="ctaBtnClick.emit($event)" *ngIf="showCtaBtn && ctaBtnText" [color]="ctaBtnColor">
+        <mat-icon *ngIf="ctaBtnIcon && !ctaBtnSvgIcon">{{ ctaBtnIcon }}</mat-icon>
+        <mat-icon *ngIf="ctaBtnSvgIcon && !ctaBtnIcon" [svgIcon]="ctaBtnSvgIcon"></mat-icon>
+        {{ ctaBtnText }}
+      </button>
+    </ng-container>
+  </ng-container>
+  <ng-container *ngIf="hasCustomActions">
+    <ng-content select="[empty-state-actions]"></ng-content>
+  </ng-container>
+</div>
