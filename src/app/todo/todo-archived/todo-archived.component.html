@@ -17,10 +17,8 @@
 <ng-template #emptystate>
   <div class="empty-state-container">
     <div class="empty-state-container-div">
-      <img src="./assets/undraw/undraw_High_five_u364.svg" alt="High five">
-      <h2>All todos done!</h2>
-      <p>Go reward yourself!</p>
-      <button mat-raised-button (click)="newTodo()" color="primary">Create a new todo</button>
+      <h2>No archived todos</h2>
+      <p>To archive a todo, click on <em>More options</em> &gt; <em>Archive todo</em></p>
     </div>
   </div>
 </ng-template>
@@ -41,7 +39,8 @@
     <ng-container matColumnDef="isDone">
       <mat-header-cell *matHeaderCellDef>Done?</mat-header-cell>
       <mat-cell *matCellDef="let todo">
-        <mat-checkbox [checked]="todo.isDone" (change)="stopPropogation($event); toggleChecked(todo)" *ngIf="toolbar.showToolbar"></mat-checkbox>
+        <mat-checkbox [checked]="todo.isDone" (change)="stopPropogation($event); toggleChecked(todo)"
+          *ngIf="toolbar.showToolbar"></mat-checkbox>
       </mat-cell>
     </ng-container>
     <ng-container matColumnDef="title">
@@ -72,7 +71,8 @@
             Mark todo as {{todo?.isDone ? 'undone' : 'done'}}
           </button>
         </mat-menu>
-        <button mat-icon-button matTooltip="Remove todo" (click)="removeTodo(todo?.id, false, $event)" *ngIf="toolbar.showToolbar">
+        <button mat-icon-button matTooltip="Remove todo" (click)="removeTodo(todo?.id, false, $event)"
+          *ngIf="toolbar.showToolbar">
           <mat-icon>delete</mat-icon>
         </button>
       </mat-cell>
@@ -81,16 +81,18 @@
     <mat-row *matRowDef="let row; columns: columnsToDisplay;"></mat-row>
   </mat-table>
   <mat-nav-list *ngIf="todoView === 'list'">
-    <mat-list-item *ngFor="let todo of todos$ | async" (click)="handleListClick(todo, $event)" [ngClass]="{'currently-selected': hasListItemSelected(todo)}"
-      class="app-todo-list-item" disableRipple @todoUpdateAnim>
+    <mat-list-item *ngFor="let todo of todos$ | async" (click)="handleListClick(todo, $event)"
+      [ngClass]="{'currently-selected': hasListItemSelected(todo)}" class="app-todo-list-item" disableRipple
+      @todoUpdateAnim>
       <mat-icon matListIcon *ngIf="!toolbar.showToolbar" [color]="hasListItemSelected(todo) ? 'primary' : ''">
         <ng-container *ngIf="hasListItemSelected(todo)">check_circle</ng-container>
         <svg width="24px" height="24px" viewBox="0 0 24 24" *ngIf="!hasListItemSelected(todo)">
-          <path d="M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
+          <path
+            d="M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
         </svg>
       </mat-icon>
-      <mat-checkbox [checked]="todo.isDone" (change)="stopPropogation($event); toggleChecked(todo)" *ngIf="toolbar.showToolbar"
-        matListIcon></mat-checkbox>
+      <mat-checkbox [checked]="todo.isDone" (change)="stopPropogation($event); toggleChecked(todo)"
+        *ngIf="toolbar.showToolbar" matListIcon></mat-checkbox>
       <h3 matLine>{{todo?.title}}</h3>
       <span matLine [innerHTML]="todo?.content | markdown"></span>
       <span matLine *ngIf="todo?.tags">
@@ -98,14 +100,17 @@
           <mat-chip *ngFor="let tag of todo?.tags">{{tag}}</mat-chip>
         </mat-chip-list>
       </span>
-      <span matLine *ngIf="todo?.dueDate" style="vertical-align: middle; align-items: center; align-content: center; display: flex;">
+      <span matLine *ngIf="todo?.dueDate"
+        style="vertical-align: middle; align-items: center; align-content: center; display: flex;">
         <mat-icon color="primary" style="padding-right: 4px;">today</mat-icon>
         <span>Due date: {{todo?.dueDate.toDate() | date}}</span>
       </span>
-      <span matLine *ngIf="todo?.project" style="vertical-align: middle; align-items: center; align-content: center; display: flex;">
+      <span matLine *ngIf="todo?.project"
+        style="vertical-align: middle; align-items: center; align-content: center; display: flex;">
         <mat-icon color="primary" style="padding-right: 4px;">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px">
-            <path d="M19,3A2,2 0 0,1 21,5V19C21,20.11 20.1,21 19,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3H19M16.7,9.35C16.92,9.14 16.92,8.79 16.7,8.58L15.42,7.3C15.21,7.08 14.86,7.08 14.65,7.3L13.65,8.3L15.7,10.35L16.7,9.35M7,14.94V17H9.06L15.12,10.94L13.06,8.88L7,14.94Z" />
+            <path
+              d="M19,3A2,2 0 0,1 21,5V19C21,20.11 20.1,21 19,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3H19M16.7,9.35C16.92,9.14 16.92,8.79 16.7,8.58L15.42,7.3C15.21,7.08 14.86,7.08 14.65,7.3L13.65,8.3L15.7,10.35L16.7,9.35M7,14.94V17H9.06L15.12,10.94L13.06,8.88L7,14.94Z" />
           </svg>
         </mat-icon>
         <span>Project: {{todo?.project}}</span>
@@ -129,7 +134,8 @@
             Mark todo as {{todo?.isDone ? 'undone' : 'done'}}
           </button>
         </mat-menu>
-        <button mat-icon-button matTooltip="Remove todo" (click)="removeTodo(todo?.id, false, $event)" *ngIf="toolbar.showToolbar">
+        <button mat-icon-button matTooltip="Remove todo" (click)="removeTodo(todo?.id, false, $event)"
+          *ngIf="toolbar.showToolbar">
           <mat-icon>delete</mat-icon>
         </button>
       </ng-container>
@@ -155,6 +161,7 @@
     </mat-card>
   </ng-container>
 </div>
-<button mat-fab (click)="newTodo()" matTooltip="New todo" matTooltipPosition="left" class="new-todo-fab" *ngIf="toolbar.showToolbar">
+<button mat-fab (click)="newTodo()" matTooltip="New todo" matTooltipPosition="left" class="new-todo-fab"
+  *ngIf="toolbar.showToolbar">
   <mat-icon>add</mat-icon>
 </button>
