@@ -1,4 +1,5 @@
 import { FirebaseAppConfig } from '@angular/fire';
+import { Version } from '@angular/core';
 
 // This file is the base environment file for all of the environment files that
 // inherit from this file
@@ -6,6 +7,8 @@ import { FirebaseAppConfig } from '@angular/fire';
 export interface Environment {
   /** Whether production mode is enabled */
   production?: boolean;
+  /** The current version that the app is on. */
+  currentVersion?: Version;
   /** The Firebase config for the current Firebase app */
   firebase?: FirebaseAppConfig | {
     apiKey?: string;
@@ -28,6 +31,9 @@ export const firebaseConfig: FirebaseAppConfig = {
   appId: '1:713563449638:web:e518a1ccfe468413'
 };
 
+export const currentVersion: Version = new Version('1.0.0');
+
 export const baseEnvironment: Environment = {
+  currentVersion: currentVersion,
   firebase: firebaseConfig
 };
