@@ -88,10 +88,6 @@
                 {
                   "src": "src/environments/environment.ts",
                   "replaceWith": "src/environments/environment.prod.ts"
-                },
-                {
-                  "src": "src/index.html",
-                  "replaceWith": "src/index.ngsw.html"
                 }
               ],
               "serviceWorker": true
