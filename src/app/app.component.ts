@@ -15,8 +15,6 @@ import { Message, MessageImportance, MessagingService } from './messaging.servic
 import { SharedService } from './shared.service';
 import { ToolbarService } from './toolbar.service';
 
-
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -151,6 +149,7 @@ export class AppComponent implements OnInit {
 
       }
     });
+
     if (!this.shared.isOnline) {
       const snackBarRef = this.shared.openSnackBar({
         msg: 'You are offline. Some actions will not be available.',
@@ -160,6 +159,7 @@ export class AppComponent implements OnInit {
         window.location.reload(true);
       });
     }
+
     router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
         if (router.url === '/todo') {
@@ -168,6 +168,7 @@ export class AppComponent implements OnInit {
       }
       this.navigationInterceptor(event);
     });
+
     if (this.shared.isDarkThemeEnabled) {
       if (!this.document.body.classList.contains('studybuddy-dark')) {
         this.document.body.classList.add('studybuddy-dark');
