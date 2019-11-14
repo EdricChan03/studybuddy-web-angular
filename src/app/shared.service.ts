@@ -93,21 +93,9 @@ export class SharedService {
   /**
    * Checks if dark theme mode is enabled
    */
-  get isDarkThemeEnabled() {
-    if (this.settings === null) {
-      return false;
-    } else {
-      return this.settings['enableDarkTheme'] || this.settings['darkTheme'] || false;
-    }
-  }
-  get extraToolbarConfig(): ExtraToolbarConfig {
-    return this._extraToolbarConfig;
-  }
-  get showExtraToolbar(): boolean {
-    return this._extraToolbarConfig !== null;
-  }
-  set extraToolbarConfig(extraToolbarConfig: ExtraToolbarConfig) {
-    this._extraToolbarConfig = extraToolbarConfig;
+  get isDarkThemeEnabled(): boolean {
+    // return !(this.settings === null) || this.settings['enableDarkTheme'] || this.settings['darkTheme'] || false;
+    return this.settings !== null && (this.settings['enableDarkTheme'] || this.settings['darkTheme']);
   }
   /**
    * Opens a snack-bar with the specified params and a return of the snackbar's ref (for component)
