@@ -91,7 +91,7 @@
     <mat-progress-bar color="accent" [mode]="toolbarService?.progressIndeterminate ? 'indeterminate' : 'determinate'"
       *ngIf="toolbarService?.showProgress" [value]="toolbarService?.progressPercentage"></mat-progress-bar>
     <mat-toolbar color="primary" class="mat-elevation-z3 sticky-toolbar"
-      *ngIf="toolbarService?.showToolbar && isAuthenticated" id="topToolbar">
+      *ngIf="toolbarService?.showToolbar" id="topToolbar">
       <button mat-icon-button (click)="left.toggle()" *ngIf="!isSidenavOpened">
         <mat-icon>menu</mat-icon>
       </button>
