@@ -416,8 +416,8 @@ export class SharedService {
    * @param value The value to sanitize
    * @returns A sanitized HTML string
    */
-  sanitizeHtml(value: string | SafeValue): string {
-    return this.dom.sanitize(SecurityContext.HTML, value);
+  sanitizeHtml(value: string | SafeValue, bypassSanitization: boolean = false): string | SafeHtml {
+    return bypassSanitization ? this.dom.bypassSecurityTrustHtml(value as string) : this.dom.sanitize(SecurityContext.HTML, value);
   }
 
   /**
