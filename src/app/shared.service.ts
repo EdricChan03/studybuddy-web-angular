@@ -2,6 +2,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { ComponentType } from '@angular/cdk/portal';
 import { Component, Injectable, NgModule, OnInit, TemplateRef, ViewChild, SecurityContext } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ThemePalette } from '@angular/material/core';
@@ -10,8 +11,16 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule, MatSelectionList } from '@angular/material/list';
-import { MatSnackBar, MatSnackBarConfig, MatSnackBarHorizontalPosition, MatSnackBarModule, MatSnackBarRef, MatSnackBarVerticalPosition, SimpleSnackBar } from '@angular/material/snack-bar';
-import { BrowserModule, DomSanitizer, SafeHtml, SafeValue, Title } from '@angular/platform-browser';
+import {
+  MatSnackBar,
+  MatSnackBarConfig,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarModule,
+  MatSnackBarRef,
+  MatSnackBarVerticalPosition,
+  SimpleSnackBar
+} from '@angular/material/snack-bar';
+import { DomSanitizer, SafeHtml, SafeValue, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Observable, Subject } from 'rxjs';
 import { Settings } from './interfaces';
@@ -855,7 +864,7 @@ const SHARED_DIALOGS = [
   SelectionDialog
 ];
 const SHARED_MODULES = [
-  BrowserModule,
+  CommonModule,
   BrowserAnimationsModule,
   FormsModule,
   ReactiveFormsModule,
