@@ -1,26 +1,18 @@
 # StudyBuddy-web
 
-Hey there user! Welcome to StudyBuddy for web official client (now in rc!).
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.4.2.
+This repository contains the source code of the web client, available [here](https://studybuddy-e5f46.web.app).
 
-## Website
+## Native apps
 
-The website is available [here](https://studybuddy-e5f46.firebaseapp.com).
-
-## Android
-
-For Android builds, see this [Github repo](https://github.com/Chan4077/StudyBuddy) and its [Releases](https://github.com/Chan4077/StudyBuddy/releases).
+For a native version of the application, see this [Github repo](https://github.com/EdricChan03/StudyBuddy-android) and its [Releases](https://github.com/EdricChan03/StudyBuddy-android/releases). Note that this is only available for Android for now.
 
 ---
 
-## Building the source code
+## Running a local instance of the site
 
 ### Prerequisites
 
-- A fast computer (optional)
-- An installation of the latest [NodeJS](https://nodejs.org/en/) **(required)**
-- Some basic knowledge of the shell (optional)
-- Some knowledge of git (optional)
+- An installation of the latest [NodeJS](https://nodejs.org/en/) (ideally the version needed for the Angular CLI)
 
 ### Get started
 
@@ -30,7 +22,7 @@ To build the source code, follow these steps:
 
    ```bash
    cd path/to/dir
-   git clone https://github.com/Chan4077/StudyBuddy
+   git clone https://github.com/EdricChan03/StudyBuddy-web
    ```
 
 2. Install the modules.
