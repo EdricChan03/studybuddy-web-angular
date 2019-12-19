@@ -41,7 +41,7 @@ export class TestpageComponent implements OnInit {
   verticalPos = ['top', 'bottom'];
   horizontalPos = ['start', 'center', 'end', 'left', 'right'];
   constructor(
-    private shared: SharedService,
+    public shared: SharedService,
     private dom: DomSanitizer
   ) {
     shared.title = 'Test page';

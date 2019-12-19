@@ -1,30 +1,28 @@
 <div class="padding-container">
-  <p>Welcome to the test page! This page is used to test the shared functions.</p>
+  <p>Welcome to the test page! This page is used to test the shared service.</p>
   <fieldset>
-    <legend>Buttons</legend>
-    <div fxLayout="row">
-      <ng-container *ngFor="let button of buttons">
-        <button mat-button *ngIf="button.btnType == 'normal'" [color]="button.color">{{button.title ? button.title : 'Button'}}</button>
-        <button mat-flat-button *ngIf="button.btnType == 'flat'" [color]="button.color">{{button.title ? button.title : 'Button'}}</button>
-        <button mat-stroked-button *ngIf="button.btnType == 'stroked'" [color]="button.color">{{button.title ? button.title : 'Button'}}</button>
-        <button mat-raised-button *ngIf="button.btnType == 'raised'" [color]="button.color">{{button.title ? button.title : 'Button'}}</button>
-        <button mat-icon-button *ngIf="button.btnType == 'icon'" [color]="button.color" [matTooltip]="button.tooltip"><mat-icon>{{button.icon ? button.icon : 'close'}}</mat-icon></button>
-        <button mat-fab *ngIf="button.btnType == 'fab'" [color]="button.color ? button.color : 'accent'" [matTooltip]="button.tooltip"><mat-icon>{{button.icon ? button.icon : 'close'}}</mat-icon></button>
-        <button mat-mini-fab *ngIf="button.btnType == 'mini-fab'" [color]="button.color ? button.color : 'accent'" [matTooltip]="button.tooltip"><mat-icon>{{button.icon ? button.icon : 'close'}}</mat-icon></button>
-      </ng-container>
-    </div>
+    <legend>Utility methods</legend>
+    <p><code>SharedService.isDarkThemeEnabled</code>: {{ shared.isDarkThemeEnabled }}</p>
+    <p><code>SharedService.isMobile</code>: {{ shared.isMobile }}</p>
+    <p><code>SharedService.isOnline</code>: {{ shared.isOnline }}</p>
+    <p><code>SharedService.documentTitle</code>: {{ shared.documentTitle }}</p>
+    <p><code>SharedService.title</code>: {{ shared.title }}</p>
+    <p><code>SharedService.settings</code>:</p>
+    <pre><code>{{ shared.settings | json }}</code></pre>
   </fieldset>
   <fieldset fxLayout="column">
     <legend>Dialog properties</legend>
     <h4>Dialog type:</h4>
     <mat-radio-group [(ngModel)]="dialog.dialogType" fxLayout="column" required>
-      <mat-radio-button *ngFor="let type of dialogTypes" [value]="type" style="padding: 1px;">{{type | titlecase}}</mat-radio-button>
+      <mat-radio-button *ngFor="let type of dialogTypes" [value]="type" style="padding: 1px;">{{type | titlecase}}
+      </mat-radio-button>
     </mat-radio-group>
     <mat-form-field>
       <input matInput [(ngModel)]="dialog.title" placeholder="Title of dialog">
     </mat-form-field>
     <mat-form-field>
-      <textarea matInput [(ngModel)]="dialog.message" placeholder="Message of dialog" rows="3" matTextareaAutosize></textarea>
+      <textarea matInput [(ngModel)]="dialog.message" placeholder="Message of dialog" rows="3"
+        matTextareaAutosize></textarea>
       <button mat-icon-button matSuffix (click)="generateLoremIpsum()" matTooltip="Generate lorem ipsum">
         <mat-icon>cached</mat-icon>
       </button>
@@ -50,7 +48,8 @@
   <fieldset fxLayout="column">
     <legend>Snackbar properties</legend>
     <mat-form-field>
-      <textarea matInput [(ngModel)]="snackbar.snackBarMsg" placeholder="Message of snackbar" rows="3" matTextareaAutosize></textarea>
+      <textarea matInput [(ngModel)]="snackbar.snackBarMsg" placeholder="Message of snackbar" rows="3"
+        matTextareaAutosize></textarea>
       <button mat-icon-button matSuffix (click)="generateLoremIpsum(true)" matTooltip="Generate lorem ipsum">
         <mat-icon>cached</mat-icon>
       </button>
