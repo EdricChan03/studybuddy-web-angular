@@ -1,8 +1,8 @@
+import { DOCUMENT } from '@angular/common';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSidenav } from '@angular/material/sidenav';
-import { DOCUMENT } from '@angular/common';
 import { Event, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 import * as firebase from 'firebase';
 import { Observable } from 'rxjs';
@@ -23,9 +23,6 @@ import { ToolbarService } from './toolbar.service';
   ]
 })
 export class AppComponent implements OnInit {
-  /**
-   * The sidenav
-   */
   @ViewChild('left', { static: true }) sidenav: MatSidenav;
   environment = environment;
   user: firebase.User;
@@ -34,9 +31,6 @@ export class AppComponent implements OnInit {
   showNotificationSettings = false;
   toggleState = [];
   toggleOtherState = [];
-  /**
-   * Links for the sidenav
-   */
   sidenavLinks: SidenavLink[] = [
     {
       link: 'dashboard',
@@ -93,9 +87,6 @@ export class AppComponent implements OnInit {
       hidden: true
     },
   ];
-  /**
-   * Other links for the sidenav
-   */
   otherLinks: SidenavLink[] = [
     {
       link: 'account',
@@ -119,9 +110,6 @@ export class AppComponent implements OnInit {
     }
   ];
   tempId = 0;
-  /**
-   * Whether the user is signed in
-   */
   isSignedIn = false;
   keyMaps = {};
   constructor(
@@ -176,15 +164,19 @@ export class AppComponent implements OnInit {
       }
     }
   }
+
   get isMobile(): boolean {
     return this.shared.isMobile;
   }
+
   get isSidenavOpened(): boolean {
     return this.sidenav.opened;
   }
+
   get isAuthenticated(): boolean {
     return this.auth.authenticated;
   }
+
   ngOnInit() {
     this.sidenavLinks.forEach(item => {
       if (item.list) {
@@ -197,6 +189,7 @@ export class AppComponent implements OnInit {
       this.shared.settings = settingsStorage;
     }
   }
+
   navigationInterceptor(event: Event) {
     if (event instanceof NavigationStart) {
       this.toolbarService.setProgress(true, true);
@@ -213,11 +206,13 @@ export class AppComponent implements OnInit {
       this.toolbarService.setProgress(false);
     }
   }
+
   onKeydown($event: KeyboardEvent) {
     // console.log(`key down: ${$event}`);
     console.log(`onKeydown: key: ${$event.key}`);
     console.log(`onKeydown: keyCode: ${$event.keyCode}`);
   }
+
   toggleList(event: KeyboardEvent | MouseEvent, index: number) {
     event.stopImmediatePropagation();
     event.stopPropagation();
@@ -232,6 +227,7 @@ export class AppComponent implements OnInit {
       this.toggleState[index] = 'toggled';
     }
   }
+
   toggleOtherList(event: KeyboardEvent | MouseEvent, index: number) {
     event.stopImmediatePropagation();
     event.stopPropagation();
@@ -246,6 +242,7 @@ export class AppComponent implements OnInit {
       this.toggleOtherState[index] = 'toggled';
     }
   }
+
   logOut() {
     const dialogRef = this.shared.openConfirmDialog({
       title: 'Log out?',
@@ -275,11 +272,13 @@ export class AppComponent implements OnInit {
       }
     });
   }
+
   closeLeftSidenav(ref: MatSidenav) {
     if (this.shared.settings.closeSidenavOnClick) {
       ref.close();
     }
   }
+
   openUserInfoDialog() {
     this.dialog.open(UserInfoDialogComponent);
   }
