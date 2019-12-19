@@ -179,33 +179,9 @@ export class AppComponent implements OnInit {
       }
     }
   }
-  get messages(): Message[] {
-    return this.messagingService.messages;
-  }
-  /**
-   * Checks whether the user is using a mobile device
-   */
   get isMobile(): boolean {
     return this.shared.isMobile;
   }
-  /**
-   * Whether to enable notifications
-   */
-  get isNotificationsEnabled(): boolean {
-    if (this.shared.settings === null) {
-      return false;
-    } else {
-      if (this.shared.settings.hasOwnProperty('enableNotifications')) {
-        return this.shared.settings['enableNotifications'];
-      } else {
-        return false;
-      }
-    }
-  }
-  /**
-   * Checks whether the sidenav is currently opened
-   * @returns {boolean}
-   */
   get isSidenavOpened(): boolean {
     return this.sidenav.opened;
   }
@@ -305,100 +281,6 @@ export class AppComponent implements OnInit {
   closeLeftSidenav(ref: MatSidenav) {
     if (this.shared.settings.closeSidenavOnClick) {
       ref.close();
-    }
-  }
-  // TODO(Edric): Remove this method
-  toggleNotificationSettings() {
-    this.showNotificationSettings = !this.showNotificationSettings;
-  }
-  // TODO(Edric): Remove this method
-  addDebugMessage() {
-    if (environment.production) {
-      console.error('This functionality only works in developer mode.');
-    } else {
-      this.tempId++;
-      const random = Math.floor((Math.random() * 5) + 1);
-      switch (random) {
-        case 1:
-          this.messagingService.addMessage({
-            category: 'Product announcements',
-            title: 'Check out the all new XX feature which is available starting today!',
-            date: this.todayDate,
-            id: `debug-${this.tempId}`,
-            importanceLevel: MessageImportance.Low,
-            actions: [
-              {
-                title: 'Read blogpost',
-                onClickListener: (ev) => {
-                  window.location.href = 'https://example.com';
-                }
-              }
-            ]
-          });
-          break;
-        case 2:
-          this.messagingService.addMessage({
-            category: 'Critical alert',
-            title: 'Feature xx is currently down. Please stand by for more updates.',
-            date: this.todayDate,
-            id: `debug-${this.tempId}`,
-            importanceLevel: MessageImportance.High,
-            actions: [{
-              title: 'Dismiss',
-              onClickListener: (ev) => {
-                window.location.href = 'https://example.com';
-              }
-            }]
-          });
-          break;
-        case 3:
-          this.messagingService.addMessage({
-            category: 'Notification',
-            title: 'Hi there!',
-            date: this.todayDate,
-            id: `debug-${this.tempId}`,
-            importanceLevel: MessageImportance.Low,
-            actions: [{
-              title: 'Dismiss',
-              onClickListener: (ev) => {
-                window.location.href = 'https://example.com';
-              }
-            }]
-          });
-          break;
-        case 4:
-          this.messagingService.addMessage({
-            category: 'Newsletter',
-            title: 'This week\'s newsletter',
-            date: this.todayDate,
-            id: `debug-${this.tempId}`,
-            importanceLevel: MessageImportance.Medium,
-            actions: [{
-              title: 'Dismiss',
-              onClickListener: (ev) => {
-                window.location.href = 'https://example.com';
-              }
-            }]
-          });
-          break;
-        case 5:
-          this.messagingService.addMessage({
-            category: 'Critical alert',
-            title: 'Update: All features are back up!',
-            date: this.todayDate,
-            id: `debug-${this.tempId}`,
-            importanceLevel: MessageImportance.High,
-            actions: [{
-              title: 'Dismiss',
-              onClickListener: (ev) => {
-                window.location.href = 'https://example.com';
-              }
-            }]
-          });
-          break;
-        default:
-          break;
-      }
     }
   }
   openUserInfoDialog() {
