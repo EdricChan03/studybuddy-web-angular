@@ -8,8 +8,6 @@ import { AuthGuardService } from './auth-guard.service';
 import { ChatExploreComponent } from './chats/chat-explore/chat-explore.component';
 import { ChatViewerComponent } from './chats/chat-viewer/chat-viewer.component';
 import { ChatsComponent } from './chats/chats.component';
-import { CheatsheetHomeComponent } from './cheatsheets/cheatsheet-home/cheatsheet-home.component';
-import { CheatsheetViewerComponent } from './cheatsheets/shared/cheatsheet-viewer/cheatsheet-viewer.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
 import { NoteNotFoundComponent } from './notes/note-not-found/note-not-found.component';
@@ -44,9 +42,6 @@ export const routes: Route[] = [
   { path: 'chats', component: ChatsComponent, ...canActivate(redirectUnauthorizedToLogin) },
   { path: 'chats/explore', component: ChatExploreComponent, ...canActivate(redirectUnauthorizedToLogin) },
   { path: 'chats/:id', component: ChatViewerComponent, ...canActivate(redirectUnauthorizedToLogin) },
-  // Cheat sheet page
-  { path: 'cheatsheets', component: CheatsheetHomeComponent },
-  { path: 'cheatsheets/:id', component: CheatsheetViewerComponent },
   // Dashboard
   { path: 'dashboard', component: DashboardComponent, ...canActivate(redirectUnauthorizedToLogin) },
   // Downloads for the app. Currently a bit empty

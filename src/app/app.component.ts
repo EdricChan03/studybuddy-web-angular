@@ -75,12 +75,6 @@ export class AppComponent implements OnInit {
       icon: 'chat'
     },
     {
-      link: 'cheatsheets',
-      title: 'Cheatsheets',
-      icon: 'library_books',
-      hidden: true
-    },
-    {
       link: 'notes',
       title: 'Notes',
       icon: 'subject',
