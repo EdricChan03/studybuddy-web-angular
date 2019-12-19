@@ -2,10 +2,10 @@ import { Injectable, Component, Input } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 
 @Injectable()
+/** @deprecated Currently has no functional purpose */
 export class MessagingService {
-
   private _messages: Message[] = [];
-  private _archivedMeesages: Message[] = [];
+  private _archivedMessages: Message[] = [];
   get messages(): Message[] {
     return this._messages;
   }
@@ -13,10 +13,10 @@ export class MessagingService {
     this._messages = messages;
   }
   get archivedMessages(): Message[] {
-    return this._archivedMeesages;
+    return this._archivedMessages;
   }
   set archivedMessages(archivedMessages: Message[]) {
-    this._archivedMeesages = archivedMessages;
+    this._archivedMessages = archivedMessages;
   }
   getMessages(): Message[] {
     return this._messages;
@@ -35,11 +35,11 @@ export class MessagingService {
   deleteMessageById(id: string) {
     // this._archivedMeesages.push(this._messages.filter((message: Message) => message.id === id));
     this._messages = this._messages.filter((message: Message) => message.id !== id);
-    this._archivedMeesages.push(this.getMessageById(id));
+    this._archivedMessages.push(this.getMessageById(id));
   }
   deleteMessage(index: string | number) {
     if (typeof index === 'number') {
-      this._archivedMeesages.push(this._messages[index]);
+      this._archivedMessages.push(this._messages[index]);
       this._messages.splice(index, 1);
     } else {
       this.deleteMessageById(index);
@@ -54,7 +54,7 @@ export class MessagingService {
    * @param message {Message} The message
    */
   addArchivedMessage(message: Message) {
-    this._archivedMeesages.push(message);
+    this._archivedMessages.push(message);
   }
 }
 @Component({
@@ -96,6 +96,7 @@ export class MessagingService {
   </mat-card>
   `
 })
+/** @deprecated Currently has no functional purpose */
 export class MessageCardComponent {
   constructor(
     // TODO(Edric): Figure out a way to make this private
@@ -105,6 +106,7 @@ export class MessageCardComponent {
   @Input() index: number;
 }
 
+/** @deprecated Currently has no functional purpose */
 export interface MessageGroup {
   /**
    * Messages of the group
@@ -115,6 +117,8 @@ export interface MessageGroup {
    */
   title: string;
 }
+
+/** @deprecated Currently has no functional purpose */
 export interface Message {
   /**
    * The title of the message
@@ -153,6 +157,8 @@ export interface Message {
    */
   importanceLevel: MessageImportance;
 }
+
+/** @deprecated Currently has no functional purpose */
 export interface MessageAction {
   /**
    * Whether the action button is an icon button
@@ -185,6 +191,7 @@ export interface MessageAction {
 
 /**
  * Denotes the importance of a message.
+ * @deprecated Currently has no functional purpose
  */
 export enum MessageImportance {
   /**
