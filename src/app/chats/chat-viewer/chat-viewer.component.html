@@ -34,7 +34,7 @@
       </div>
     </ng-template>
   </div>
-  <form class="chat-input-container" [formGroup]="newMessageForm" (ngSubmit)="sendMessage()" fxFlex>
+  <form class="chat-input-container mat-elevation-z3" [formGroup]="newMessageForm" (ngSubmit)="sendMessage()" fxFlex>
     <input placeholder="Enter message" formControlName="message" required class="chat-input-container__input" fxFlex>
     <button type="submit" mat-icon-button [disabled]="newMessageForm.invalid" matTooltip="Send message">
       <mat-icon>send</mat-icon>
