@@ -15,8 +15,8 @@ import { environment } from '../environments/environment';
 import { AboutComponent } from './about/about.component';
 import { AccountComponent } from './account/account.component';
 import { ApiService } from './api.service';
+import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AppRouting } from './app.routing';
 import { AppDownloadsComponent } from './appdownloads/appdownloads.component';
 import { AuthService } from './auth.service';
 import { ChatExploreComponent } from './chats/chat-explore/chat-explore.component';
@@ -86,7 +86,7 @@ import { HotkeysModule } from './hotkeys/hotkeys.module';
     FormsModule,
     ReactiveFormsModule,
     MaterialModule,
-    AppRouting,
+    AppRoutingModule,
     HttpClientModule,
     FlexLayoutModule,
     AngularFireModule.initializeApp(environment.firebase),

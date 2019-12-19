@@ -1,4 +1,4 @@
-import { ModuleWithProviders } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { canActivate, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { Route, RouterModule } from '@angular/router';
 import { AboutComponent } from './about/about.component';
@@ -35,7 +35,7 @@ const SUPPORT_ROUTES: Route[] = [
 const redirectUnauthorizedToLogin = redirectUnauthorizedTo(['login']);
 
 // The routes
-export const AppRoutes: Route[] = [
+export const routes: Route[] = [
   // About StudyBuddy
   { path: 'about', component: AboutComponent },
   // Account
@@ -91,4 +91,13 @@ export const AppRoutes: Route[] = [
 ];
 
 // The routing
-export const AppRouting: ModuleWithProviders = RouterModule.forRoot(AppRoutes);
+/**
+ * @deprecated Use {@link AppRoutingModule} instead
+ */
+export const AppRouting: ModuleWithProviders = RouterModule.forRoot(routes);
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
