@@ -1,4 +1,4 @@
-import { SharedService, SelectionDialogOptions } from '../shared.service';
+import { SharedService, SelectionDialogOptions } from '../../../shared.service';
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition } from '@angular/material/snack-bar';
 import { ThemePalette } from '@angular/material/core';
@@ -29,11 +29,12 @@ interface TestSnackBar {
   panelClass?: string[] | string;
   snackBarMsg?: string;
 }
+
 @Component({
-  selector: 'app-testpage',
-  templateUrl: './testpage.component.html'
+  selector: 'app-develop-shared-service',
+  templateUrl: './shared-service.component.html'
 })
-export class TestpageComponent implements OnInit {
+export class DevelopSharedServiceComponent implements OnInit {
   buttons: TestButton[] = [];
   dialogTypes = ['alert', 'confirm', 'prompt', 'selection'];
   dialog: TestDialog = {};

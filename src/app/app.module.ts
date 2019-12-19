@@ -37,7 +37,6 @@ import { SearchInputComponent } from './shared/search-input/search-input.compone
 import { SignupComponent } from './signup/signup.component';
 import { SupportViewerComponent } from './support/shared/support-viewer/support-viewer.component';
 import { SupportHomeComponent } from './support/support-home/support-home.component';
-import { TestpageComponent } from './testpage/testpage.component';
 import { TipsComponent } from './tips/tips.component';
 import { TodoArchivedComponent, TodoDashboardComponent, TodoHomeComponent, TodoProjectComponent } from './todo';
 import { TodoDashboardNewComponent } from './todo/todo-dashboard-new/todo-dashboard-new.component';
@@ -51,7 +50,6 @@ import { HotkeysModule } from './hotkeys/hotkeys.module';
     AppComponent,
     AppDownloadsComponent,
     TodoHomeComponent,
-    TestpageComponent,
     TipsComponent,
     SettingsComponent,
     TodoProjectComponent,

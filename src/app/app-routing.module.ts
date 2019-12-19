@@ -16,12 +16,12 @@ import { SettingsComponent } from './settings/settings.component';
 import { SignupComponent } from './signup/signup.component';
 import { SupportViewerComponent } from './support/shared/support-viewer/support-viewer.component';
 import { SupportHomeComponent } from './support/support-home/support-home.component';
-import { TestpageComponent } from './testpage/testpage.component';
 import { TipsComponent } from './tips/tips.component';
 import { TodoArchivedComponent, TodoDashboardComponent, TodoHomeComponent, TodoProjectComponent } from './todo';
 import { TodoDashboardNewComponent } from './todo/todo-dashboard-new/todo-dashboard-new.component';
 import { TodoOutletComponent } from './todo/todo-outlet/todo-outlet.component';
 import { UserViewerComponent } from './user-viewer/user-viewer.component';
+import { DevelopmentGuard } from './development.guard';
 
 
 const SUPPORT_ROUTES: Route[] = [
@@ -63,7 +63,7 @@ export const routes: Route[] = [
   // Support page
   { path: 'support', children: SUPPORT_ROUTES },
   // Test links for developers.
-  { path: 'test', component: TestpageComponent },
+  { path: 'test', redirectTo: '/develop/shared-service' },
   // Tips page.
   { path: 'tips', component: TipsComponent },
   {
@@ -81,6 +81,15 @@ export const routes: Route[] = [
   },
   { path: 'user/:userId', component: UserViewerComponent },
   { path: 'u/:userId', component: UserViewerComponent },
+
+  // Lazy loaded feature modules
+  {
+    path: 'develop',
+    canActivate: [DevelopmentGuard],
+    loadChildren: () => import('./pages/develop/develop.module').then(m => m.DevelopModule)
+  },
+
+  // Wildcard routes
   { path: '**', redirectTo: '/dashboard' }
 ];
 
