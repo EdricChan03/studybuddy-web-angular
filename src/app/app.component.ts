@@ -11,7 +11,6 @@ import { animations } from './animations';
 import { AuthService } from './auth.service';
 import { UserInfoDialogComponent } from './dialogs';
 import { SidenavLink } from './interfaces';
-import { Message, MessageImportance, MessagingService } from './messaging.service';
 import { SharedService } from './shared.service';
 import { ToolbarService } from './toolbar.service';
 
