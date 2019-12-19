@@ -10,7 +10,7 @@ export interface Environment {
   /** The current version that the app is on. */
   currentVersion?: Version;
   /** The Firebase config for the current Firebase app */
-  firebase?: FirebaseAppConfig | {
+  firebase?: {
     apiKey?: string;
     authDomain?: string;
     databaseURL?: string;
