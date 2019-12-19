@@ -21,7 +21,6 @@ import {
   SimpleSnackBar
 } from '@angular/material/snack-bar';
 import { DomSanitizer, SafeHtml, SafeValue, Title } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Observable, Subject } from 'rxjs';
 import { Settings } from './interfaces';
 
@@ -865,7 +864,6 @@ const SHARED_DIALOGS = [
 ];
 const SHARED_MODULES = [
   CommonModule,
-  BrowserAnimationsModule,
   FormsModule,
   ReactiveFormsModule,
   MatButtonModule,
