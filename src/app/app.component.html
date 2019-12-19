@@ -54,39 +54,6 @@
       </ng-container>
     </mat-nav-list>
   </mat-sidenav>
-  <mat-sidenav #notifySidenav class="app-notify-sidenav mat-elevation-z2" position="end">
-    <mat-toolbar color="primary" class="sticky-toolbar mat-elevation-z3">
-      Notifications
-      <span fxFlex></span>
-      <button mat-icon-button *ngIf="!environment.production" (click)="addDebugMessage()"
-        matTooltip="Add notification [DEBUG]">
-        <mat-icon>add</mat-icon>
-      </button>
-      <a mat-icon-button matTooltip="Notification settings" (click)="toggleNotificationSettings()">
-        <mat-icon>settings</mat-icon>
-      </a>
-      <button mat-icon-button matTooltip="Clear all notifications" (click)="messagingService.deleteMessages()"
-        [disabled]="messages.length === 0">
-        <mat-icon>clear_all</mat-icon>
-      </button>
-      <button mat-icon-button (click)="notifySidenav.close()" matTooltip="Close sidenav">
-        <mat-icon>close</mat-icon>
-      </button>
-    </mat-toolbar>
-    <div *ngIf="!showNotificationSettings">
-      <message-card *ngFor="let message of messages; let i = index" [message]="message" [index]="i">
-      </message-card>
-      <div *ngIf="messages.length === 0" class="empty-state-container">
-        <div class="empty-state-container-div">
-          <p>All caught up!</p>
-          <button mat-raised-button color="primary">Notification history</button>
-        </div>
-      </div>
-    </div>
-    <div *ngIf="showNotificationSettings" class="padding-percentage-container">
-      Notification settings
-    </div>
-  </mat-sidenav>
   <mat-sidenav-content>
     <mat-progress-bar color="accent" [mode]="toolbarService?.progressIndeterminate ? 'indeterminate' : 'determinate'"
       *ngIf="toolbarService?.showProgress" [value]="toolbarService?.progressPercentage"></mat-progress-bar>
@@ -144,12 +111,6 @@
           </div>
         </mat-nav-list>
       </mat-menu>
-      <button mat-icon-button matTooltip="Notifications" (click)="notifySidenav.toggle()"
-        *ngIf="isNotificationsEnabled">
-        <!-- For now, don't use any badge as notifications haven't been implemented as of now -->
-        <!-- <mat-icon matBadge="10" matBadgeColor="accent">notifications</mat-icon> -->
-        <mat-icon>notifications</mat-icon>
-      </button>
     </mat-toolbar>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
