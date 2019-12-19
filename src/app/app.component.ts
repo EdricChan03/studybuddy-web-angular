@@ -132,8 +132,6 @@ export class AppComponent implements OnInit {
     private router: Router,
     private afFs: AngularFirestore,
     private dialog: MatDialog,
-    // TODO(Edric): Figure out a way to make this private
-    public messagingService: MessagingService,
     @Inject(DOCUMENT) private document: Document
   ) {
     this.userObservable = auth.getAuthState();
