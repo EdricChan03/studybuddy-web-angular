@@ -126,7 +126,7 @@ export interface Chat extends HasId, HasTimestampMetadata {
  * - `private`: Indicates that the chat group is private
  * (aka it can only be accessed with the chat's ID and the user has been invited by an existing user in the chat group)
  * - `unlisted`: Indicates that the chat group is only accessible with the ID
-*/
+ */
 export type ChatVisibility = 'public' | 'private' | 'unlisted';
 
 /** Represents a message in a chat group */
