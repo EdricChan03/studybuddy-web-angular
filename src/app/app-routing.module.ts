@@ -4,7 +4,6 @@ import { Route, RouterModule } from '@angular/router';
 import { AboutComponent } from './about/about.component';
 import { AccountComponent } from './account/account.component';
 import { AppDownloadsComponent } from './appdownloads/appdownloads.component';
-import { AuthGuardService } from './auth-guard.service';
 import { ChatExploreComponent } from './chats/chat-explore/chat-explore.component';
 import { ChatViewerComponent } from './chats/chat-viewer/chat-viewer.component';
 import { ChatsComponent } from './chats/chats.component';
