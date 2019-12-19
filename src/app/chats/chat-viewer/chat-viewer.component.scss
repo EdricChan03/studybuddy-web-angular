@@ -1,7 +1,14 @@
 .chat-input-container {
   width: 100%;
   position: absolute;
-  
+  padding: 10px;
+  input {
+    background: none;
+    border: 0;
+    color: currentColor;
+    font-family: inherit;
+    outline: 0;
+  }
 }
 
 .chat-viewer-container {
