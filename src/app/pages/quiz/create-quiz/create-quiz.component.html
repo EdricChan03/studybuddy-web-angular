@@ -1,0 +1,14 @@
+<div class="padding-percentage-container">
+  <mat-card>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <mat-card-title>Create quiz</mat-card-title>
+      <mat-card-content>
+        <formly-form [form]="form" [fields]="fields" [model]="model">
+        </formly-form>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button mat-button color="primary" type="submit" [disabled]="form.invalid">Submit</button>
+      </mat-card-actions>
+    </form>
+  </mat-card>
+</div>

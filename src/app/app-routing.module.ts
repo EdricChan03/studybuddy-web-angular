@@ -88,6 +88,10 @@ export const routes: Route[] = [
     canActivate: [DevelopmentGuard],
     loadChildren: () => import('./pages/develop/develop.module').then(m => m.DevelopModule)
   },
+  {
+    path: 'quizzes',
+    loadChildren: () => import('./pages/quiz/quiz.module').then(m => m.QuizModule)
+  },
 
   // Wildcard routes
   { path: '**', redirectTo: '/dashboard' }

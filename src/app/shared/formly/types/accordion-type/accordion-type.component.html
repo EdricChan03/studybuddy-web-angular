@@ -1,0 +1,30 @@
+<div fxLayout="row" fxLayoutAlign="center center">
+  <div fxLayout="column">
+    <legend *ngIf="to.label">{{ to.label }}</legend>
+    <p *ngIf="to.description">{{ to.description }}</p>
+  </div>
+  <span fxFlex></span>
+  <button mat-icon-button (click)="add()" matTooltip="Add">
+    <mat-icon>add_circle_outline</mat-icon>
+  </button>
+</div>
+<div fxLayout="column">
+  <mat-accordion [multi]="to['multi'] || false" [displayMode]="to['displayMode'] || 'default'"
+  [hideToggle]="to['hideToggle'] || false" fxLayout="column" fxFlex="grow">
+  <mat-expansion-panel *ngFor="let field of field.fieldGroup; let i = index" [disabled]="field.templateOptions.disabled">
+    <mat-expansion-panel-header>
+      <mat-panel-title>{{ field.templateOptions.label }}</mat-panel-title>
+      <mat-panel-description *ngIf="field.templateOptions.description">{{ field.templateOptions.description }}
+      </mat-panel-description>
+      <span fxFlex></span>
+      <button mat-icon-button fxFlexAlign="center" (click)="remove(i)" matTooltip="Remove">
+        <mat-icon>remove_circle_outline</mat-icon>
+      </button>
+    </mat-expansion-panel-header>
+    <formly-field [field]="field"></formly-field>
+    <mat-action-row>
+      <button mat-button color="warn" (click)="remove(i)">Remove</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</mat-accordion>
+</div>

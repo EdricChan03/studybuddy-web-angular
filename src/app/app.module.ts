@@ -4,10 +4,12 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
+import { FormlyMaterialModule } from '@ngx-formly/material';
 import 'hammerjs';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
@@ -33,6 +35,7 @@ import { NotesHomeComponent } from './notes/notes-home/notes-home.component';
 import { NotesViewerComponent } from './notes/notes-viewer/notes-viewer.component';
 import { SettingsComponent } from './settings/settings.component';
 import { SharedModule } from './shared.service';
+import { CustomFormlyModule } from './shared/formly/custom-formly.module';
 import { SearchInputComponent } from './shared/search-input/search-input.component';
 import { SignupComponent } from './signup/signup.component';
 import { SupportViewerComponent } from './support/shared/support-viewer/support-viewer.component';
@@ -44,6 +47,16 @@ import { TodoOutletComponent } from './todo/todo-outlet/todo-outlet.component';
 import { ToolbarService } from './toolbar.service';
 import { UserViewerComponent } from './user-viewer/user-viewer.component';
 import { HotkeysModule } from './hotkeys/hotkeys.module';
+
+function EmailValidator(control: FormControl): ValidationErrors {
+  // Regex from https://emailregex.com/
+  return !control.value ||
+    /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(control.value) ? null : { email: true };
+}
+
+function minItemsValidationMessage(err, field: FormlyFieldConfig) {
+  return `A minimum of ${field.templateOptions.minItems} items are required.`;
+}
 
 @NgModule({
   declarations: [
@@ -79,6 +92,18 @@ import { HotkeysModule } from './hotkeys/hotkeys.module';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
+    FormlyModule.forRoot({
+      validators: [
+        { name: 'email', validation: EmailValidator }
+      ],
+      validationMessages: [
+        { name: 'required', message: 'This field is required.' },
+        { name: 'email', message: 'Please enter a valid email address!' },
+        { name: 'minItems', message: minItemsValidationMessage }
+      ]
+    }),
+    FormlyMaterialModule,
+    CustomFormlyModule,
     MaterialModule,
     AppRoutingModule,
     HttpClientModule,
