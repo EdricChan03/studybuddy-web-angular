@@ -33,6 +33,7 @@ import { ChatsComponent } from './chats/chats.component';
 import { ComponentsModule } from './components/components.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DialogsModule } from './dialogs/dialogs.module';
+import { HotkeysModule } from './hotkeys/hotkeys.module';
 import { LoginComponent } from './login/login.component';
 import { MaterialModule } from './material.module';
 import { NoteNotFoundComponent } from './notes/note-not-found/note-not-found.component';
@@ -51,7 +52,6 @@ import { TodoDashboardNewComponent } from './todo/todo-dashboard-new/todo-dashbo
 import { TodoOutletComponent } from './todo/todo-outlet/todo-outlet.component';
 import { ToolbarService } from './toolbar.service';
 import { UserViewerComponent } from './user-viewer/user-viewer.component';
-import { HotkeysModule } from './hotkeys/hotkeys.module';
 
 function EmailValidator(control: FormControl): ValidationErrors {
   // Regex from https://emailregex.com/
