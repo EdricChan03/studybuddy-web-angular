@@ -117,8 +117,8 @@ function minItemsValidationMessage(err, field: FormlyFieldConfig) {
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAnalyticsModule,
     AngularFireAuthModule,
-    AngularFirestoreModule.enablePersistence(),
     AngularFireAuthGuardModule,
+    AngularFirestoreModule.enablePersistence({ synchronizeTabs: true }),
     AngularFirePerformanceModule,
     SharedModule,
     MarkdownModule.forRoot({
