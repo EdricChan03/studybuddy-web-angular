@@ -61,3 +61,9 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
  * Need to import at least one locale-data with intl.
  */
 // import 'intl/locale-data/jsonp/en';
+
+/**
+ * Used for measuring First Input Delay.
+ * See https://github.com/angular/angularfire/blob/master/docs/performance/getting-started.md#measuring-first-input-delay for more info.
+ */
+import 'first-input-delay';

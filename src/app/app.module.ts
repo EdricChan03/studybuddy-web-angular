@@ -1,8 +1,13 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
+import {
+  AngularFireAnalyticsModule, ScreenTrackingService, UserTrackingService,
+  APP_NAME, APP_VERSION, COLLECTION_ENABLED, DEBUG_MODE
+} from '@angular/fire/analytics';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFirePerformanceModule } from '@angular/fire/performance';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormControl, FormsModule, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -109,8 +114,10 @@ function minItemsValidationMessage(err, field: FormlyFieldConfig) {
     HttpClientModule,
     FlexLayoutModule,
     AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAnalyticsModule,
     AngularFireAuthModule,
     AngularFirestoreModule.enablePersistence(),
+    AngularFirePerformanceModule,
     SharedModule,
     MarkdownModule.forRoot({
       markedOptions: {
@@ -138,7 +145,14 @@ function minItemsValidationMessage(err, field: FormlyFieldConfig) {
     ToolbarService,
     MessagingService,
     AuthService,
-    ApiService
+    ApiService,
+    // @angular/fire optional Analytics services
+    ScreenTrackingService,
+    UserTrackingService,
+    { provide: APP_NAME, useValue: environment.analytics.appName },
+    { provide: APP_VERSION, useValue: environment.analytics.appVersion },
+    { provide: COLLECTION_ENABLED, useValue: !environment.analytics.disableCollection },
+    { provide: DEBUG_MODE, useValue: environment.analytics.debugMode }
   ]
 })
 export class AppModule { }
