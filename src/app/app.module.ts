@@ -35,7 +35,6 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { DialogsModule } from './dialogs/dialogs.module';
 import { LoginComponent } from './login/login.component';
 import { MaterialModule } from './material.module';
-import { MessageCardComponent, MessagingService } from './messaging.service';
 import { NoteNotFoundComponent } from './notes/note-not-found/note-not-found.component';
 import { NotesHomeComponent } from './notes/notes-home/notes-home.component';
 import { NotesViewerComponent } from './notes/notes-viewer/notes-viewer.component';
@@ -81,7 +80,6 @@ function minItemsValidationMessage(err, field: FormlyFieldConfig) {
     ChatsComponent,
     ChatExploreComponent,
     ChatViewerComponent,
-    MessageCardComponent,
     NotesHomeComponent,
     NotesViewerComponent,
     NoteNotFoundComponent,
@@ -145,7 +143,6 @@ function minItemsValidationMessage(err, field: FormlyFieldConfig) {
   bootstrap: [AppComponent],
   providers: [
     ToolbarService,
-    MessagingService,
     AuthService,
     ApiService,
     // @angular/fire optional Analytics services
