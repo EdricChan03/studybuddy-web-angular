@@ -137,7 +137,7 @@ function minItemsValidationMessage(err, field: FormlyFieldConfig) {
       }
     }),
     NgCircleProgressModule.forRoot(),
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    ServiceWorkerModule.register('./ngsw-worker.js', { enabled: environment.production, scope: './' }),
     DialogsModule,
     HotkeysModule,
     ComponentsModule
