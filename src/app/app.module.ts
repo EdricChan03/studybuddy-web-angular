@@ -6,6 +6,7 @@ import {
   APP_NAME, APP_VERSION, COLLECTION_ENABLED, DEBUG_MODE
 } from '@angular/fire/analytics';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireAuthGuardModule } from '@angular/fire/auth-guard';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFirePerformanceModule } from '@angular/fire/performance';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -117,6 +118,7 @@ function minItemsValidationMessage(err, field: FormlyFieldConfig) {
     AngularFireAnalyticsModule,
     AngularFireAuthModule,
     AngularFirestoreModule.enablePersistence(),
+    AngularFireAuthGuardModule,
     AngularFirePerformanceModule,
     SharedModule,
     MarkdownModule.forRoot({
