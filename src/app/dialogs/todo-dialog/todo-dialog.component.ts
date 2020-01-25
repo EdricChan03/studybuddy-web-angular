@@ -203,10 +203,10 @@ export class TodoDialogComponent implements OnInit {
   }
   saveOrAddTodo() {
     if (this.isNewTodo) {
-      const itemToAdd: TodoItem = { title: '' };
+      const itemToAdd: Partial<TodoItem> = {};
       for (const prop in this.todoFormRawValue) {
         if (this.todoFormRawValue.hasOwnProperty(prop) && this.todoFormRawValue[prop] !== null) {
-          switch (prop) {
+          switch (prop as keyof TodoItem) {
             case 'id':
             case 'isArchived':
             case 'isDone':
