@@ -3,7 +3,7 @@ import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, Subject } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
 import { AuthService } from '../../auth.service';
 import { Chat } from '../../interfaces';
 import { SharedService } from '../../shared.service';
@@ -38,6 +38,7 @@ export class ChatExploreComponent {
   hasJoinedChat(chat: Chat): boolean {
     return (chat.members as DocumentReference[]).some(e => e.id === this.auth.authState.uid);
   }
+
   joinChat(chat: Chat) {
     const chatRef = this.afFs.doc<Chat>(`chats/${chat['id']}`);
     chatRef
@@ -63,7 +64,15 @@ export class ChatExploreComponent {
       });
   }
 
-  getOwnerName(ownerDoc: DocumentReference): Observable<firebase.User> {
-    return this.api.getUserById(ownerDoc.id);
+  getUserData(userDoc: DocumentReference): Observable<firebase.User> {
+    return this.afFs.doc(`users/${userDoc.id}`).get().pipe(
+      take(1),
+      map(snapshot => snapshot.data() as firebase.User)
+    );
+    // return this.api.getUserById(ownerDoc.id);
+  }
+
+  getUserDisplayName(userDoc: DocumentReference): Observable<string> {
+    return this.getUserData(userDoc).pipe(map(user => user.displayName));
   }
 }
