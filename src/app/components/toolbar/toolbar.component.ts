@@ -50,7 +50,7 @@ export class ToolbarComponent {
   @Input() hideMenuButton = false;
 
   /** The default menu button configuration. */
-  private defaultMenuButtonConfig: MenuButtonConfig = {
+  readonly defaultMenuButtonConfig: MenuButtonConfig = {
     // behavior: MenuButtonBehavior.MENU,
     behavior: {
       handlerType: 'listener',
@@ -60,6 +60,7 @@ export class ToolbarComponent {
     showTooltip: false,
     title: 'Menu'
   };
+
   /** Configuration for the menu button. */
   @Input() menuButtonConfig: MenuButtonConfig = this.defaultMenuButtonConfig;
 
