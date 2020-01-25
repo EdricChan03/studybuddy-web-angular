@@ -23,14 +23,17 @@ import { UrlTree } from '@angular/router';
 //   CUSTOM = 'custom'
 // }
 /** Represents a custom behavior/behaviour of the menu button when interacted with. */
-export interface MenuButtonCustomBehavior {
+export type MenuButtonCustomBehavior = {
   /** The handler to use when the menu button is clicked. */
-  handlerType: 'listener' | 'router';
+  handlerType: 'listener';
   /** The listener which is invoked when the menu button is clicked on. */
-  onClick?: (ev?: Event) => void;
+  onClick: (ev?: Event) => void;
+} | {
+  /** The handler to use when the menu button is clicked. */
+  handlerType: 'router';
   /** The path to navigate to with `Router#navigateByUrl`. */
-  navigateTo?: string | UrlTree;
-}
+  navigateTo: string | UrlTree;
+};
 
 /**
  * Configuration for the menu button typically displayed next to the title
