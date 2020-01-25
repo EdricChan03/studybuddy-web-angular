@@ -23,7 +23,7 @@
       <span fxFlex></span>
       <mat-menu #moreMenu="matMenu">
         <button mat-menu-item (click)="showChatInfo(chat, $event)">
-          <mat-icon>information</mat-icon>
+          <mat-icon>info</mat-icon>
           <span>Show chat info</span>
         </button>
         <button mat-menu-item (click)="editChatDetails(chat, $event)" [disabled]="!isAdmin(chat)">
