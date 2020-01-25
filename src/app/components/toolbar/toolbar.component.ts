@@ -46,9 +46,6 @@ export class ToolbarComponent {
    */
   nonOverflowActionItems: ActionItem[];
 
-  /** Whether to hide the menu button. */
-  @Input() hideMenuButton = false;
-
   /** The default menu button configuration. */
   readonly defaultMenuButtonConfig: MenuButtonConfig = {
     // behavior: MenuButtonBehavior.MENU,
@@ -69,6 +66,14 @@ export class ToolbarComponent {
 
   /** Event that will be emitted when the menu button is clicked on. */
   @Output() menuClick = new EventEmitter<Event>();
+
+  /**
+   * Whether to hide the menu button.
+   *
+   * Note: The menu button is hidden by default if no click listener for
+   * the menu is specified. (See {@link ToolbarComponent#menuClick} for more info)
+   */
+  @Input() hideMenuButton = false;
 
   /**
    * Whether the overflow menu should be shown.
