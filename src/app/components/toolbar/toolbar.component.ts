@@ -153,7 +153,7 @@ export class ToolbarComponent {
         this.router.navigateByUrl(this.menuButtonConfig.behavior.navigateTo);
         break;
       default:
-        console.warn(`Handler type ${this.menuButtonConfig.behavior.handlerType} not implemented!`);
+        console.warn(`Handler type ${this.menuButtonConfig.behavior['handlerType']} not implemented!`);
         break;
     }
   }
