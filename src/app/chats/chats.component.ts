@@ -176,7 +176,7 @@ export class ChatsComponent {
     } else {
       const dialogText = `
       <p>Are you sure you want to leave "${chat.name}"?</p>
-      <small>Tip: To bypass this dialog, hold down the <kbd>Shift</kbd> key while clicking the delete action.</small>
+      <small>Tip: To bypass this dialog, hold down the <kbd>Shift</kbd> key while clicking the leave action.</small>
       `;
       const dialogRef = this.shared.openConfirmDialog({
         title: `Leave "${chat.name}"?`,
