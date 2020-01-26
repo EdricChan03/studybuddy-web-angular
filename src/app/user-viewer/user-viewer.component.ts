@@ -28,7 +28,7 @@ export class UserViewerComponent implements OnInit {
     this.api.getUserById(this.userId)
       .subscribe(user => {
         console.log(user);
-      })
+      });
   }
 
 }
