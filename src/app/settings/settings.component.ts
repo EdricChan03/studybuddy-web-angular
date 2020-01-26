@@ -1,12 +1,14 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-
-import { Settings } from '../interfaces';
-import { SharedService } from '../shared.service';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { Router, ActivatedRoute } from '@angular/router';
+import { AngularFireRemoteConfig } from '@angular/fire/remote-config';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as firebase from 'firebase';
 import { filter } from 'rxjs/operators';
+import { Settings } from '../interfaces';
+import { SharedService } from '../shared.service';
+import { Experiment } from '../core/experiments/models/experiment';
+import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
 
 @Component({
   selector: 'app-settings',
@@ -17,9 +19,24 @@ import { filter } from 'rxjs/operators';
 export class SettingsComponent implements OnInit {
   settingsForm: FormGroup;
   updateUserForm: FormGroup;
+
+  experimentsFormlyConfig: {
+    form: FormGroup,
+    model: any,
+    fields: FormlyFieldConfig[],
+    options: FormlyFormOptions
+  } = {
+    form: new FormGroup({}),
+    model: {},
+    fields: [],
+    options: {}
+  };
+
   currentUser: firebase.User;
+  experiments: Experiment[] = [];
   constructor(
     private afAuth: AngularFireAuth,
+    private remoteConfig: AngularFireRemoteConfig,
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
@@ -30,18 +47,22 @@ export class SettingsComponent implements OnInit {
       darkTheme: false,
       closeSidenavOnClick: false,
       enableNewUi: false,
-      enableNotifications: false
+      enableNotifications: false,
+      todoView: 'list'
     });
+
     this.updateUserForm = fb.group({
       displayName: null,
       email: null,
       password: null
     });
+
     afAuth.user.subscribe(user => {
       if (user) {
         this.currentUser = user;
       }
     });
+
     route.queryParams
       .pipe(
         filter(params => params.panel || params.settingPanel)
@@ -62,6 +83,41 @@ export class SettingsComponent implements OnInit {
           }
         }
       });
+
+      remoteConfig.getString('available_experiments').then(value => {
+        console.log('Currently available experiments:', JSON.parse(value));
+
+        const parsedVal = JSON.parse(value) as Experiment[];
+        this.experiments = parsedVal;
+
+        const formFields: FormlyFieldConfig[] = [];
+        parsedVal.forEach(experiment => {
+          let fieldType;
+          switch (experiment.type) {
+            case 'boolean':
+              fieldType = 'checkbox';
+              break;
+            case 'string':
+              fieldType = 'input';
+              break;
+            default:
+              fieldType = experiment.type;
+              break;
+          }
+
+          formFields.push({
+            key: experiment.key,
+            type: fieldType,
+            templateOptions: {
+              label: experiment.name,
+              description: experiment.description
+            },
+            defaultValue: experiment.defaultValue
+          });
+        });
+
+        this.experimentsFormlyConfig.fields = formFields;
+      });
   }
   currentSettingPanel = 'appearance';
   settingsPanels = [
@@ -69,6 +125,11 @@ export class SettingsComponent implements OnInit {
       name: 'Account',
       id: 'account',
       description: 'Account-related actions'
+    },
+    {
+      name: 'Todos',
+      id: 'todos',
+      description: 'Configure the todos page'
     },
     {
       name: 'Appearance',
@@ -99,6 +160,7 @@ export class SettingsComponent implements OnInit {
   showSettingsPanel(panelId: string) {
     this.currentSettingPanel = panelId;
   }
+
   saveSettings() {
     if (this.settingsForm.value) {
       let tempSettings: Settings;
@@ -122,9 +184,11 @@ export class SettingsComponent implements OnInit {
       console.error('Could not save settings as the variable is undefined.');
     }
   }
+
   retrieveSettings(): Settings {
     return this.shared.settings || {};
   }
+
   resetSettings() {
     const dialogRef = this.shared.openConfirmDialog({
       title: 'Delete settings?',
