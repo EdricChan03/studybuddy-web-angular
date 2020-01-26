@@ -13,6 +13,7 @@ import { UserInfoDialogComponent } from './dialogs';
 import { SidenavLink } from './interfaces';
 import { SharedService } from './shared.service';
 import { ToolbarService } from './toolbar.service';
+import { AngularFireRemoteConfig } from '@angular/fire/remote-config';
 
 @Component({
   selector: 'app-root',
@@ -114,7 +115,8 @@ export class AppComponent implements OnInit {
     private router: Router,
     private afFs: AngularFirestore,
     private dialog: MatDialog,
-    @Inject(DOCUMENT) private document: Document
+    @Inject(DOCUMENT) private document: Document,
+    private remoteConfig: AngularFireRemoteConfig
   ) {
     this.userObservable = auth.getAuthState();
     auth.getAuthState().subscribe((user) => {
@@ -157,6 +159,17 @@ export class AppComponent implements OnInit {
         this.document.body.classList.remove('studybuddy-dark');
       }
     }
+
+    // Fetch and activate Firebase Remote Config
+    // See https://firebase.google.com/docs/reference/js/firebase.remoteconfig.RemoteConfig#fetch-and-activate
+    // for what the result of the `Promise` means
+    remoteConfig.fetchAndActivate().then(result => {
+      console.log(result ?
+        'Successfully activated the fetched configuration!' :
+        'Fetched configuration was already activated. Skipping...');
+    }, error => {
+      console.error('An error occurred while attempting to fetch and activate the Remote Config:', error);
+    });
   }
 
   get isMobile(): boolean {
