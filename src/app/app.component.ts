@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 import { animations } from './animations';
 import { AuthService } from './auth.service';
+import { PanelService } from './core/panel/panel.service';
 import { UserInfoDialogComponent } from './dialogs';
 import { SidenavLink } from './interfaces';
 import { SharedService } from './shared.service';
@@ -25,6 +26,7 @@ import { AngularFireRemoteConfig } from '@angular/fire/remote-config';
 })
 export class AppComponent implements OnInit {
   @ViewChild('left', { static: true }) sidenav: MatSidenav;
+  @ViewChild('rightPanel', { static: true }) rightPanel: MatSidenav;
   environment = environment;
   user: firebase.User;
   userObservable: Observable<firebase.User>;
@@ -116,6 +118,7 @@ export class AppComponent implements OnInit {
     private afFs: AngularFirestore,
     private dialog: MatDialog,
     @Inject(DOCUMENT) private document: Document,
+    public panelService: PanelService,
     private remoteConfig: AngularFireRemoteConfig
   ) {
     this.userObservable = auth.getAuthState();
@@ -185,6 +188,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.panelService.panel = this.rightPanel;
     this.sidenavLinks.forEach(item => {
       if (item.list) {
         this.toggleState.push('notToggled');

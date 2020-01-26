@@ -54,6 +54,9 @@
       </ng-container>
     </mat-nav-list>
   </mat-sidenav>
+  <mat-sidenav #rightPanel class="right-panel mat-elevation-z2" position="end">
+    <ng-template [cdkPortalOutlet]="panelService.panelPortal | async"></ng-template>
+  </mat-sidenav>
   <mat-sidenav-content>
     <mat-progress-bar color="accent" [mode]="toolbarService?.progressIndeterminate ? 'indeterminate' : 'determinate'"
       *ngIf="toolbarService?.showProgress" [value]="toolbarService?.progressPercentage"></mat-progress-bar>
