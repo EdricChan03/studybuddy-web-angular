@@ -9,6 +9,7 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireAuthGuardModule } from '@angular/fire/auth-guard';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFirePerformanceModule } from '@angular/fire/performance';
+import { AngularFireRemoteConfigModule, DEFAULTS as DEFAULT_CONFIG, SETTINGS as REMOTE_CONFIG_SETTINGS } from '@angular/fire/remote-config';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormControl, FormsModule, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -118,6 +119,7 @@ function minItemsValidationMessage(err, field: FormlyFieldConfig) {
     AngularFireAuthGuardModule,
     AngularFirestoreModule.enablePersistence({ synchronizeTabs: true }),
     AngularFirePerformanceModule,
+    AngularFireRemoteConfigModule,
     SharedModule,
     MarkdownModule.forRoot({
       markedOptions: {
@@ -151,7 +153,15 @@ function minItemsValidationMessage(err, field: FormlyFieldConfig) {
     { provide: APP_NAME, useValue: environment.analytics.appName },
     { provide: APP_VERSION, useValue: environment.analytics.appVersion },
     { provide: COLLECTION_ENABLED, useValue: !environment.analytics.disableCollection },
-    { provide: DEBUG_MODE, useValue: environment.analytics.debugMode }
+    { provide: DEBUG_MODE, useValue: environment.analytics.debugMode },
+    {
+      provide: REMOTE_CONFIG_SETTINGS, useFactory: () =>
+        ('remoteConfig' in environment && 'settings' in environment.remoteConfig) ? environment.remoteConfig.settings : {}
+    },
+    {
+      provide: DEFAULT_CONFIG, useFactory: () =>
+        ('remoteConfig' in environment && 'defaults' in environment.remoteConfig) ? environment.remoteConfig.defaults : {}
+    }
   ]
 })
 export class AppModule { }

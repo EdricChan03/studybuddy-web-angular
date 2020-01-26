@@ -8,5 +8,10 @@ export const environment: Environment = {
   ...baseEnvironment,
   analytics: {
     debugMode: true
+  },
+  remoteConfig: {
+    settings: {
+      minimumFetchIntervalMillis: 10_000
+    }
   }
 };

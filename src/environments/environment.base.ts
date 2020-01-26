@@ -31,6 +31,15 @@ export interface Environment {
   };
   /** Firebase Analytics configuration options */
   analytics?: AnalyticsConfig;
+  /** Firebase Remote Config options */
+  remoteConfig?: {
+    /** Settings to be passed to `CONFIG` from `@angular/fire/remote-config`. */
+    settings?: Partial<firebase.remoteConfig.Settings>;
+    /** Defaults to be passed to `DEFAULTS` from `@angular/fire/remote-config`. */
+    defaults?: {
+      [key: string]: string | number | boolean;
+    }
+  };
 }
 
 export const versionStr = '1.0.0';

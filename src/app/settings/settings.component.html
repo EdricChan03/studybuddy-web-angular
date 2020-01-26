@@ -50,11 +50,20 @@
             <mat-checkbox formControlName="darkTheme">Enable dark theme</mat-checkbox>
           </div>
           <div class="setting-panel-section"
-            [style.display]="(shared.isMobile || currentSettingPanel === 'experiments') ? 'block' : 'none'"
+            [style.display]="(shared.isMobile || currentSettingPanel === 'todos') ? 'block' : 'none'"
             fxLayout="column">
-            <h2 [style.display]="shared.isMobile ? 'block' : 'none'">Experiments</h2>
-            <mat-checkbox formControlName="enableNewUi">Show new UI</mat-checkbox>
-            <mat-checkbox formControlName="enableNotifications">Show notifications</mat-checkbox>
+            <h2 [style.display]="shared.isMobile ? 'block' : 'none'">Todos</h2>
+            <h3>Default todo view</h3>
+            <mat-button-toggle-group formControlName="todoView">
+              <mat-button-toggle value="list">
+                <mat-icon aria-hidden="true" aria-label="List icon">view_list</mat-icon>
+                List
+              </mat-button-toggle>
+              <mat-button-toggle value="table">
+                <mat-icon svgIcon="mdi:table" aria-hidden="true" aria-label="List icon"></mat-icon>
+                Table
+              </mat-button-toggle>
+            </mat-button-toggle-group>
           </div>
           <div class="setting-panel-section"
             [style.display]="(shared.isMobile || currentSettingPanel === 'behaviour') ? 'block' : 'none'"
@@ -62,12 +71,29 @@
             <h2 [style.display]="shared.isMobile ? 'block' : 'none'">Behaviour</h2>
             <mat-checkbox formControlName="closeSidenavOnClick">Close sidenav on click</mat-checkbox>
           </div>
-          <div class="setting-panel-actions-row"
-            [style.display]="(shared.isMobile || currentSettingPanel !== 'account') ? 'block' : 'none'">
-            <button mat-button color="warn" (click)="resetSettings()">Reset settings</button>
-            <button mat-button color="primary" (click)="saveSettings()">Save changes</button>
+        </form>
+        <form [formGroup]="experimentsFormlyConfig.form">
+          <div class="setting-panel-section"
+            [style.display]="(shared.isMobile || currentSettingPanel === 'experiments') ? 'block' : 'none'"
+            fxLayout="column">
+            <h2 [style.display]="shared.isMobile ? 'block' : 'none'">Experiments</h2>
+            <formly-form
+            *ngIf="experiments.length > 0; else: noExperiments"
+            [model]="experimentsFormlyConfig.model"
+            [fields]="experimentsFormlyConfig.fields"
+            [options]="experimentsFormlyConfig.options"
+            [form]="experimentsFormlyConfig.form"></formly-form>
+            <ng-template #noExperiments>
+              <p>There are currently no available experiments.</p>
+              <p>Check again later.</p>
+            </ng-template>
           </div>
         </form>
+        <div class="setting-panel-actions-row"
+          [style.display]="(shared.isMobile || (currentSettingPanel !== 'account' && currentSettingPanel !== 'experiments')) ? 'block' : 'none'">
+          <button mat-button color="warn" (click)="resetSettings()">Reset settings</button>
+          <button mat-button color="primary" (click)="saveSettings()">Save changes</button>
+        </div>
       </div>
     </mat-card-content>
     <!-- <mat-card-title>Settings</mat-card-title>
