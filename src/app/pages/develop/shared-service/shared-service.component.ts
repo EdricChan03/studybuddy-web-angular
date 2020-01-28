@@ -154,20 +154,13 @@ export class DevelopSharedServiceComponent implements OnInit {
     this.clearOptions(this.dialog);
   }
   openSelectionDialog() {
-    const selectionDialogOptions: SelectionDialogOption[] = [];
-    // for (let i = 0; i < 10; i++) {
-    //   if (i === 1) {
-    //     tempVar.push({ content: 'Item 1', disabled: true, value: 'item-1' });
-    //   } else if (i === 8) {
-    //     tempVar.push({ content: 'Item 8', value: 'item-8', selected: true });
-    //   } else {
-    //     tempVar.push({ content: `Item ${i}`, value: `item-${i}` });
-    //   }
-    // }
-    selectionDialogOptions.push({ content: 'Critical alerts', value: 'critical_alerts', selected: true, disabled: true });
-    selectionDialogOptions.push({ content: 'Weekly summary', value: 'weekly_summary' });
-    selectionDialogOptions.push({ content: 'New features', value: 'new_features' });
-    selectionDialogOptions.push({ content: 'Uncategorised', value: 'uncategorised', selected: true, disabled: true });
+    const selectionDialogOptions: SelectionDialogOption[] = [
+      { content: 'Critical alerts', value: 'critical_alerts', selected: true, disabled: true },
+      { content: 'Weekly summary', value: 'weekly_summary' },
+      { content: 'New features', value: 'new_features' },
+      { content: 'Uncategorised', value: 'uncategorised', selected: true, disabled: true }
+    ];
+
     const dialogRef = this.shared.openSelectionDialog({
       title: this.getValOrReturnDefault(this.dialog.title, 'Notification preferences'),
       msg: this.getValOrReturnDefault(this.dialog.message, 'Show preferences for the following'),
