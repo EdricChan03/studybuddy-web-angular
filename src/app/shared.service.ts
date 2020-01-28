@@ -108,7 +108,9 @@ export class AlertDialog extends Dialog {
   }
 
   get positiveBtnColor(): ThemePalette {
-    return this.opts.positiveBtnColor ? this.opts.positiveBtnColor : this.defaultBtnColor;
+    // This is to handle users using the now deprecated `okColor` property.
+    // tslint:disable-next-line:deprecation
+    return this.opts.okColor ? this.opts.okColor : this.opts.positiveBtnColor ? this.opts.positiveBtnColor : this.defaultBtnColor;
   }
 
   get positiveBtnText(): string {
@@ -185,7 +187,9 @@ export class ConfirmDialog extends Dialog {
   }
 
   get negativeBtnColor(): ThemePalette {
-    return this.opts.negativeBtnColor ? this.opts.negativeBtnColor : this.defaultBtnColor;
+    // This is to handle users using the now deprecated `cancelColor` property.
+    // tslint:disable-next-line:deprecation
+    return this.opts.cancelColor ? this.opts.cancelColor : this.opts.negativeBtnColor ? this.opts.negativeBtnColor : this.defaultBtnColor;
   }
 
   get neutralBtnColor(): ThemePalette {
@@ -193,7 +197,9 @@ export class ConfirmDialog extends Dialog {
   }
 
   get positiveBtnColor(): ThemePalette {
-    return this.opts.positiveBtnColor ? this.opts.positiveBtnColor : this.defaultBtnColor;
+    // This is to handle users using the now deprecated `okColor` property.
+    // tslint:disable-next-line:deprecation
+    return this.opts.okColor ? this.opts.okColor : this.opts.positiveBtnColor ? this.opts.positiveBtnColor : this.defaultBtnColor;
   }
 
   get negativeBtnText(): string {
@@ -291,7 +297,9 @@ export class PromptDialog extends Dialog implements OnInit {
   }
 
   get negativeBtnColor(): ThemePalette {
-    return this.opts.negativeBtnColor ? this.opts.negativeBtnColor : this.defaultBtnColor;
+    // This is to handle users using the now deprecated `cancelColor` property.
+    // tslint:disable-next-line:deprecation
+    return this.opts.cancelColor ? this.opts.cancelColor : this.opts.negativeBtnColor ? this.opts.negativeBtnColor : this.defaultBtnColor;
   }
 
   get neutralBtnColor(): ThemePalette {
@@ -299,7 +307,9 @@ export class PromptDialog extends Dialog implements OnInit {
   }
 
   get positiveBtnColor(): ThemePalette {
-    return this.opts.positiveBtnColor ? this.opts.positiveBtnColor : this.defaultBtnColor;
+    // This is to handle users using the now deprecated `okColor` property.
+    // tslint:disable-next-line:deprecation
+    return this.opts.okColor ? this.opts.okColor : this.opts.positiveBtnColor ? this.opts.positiveBtnColor : this.defaultBtnColor;
   }
 
   get negativeBtnText(): string {
@@ -538,10 +548,20 @@ export interface PromptDialogOpts extends DialogOpts {
    */
   ok?: string;
   /**
+   * The ok button's color.
+   * @deprecated Use {@link DialogOpts#positiveBtnColor} instead
+   */
+  okColor?: ThemePalette;
+  /**
    * The cancel button's text.
    * @deprecated Use {@link DialogOpts#negativeBtnText} instead
    */
   cancel?: string;
+  /**
+   * The cancel button's color.
+   * @deprecated Use {@link DialogOpts#negativeBtnColor} instead
+   */
+  cancelColor?: ThemePalette;
   /** Configuration for the input. */
   inputConfig?: PromptDialogInputConfig;
   /**
