@@ -54,7 +54,10 @@ export class TodoArchivedComponent implements OnInit, AfterViewInit, OnDestroy {
     afAuth.auth.onAuthStateChanged((user) => {
       if (user) {
         this.currentUser = user.uid;
-        this.todosCollection = this.afFs.collection<TodoItem>(`users/${this.currentUser}/todos`, ref => ref.where('isArchived', '==', true));
+        this.todosCollection = this.afFs.collection<TodoItem>(
+          `users/${this.currentUser}/todos`,
+          ref => ref.where('isArchived', '==', true)
+        );
         this.todos$ = this.todosCollection.snapshotChanges().pipe(map(actions => {
           return actions.map(a => {
             // tslint:disable-next-line:no-shadowed-variable
@@ -100,7 +103,7 @@ export class TodoArchivedComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   unarchiveSelectedTodos() {
     this.shared.openConfirmDialog({
-      title: `Unarchive ${this.selectedTodos.length} todos?`
+      msg: `Unarchive ${this.selectedTodos.length} todos?`
     }).afterClosed().subscribe(result => {
       if (result === 'ok') {
         // Use Array#forEach to simplify for-loop
@@ -109,7 +112,7 @@ export class TodoArchivedComponent implements OnInit, AfterViewInit, OnDestroy {
         // Reset selected todos
         this.clearSelectedTodos();
       }
-    })
+    });
   }
   deleteSelectedTodos() {
     this.shared.openConfirmDialog({
@@ -233,7 +236,7 @@ export class TodoArchivedComponent implements OnInit, AfterViewInit, OnDestroy {
     let unarchiveConfirm = false;
     if (!skipConfirmDialog) {
       this.shared.openConfirmDialog({
-        title: 'Unarchive todo?'
+        msg: 'Unarchive todo?'
       }).afterClosed().subscribe(result => {
         if (result === 'ok') {
           unarchiveConfirm = true;
@@ -253,7 +256,7 @@ export class TodoArchivedComponent implements OnInit, AfterViewInit, OnDestroy {
         .catch((error) => {
           console.error('An error occurred while attempting to archive the todo:', error);
           this.shared.openSnackBar({ msg: `An error occurred while attempting to archive the todo: ${error.message}` });
-        })
+        });
     } else {
       console.error('User cancelled the confirmation request.');
     }
@@ -264,10 +267,10 @@ export class TodoArchivedComponent implements OnInit, AfterViewInit, OnDestroy {
       console.log(`Successfully deleted todo (document ID: ${id})`);
       this.shared.openSnackBar({ msg: 'Successfully deleted todo!' });
     })
-    .catch((error) => {
-      console.error('An error occurred while attempting to delete the todo:', error);
-      this.shared.openSnackBar({ msg: `An error occurred while attempting to delete the todo: ${error.message}`})
-    });
+      .catch((error) => {
+        console.error('An error occurred while attempting to delete the todo:', error);
+        this.shared.openSnackBar({ msg: `An error occurred while attempting to delete the todo: ${error.message}` });
+      });
   }
 
   // Method for stopping propogation
