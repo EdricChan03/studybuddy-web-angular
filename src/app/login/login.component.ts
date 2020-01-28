@@ -70,25 +70,37 @@ export class LoginComponent implements OnInit {
     this.showLoginFormPassword = !this.showLoginFormPassword;
   }
   resetPassword() {
-    const dialogRef = this.shared.openPromptDialog(
-      {
-        title: 'Reset password',
-        msg: 'Enter the email address to reset below:',
-        placeholder: 'Email address',
-        ok: 'Reset',
-        okColor: 'warn',
-        errorTypes: [
-          {
-            errorText: 'Please enter a valid email address!',
-            errorType: 'email',
+    const dialogRef = this.shared.openPromptDialog({
+      title: 'Reset password',
+      msg: 'Enter the email address to reset below:',
+      placeholder: 'Email address',
+      ok: 'Reset',
+      okColor: 'warn'
+      /*errorTypes: [
+        {
+          errorText: 'Please enter a valid email address!',
+          errorType: 'email',
+        },
+        {
+          errorText: 'This is required!',
+          errorType: 'required'
+        }
+      ]*/
+      /*formlyConfig: {
+        form: new FormGroup({}),
+        fields: [{
+          key: 'email',
+          type: 'input',
+          templateOptions: {
+            label: 'Email address',
+            type: 'email',
+            required: true
           },
-          {
-            errorText: 'This is required!',
-            errorType: 'required'
+          validators: {
+            validation: ['email']
           }
-        ]
-      }
-    );
+        }]*/
+    });
     dialogRef.afterClosed().subscribe(result => {
       // Note: The dialog's result will return `undefined` if the user clicked
       // outside of the dialog
