@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
@@ -30,6 +31,7 @@ const MATERIAL_MODULES = [
   imports: [
     CommonModule,
     FormsModule,
+    FlexLayoutModule,
     MATERIAL_MODULES,
     SharedModule,
     DevelopRoutingModule
