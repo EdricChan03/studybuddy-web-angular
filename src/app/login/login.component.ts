@@ -48,10 +48,10 @@ export class LoginComponent implements OnInit {
       if (result && JSON.parse(localStorage.getItem('loggedIn'))) {
         console.log('User is already logged in. Redirecting...');
         const snackBarRef = this.shared.openSnackBar({
-            msg: 'You\'re already logged in! Redirecting in 2 seconds...',
-            action: 'Log out',
-            additionalOpts: { duration: 5000 }
-          });
+          msg: 'You\'re already logged in! Redirecting in 2 seconds...',
+          action: 'Log out',
+          additionalOpts: { duration: 5000 }
+        });
         snackBarRef.onAction().subscribe(() => {
           this.auth.logOut().then(() => {
             this.shared.openSnackBar({ msg: 'Successfully logged out!' });
