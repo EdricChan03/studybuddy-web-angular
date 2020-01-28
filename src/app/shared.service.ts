@@ -24,43 +24,17 @@ import { DomSanitizer, SafeHtml, SafeValue, Title } from '@angular/platform-brow
 import { Observable, Subject } from 'rxjs';
 import { Settings } from './interfaces';
 
-
-/**
- * This callback gets called when the action button has been clicked
- * @callback SharedService~actionBtnCallback
- */
-
-/**
- * This callback gets called when the toolbar button has been clicked
- * @callback SharedService~toolbarBtnCallback
- * @param event The event of the button
- */
-
-/**
- * Extra toolbar
- */
-export interface ExtraToolbarConfig {
-  text: string;
-  color?: ThemePalette;
-  btnText?: string;
-  btnType?: 'button' | 'raised-button' | 'flat-button' | 'stroked-button' | 'icon-button' | 'fab';
-  btnBadge?: number;
-  btnRouterLink?: string | string[] | any;
-  btnCallback?: (ev?: Event) => void;
-  showDismiss?: boolean;
-}
 // Shared service
 @Injectable()
 export class SharedService {
   private _title = '';
-  private _extraToolbarConfig: ExtraToolbarConfig;
   constructor(
     public snackbar: MatSnackBar,
     public dialog: MatDialog,
     public documentTitle: Title,
     public breakpointObserver: BreakpointObserver,
     public dom: DomSanitizer
-  ) {}
+  ) { }
   // Getters and setters
   get title(): string { return this._title; }
   set title(title: string) {
