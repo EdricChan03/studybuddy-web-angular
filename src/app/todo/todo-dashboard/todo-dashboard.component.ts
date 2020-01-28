@@ -77,9 +77,7 @@ export class TodoDashboardComponent implements OnInit {
       }
     });
   }
-  get isMobile(): boolean {
-    return this.shared.isMobile;
-  }
+
   getRandomColor(): string {
     return this.shared.getRandomColor();
   }

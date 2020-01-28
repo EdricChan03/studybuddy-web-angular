@@ -175,10 +175,6 @@ export class AppComponent implements OnInit {
     });
   }
 
-  get isMobile(): boolean {
-    return this.shared.isMobile;
-  }
-
   get isSidenavOpened(): boolean {
     return this.sidenav.opened;
   }

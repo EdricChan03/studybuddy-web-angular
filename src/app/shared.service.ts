@@ -1,4 +1,4 @@
-import { BreakpointObserver } from '@angular/cdk/layout';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ComponentType } from '@angular/cdk/portal';
 import { Component, Injectable, NgModule, OnInit, TemplateRef, ViewChild, SecurityContext } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -77,17 +77,17 @@ export class SharedService {
   get isOnline(): boolean {
     return navigator.onLine;
   }
-  /**
-   * Detects if the user is using a mobile device
-   * @returns {boolean}
-   */
+
+  /** Detects if the user is using a mobile device based on CSS media queries. */
   get isMobile(): boolean {
-    if (this.breakpointObserver.isMatched('(max-width: 599px)')) {
-      return true;
-    } else {
-      return false;
-    }
+    return this.breakpointObserver.isMatched(Breakpoints.Handset);
   }
+
+  /** Detects if the user is using a handset in portrait mode based on CSS media queries. */
+  get isPortraitHandset(): boolean {
+    return this.breakpointObserver.isMatched(Breakpoints.HandsetPortrait);
+  }
+
   /**
    * Returns the settings saved to LocalStorage.
    * Note: If the settings haven't been set yet, it will return `null`.
