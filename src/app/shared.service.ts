@@ -1,813 +1,587 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ComponentType } from '@angular/cdk/portal';
-import { Component, Injectable, NgModule, OnInit, TemplateRef, ViewChild, SecurityContext } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Component, Inject, Injectable, NgModule, OnInit, TemplateRef } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ThemePalette } from '@angular/material/core';
-import { MatDialog, MatDialogConfig, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatListModule, MatSelectionList } from '@angular/material/list';
-import {
-  MatSnackBar,
-  MatSnackBarConfig,
-  MatSnackBarHorizontalPosition,
-  MatSnackBarModule,
-  MatSnackBarRef,
-  MatSnackBarVerticalPosition,
-  SimpleSnackBar
-} from '@angular/material/snack-bar';
-import { DomSanitizer, SafeHtml, SafeValue, Title } from '@angular/platform-browser';
-import { Observable, Subject } from 'rxjs';
+import { MatListModule } from '@angular/material/list';
+import { MatSnackBar, MatSnackBarConfig, MatSnackBarModule, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
+import { SafeHtml, Title } from '@angular/platform-browser';
 import { Settings } from './interfaces';
 
-// Shared service
-@Injectable()
-export class SharedService {
-  private _title = '';
-  constructor(
-    public snackbar: MatSnackBar,
-    public dialog: MatDialog,
-    public documentTitle: Title,
-    public breakpointObserver: BreakpointObserver,
-    public dom: DomSanitizer
-  ) { }
-  // Getters and setters
-  get title(): string { return this._title; }
-  set title(title: string) {
-    this._title = title;
-    if (title !== '') {
-      title = `${title} | `;
-    }
-    this.documentTitle.setTitle(`${title}Study Buddy`);
-  }
-  /**
-   * Getter to check if the user is online
-   * @returns {boolean}
-   */
-  get isOnline(): boolean {
-    return navigator.onLine;
-  }
+/** An abstract dialog class. */
+export abstract class Dialog {
+  /** The default color to be used for the dialog's buttons. */
+  readonly defaultBtnColor = 'primary';
 
-  /** Detects if the user is using a mobile device based on CSS media queries. */
-  get isMobile(): boolean {
-    return this.breakpointObserver.isMatched(Breakpoints.Handset);
-  }
+  abstract get hasActionBtns(): boolean;
 
-  /** Detects if the user is using a handset in portrait mode based on CSS media queries. */
-  get isPortraitHandset(): boolean {
-    return this.breakpointObserver.isMatched(Breakpoints.HandsetPortrait);
-  }
+  abstract get hideNegativeBtn(): boolean;
 
-  /**
-   * Returns the settings saved to LocalStorage.
-   * Note: If the settings haven't been set yet, it will return `null`.
-   */
-  get settings(): Settings {
-    return window.localStorage.getItem('settings') === null ? null : <Settings>JSON.parse(window.localStorage.getItem('settings'));
-  }
-  set settings(settings: Settings) {
-    window.localStorage.setItem('settings', JSON.stringify(settings));
-  }
-  /**
-   * Checks if dark theme mode is enabled
-   */
-  get isDarkThemeEnabled(): boolean {
-    // return !(this.settings === null) || this.settings['enableDarkTheme'] || this.settings['darkTheme'] || false;
-    return this.settings !== null && (this.settings['enableDarkTheme'] || this.settings['darkTheme']);
-  }
-  /**
-   * Opens a snack-bar with the specified params and a return of the snackbar's ref (for component)
-   * @param opts The options of the snack-bar
-   * @returns The snack-bar's ref
-   */
-  openSnackBarComponent(opts: SnackBarConfig): MatSnackBarRef<any> {
-    return this.handleSnackBarWithComponent(opts);
-  }
-  /**
-   * Opens a snack-bar with the specified params and a return of the snackbar's ref (not for component)
-   * @param opts The options of the snackbar
-   * @returns The snackbar's ref
-   */
-  openSnackBar(opts: SnackBarConfig): MatSnackBarRef<SimpleSnackBar> {
-    return this.handleSnackBar(opts);
-  }
-  /**
-   * Opens a snack-bar with arguments. (A simplified version of {@link #openSnackBar})
-   * @param msg The message for the snack-bar.
-   * @param action The action for the snack-bar. Leave as `null` to remove the action.
-   * @param duration The duration for the snack-bar to appear.
-   * @param hasElevation (Now deprecated!) Whether to show the elevation. Specify a number for the elevation level.
-   * @param showHorizontal Configuration on where to show the snack-barhorizontally.
-   * @param showVertical Configuration on where to show the snack-bar vertically.
-   * @returns The snack-bar's ref.
-   */
-  openSnackBarWithOpts(
-    msg: string,
-    action?: string,
-    duration?: number,
-    hasElevation?: boolean | string,
-    showHorizontal?: MatSnackBarHorizontalPosition,
-    showVertical?: MatSnackBarVerticalPosition
-  ): MatSnackBarRef<SimpleSnackBar> {
-    let snackBarRef: MatSnackBarRef<SimpleSnackBar>;
-    // Configuration options
-    if (showHorizontal || showVertical || duration) {
-      const snackBarConfig = new MatSnackBarConfig();
-      // Elevation options
-      // Note: Since Angular Material v7, the snackbar styling was revamped to the new Material
-      // Design spec.
-      // Thus, this feature will be deprecated.
-      /*
-      if (hasElevation) {
-        if (typeof hasElevation === 'number') {
-          snackBarConfig.panelClass += `mat-elevation-z${hasElevation}`;
-        } else {
-          snackBarConfig.panelClass += 'mat-elevation-z3';
-        }
-      }
-      */
-      // Config option for horizontal
-      if (showHorizontal) {
-        snackBarConfig.horizontalPosition = showHorizontal;
-      }
-      // Config option for vertical
-      if (showVertical) {
-        snackBarConfig.verticalPosition = showVertical;
-      }
-      // Config option for duration
-      if (duration) {
-        snackBarConfig.duration = duration;
-      }
-      // Config option for action
-      if (action) {
-        snackBarRef = this.snackbar.open(msg, action, snackBarConfig);
-      } else {
-        snackBarRef = this.snackbar.open(msg, null, snackBarConfig);
-      }
-    } else {
-      if (action) {
-        snackBarRef = this.snackbar.open(msg, action);
-      } else {
-        snackBarRef = this.snackbar.open(msg);
-      }
-    }
-    return snackBarRef;
-  }
-  /**
-   * Method for handling snack-bar related methods
-   * @param opts The configuration options for the snackbar
-   * @returns The snack-bar's ref
-   */
-  private handleSnackBar(opts: SnackBarConfig): MatSnackBarRef<SimpleSnackBar> {
-    if (opts) {
-      if (opts.action) {
-        if (opts.additionalOpts) {
-          if (opts.additionalOpts.panelClass) {
-            if (typeof opts.additionalOpts.panelClass === 'string') {
-              const tempArray = [];
-              /*
-              if (typeof opts.hasElevation === 'number') {
-                tempArray.push(`mat-elevation-z${opts.hasElevation}`);
-              } else {
-                tempArray.push('mat-elevation-z3');
-              }
-              */
-              tempArray.push(opts.additionalOpts.panelClass);
-              opts.additionalOpts.panelClass = tempArray;
-            } else {
-              /*
-              if (typeof opts.hasElevation === 'number') {
-                opts.additionalOpts.panelClass = `mat-elevation-z${opts.hasElevation}`;
-              } else {
-                opts.additionalOpts.panelClass = 'mat-elevation-z3';
-              }
-              */
-            }
-          } else {
-            /* if (typeof opts.hasElevation === 'number') {
-              opts.additionalOpts.panelClass = `mat-elevation-z${opts.hasElevation}`;
-            } else {
-              opts.additionalOpts.panelClass = 'mat-elevation-z3';
-            } */
-          }
-          return this.snackbar.open(opts.msg, opts.action, opts.additionalOpts);
-        } else {
-          return this.snackbar.open(opts.msg, opts.action);
-        }
-      } else {
-        if (opts.additionalOpts) {
-          if (opts.additionalOpts.panelClass) {
-            if (typeof opts.additionalOpts.panelClass === 'string') {
-              const tempArray = [];
-              /* if (typeof opts.hasElevation === 'number') {
-                tempArray.push(`mat-elevation-z${opts.hasElevation}`);
-              } else {
-                tempArray.push('mat-elevation-z3');
-              } */
-              tempArray.push(opts.additionalOpts.panelClass);
-              opts.additionalOpts.panelClass = tempArray;
-            } else {
-              /* if (typeof opts.hasElevation === 'number') {
-                opts.additionalOpts.panelClass = `mat-elevation-z${opts.hasElevation}`;
-              } else {
-                opts.additionalOpts.panelClass = 'mat-elevation-z3';
-              } */
-            }
-          } else {
-            /* if (typeof opts.hasElevation === 'number') {
-              opts.additionalOpts.panelClass = `mat-elevation-z${opts.hasElevation}`;
-            } else {
-              opts.additionalOpts.panelClass = 'mat-elevation-z3';
-            } */
-          }
-          return this.snackbar.open(opts.msg, undefined, opts.additionalOpts);
-        } else {
-          return this.snackbar.open(opts.msg);
-        }
-      }
-    } else {
-      this.throwError('opts', 'SnackBarConfig');
-    }
-  }
-  /**
-   * Method for handling a component snack-bar
-   * @param opts The configuration for the component snack-bar
-   * @returns The snack-bar's ref
-   */
-  private handleSnackBarWithComponent(opts: SnackBarConfig): MatSnackBarRef<any> {
-    if (opts) {
-      if (opts.additionalOpts) {
-        if (opts.additionalOpts) {
-          return this.snackbar.openFromComponent(opts.component, opts.additionalOpts);
-        } else {
-          return this.snackbar.openFromComponent(opts.component);
-        }
-      } else {
-        this.throwError('opts.additionalOpts', 'MatSnackBarConfig');
-      }
-    } else {
-      this.throwError('opts', 'SnackBarConfig');
-    }
-  }
-  /**
-   * Closes the currently opened snack-bar
-   */
-  closeSnackBar() {
-    this.snackbar.dismiss();
-  }
-  /**
-   * Opens an alert dialog with the specified parameters
-   * @param opts The options for the dialog
-   * @returns The dialog's ref
-   */
-  openAlertDialog(opts: AlertDialogConfig): MatDialogRef<AlertDialog> {
-    if (opts) {
-      const dialogRef = this.dialog.open(AlertDialog);
-      dialogRef.componentInstance.alertConfig = opts;
-      return dialogRef;
-    } else {
-      this.throwError('opts', 'AlertDialogConfig');
-    }
-  }
-  /**
-   * Opens a confirm dialog with the specified parameters
-   * @param opts The options for the dialog
-   * @returns The dialog's ref
-   */
-  openConfirmDialog(opts: ConfirmDialogConfig): MatDialogRef<ConfirmDialog, string | null> {
-    if (opts) {
-      const dialogRef = this.dialog.open<ConfirmDialog, any, string | null>(ConfirmDialog);
-      dialogRef.componentInstance.confirmConfig = opts;
-      return dialogRef;
-    } else {
-      this.throwError('opts', 'ConfirmDialogConfig');
-    }
-  }
-  /**
-   * Opens a prompt dialog with the specified parameters
-   * @param opts The options for the dialog
-   * @returns The dialog ref
-   */
-  openPromptDialog(opts: PromptDialogConfig): MatDialogRef<PromptDialog, string | null> {
-    if (opts) {
-      const dialogRef = this.dialog.open<PromptDialog, any, string | null>(PromptDialog);
-      dialogRef.componentInstance.promptConfig = opts;
-      return dialogRef;
-    } else {
-      this.throwError('opts', 'PromptDialogConfig');
-    }
-  }
-  /**
-   * Opens a selection dialog with the configured options
-   * @param opts The options for the dialog
-   * @returns The dialog ref
-   */
-  openSelectionDialog(opts: SelectionDialogConfig): MatDialogRef<SelectionDialog, any> {
-    if (opts) {
-      const dialogRef = this.dialog.open<SelectionDialog, any, any>(
-        SelectionDialog,
-        {
-          disableClose: true,
-          panelClass: 'selection-dialog'
-        }
-      );
-      dialogRef.componentInstance.selectionConfig = opts;
-      return dialogRef;
-    } else {
-      this.throwError('opts', 'SelectionDialogConfig');
-    }
-  }
-  /**
-   * Opens a help dialog
-   * @param templateRef ;The `TemplateRef` to open the dialog with.
-   * @returns The dialog's ref
-   * @deprecated Use {@link MatDialog#open}
-   */
-  openHelpDialog<T = any>(templateRef: TemplateRef<T>): MatDialogRef<T> {
-    return this.dialog.open<T>(templateRef);
-  }
-  /**
-   * Gets all currently opened dialogs
-   * @returns All currently opened dialogs
-   */
-  getDialogs(): MatDialogRef<any>[] {
-    return this.dialog.openDialogs;
-  }
-  /**
-   * Closes all dialogs currently opened
-   */
-  closeAllDialogs() {
-    this.dialog.closeAll();
-  }
-  /**
-   * Gets a dialog by its id
-   * @param id The ID of the dialog
-   * @returns The dialog's ref
-   */
-  getDialogById(id: string): MatDialogRef<any> {
-    return this.dialog.getDialogById(id);
-  }
-  /**
-   * `Observable` for after all dialogs have been closed
-   * @returns The `Observable` stream
-   */
-  afterAllClosed(): Observable<void> {
-    return this.dialog.afterAllClosed;
-  }
-  /**
-   * Generates a random hex color
-   * @returns A random hexadecimal color
-   */
-  getRandomColor(): string {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  }
-  /**
-   * Generates a random hex colour. (An alias of {@link SharedService#getRandomColor})
-   * @returns A random hexadecimal colour
-   */
-  getRandomColour(): string {
-    return this.getRandomColor();
-  }
+  abstract get hideNeutralBtn(): boolean;
 
-  /**
-   * Sanitizes a HTML string
-   *
-   * Note: It's preferred to use {@link DomSanitizer#sanitize} instead of {@link DomSanitizer#bypassSecurityTrustHtml}
-   * as the former sanitizes the HTML-like string while the latter completely skips sanitizing
-   * @param value The value to sanitize
-   * @returns A sanitized HTML string
-   */
-  sanitizeHtml(value: string | SafeValue, bypassSanitization: boolean = false): string | SafeHtml {
-    return bypassSanitization ? this.dom.bypassSecurityTrustHtml(value as string) : this.dom.sanitize(SecurityContext.HTML, value);
-  }
+  abstract get hidePositiveBtn(): boolean;
 
-  /**
-   * Throws an error with the specified parameters
-   * @param variable The variable that was not specified
-   * @param type The type of variable
-   */
-  private throwError(variable: string, type: string) {
-    throw new Error(`"${variable}" was not specified. `
-      + `Please ensure that the "${variable}" property is specified and that `
-      + `it is of type "${type}".`);
-  }
+  abstract get negativeBtnColor(): ThemePalette;
+
+  abstract get neutralBtnColor(): ThemePalette;
+
+  abstract get positiveBtnColor(): ThemePalette;
 }
-
 
 @Component({
   selector: 'alert-dialog',
   template: `
-  <h2 matDialogTitle>{{alertConfig?.title ? alertConfig?.title : 'Alert'}}</h2>
-  <mat-dialog-content fxLayout="column" class="mat-typography" *ngIf="alertConfig?.msg">
-    <p class="mat-body" *ngIf="!alertConfig?.isHtml">{{alertConfig?.msg}}</p>
-    <span *ngIf="alertConfig?.isHtml" [innerHTML]="alertConfig?.msg"></span>
+  <h2 matDialogTitle *ngIf="opts?.title">{{ opts.title }}</h2>
+  <mat-dialog-content fxLayout="column" class="mat-typography">
+    <p class="mat-body" *ngIf="!opts.isHtml">{{ opts.msg }}</p>
+    <span *ngIf="opts.isHtml" [innerHTML]="opts.msg"></span>
   </mat-dialog-content>
-  <mat-dialog-actions align="end">
-    <button
-      mat-button
-      [color]="alertConfig?.okColor ? alertConfig?.okColor : 'primary'"
-      (click)="close()">
-      {{alertConfig?.ok ? alertConfig?.ok : 'Dismiss'}}
-    </button>
+  <mat-dialog-actions align="end" *ngIf="hasActionBtns">
+    <button mat-button *ngIf="!hideNegativeBtn" [color]="negativeBtnColor" matDialogClose="cancel">{{ opts.negativeBtnText }}</button>
+    <button mat-button *ngIf="!hideNeutralBtn" [color]="neutralBtnColor" matDialogClose="neutral">{{ opts.neutralBtnText }}</button>
+    <button mat-button *ngIf="!hidePositiveBtn" [color]="positiveBtnColor" matDialogClose="ok">{{ positiveBtnText }}</button>
   </mat-dialog-actions>
   `
 })
-export class AlertDialog implements OnInit {
-  constructor(private dialogRef: MatDialogRef<AlertDialog>) {
+// tslint:disable-next-line:component-class-suffix
+export class AlertDialog extends Dialog {
+  /** The default text to be used for the positive button. */
+  readonly defaultPositiveBtnText = 'Dismiss';
+
+  constructor(@Inject(MAT_DIALOG_DATA) public opts: AlertDialogOpts) {
+    super();
   }
-  alertConfig: AlertDialogConfig;
-  close() {
-    this.dialogRef.close();
+
+  get hasActionBtns(): boolean {
+    if ('hideActionBtns' in this.opts) {
+      if (typeof this.opts.hideActionBtns === 'boolean') {
+        return !this.opts.hideActionBtns;
+      } else if (Array.isArray(this.opts.hideActionBtns)) {
+        // Skip the below logic
+        return true;
+      }
+    }
+
+    return 'negativeBtnText' in this.opts || 'neutralBtnText' in this.opts || typeof this.positiveBtnText === 'string';
   }
-  ngOnInit() {
-    if (this.alertConfig.disableClose) {
-      this.dialogRef.disableClose = true;
+
+  get hideNegativeBtn(): boolean {
+    if ('hideActionBtns' in this.opts &&
+      Array.isArray(this.opts.hideActionBtns)) {
+      return this.opts.hideActionBtns.includes('negative');
+    }
+
+    return !('negativeBtnText' in this.opts);
+  }
+
+  get hideNeutralBtn(): boolean {
+    if ('hideActionBtns' in this.opts &&
+      Array.isArray(this.opts.hideActionBtns)) {
+      return this.opts.hideActionBtns.includes('neutral');
+    }
+
+    return !('neutralBtnText' in this.opts);
+  }
+
+  get hidePositiveBtn(): boolean {
+    // As the default text will be used if no text was specified,
+    // the button will always be shown unless explicitly hidden.
+    if ('hideActionBtns' in this.opts &&
+      Array.isArray(this.opts.hideActionBtns)) {
+      return this.opts.hideActionBtns.includes('positive');
     }
   }
+
+  get negativeBtnColor(): ThemePalette {
+    return this.opts.negativeBtnColor ? this.opts.negativeBtnColor : this.defaultBtnColor;
+  }
+
+  get neutralBtnColor(): ThemePalette {
+    return this.opts.neutralBtnColor ? this.opts.neutralBtnColor : this.defaultBtnColor;
+  }
+
+  get positiveBtnColor(): ThemePalette {
+    return this.opts.positiveBtnColor ? this.opts.positiveBtnColor : this.defaultBtnColor;
+  }
+
+  get positiveBtnText(): string {
+    // This is to handle users using the now deprecated `ok` property.
+    // tslint:disable-next-line:deprecation
+    return this.opts.ok ? this.opts.ok : this.opts.positiveBtnText ? this.opts.positiveBtnText : this.defaultPositiveBtnText;
+  }
 }
+
 @Component({
   selector: 'confirm-dialog',
   template: `
-  <h2 matDialogTitle>{{confirmConfig?.title ? confirmConfig?.title : 'Confirm'}}</h2>
-  <mat-dialog-content fxLayout="column" class="mat-typography" *ngIf="confirmConfig?.msg">
-    <p class="mat-body" *ngIf="!confirmConfig?.isHtml">{{confirmConfig?.msg}}</p>
-    <span *ngIf="confirmConfig?.isHtml" [innerHTML]="confirmConfig?.msg"></span>
-    <div class="checkbox-box" *ngIf="confirmConfig?.hasCheckbox">
-      <mat-checkbox
-        [color]="confirmConfig?.checkboxColor"
-        [(ngModel)]="confirmConfig.checkboxValue">
-        {{confirmConfig?.checkboxLabel}}
-      </mat-checkbox>
-    </div>
+  <h2 matDialogTitle *ngIf="opts?.title">{{ opts.title }}</h2>
+  <mat-dialog-content fxLayout="column" class="mat-typography">
+    <p class="mat-body" *ngIf="!opts.isHtml">{{ opts.msg }}</p>
+    <span *ngIf="opts.isHtml" [innerHTML]="opts.msg"></span>
   </mat-dialog-content>
-  <mat-dialog-actions align="end">
-    <button
-      mat-button
-      (click)="cancel()"
-      [color]="confirmConfig?.cancelColor ? confirmConfig?.cancelColor : 'primary'">
-      {{confirmConfig?.cancel ? confirmConfig?.cancel : 'Cancel'}}
-    </button>
-    <button
-      mat-button
-      (click)="ok()"
-      [color]="confirmConfig?.okColor ? confirmConfig?.okColor : 'primary'"
-      [disabled]="okBtnDisabled">
-      {{confirmConfig?.ok ? confirmConfig?.ok : 'OK'}}
-    </button>
-  </mat-dialog-actions>
-  `,
-  styles: [
-    `
-    .checkbox-box {
-      padding: 8px;
-      border: 1px solid grey;
-      overflow-wrap: break-word;
-      word-wrap: break-word;
-      hyphens: auto;
-    }
-    `
-  ]
-})
-export class ConfirmDialog implements OnInit {
-  constructor(private dialogRef: MatDialogRef<ConfirmDialog>) {
-
-  }
-  get okBtnDisabled() {
-    if (this.confirmConfig.dialogRequiresCheckbox) {
-      if (this.confirmConfig.checkboxValue) {
-        return false;
-      } else {
-        return true;
-      }
-    } else {
-      return false;
-    }
-  }
-  confirmConfig: ConfirmDialogConfig;
-  cancel() {
-    this.dialogRef.close('cancel');
-  }
-  ok() {
-    this.dialogRef.close('ok');
-  }
-  ngOnInit() {
-    if (this.confirmConfig.disableClose) {
-      this.dialogRef.disableClose = true;
-    }
-  }
-}
-@Component({
-  selector: 'prompt-dialog',
-  template: `
-  <h2 matDialogTitle>{{_returnIfValid(promptConfig.title, 'Prompt')}}</h2>
-  <mat-dialog-content fxLayout="column" class="mat-typography" *ngIf="promptConfig.msg">
-    <p class="mat-body" *ngIf="!promptConfig.isHtml">{{promptConfig.msg}}</p>
-    <span *ngIf="promptConfig.isHtml" [innerHTML]="promptConfig.msg"></span>
-    <mat-form-field [color]="_returnIfValid(promptConfig.inputColor, 'primary')" style="width:100%">
-      <mat-label>{{promptConfig.placeholder}}</mat-label>
-      <input
-        matInput
-        [type]="_returnIfValid(promptConfig.inputType, 'text')"
-        required
-        [formControl]="input">
-      <ng-container *ngIf="promptConfig?.errorTypes">
-        <ng-container *ngFor="let error of promptConfig?.errorTypes">
-          <mat-error *ngIf="input?.hasError(error?.errorType)">{{error?.errorText}}</mat-error>
-        </ng-container>
-      </ng-container>
-    </mat-form-field>
-  </mat-dialog-content>
-  <mat-dialog-actions align="end">
-    <button mat-button
-      (click)="cancel()"
-      [color]="_returnIfValid(promptConfig.cancelColor, 'primary')">
-      {{_returnIfValid(promptConfig.cancel, 'Cancel')}}
-      </button>
-    <button mat-button
-      (click)="ok()"
-      [color]="_returnIfValid(promptConfig.okColor, 'primary')"
-      [disabled]="input?.invalid">
-      {{_returnIfValid(promptConfig.ok, 'OK')}}
-      </button>
+  <mat-dialog-actions align="end" *ngIf="hasActionBtns">
+    <button mat-button *ngIf="!hideNegativeBtn" [color]="negativeBtnColor" matDialogClose="cancel">{{ negativeBtnText }}</button>
+    <button mat-button *ngIf="!hideNeutralBtn" [color]="neutralBtnColor" matDialogClose="neutral">{{ opts.neutralBtnText }}</button>
+    <button mat-button *ngIf="!hidePositiveBtn" [color]="positiveBtnColor" matDialogClose="ok">{{ positiveBtnText }}</button>
   </mat-dialog-actions>
   `
 })
-export class PromptDialog implements OnInit {
-  constructor(private dialogRef: MatDialogRef<PromptDialog>) { }
-  /**
-   * The configuration of the dialog
-   */
-  promptConfig: PromptDialogConfig;
-  /**
-   * The input of the dialog's prompt
-   */
-  input: FormControl = new FormControl();
-  // Since this is used often in the HTML template, it'll be much easier if this
-  // was extracted a method that could be used instead of having to do a null check
-  // for checking if the property is non-null. If the property is null, return a default
-  // value as specified in the second parameter.
-  _returnIfValid(propertyToCheck: any, defaultValue: any): any {
-    return propertyToCheck ? propertyToCheck : defaultValue;
+// tslint:disable-next-line:component-class-suffix
+export class ConfirmDialog extends Dialog {
+  /** The default text to be used for the negative button. */
+  readonly defaultNegativeBtnText = 'Cancel';
+  /** The default text to be used for the positive button. */
+  readonly defaultPositiveBtnText = 'OK';
+
+  constructor(@Inject(MAT_DIALOG_DATA) public opts: ConfirmDialogOpts) {
+    super();
   }
-  cancel() {
-    // Close the dialog with a result of 'cancel'. Developers can check for this event by
-    // doing a check if the result of the dialog is 'cancel' when the input's type is set
-    // to number, or by checking it the result ofthe dialog is `-1` when the input's type
-    // is set to string.
-    if (typeof this.input.value === 'number') {
-      this.dialogRef.close('cancel');
-    } else {
-      this.dialogRef.close(-1);
-    }
-  }
-  ok() {
-    // Close the dialog with the value of the input. The value of the input can then be
-    // accessed by accessing the result of the `afterClosed` event.
-    this.dialogRef.close(this.input.value);
-  }
-  ngOnInit() {
-    // Check if the devleoper has set the initial value for the prompt
-    if (this.promptConfig.value) {
-      this.input.setValue(this.promptConfig.value);
-    }
-    // Check if the developer has enabled the `disableClose` config setting which prevents the
-    // user from clicking outside the dialog to close it.
-    if (this.promptConfig.disableClose) {
-      this.dialogRef.disableClose = true;
-    }
-    // HAndler for error types
-    if (this.promptConfig.errorTypes) {
-      const configErrorTypes = this.promptConfig.errorTypes;
-      const errorTypes = [];
-      // Loop through
-      for (let errorTypeI = 0; errorTypeI < configErrorTypes.length; errorTypeI++) {
-        errorTypes.push(configErrorTypes[errorTypeI].errorType);
+
+  get hasActionBtns(): boolean {
+    if ('hideActionBtns' in this.opts) {
+      if (typeof this.opts.hideActionBtns === 'boolean') {
+        return !this.opts.hideActionBtns;
+      } else if (Array.isArray(this.opts.hideActionBtns)) {
+        // Skip the below logic
+        return true;
       }
-      console.log(errorTypes);
-      this.input.setErrors(errorTypes);
     }
+
+    return typeof this.negativeBtnText === 'string' || typeof this.positiveBtnText === 'string' || 'neutralBtnText' in this.opts;
+  }
+
+  get hideNegativeBtn(): boolean {
+    // As the default text will be used if no text was specified,
+    // the button will always be shown unless explicitly hidden.
+    if ('hideActionBtns' in this.opts &&
+      Array.isArray(this.opts.hideActionBtns)) {
+      return this.opts.hideActionBtns.includes('negative');
+    }
+  }
+
+  get hideNeutralBtn(): boolean {
+    if ('hideActionBtns' in this.opts &&
+      Array.isArray(this.opts.hideActionBtns)) {
+      return this.opts.hideActionBtns.includes('neutral');
+    }
+
+    return !('neutralBtnText' in this.opts);
+  }
+
+  get hidePositiveBtn(): boolean {
+    // As the default text will be used if no text was specified,
+    // the button will always be shown unless explicitly hidden.
+    if ('hideActionBtns' in this.opts &&
+      Array.isArray(this.opts.hideActionBtns)) {
+      return this.opts.hideActionBtns.includes('positive');
+    }
+  }
+
+  get negativeBtnColor(): ThemePalette {
+    return this.opts.negativeBtnColor ? this.opts.negativeBtnColor : this.defaultBtnColor;
+  }
+
+  get neutralBtnColor(): ThemePalette {
+    return this.opts.neutralBtnColor ? this.opts.neutralBtnColor : this.defaultBtnColor;
+  }
+
+  get positiveBtnColor(): ThemePalette {
+    return this.opts.positiveBtnColor ? this.opts.positiveBtnColor : this.defaultBtnColor;
+  }
+
+  get negativeBtnText(): string {
+    // This is to handle users using the now deprecated `cancel` property.
+    // tslint:disable-next-line:deprecation
+    return this.opts.cancel ? this.opts.cancel : this.opts.negativeBtnText ? this.opts.negativeBtnText : this.defaultNegativeBtnText;
+  }
+
+  get positiveBtnText(): string {
+    // This is to handle users using the now deprecated `ok` property.
+    // tslint:disable-next-line:deprecation
+    return this.opts.ok ? this.opts.ok : this.opts.positiveBtnText ? this.opts.positiveBtnText : this.defaultPositiveBtnText;
   }
 }
+
+@Component({
+  selector: 'prompt-dialog',
+  template: `
+  <h2 matDialogTitle *ngIf="opts?.title">{{ opts?.title }}</h2>
+  <mat-dialog-content fxLayout="column" class="mat-typography">
+    <p class="mat-body" *ngIf="!opts.isHtml">{{ opts.msg }}</p>
+    <span *ngIf="opts.isHtml" [innerHTML]="opts.msg"></span>
+    <form #form="ngForm">
+      <mat-form-field [color]="inputColor" style="width:100%">
+        <mat-label>{{ opts.placeholder }}</mat-label>
+        <input
+          matInput
+          [(ngModel)]="input"
+          type="{{opts.inputType ? opts.inputType : 'text'}}"
+          required
+          name="input">
+        <mat-error>This is required.</mat-error>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end" *ngIf="hasActionBtns">
+    <button mat-button *ngIf="!hideNegativeBtn" [color]="negativeBtnColor" matDialogClose="cancel">{{ negativeBtnText }}</button>
+    <button mat-button *ngIf="!hideNeutralBtn" [color]="neutralBtnColor" matDialogClose="neutral">{{ opts.neutralBtnText }}</button>
+    <button mat-button *ngIf="!hidePositiveBtn" [color]="positiveBtnColor" [matDialogClose]="input" [disabled]="form.invalid">{{ positiveBtnText }}</button>
+  </mat-dialog-actions>
+  `
+})
+// tslint:disable-next-line:component-class-suffix
+export class PromptDialog extends Dialog implements OnInit {
+  input: string | number;
+  /** The default text to be used for the negative button. */
+  readonly defaultNegativeBtnText = 'Cancel';
+  /** The default text to be used for the positive button. */
+  readonly defaultPositiveBtnText = 'OK';
+  /** The default color to be used for the input. */
+  readonly defaultInputColor = 'primary';
+
+  constructor(@Inject(MAT_DIALOG_DATA) public opts: PromptDialogOpts) {
+    super();
+  }
+
+  get hasActionBtns(): boolean {
+    if ('hideActionBtns' in this.opts) {
+      if (typeof this.opts.hideActionBtns === 'boolean') {
+        return !this.opts.hideActionBtns;
+      } else if (Array.isArray(this.opts.hideActionBtns)) {
+        // Skip the below logic
+        return true;
+      }
+    }
+
+    return typeof this.negativeBtnText === 'string' || typeof this.positiveBtnText === 'string' || 'neutralBtnText' in this.opts;
+  }
+
+  get hideNegativeBtn(): boolean {
+    // As the default text will be used if no text was specified,
+    // the button will always be shown unless explicitly hidden.
+    if ('hideActionBtns' in this.opts &&
+      Array.isArray(this.opts.hideActionBtns)) {
+      return this.opts.hideActionBtns.includes('negative');
+    }
+  }
+
+  get hideNeutralBtn(): boolean {
+    if ('hideActionBtns' in this.opts &&
+      Array.isArray(this.opts.hideActionBtns)) {
+      return this.opts.hideActionBtns.includes('neutral');
+    }
+
+    return !('neutralBtnText' in this.opts);
+  }
+
+  get hidePositiveBtn(): boolean {
+    // As the default text will be used if no text was specified,
+    // the button will always be shown unless explicitly hidden.
+    if ('hideActionBtns' in this.opts &&
+      Array.isArray(this.opts.hideActionBtns)) {
+      return this.opts.hideActionBtns.includes('positive');
+    }
+  }
+
+  get negativeBtnColor(): ThemePalette {
+    return this.opts.negativeBtnColor ? this.opts.negativeBtnColor : this.defaultBtnColor;
+  }
+
+  get neutralBtnColor(): ThemePalette {
+    return this.opts.neutralBtnColor ? this.opts.neutralBtnColor : this.defaultBtnColor;
+  }
+
+  get positiveBtnColor(): ThemePalette {
+    return this.opts.positiveBtnColor ? this.opts.positiveBtnColor : this.defaultBtnColor;
+  }
+
+  get negativeBtnText(): string {
+    // This is to handle users using the now deprecated `cancel` property.
+    // tslint:disable-next-line:deprecation
+    return this.opts.cancel ? this.opts.cancel : this.opts.negativeBtnText ? this.opts.negativeBtnText : this.defaultNegativeBtnText;
+  }
+
+  get positiveBtnText(): string {
+    // This is to handle users using the now deprecated `ok` property.
+    // tslint:disable-next-line:deprecation
+    return this.opts.ok ? this.opts.ok : this.opts.positiveBtnText ? this.opts.positiveBtnText : this.defaultPositiveBtnText;
+  }
+
+  get inputColor(): ThemePalette {
+    // This is to handle users using the now deprecated `color` property.
+    // tslint:disable-next-line:deprecation
+    return this.opts.color ? this.opts.color :
+      (this.opts.inputConfig && 'color' in this.opts.inputConfig) ? this.opts.inputConfig.color : this.defaultInputColor;
+  }
+
+  ngOnInit() {
+    // tslint:disable:deprecation
+    if (this.opts.value) {
+      this.input = this.opts.value;
+    } else if (this.opts.inputConfig.value) {
+      this.input = this.opts.inputConfig.value;
+    }
+    // tslint:enable:deprecation
+  }
+}
+
 @Component({
   selector: 'selection-dialog',
   template: `
-  <h2 matDialogTitle>{{selectionConfig.title ? selectionConfig.title : 'Select options from the list'}}</h2>
-  <mat-dialog-content fxLayout="column" class="mat-typography" *ngIf="selectionConfig.options">
+  <h2 matDialogTitle *ngIf="opts?.title">{{ opts.title }}</h2>
+  <mat-dialog-content fxLayout="column" class="mat-typography">
     <mat-selection-list #selection>
       <mat-list-option
-        *ngFor="let option of selectionConfig.options"
+        *ngFor="let option of opts.options"
         [disabled]="option.disabled"
         [value]="option.value"
         [checkboxPosition]="option.checkboxPosition ? option.checkboxPosition : 'before'"
         [selected]="option.selected">
-        {{option.content}}
+        {{ option.content }}
       </mat-list-option>
     </mat-selection-list>
   </mat-dialog-content>
-  <mat-dialog-actions align="end">
-    <button mat-button color="primary" (click)="cancel()">{{selectionConfig.cancel ? selectionConfig.cancel : 'Cancel'}}</button>
+  <mat-dialog-actions align="end" *ngIf="hasActionBtns">
+    <button mat-button *ngIf="!hideNegativeBtn" [color]="negativeBtnColor" matDialogClose="cancel">{{ negativeBtnText }}</button>
+    <button mat-button *ngIf="!hideNeutralBtn" [color]="neutralBtnColor" matDialogClose="neutral">{{ opts.neutralBtnText }}</button>
     <button
       mat-button
-      [color]="selectionConfig.okColor ? selectionConfig.okColor : 'primary'"
-      (click)="ok()"
-      [disabled]="selection.selectedOptions.selected.length < 1">{{selectionConfig.ok ? selectionConfig.ok : 'OK'}}</button>
+      *ngIf="!hidePositiveBtn"
+      [color]="positiveBtnColor"
+      [matDialogClose]="selection.selectedOptions"
+      [disabled]="selection.selectedOptions.selected.length < 1">
+      {{ positiveBtnText }}
+    </button>
   </mat-dialog-actions>
   `
 })
-export class SelectionDialog implements OnInit {
-  @ViewChild('selection', { static: false }) selection: MatSelectionList;
-  constructor(private dialogRef: MatDialogRef<SelectionDialog>) {
+// tslint:disable-next-line:component-class-suffix
+export class SelectionDialog extends Dialog {
+  /** The default text to be used for the negative button. */
+  readonly defaultNegativeBtnText = 'Cancel';
+  /** The default text to be used for the positive button. */
+  readonly defaultPositiveBtnText = 'OK';
+
+  constructor(@Inject(MAT_DIALOG_DATA) public opts: SelectionDialogOpts) {
+    super();
   }
-  selectionConfig: SelectionDialogConfig;
-  ngOnInit() {
-    if (this.selectionConfig.disableClose) {
-      this.dialogRef.disableClose = true;
+
+  get hasActionBtns(): boolean {
+    if ('hideActionBtns' in this.opts) {
+      if (typeof this.opts.hideActionBtns === 'boolean') {
+        return !this.opts.hideActionBtns;
+      } else if (Array.isArray(this.opts.hideActionBtns)) {
+        // Skip the below logic
+        return true;
+      }
+    }
+
+    return typeof this.negativeBtnText === 'string' || typeof this.positiveBtnText === 'string' || 'neutralBtnText' in this.opts;
+  }
+
+
+  get hideNegativeBtn(): boolean {
+    // As the default text will be used if no text was specified,
+    // the button will always be shown unless explicitly hidden.
+    if ('hideActionBtns' in this.opts &&
+      Array.isArray(this.opts.hideActionBtns)) {
+      return this.opts.hideActionBtns.includes('negative');
     }
   }
-  cancel() {
-    this.dialogRef.close('cancel');
+
+  get hideNeutralBtn(): boolean {
+    if ('hideActionBtns' in this.opts &&
+      Array.isArray(this.opts.hideActionBtns)) {
+      return this.opts.hideActionBtns.includes('neutral');
+    }
+
+    return !('neutralBtnText' in this.opts);
   }
-  ok() {
-    this.dialogRef.close(this.selection.selectedOptions.selected);
+
+  get hidePositiveBtn(): boolean {
+    // As the default text will be used if no text was specified,
+    // the button will always be shown unless explicitly hidden.
+    if ('hideActionBtns' in this.opts &&
+      Array.isArray(this.opts.hideActionBtns)) {
+      return this.opts.hideActionBtns.includes('positive');
+    }
+  }
+
+  get negativeBtnColor(): ThemePalette {
+    return this.opts.negativeBtnColor ? this.opts.negativeBtnColor : this.defaultBtnColor;
+  }
+
+  get neutralBtnColor(): ThemePalette {
+    return this.opts.neutralBtnColor ? this.opts.neutralBtnColor : this.defaultBtnColor;
+  }
+
+  get positiveBtnColor(): ThemePalette {
+    return this.opts.positiveBtnColor ? this.opts.positiveBtnColor : this.defaultBtnColor;
+  }
+
+  get negativeBtnText(): string {
+    // This is to handle users using the now deprecated `cancel` property.
+    // tslint:disable-next-line:deprecation
+    return this.opts.cancel ? this.opts.cancel : this.opts.negativeBtnText ? this.opts.negativeBtnText : this.defaultNegativeBtnText;
+  }
+
+  get positiveBtnText(): string {
+    // This is to handle users using the now deprecated `ok` property.
+    // tslint:disable-next-line:deprecation
+    return this.opts.ok ? this.opts.ok : this.opts.positiveBtnText ? this.opts.positiveBtnText : this.defaultPositiveBtnText;
   }
 }
-export class SnackBarConfig {
-  /**
-   * The message for the snackbar
-   */
+
+export interface SnackBarOpts<D = any> {
+  /** The snackbar's message. */
   msg: string;
-  /**
-   * The action for the snackbar
-   */
+  /** The snackbar's action. */
   action?: string;
-  /**
-   * The custom component for the snack-bar to open in
-   */
+  /** A component to open the snackbar with. */
   component?: ComponentType<any>;
+  /** Configuration for the snackbar. */
+  config?: MatSnackBarConfig<D>;
   /**
-   * Additional options
+   * Additional options for the snackbar.
+   * @deprecated Use {@link SnackBarOpts#config} instead
    */
-  additionalOpts?: MatSnackBarConfig;
-  /**
-   * The icon of the snackbar
-   *
-   * Defaults to `error`
-   */
-  icon?: string;
+  additionalOpts?: MatSnackBarConfig<D>;
 }
-export class DialogConfig extends MatDialogConfig {
-  /**
-   * The message of the dialog
-   *
-   * Note: Please consider using {@link DomSanitizer#sanitize} instead of {@link DomSanitizer#bypassSecurityTrustHtml} as the latter does not actually sanitize the HTML, while the former does
-   */
-  msg?: string | SafeHtml;
-  /**
-   * The title of the dialog
-   */
+
+export type HideButtonType = 'negative' | 'neutral' | 'positive';
+
+export interface DialogOpts {
+  /** The dialog's message. */
+  msg: string | SafeHtml;
+  /** The dialog's title. */
   title?: string;
-  /**
-   * Whether the dialog's message is HTML
-   *
-   * Required to be set if you're passing in HTML.
-   */
+  /** Whether the dialog's message is in HTML. */
   isHtml?: boolean;
+  /** The positive button's text. */
+  positiveBtnText?: string;
+  /** The positive button's color. */
+  positiveBtnColor?: ThemePalette;
+  /** The negative button's text. */
+  negativeBtnText?: string;
+  /** The negative button's color. */
+  negativeBtnColor?: ThemePalette;
+  /** The neutral button's text. */
+  neutralBtnText?: string;
+  /** The neutral button's color. */
+  neutralBtnColor?: ThemePalette;
   /**
-   * The theme color for the dialog
+   * Whether to hide the action buttons.
+   *
+   * Optionally, you can specify which buttons to hide.
    */
-  themeColor?: ThemePalette;
+  hideActionBtns?: HideButtonType[] | boolean;
 }
-export class AlertDialogConfig extends DialogConfig {
+
+export interface AlertDialogOpts extends DialogOpts {
   /**
-   * The ok button text
+   * The ok button's text.
+   * @deprecated Use {@link DialogOpts#positiveBtnText} instead
    */
   ok?: string;
   /**
-   * The ok button color
+   * The ok button's color.
+   * @deprecated Use {@link DialogOpts#positiveBtnColor} instead
    */
   okColor?: ThemePalette;
 }
 
-export class ConfirmDialogConfig extends DialogConfig {
+export interface ConfirmDialogOpts extends DialogOpts {
   /**
-   * The ok button text
+   * The ok button's text.
+   * @deprecated Use {@link DialogOpts#positiveBtnText} instead
    */
   ok?: string;
   /**
-   * The cancel button text
+   * The ok button's color.
+   * @deprecated Use {@link DialogOpts#positiveBtnColor} instead
+   */
+  okColor?: ThemePalette;
+  /**
+   * The cancel button's text.
+   * @deprecated Use {@link DialogOpts#negativeBtnText} instead
    */
   cancel?: string;
   /**
-   * The ok button color
-   */
-  okColor?: ThemePalette;
-  /**
-   * The cancel button color
+   * The cancel button's color.
+   * @deprecated Use {@link DialogOpts#negativeBtnColor} instead
    */
   cancelColor?: ThemePalette;
-  /**
-   * Whether the confirm dialog should have a checkbox
-   */
-  hasCheckbox?: boolean;
-  /**
-   * The label of the checkbox. Depends on `hasCheckbox`.
-   */
-  checkboxLabel?: string;
-  /**
-   * The color of the checkbox
-   */
-  checkboxColor?: ThemePalette;
-  /**
-   * Whether the dialog must have the checkbox checked in order for the ok button to be enabled
-   */
-  dialogRequiresCheckbox?: boolean;
-  /**
-   * The initial value of the checkbox
-   */
-  checkboxValue?: boolean;
 }
 
-export interface PromptDialogConfigErrorType {
-  /**
-   * The text to show when the error occurs
-   */
-  errorText: string;
-  /**
-   * The type of error.
-   */
-  errorType: string;
+export interface PromptDialogInputConfig {
+  /** The input's placeholder. */
+  placeholder: string;
+  /** The input type. */
+  inputType?: string;
+  /** The input's initial value. */
+  value?: string;
+  /** The input's color. */
+  color?: ThemePalette;
 }
 
-export class PromptDialogConfig extends DialogConfig {
+export interface PromptDialogOpts extends DialogOpts {
   /**
-   * The ok button text
+   * The ok button's text.
+   * @deprecated Use {@link DialogOpts#positiveBtnText} instead
    */
   ok?: string;
   /**
-   * The color of the ok button
-   */
-  okColor?: ThemePalette;
-  /**
-   * The cancel button text
+   * The cancel button's text.
+   * @deprecated Use {@link DialogOpts#negativeBtnText} instead
    */
   cancel?: string;
+  /** Configuration for the input. */
+  inputConfig?: PromptDialogInputConfig;
   /**
-   * The color of the cancel button
-   */
-  cancelColor?: ThemePalette;
-  /**
-   * The placeholder of the input
+   * The input's placeholder.
+   * @deprecated Use {@link PromptDialogInputConfig#placeholder} instead
    */
   placeholder: string;
   /**
-   * The input type
+   * The input type.
+   * @deprecated Use {@link PromptDialogInputConfig#inputType} instead
    */
   inputType?: 'text' | 'email' | 'password' | 'number';
   /**
    * The initial value of the input
+   * @deprecated Use {@link PromptDialogInputConfig#value} instead
    */
   value?: string | number;
   /**
    * The color of the input
+   * @deprecated Use {@link PromptDialogInputConfig#color} instead
    */
-  inputColor?: ThemePalette;
-  /**
-   * Error types to show on the input
-   */
-  errorTypes?: PromptDialogConfigErrorType[];
+  color?: ThemePalette;
 }
-export class SelectionDialogConfig extends DialogConfig {
+
+export interface SelectionDialogOpts extends DialogOpts {
   /**
-   * The ok button text
+   * The ok button's text.
+   * @deprecated Use {@link DialogOpts#positiveBtnText} instead
    */
   ok?: string;
   /**
-   * The color of the ok button
-   */
-  okColor?: ThemePalette;
-  /**
-   * The cancel button text
+   * The cancel button's text.
+   * @deprecated Use {@link DialogOpts#negativeBtnText} instead
    */
   cancel?: string;
-  /**
-   * The color of the cancel button
-   */
-  cancelColor?: ThemePalette;
-  /**
-   * The options for the selection dialog
-   */
-  options: SelectionDialogOptions[];
+  /** Options to be shown in the dialog. */
+  options: SelectionDialogOption[];
 }
-export class SelectionDialogOptions {
+
+export interface SelectionDialogOption {
   /**
    * The title of the selection list item
    */
@@ -828,6 +602,170 @@ export class SelectionDialogOptions {
    * Whether the selection list item is initially selected
    */
   selected?: boolean;
+}
+
+// Shared service
+@Injectable()
+export class SharedService {
+  private _title = '';
+  /** The document's title suffix. */
+  readonly titleSuffix = 'Study Buddy';
+  constructor(
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog,
+    private documentTitle: Title,
+    private breakpointObserver: BreakpointObserver
+  ) { }
+  // Getters and setters
+  get title(): string { return this._title; }
+  set title(title: string) {
+    this._title = title;
+    if (title !== '') {
+      title = `${title} | `;
+    }
+    this.documentTitle.setTitle(`${title}${this.titleSuffix}`);
+  }
+
+  /** Checks if the user is online. */
+  get isOnline(): boolean {
+    return navigator.onLine;
+  }
+
+  /** Detects if the user is using a mobile device based on CSS media queries. */
+  get isMobile(): boolean {
+    return this.breakpointObserver.isMatched(Breakpoints.Handset);
+  }
+
+  /** Detects if the user is using a handset in portrait mode based on CSS media queries. */
+  get isPortraitHandset(): boolean {
+    return this.breakpointObserver.isMatched(Breakpoints.HandsetPortrait);
+  }
+
+  /**
+   * Returns the settings saved to LocalStorage.
+   * Note: If the settings haven't been set yet, it will return `null`.
+   */
+  get settings(): Settings {
+    return JSON.parse(window.localStorage.getItem('settings')) as Settings || null;
+  }
+  set settings(settings: Settings) {
+    window.localStorage.setItem('settings', JSON.stringify(settings));
+  }
+
+  /** Checks if dark theme is enabled. */
+  get isDarkThemeEnabled(): boolean {
+    // return !(this.settings === null) || this.settings['enableDarkTheme'] || this.settings['darkTheme'] || false;
+    return this.settings !== null && (this.settings['enableDarkTheme'] || this.settings['darkTheme']);
+  }
+
+  /**
+   * Opens a snackbar with the specified options.
+   * @param opts The options of the snackbar
+   * @returns The snackbar reference
+   */
+  openSnackBar(opts: SnackBarOpts): MatSnackBarRef<SimpleSnackBar> {
+    return this.handleSnackBar(opts);
+  }
+  /**
+   * Opens a snackbar component with the specified options.
+   * @param opts The options of the snackbar
+   * @returns The snackbar reference
+   */
+  openSnackBarComponent(opts: SnackBarOpts): MatSnackBarRef<any> {
+    return this.handleSnackBarWithComponent(opts);
+  }
+
+  private handleSnackBar(opts: SnackBarOpts): MatSnackBarRef<SimpleSnackBar> {
+    // tslint:disable-next-line:deprecation
+    const config = opts.config ? opts.config : opts.additionalOpts;
+    return this.snackBar.open(opts.msg, opts.action ? opts.action : undefined, config);
+  }
+
+  private handleSnackBarWithComponent(opts: SnackBarOpts): MatSnackBarRef<any> {
+    // tslint:disable-next-line:deprecation
+    const config = opts.config ? opts.config : opts.additionalOpts;
+    return this.snackBar.openFromComponent(opts.component, config);
+  }
+
+  /** Closes the current snackbar. */
+  closeSnackBar() {
+    this.snackBar.dismiss();
+  }
+
+  private createOrGetDialogConfig<D = any>(config?: MatDialogConfig<D>): MatDialogConfig<D> {
+    return config ? config : new MatDialogConfig<D>();
+  }
+
+  /**
+   * Opens an alert dialog with the specified parameters
+   * @param opts The options for the dialog.
+   * @param config Additional configurations for the dialog.
+   * @returns The dialog reference
+   */
+  openAlertDialog(opts: AlertDialogOpts, config?: MatDialogConfig<AlertDialogOpts>): MatDialogRef<AlertDialog> {
+    const tempConfig = this.createOrGetDialogConfig<AlertDialogOpts>(config);
+    tempConfig.data = opts;
+    return this.dialog.open(AlertDialog, tempConfig);
+  }
+
+  /**
+   * Opens a confirm dialog with the specified parameters
+   * @param opts The options for the dialog
+   * @param config Additional configurations for the dialog.
+   * @returns The dialog reference
+   */
+  openConfirmDialog(opts: ConfirmDialogOpts, config?: MatDialogConfig<ConfirmDialogOpts>): MatDialogRef<ConfirmDialog> {
+    const tempConfig = this.createOrGetDialogConfig<ConfirmDialogOpts>(config);
+    tempConfig.data = opts;
+    return this.dialog.open(ConfirmDialog, tempConfig);
+  }
+
+  /**
+   * Opens a prompt dialog with the specified parameters
+   * @param opts The options for the dialog
+   * @param config Additional configurations for the dialog.
+   * @returns The dialog reference
+   */
+  openPromptDialog(opts: PromptDialogOpts, config?: MatDialogConfig<PromptDialogOpts>): MatDialogRef<PromptDialog> {
+    const tempConfig = this.createOrGetDialogConfig<PromptDialogOpts>(config);
+    tempConfig.data = opts;
+    return this.dialog.open(PromptDialog, tempConfig);
+  }
+  /**
+   * Opens a selection dialog with the configured options
+   * @param opts The options for the dialog
+   * @param config Additional configurations for the dialog.
+   * @returns The dialog reference
+   */
+  openSelectionDialog(opts: SelectionDialogOpts, config?: MatDialogConfig<SelectionDialogOpts>): MatDialogRef<SelectionDialog> {
+    const tempConfig = this.createOrGetDialogConfig<SelectionDialogOpts>(config);
+    tempConfig.data = opts;
+    tempConfig.panelClass = 'selection-dialog';
+    return this.dialog.open(SelectionDialog, tempConfig);
+  }
+
+  /**
+   * Opens a help dialog
+   * @param templateRef ;The `TemplateRef` to open the dialog with.
+   * @returns The dialog's ref
+   * @deprecated Use {@link MatDialog#open}
+   */
+  openHelpDialog<T = any>(templateRef: TemplateRef<T>): MatDialogRef<T> {
+    return this.dialog.open<T>(templateRef);
+  }
+
+  /**
+   * Generates a random hex color
+   * @returns A random hexadecimal color
+   */
+  getRandomColor(): string {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
 }
 
 const SHARED_DIALOGS = [

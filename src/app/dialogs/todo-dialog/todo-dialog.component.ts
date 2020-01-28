@@ -91,6 +91,8 @@ export class TodoDialogComponent implements OnInit {
         msg: `<p>To access this content, please login before continuing.</p>
         <p><strong>Note: Please enable popups before clicking the Login button.</strong></p>`,
         ok: 'Login'
+      }, {
+        disableClose: true
       });
       loginDialogRef.afterClosed().subscribe(result => {
         if (result === 'ok') {
@@ -105,9 +107,7 @@ export class TodoDialogComponent implements OnInit {
       });
     }
   }
-  get isMobile(): boolean {
-    return this.shared.isMobile;
-  }
+
   get todoFormRawValue(): any {
     return this.todoForm.getRawValue();
   }
