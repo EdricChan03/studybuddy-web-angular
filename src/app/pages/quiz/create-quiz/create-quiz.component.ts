@@ -38,26 +38,37 @@ export class CreateQuizComponent implements OnInit {
       createdAt: firestore.FieldValue.serverTimestamp(),
       lastModified: firestore.FieldValue.serverTimestamp()
     } as any).then(doc => {
-      const snackBarRef = this.shared.openSnackBarWithOpts('Successfully submitted quiz!', 'Undo');
+      const snackBarRef = this.shared.openSnackBar({
+        msg: 'Successfully submitted quiz!',
+        action: 'Undo'
+      });
       snackBarRef.onAction().subscribe(() => {
         this.deleteDoc(doc);
       });
     }).catch(error => {
-      const snackBarRef = this.shared.openSnackBarWithOpts(`Could not submit quiz: ${error.message}`, 'Try again', 6000);
+      const snackBarRef = this.shared.openSnackBar({
+        msg: `Could not submit quiz: ${error.message}`,
+        action: 'Try again',
+        config: {
+          duration: 6000
+        }
+      });
       snackBarRef.onAction().subscribe(() => { this.submit(); });
     });
   }
 
   // Utility method to show snackbar for deletion of document
-  private deleteDoc(doc: firestore.DocumentReference, snackBarMessage?: string,
-    undoSnackBarMessage?: string, undoSnackBarAction?: string) {
-    snackBarMessage = snackBarMessage ? snackBarMessage : 'Successfully undone submission of quiz.';
-    undoSnackBarMessage = undoSnackBarMessage ? undoSnackBarMessage : 'Could not undo submission of quiz:';
-    undoSnackBarAction = undoSnackBarAction ? undoSnackBarAction : 'Try again';
+  private deleteDoc(doc: firestore.DocumentReference,
+    snackBarMessage: string = 'Successfully undone submission of quiz.',
+    undoSnackBarMessage: string = 'Could not undo submission of quiz:',
+    undoSnackBarAction: string = 'Try again') {
     doc.delete().then(() => {
-      this.shared.openSnackBarWithOpts(snackBarMessage);
+      this.shared.openSnackBar({ msg: snackBarMessage });
     }).catch(error => {
-      const undoSnackBarRef = this.shared.openSnackBarWithOpts(`${undoSnackBarMessage} ${error.message}`, undoSnackBarAction);
+      const undoSnackBarRef = this.shared.openSnackBar({
+        msg: `${undoSnackBarMessage} ${error.message}`,
+        action: undoSnackBarAction
+      });
       undoSnackBarRef.onAction().subscribe(() => {
         this.deleteDoc(doc, snackBarMessage, undoSnackBarMessage, undoSnackBarAction);
       });
