@@ -1,4 +1,4 @@
-import { SharedService, SelectionDialogOptions } from '../../../shared.service';
+import { SharedService, SelectionDialogOption } from '../../../shared.service';
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition } from '@angular/material/snack-bar';
 import { ThemePalette } from '@angular/material/core';
@@ -151,14 +151,17 @@ export class DevelopSharedServiceComponent implements OnInit {
       inputType: 'text',
       placeholder: this.setDefaultValue(this.dialog.placeholder, 'Name'),
       value: this.setDefaultValue(this.dialog.value, null),
-      themeColor: 'accent'
+      inputConfig: {
+        placeholder: 'Placeholder',
+        color: 'warn'
+      }
     }).afterClosed().subscribe((result) => {
       this.outputResult(result);
     });
     this.clearOptions(this.dialog);
   }
   selectionDialog() {
-    const selectionDialogOptions: SelectionDialogOptions[] = [];
+    const selectionDialogOptions: SelectionDialogOption[] = [];
     // for (let i = 0; i < 10; i++) {
     //   if (i === 1) {
     //     tempVar.push({ content: 'Item 1', disabled: true, value: 'item-1' });
