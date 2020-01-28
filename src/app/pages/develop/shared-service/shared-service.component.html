@@ -18,26 +18,60 @@
       </mat-radio-button>
     </mat-radio-group>
     <mat-form-field>
-      <input matInput [(ngModel)]="dialog.title" placeholder="Title of dialog">
+      <mat-label>Title</mat-label>
+      <input matInput [(ngModel)]="dialog.title">
     </mat-form-field>
     <mat-form-field>
-      <textarea matInput [(ngModel)]="dialog.message" placeholder="Message of dialog" rows="3"
+      <mat-label>Message</mat-label>
+      <textarea matInput [(ngModel)]="dialog.message" rows="3"
         matTextareaAutosize></textarea>
       <button mat-icon-button matSuffix (click)="generateLoremIpsum()" matTooltip="Generate lorem ipsum">
         <mat-icon>cached</mat-icon>
       </button>
     </mat-form-field>
-    <mat-form-field color="accent">
-      <input matInput [(ngModel)]="dialog.okBtn" placeholder="OK button text of dialog">
+    <mat-form-field>
+      <mat-label>Positive button text</mat-label>
+      <input matInput [(ngModel)]="dialog.positiveBtnText">
     </mat-form-field>
-    <mat-form-field color="accent">
-      <input matInput [(ngModel)]="dialog.cancelBtn" placeholder="Cancel button text of dialog">
+    <mat-form-field>
+      <mat-label>Positive button color</mat-label>
+      <mat-select [(ngModel)]="dialog.positiveBtnColor">
+        <mat-option *ngFor="let option of dialogBtnColorTypes" [value]="option.value">
+          {{ option.viewValue }}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
-    <mat-form-field color="accent" *ngIf="dialog.dialogType == 'prompt'">
-      <input matInput [(ngModel)]="dialog.placeholder" placeholder="Placeholder for prompt dialog">
+    <mat-form-field>
+      <mat-label>Neutral button text</mat-label>
+      <input matInput [(ngModel)]="dialog.neutralBtnText">
     </mat-form-field>
-    <mat-form-field color="accent" *ngIf="dialog.dialogType == 'prompt'">
-      <input matInput [(ngModel)]="dialog.value" placeholder="Initial value for prompt dialog">
+    <mat-form-field>
+      <mat-label>Neutral button color</mat-label>
+      <mat-select [(ngModel)]="dialog.neutralBtnColor">
+        <mat-option *ngFor="let option of dialogBtnColorTypes" [value]="option.value">
+          {{ option.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Negative button text</mat-label>
+      <input matInput [(ngModel)]="dialog.negativeBtnText">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Negative button color</mat-label>
+      <mat-select [(ngModel)]="dialog.negativeBtnColor">
+        <mat-option *ngFor="let option of dialogBtnColorTypes" [value]="option.value">
+          {{ option.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field *ngIf="dialog.dialogType === 'prompt'">
+      <mat-label>Input placeholder</mat-label>
+      <input matInput [(ngModel)]="dialog.placeholder">
+    </mat-form-field>
+    <mat-form-field *ngIf="dialog.dialogType === 'prompt'">
+      <mat-label>Initial input value</mat-label>
+      <input matInput [(ngModel)]="dialog.value">
     </mat-form-field>
     <div>
       <button mat-button (click)="openDialog()" color="primary">Open Dialog</button>
@@ -48,17 +82,20 @@
   <fieldset fxLayout="column">
     <legend>Snackbar properties</legend>
     <mat-form-field>
-      <textarea matInput [(ngModel)]="snackbar.snackBarMsg" placeholder="Message of snackbar" rows="3"
+      <mat-label>Message</mat-label>
+      <textarea matInput [(ngModel)]="snackbar.snackBarMsg" rows="3"
         matTextareaAutosize></textarea>
       <button mat-icon-button matSuffix (click)="generateLoremIpsum(true)" matTooltip="Generate lorem ipsum">
         <mat-icon>cached</mat-icon>
       </button>
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="number" [(ngModel)]="snackbar.duration" placeholder="Duration of snackbar">
+      <mat-label>Duration</mat-label>
+      <input matInput type="number" [(ngModel)]="snackbar.duration">
     </mat-form-field>
     <mat-form-field>
-      <input matInput [(ngModel)]="snackbar.action" placeholder="Action of snackbar">
+      <mat-label>Action</mat-label>
+      <input matInput [(ngModel)]="snackbar.action">
     </mat-form-field>
     <h3>Vertical Position:</h3>
     <mat-radio-group [(ngModel)]="snackbar.verticalPosition" fxLayout="column">
@@ -69,8 +106,9 @@
       <mat-radio-button *ngFor="let opt of horizontalPos" [value]="opt">{{opt}}</mat-radio-button>
     </mat-radio-group>
     <h3>Extra classes</h3>
-    <mat-form-field color="accent">
-      <mat-select [(ngModel)]="snackbar.panelClass" placeholder="Extra class" multiple>
+    <mat-form-field>
+      <mat-label>Extra class(es)</mat-label>
+      <mat-select [(ngModel)]="snackbar.panelClass" multiple>
         <mat-option value="red">
           <code>red</code>
         </mat-option>
@@ -81,10 +119,10 @@
     </mat-form-field>
     <div>
       <button mat-button (click)="closeSnackBar()" color="warn">Close all snackbars</button>
-      <button mat-button (click)="snackBar()" color="primary">Normal Snackbar</button>
-      <button mat-button (click)="errorSnackBar()" color="primary">Error Snackbar</button>
-      <button mat-button (click)="durationSnackBar()" color="primary">Duration Snackbar</button>
-      <button mat-button (click)="snackBarWithResult()" color="primary">Snackbar with result</button>
+      <button mat-button (click)="openSnackBar()" color="primary">Normal Snackbar</button>
+      <button mat-button (click)="openErrorSnackBar()" color="primary">Error Snackbar</button>
+      <button mat-button (click)="openDurationSnackBar()" color="primary">Duration Snackbar</button>
+      <button mat-button (click)="openSnackBarWithResult()" color="primary">Snackbar with result</button>
     </div>
   </fieldset>
 

@@ -1,23 +1,18 @@
-import { SharedService, SelectionDialogOption } from '../../../shared.service';
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition } from '@angular/material/snack-bar';
 import { ThemePalette } from '@angular/material/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { SelectionDialogOption, SharedService } from '../../../shared.service';
 
-type TestButtonType = 'normal' | 'stroked' | 'flat' | 'icon' | 'fab' | 'mini-fab' | 'raised';
-interface TestButton {
-  color?: ThemePalette;
-  title?: string;
-  tooltip?: string;
-  btnType?: TestButtonType;
-  icon?: string;
-}
 interface TestDialog {
   dialogType?: 'alert' | 'confirm' | 'prompt' | 'selection';
   title?: string;
   message?: string;
-  okBtn?: string;
-  cancelBtn?: string;
+  positiveBtnText?: string;
+  positiveBtnColor?: ThemePalette | '';
+  neutralBtnText?: string;
+  neutralBtnColor?: ThemePalette | '';
+  negativeBtnText?: string;
+  negativeBtnColor?: ThemePalette | '';
   placeholder?: string;
   value?: string | number | any;
 }
@@ -35,62 +30,44 @@ interface TestSnackBar {
   templateUrl: './shared-service.component.html'
 })
 export class DevelopSharedServiceComponent implements OnInit {
-  buttons: TestButton[] = [];
   dialogTypes = ['alert', 'confirm', 'prompt', 'selection'];
-  dialog: TestDialog = {};
+  dialog: TestDialog = {
+    positiveBtnColor: '',
+    negativeBtnColor: '',
+    neutralBtnColor: ''
+  };
   snackbar: TestSnackBar = {};
   verticalPos = ['top', 'bottom'];
   horizontalPos = ['start', 'center', 'end', 'left', 'right'];
+  dialogBtnColorTypes = [
+    {
+      value: '',
+      viewValue: 'None'
+    },
+    {
+      value: 'primary',
+      viewValue: 'Primary'
+    },
+    {
+      value: 'accent',
+      viewValue: 'Accent'
+    },
+    {
+      value: 'warn',
+      viewValue: 'Warn'
+    }
+  ];
+
   constructor(
-    public shared: SharedService,
-    private dom: DomSanitizer
+    public shared: SharedService
   ) {
     shared.title = 'Test page';
   }
-  /**
-   * Sets the default value
-   * @param varToSet The variable to set
-   * @param defaultVal Default variable
-   */
-  private setDefaultValue(varToSet: any, defaultVal: any): any {
+
+  private getValOrReturnDefault(varToSet: any, defaultVal: any): any {
     return varToSet ? varToSet : defaultVal;
   }
-  ngOnInit() {
-    this.dialog.dialogType = 'alert';
-    this.buttons = [
-      {
-        color: 'primary',
-        title: 'Button',
-        btnType: 'normal'
-      },
-      {
-        color: 'accent',
-        title: 'Accent!',
-        btnType: 'raised'
-      },
-      {
-        color: 'warn',
-        title: 'Flat button',
-        btnType: 'flat'
-      },
-      {
-        color: 'primary',
-        btnType: 'icon',
-        icon: 'done_all',
-        tooltip: 'Mark all as done'
-      },
-      {
-        btnType: 'fab',
-        icon: 'add'
-      },
-      {
-        color: 'warn',
-        btnType: 'mini-fab',
-        icon: 'close',
-        tooltip: 'Close'
-      }
-    ];
-  }
+
   /**
    * Generates lorem ipsum text
    * @param isSnackBar Whether to generate lorem ipsum for the snackbar message
@@ -107,50 +84,66 @@ export class DevelopSharedServiceComponent implements OnInit {
   openDialog() {
     switch (this.dialog.dialogType) {
       case 'alert':
-        this.alertDialog();
+        this.openAlertDialog();
         break;
       case 'confirm':
-        this.confirmDialog();
+        this.openConfirmDialog();
         break;
       case 'prompt':
-        this.promptDialog();
+        this.openPromptDialog();
         break;
       case 'selection':
-        this.selectionDialog();
+        this.openSelectionDialog();
         break;
       default:
-        this.alertDialog();
+        this.openAlertDialog();
         break;
     }
   }
-  alertDialog() {
+
+  openAlertDialog() {
     this.shared.openAlertDialog({
-      title: this.setDefaultValue(this.dialog.title, 'Alert'),
-      msg: this.setDefaultValue(this.dialog.message, 'I\'m an alert message made with code!'),
-      ok: this.setDefaultValue(this.dialog.okBtn, 'OK')
+      title: this.getValOrReturnDefault(this.dialog.title, 'Alert'),
+      msg: this.getValOrReturnDefault(this.dialog.message, 'I\'m an alert message made with code!'),
+      negativeBtnText: this.getValOrReturnDefault(this.dialog.negativeBtnText, null),
+      negativeBtnColor: this.getValOrReturnDefault(this.dialog.negativeBtnColor, ''),
+      neutralBtnText: this.getValOrReturnDefault(this.dialog.neutralBtnText, null),
+      neutralBtnColor: this.getValOrReturnDefault(this.dialog.neutralBtnColor, ''),
+      positiveBtnText: this.getValOrReturnDefault(this.dialog.positiveBtnText, 'OK'),
+      positiveBtnColor: this.getValOrReturnDefault(this.dialog.positiveBtnColor, '')
     });
     this.clearOptions(this.dialog);
   }
-  confirmDialog() {
+
+  openConfirmDialog() {
     this.shared.openConfirmDialog({
-      title: this.setDefaultValue(this.dialog.title, 'Confirmation'),
-      msg: this.setDefaultValue(this.dialog.message, 'I\'m a confirm message made with code!'),
-      cancel: this.setDefaultValue(this.dialog.cancelBtn, 'Cancel'),
-      ok: this.dialog.okBtn ? this.dialog.okBtn : 'OK'
+      title: this.getValOrReturnDefault(this.dialog.title, 'Confirmation'),
+      msg: this.getValOrReturnDefault(this.dialog.message, 'I\'m a confirm message made with code!'),
+      negativeBtnText: this.getValOrReturnDefault(this.dialog.negativeBtnText, 'Cancel'),
+      negativeBtnColor: this.getValOrReturnDefault(this.dialog.negativeBtnColor, ''),
+      neutralBtnText: this.getValOrReturnDefault(this.dialog.neutralBtnText, null),
+      neutralBtnColor: this.getValOrReturnDefault(this.dialog.neutralBtnColor, ''),
+      positiveBtnText: this.getValOrReturnDefault(this.dialog.positiveBtnText, 'OK'),
+      positiveBtnColor: this.getValOrReturnDefault(this.dialog.positiveBtnColor, '')
     }).afterClosed().subscribe((result) => {
       this.outputResult(result);
     });
     this.clearOptions(this.dialog);
   }
-  promptDialog() {
+
+  openPromptDialog() {
     this.shared.openPromptDialog({
-      title: this.setDefaultValue(this.dialog.title, 'Prompt'),
-      msg: this.setDefaultValue(this.dialog.message, 'Enter your name:'),
-      cancel: this.setDefaultValue(this.dialog.cancelBtn, 'Cancel'),
-      ok: this.setDefaultValue(this.dialog.okBtn, 'OK'),
+      title: this.getValOrReturnDefault(this.dialog.title, 'Prompt'),
+      msg: this.getValOrReturnDefault(this.dialog.message, 'Enter your name:'),
+      negativeBtnText: this.getValOrReturnDefault(this.dialog.negativeBtnText, 'Cancel'),
+      negativeBtnColor: this.getValOrReturnDefault(this.dialog.negativeBtnColor, ''),
+      neutralBtnText: this.getValOrReturnDefault(this.dialog.neutralBtnText, null),
+      neutralBtnColor: this.getValOrReturnDefault(this.dialog.neutralBtnColor, ''),
+      positiveBtnText: this.getValOrReturnDefault(this.dialog.positiveBtnText, 'OK'),
+      positiveBtnColor: this.getValOrReturnDefault(this.dialog.positiveBtnColor, ''),
       inputType: 'text',
-      placeholder: this.setDefaultValue(this.dialog.placeholder, 'Name'),
-      value: this.setDefaultValue(this.dialog.value, null),
+      placeholder: this.getValOrReturnDefault(this.dialog.placeholder, 'Name'),
+      value: this.getValOrReturnDefault(this.dialog.value, null),
       inputConfig: {
         placeholder: 'Placeholder',
         color: 'warn'
@@ -160,7 +153,7 @@ export class DevelopSharedServiceComponent implements OnInit {
     });
     this.clearOptions(this.dialog);
   }
-  selectionDialog() {
+  openSelectionDialog() {
     const selectionDialogOptions: SelectionDialogOption[] = [];
     // for (let i = 0; i < 10; i++) {
     //   if (i === 1) {
@@ -176,10 +169,14 @@ export class DevelopSharedServiceComponent implements OnInit {
     selectionDialogOptions.push({ content: 'New features', value: 'new_features' });
     selectionDialogOptions.push({ content: 'Uncategorised', value: 'uncategorised', selected: true, disabled: true });
     const dialogRef = this.shared.openSelectionDialog({
-      title: this.setDefaultValue(this.dialog.title, 'Notification preferences'),
-      msg: this.setDefaultValue(this.dialog.message, 'Show preferences for the following'),
-      ok: this.setDefaultValue(this.dialog.okBtn, 'Save'),
-      cancel: this.setDefaultValue(this.dialog.cancelBtn, 'Cancel'),
+      title: this.getValOrReturnDefault(this.dialog.title, 'Notification preferences'),
+      msg: this.getValOrReturnDefault(this.dialog.message, 'Show preferences for the following'),
+      negativeBtnText: this.getValOrReturnDefault(this.dialog.negativeBtnText, 'Cancel'),
+      negativeBtnColor: this.getValOrReturnDefault(this.dialog.negativeBtnColor, ''),
+      neutralBtnText: this.getValOrReturnDefault(this.dialog.neutralBtnText, null),
+      neutralBtnColor: this.getValOrReturnDefault(this.dialog.neutralBtnColor, ''),
+      positiveBtnText: this.getValOrReturnDefault(this.dialog.positiveBtnText, 'Save'),
+      positiveBtnColor: this.getValOrReturnDefault(this.dialog.positiveBtnColor, ''),
       options: selectionDialogOptions
     });
     dialogRef.afterClosed().subscribe((result) => {
@@ -187,20 +184,13 @@ export class DevelopSharedServiceComponent implements OnInit {
     });
     this.clearOptions(this.dialog);
   }
-  /**
-   * Outputs the result of a function
-   * @param result The result of a function
-   * @private
-   */
+
   private outputResult(result: any) {
     console.log(`Result: ${result}`);
     document.getElementById('result').innerText = `Result: ${result}`;
   }
-  /**
-   * Resets a value to an undefined {@link Object}
-   * @param opts The options to clear
-   */
-  private clearOptions(opts: TestDialog | TestSnackBar | any) {
+
+  private clearOptions(opts: any) {
     opts = {};
   }
   /**
@@ -212,9 +202,9 @@ export class DevelopSharedServiceComponent implements OnInit {
   /**
    * Opens a snackbar
    */
-  snackBar() {
+  openSnackBar() {
     this.shared.openSnackBar({
-      msg: this.setDefaultValue(this.snackbar.snackBarMsg, 'I\'m a snackbar!'),
+      msg: this.getValOrReturnDefault(this.snackbar.snackBarMsg, 'I\'m a snackbar!'),
       additionalOpts: {
         horizontalPosition: this.snackbar.horizontalPosition,
         verticalPosition: this.snackbar.verticalPosition,
@@ -226,9 +216,9 @@ export class DevelopSharedServiceComponent implements OnInit {
   /**
    * Opens an error snackbar
    */
-  errorSnackBar() {
+  openErrorSnackBar() {
     this.shared.openSnackBar({
-      msg: this.setDefaultValue(this.snackbar.snackBarMsg, 'Error: Something happened'),
+      msg: this.getValOrReturnDefault(this.snackbar.snackBarMsg, 'Error: Something happened'),
       additionalOpts: {
         duration: 5000
       }
@@ -237,9 +227,9 @@ export class DevelopSharedServiceComponent implements OnInit {
   /**
    * Opens a snackbar with a duration
    */
-  durationSnackBar() {
+  openDurationSnackBar() {
     this.shared.openSnackBar({
-      msg: this.setDefaultValue(this.snackbar.snackBarMsg, 'I\'m a duration snackbar!'),
+      msg: this.getValOrReturnDefault(this.snackbar.snackBarMsg, 'I\'m a duration snackbar!'),
       additionalOpts: {
         duration: this.snackbar.duration ? this.snackbar.duration : 5000,
         horizontalPosition: this.snackbar.horizontalPosition,
@@ -252,9 +242,9 @@ export class DevelopSharedServiceComponent implements OnInit {
   /**
    * Opens a snackbar with a result
    */
-  snackBarWithResult() {
+  openSnackBarWithResult() {
     const snackBarRef = this.shared.openSnackBar({
-      msg: this.setDefaultValue(this.snackbar.snackBarMsg, 'I\'m a snackbar with an action!'),
+      msg: this.getValOrReturnDefault(this.snackbar.snackBarMsg, 'I\'m a snackbar with an action!'),
       action: this.snackbar.action,
       additionalOpts:
       {
@@ -267,5 +257,9 @@ export class DevelopSharedServiceComponent implements OnInit {
       this.shared.openAlertDialog({ msg: `You clicked on the "${this.snackbar.action}" button.` });
     });
     this.clearOptions(this.snackbar);
+  }
+
+  ngOnInit() {
+    this.dialog.dialogType = 'alert';
   }
 }
