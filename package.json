@@ -22,7 +22,7 @@
     "@angular/platform-browser": "^8.2.14",
     "@angular/platform-browser-dynamic": "^8.2.14",
     "@angular/platform-server": "^8.2.14",
-    "@angular/pwa": "^0.13.8",
+    "@angular/pwa": "^0.900.2",
     "@angular/router": "^8.2.14",
     "@angular/service-worker": "^8.2.14",
     "@ngx-formly/core": "^5.3.0",
