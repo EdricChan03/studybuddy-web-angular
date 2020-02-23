@@ -2,7 +2,7 @@ import {
   ComponentPortal, ComponentType, Portal, TemplatePortal
 } from '@angular/cdk/portal';
 import { Injectable, TemplateRef, ViewContainerRef } from '@angular/core';
-import { MatSidenav } from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
 import { from, Subject } from 'rxjs';
 
 @Injectable({
