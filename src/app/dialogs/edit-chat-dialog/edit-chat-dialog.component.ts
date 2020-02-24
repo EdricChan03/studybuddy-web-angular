@@ -58,7 +58,7 @@ export class EditChatDialogComponent implements OnInit {
           // Set existing chat groups to be public
           _formData['visibility'] = 'public';
         }
-        this.editChatForm.setValue(_formData);
+        this.editChatForm.patchValue(_formData);
       });
   }
 

@@ -111,10 +111,7 @@ export class TodoDialogComponent implements OnInit {
   get todoFormRawValue(): any {
     return this.todoForm.getRawValue();
   }
-  /** @deprecated The document ID is automatically generated */
-  regenerateId() {
-    this.todoForm.get('id').setValue(this.afFs.createId());
-  }
+
   showHelp(help: 'content' | 'project' | 'dueDate') {
     switch (help) {
       case 'content':
@@ -179,7 +176,7 @@ export class TodoDialogComponent implements OnInit {
       } else {
         todoItem.dueDate = null;
       }
-      this.todoForm.setValue(todoItem);
+      this.todoForm.patchValue(todoItem);
     }
   }
   resetForm() {
