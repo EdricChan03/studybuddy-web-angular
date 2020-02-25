@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
+import { Router } from '@angular/router';
 import { SharedService } from '../../shared.service';
 import { ActionItem } from './action-item';
 import { MenuButtonConfig } from './menu-button-config';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-toolbar',
