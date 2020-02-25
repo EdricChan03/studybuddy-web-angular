@@ -333,9 +333,9 @@ export class PromptDialog extends Dialog implements OnInit {
 
   ngOnInit() {
     // tslint:disable:deprecation
-    if (this.opts.value) {
+    if ('value' in this.opts) {
       this.input = this.opts.value;
-    } else if (this.opts.inputConfig.value) {
+    } else if ('inputConfig' in this.opts && 'value' in this.opts.inputConfig) {
       this.input = this.opts.inputConfig.value;
     }
     // tslint:enable:deprecation
