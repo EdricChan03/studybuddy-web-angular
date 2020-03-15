@@ -685,8 +685,19 @@ export class SharedService {
 
   /** Checks if dark theme is enabled. */
   get isDarkThemeEnabled(): boolean {
-    // return !(this.settings === null) || this.settings['enableDarkTheme'] || this.settings['darkTheme'] || false;
-    return this.settings !== null && (this.settings['enableDarkTheme'] || this.settings['darkTheme']);
+    if (this.settingsStorage.hasSetting('appearanceSettings')) {
+      const appearanceSettings = this.settingsStorage.getSetting('appearanceSettings');
+      if ('enableDarkTheme' in appearanceSettings) {
+        return appearanceSettings['enableDarkTheme'];
+      }
+    } else if (this.settingsStorage.hasSetting('settings')) {
+      const oldSettings = this.settingsStorage.getSetting('settings');
+      if ('enableDarkTheme' in oldSettings) {
+        return oldSettings['enableDarkTheme'];
+      }
+    }
+    return false;
+  }
   }
 
   /**
