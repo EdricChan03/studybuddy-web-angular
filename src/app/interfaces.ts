@@ -66,8 +66,6 @@ export interface Settings {
    * Whether to close the sidenav when a list item is clicked
    */
   closeSidenavOnClick?: boolean;
-  /** Whether to enable the new UI */
-  enableNewUi?: boolean;
 }
 export interface TodoItem extends HasId {
   /**
