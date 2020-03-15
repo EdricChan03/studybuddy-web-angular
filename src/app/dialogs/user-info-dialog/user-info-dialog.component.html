@@ -1,7 +1,9 @@
 <h2 matDialogTitle>User info</h2>
-<div mat-dialog-content>
-  <p *ngIf="!isSignedIn">User isn't logged in</p>
-  <div class="data-table" *ngIf="isSignedIn">
+<mat-dialog-content>
+  <ng-template #notSignedIn>
+    <p>No user is logged in.</p>
+  </ng-template>
+  <ng-container *ngIf="user$ | async as user; else: notSignedIn">
     <table class="app-table">
       <thead>
         <tr>
@@ -10,38 +12,46 @@
         </tr>
       </thead>
       <tr>
-        <td>Name</td>
-        <td>{{(userObservable | async)?.displayName}}</td>
+        <td>Display name</td>
+        <td>{{ user?.displayName || '&lt;No display name set&gt;' }}</td>
       </tr>
       <tr>
         <td>Email</td>
-        <td>{{(userObservable | async)?.email}}</td>
+        <td>{{ user?.email || '&lt;No email set&gt;' }}</td>
+      </tr>
+      <tr>
+        <td>Has verified email?</td>
+        <td>{{ user?.emailVerified ? 'Yes' : 'No' }}</td>
+      </tr>
+      <tr>
+        <td>Is anonymous?</td>
+        <td>{{ user?.isAnonymous ? 'Yes' : 'No' }}</td>
       </tr>
       <tr>
         <td>Phone number</td>
-        <td>{{(userObservable | async)?.phoneNumber ? (userObservable | async)?.phoneNumber : 'null'}}</td>
+        <td>{{ user?.phoneNumber || '&lt;No phone number set&gt;' }}</td>
       </tr>
       <tr>
         <td>Photo URL</td>
-        <td>{{(userObservable | async)?.photoURL}}</td>
+        <td>{{ user?.photoURL || '&lt;No photo URL set&gt;' }}</td>
       </tr>
       <tr>
         <td>UID (User ID)</td>
-        <td>{{(userObservable | async)?.uid}}</td>
+        <td>{{ user?.uid }}</td>
       </tr>
       <tr>
         <td>Last login</td>
-        <td>{{(userObservable | async)?.metadata?.lastSignInTime | date}}</td>
+        <td>{{ user?.metadata?.lastSignInTime | date:'long' }}</td>
       </tr>
       <tr>
         <td>Created at</td>
-        <td>{{(userObservable | async)?.metadata?.creationTime | date}}</td>
+        <td>{{ user?.metadata?.creationTime | date:'long' }}</td>
       </tr>
     </table>
-  </div>
-  <mat-checkbox [(ngModel)]="showJson">Show JSON?</mat-checkbox>
-  <pre *ngIf="showJson"><code>{{(userObservable | async)?.toJSON() | json}}</code></pre>
-</div>
-<div mat-dialog-actions align="end">
+    <mat-checkbox [(ngModel)]="showJson">Show JSON?</mat-checkbox>
+    <pre *ngIf="showJson"><code>{{ user?.toJSON() | json }}</code></pre>
+  </ng-container>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
   <button mat-button color="primary" matDialogClose>Dismiss</button>
-</div>
+</mat-dialog-actions>
