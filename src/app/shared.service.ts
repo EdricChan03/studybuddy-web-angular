@@ -36,6 +36,15 @@ export abstract class Dialog {
   abstract get positiveBtnColor(): ThemePalette;
 }
 
+/** The dialog result returned by any of the dialogs. */
+export enum DialogResult {
+  Cancel = 'cancel',
+  Negative = 'cancel',
+  Neutral = 'neutral',
+  Ok = 'ok',
+  Positive = 'ok'
+}
+
 @Component({
   selector: 'alert-dialog',
   template: `
@@ -725,7 +734,7 @@ export class SharedService {
    * @param config Additional configurations for the dialog.
    * @returns The dialog reference
    */
-  openAlertDialog(opts: AlertDialogOpts, config?: MatDialogConfig<AlertDialogOpts>): MatDialogRef<AlertDialog> {
+  openAlertDialog(opts: AlertDialogOpts, config?: MatDialogConfig<AlertDialogOpts>): MatDialogRef<AlertDialog, DialogResult> {
     const tempConfig = this.createOrGetDialogConfig<AlertDialogOpts>(config);
     tempConfig.data = opts;
     return this.dialog.open(AlertDialog, tempConfig);
@@ -737,7 +746,7 @@ export class SharedService {
    * @param config Additional configurations for the dialog.
    * @returns The dialog reference
    */
-  openConfirmDialog(opts: ConfirmDialogOpts, config?: MatDialogConfig<ConfirmDialogOpts>): MatDialogRef<ConfirmDialog> {
+  openConfirmDialog(opts: ConfirmDialogOpts, config?: MatDialogConfig<ConfirmDialogOpts>): MatDialogRef<ConfirmDialog, DialogResult> {
     const tempConfig = this.createOrGetDialogConfig<ConfirmDialogOpts>(config);
     tempConfig.data = opts;
     return this.dialog.open(ConfirmDialog, tempConfig);
@@ -749,7 +758,7 @@ export class SharedService {
    * @param config Additional configurations for the dialog.
    * @returns The dialog reference
    */
-  openPromptDialog(opts: PromptDialogOpts, config?: MatDialogConfig<PromptDialogOpts>): MatDialogRef<PromptDialog> {
+  openPromptDialog(opts: PromptDialogOpts, config?: MatDialogConfig<PromptDialogOpts>): MatDialogRef<PromptDialog, DialogResult> {
     const tempConfig = this.createOrGetDialogConfig<PromptDialogOpts>(config);
     tempConfig.data = opts;
     return this.dialog.open(PromptDialog, tempConfig);
@@ -760,7 +769,8 @@ export class SharedService {
    * @param config Additional configurations for the dialog.
    * @returns The dialog reference
    */
-  openSelectionDialog(opts: SelectionDialogOpts, config?: MatDialogConfig<SelectionDialogOpts>): MatDialogRef<SelectionDialog> {
+  openSelectionDialog(opts: SelectionDialogOpts, config?: MatDialogConfig<SelectionDialogOpts>):
+    MatDialogRef<SelectionDialog, DialogResult> {
     const tempConfig = this.createOrGetDialogConfig<SelectionDialogOpts>(config);
     tempConfig.data = opts;
     tempConfig.panelClass = 'selection-dialog';
@@ -769,7 +779,7 @@ export class SharedService {
 
   /**
    * Opens a help dialog
-   * @param templateRef ;The `TemplateRef` to open the dialog with.
+   * @param templateRef The `TemplateRef` to open the dialog with.
    * @returns The dialog's ref
    * @deprecated Use {@link MatDialog#open}
    */
