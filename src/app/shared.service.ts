@@ -646,7 +646,6 @@ export class SharedService {
     private settingsStorage: SettingsStorageService,
     private snackBar: MatSnackBar,
     private documentTitle: Title,
-    private breakpointObserver: BreakpointObserver
   ) { }
   // Getters and setters
   get title(): string { return this._title; }
