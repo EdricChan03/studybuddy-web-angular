@@ -45,22 +45,23 @@ export class ToolbarService {
   get progressIndeterminate() {
     return this._progressIndeterminate;
   }
+
   /**
-   * Sets the progress bar
+   * Sets the current progress bar state.
    * @param shown Whether to show the progress bar
    * @param indeterminate Whether to enable indeterminate mode for the progress bar
-   * @param percentage The percentage of the progress bar (only applies in determinate mode)
+   * @param percentage The percentage of the progress bar (only applies in determinate mode) (specify as a whole number between 0 and 100)
    */
   setProgress(shown: boolean, indeterminate?: boolean, percentage?: number) {
     this._progressShown = shown;
-    if (indeterminate !== undefined && indeterminate !== null) {
+    if (indeterminate !== undefined) {
       this._progressIndeterminate = indeterminate;
     }
-    if (percentage !== undefined && percentage !== null) {
+    if (percentage !== undefined) {
       if (percentage >= 0 && percentage <= 100) {
         this._progressPercent = percentage;
       } else {
-        throw new Error('Please specify a number for the percentage.');
+        throw new Error('Specified progress percentage is not within the ranges 0 - 100.');
       }
     }
   }
