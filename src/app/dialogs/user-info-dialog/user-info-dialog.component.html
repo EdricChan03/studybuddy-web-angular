@@ -11,43 +11,94 @@
           <th>Value</th>
         </tr>
       </thead>
-      <tr>
-        <td>Display name</td>
-        <td>{{ user?.displayName || '&lt;No display name set&gt;' }}</td>
-      </tr>
-      <tr>
-        <td>Email</td>
-        <td>{{ user?.email || '&lt;No email set&gt;' }}</td>
-      </tr>
-      <tr>
-        <td>Has verified email?</td>
-        <td>{{ user?.emailVerified ? 'Yes' : 'No' }}</td>
-      </tr>
-      <tr>
-        <td>Is anonymous?</td>
-        <td>{{ user?.isAnonymous ? 'Yes' : 'No' }}</td>
-      </tr>
-      <tr>
-        <td>Phone number</td>
-        <td>{{ user?.phoneNumber || '&lt;No phone number set&gt;' }}</td>
-      </tr>
-      <tr>
-        <td>Photo URL</td>
-        <td>{{ user?.photoURL || '&lt;No photo URL set&gt;' }}</td>
-      </tr>
-      <tr>
-        <td>UID (User ID)</td>
-        <td>{{ user?.uid }}</td>
-      </tr>
-      <tr>
-        <td>Last login</td>
-        <td>{{ user?.metadata?.lastSignInTime | date:'long' }}</td>
-      </tr>
-      <tr>
-        <td>Created at</td>
-        <td>{{ user?.metadata?.creationTime | date:'long' }}</td>
-      </tr>
+      <tbody>
+        <tr>
+          <td>Display name</td>
+          <td>{{ user?.displayName || '&lt;No display name set&gt;' }}</td>
+        </tr>
+        <tr>
+          <td>Email</td>
+          <td>{{ user?.email || '&lt;No email set&gt;' }}</td>
+        </tr>
+        <tr>
+          <td>Has verified email?</td>
+          <td>{{ user?.emailVerified ? 'Yes' : 'No' }}</td>
+        </tr>
+        <tr>
+          <td>Is anonymous?</td>
+          <td>{{ user?.isAnonymous ? 'Yes' : 'No' }}</td>
+        </tr>
+        <tr>
+          <td>Phone number</td>
+          <td>{{ user?.phoneNumber || '&lt;No phone number set&gt;' }}</td>
+        </tr>
+        <tr>
+          <td>Photo URL</td>
+          <td>{{ user?.photoURL || '&lt;No photo URL set&gt;' }}</td>
+        </tr>
+        <tr>
+          <td>UID (User ID)</td>
+          <td>{{ user?.uid }}</td>
+        </tr>
+        <tr>
+          <td>Tenant ID</td>
+          <td>{{ user?.tenantId || '&lt;No tenant ID set&gt;' }}</td>
+        </tr>
+        <tr>
+          <td>Last login</td>
+          <td>{{ user?.metadata?.lastSignInTime | date:'long' }}</td>
+        </tr>
+        <tr>
+          <td>Created at</td>
+          <td>{{ user?.metadata?.creationTime | date:'long' }}</td>
+        </tr>
+      </tbody>
     </table>
+    <ng-container *ngIf="user?.providerData">
+      <h3>Provider data</h3>
+      <mat-accordion>
+        <mat-expansion-panel *ngFor="let provider of user.providerData">
+          <mat-expansion-panel-header>
+            <mat-panel-title>Provider ID: {{ provider.providerId }}</mat-panel-title>
+            <mat-panel-description>User ID: {{ provider.uid }}</mat-panel-description>
+          </mat-expansion-panel-header>
+          <table class="app-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Provider ID</td>
+                <td>{{ provider.providerId }}</td>
+              </tr>
+              <tr>
+                <td>User ID</td>
+                <td>{{ provider.uid }}</td>
+              </tr>
+              <tr>
+                <td>Display name</td>
+                <td>{{ provider.displayName || '&lt;No display name set&gt;' }}</td>
+              </tr>
+              <tr>
+                <td>Email</td>
+                <td>{{ provider.email || '&lt;No email set&gt;' }}</td>
+              </tr>
+              <tr>
+                <td>Photo URL</td>
+                <td>{{ provider.photoURL || '&lt;No photo URL set&gt;' }}</td>
+              </tr>
+              <tr>
+                <td>Phone number</td>
+                <td>{{ provider.phoneNumber || '&lt;No phone number set&gt;' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </ng-container>
     <mat-checkbox [(ngModel)]="showJson">Show JSON?</mat-checkbox>
     <pre *ngIf="showJson"><code>{{ user?.toJSON() | json }}</code></pre>
   </ng-container>
