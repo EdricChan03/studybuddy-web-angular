@@ -14,6 +14,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarModule, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 import { SafeHtml, Title } from '@angular/platform-browser';
 import { Settings } from './interfaces';
+import { SettingsStorageService } from './pages/settings/settings-storage.service';
 
 /** An abstract dialog class. */
 export abstract class Dialog {
@@ -631,8 +632,10 @@ export class SharedService {
   /** The document's title suffix. */
   readonly titleSuffix = 'Study Buddy';
   constructor(
-    private snackBar: MatSnackBar,
+    private breakpointObserver: BreakpointObserver,
     private dialog: MatDialog,
+    private settingsStorage: SettingsStorageService,
+    private snackBar: MatSnackBar,
     private documentTitle: Title,
     private breakpointObserver: BreakpointObserver
   ) { }
@@ -662,14 +665,14 @@ export class SharedService {
   }
 
   /**
-   * Returns the settings saved to LocalStorage.
+   * Returns the settings saved to `localStorage`.
    * Note: If the settings haven't been set yet, it will return `null`.
    */
   get settings(): Settings {
-    return JSON.parse(window.localStorage.getItem('settings')) as Settings || null;
+    return this.settingsStorage.getSetting<Settings>('settings', null);
   }
   set settings(settings: Settings) {
-    window.localStorage.setItem('settings', JSON.stringify(settings));
+    this.settingsStorage.setSetting('settings', settings);
   }
 
   /** Checks if dark theme is enabled. */
