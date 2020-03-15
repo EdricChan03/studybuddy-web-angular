@@ -13,6 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarModule, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 import { SafeHtml, Title } from '@angular/platform-browser';
+import { environment } from '../environments/environment';
 import { Settings } from './interfaces';
 import { SettingsStorageService } from './pages/settings/settings-storage.service';
 
@@ -698,6 +699,10 @@ export class SharedService {
     }
     return false;
   }
+
+  /** Checks if the app is in production mode. */
+  get isProduction(): boolean {
+    return environment.production;
   }
 
   /**
