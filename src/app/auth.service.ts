@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 // An authentication wrapper for Firebase Auth
 @Injectable({
@@ -19,12 +20,11 @@ export class AuthService {
       this.authState = result;
     });
   }
-  /**
-   * A getter to check whether there is a currently authenticated user
-   */
-  get authenticated(): boolean {
-    return this.authState !== null;
+  /** Checks whether the user is authenticated. */
+  get authenticated(): Observable<boolean> {
+    return this.afAuth.authState.pipe(map(user => user !== null));
   }
+
   /** Returns the current instance of Firebase's Auth object */
   get firebaseAuth(): firebase.auth.Auth {
     return this.afAuth.auth;
