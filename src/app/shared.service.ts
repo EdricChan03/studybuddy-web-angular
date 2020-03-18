@@ -235,12 +235,15 @@ export class ConfirmDialog extends Dialog {
     <span *ngIf="opts.isHtml" [innerHTML]="opts.msg"></span>
     <form #form="ngForm">
       <mat-form-field [color]="inputColor" style="width:100%">
-        <mat-label>{{ opts.placeholder }}</mat-label>
+        <mat-label *ngIf="opts.inputConfig && opts.inputConfig.label">
+          {{ opts.inputConfig.label }}
+        </mat-label>
         <input
           matInput
           [(ngModel)]="input"
-          type="{{opts.inputType ? opts.inputType : 'text'}}"
+          [type]="inputType"
           required
+          [placeholder]="inputPlaceholder"
           name="input">
         <mat-error>This is required.</mat-error>
       </mat-form-field>
@@ -340,6 +343,20 @@ export class PromptDialog extends Dialog implements OnInit {
     // tslint:disable-next-line:deprecation
     return this.opts.color ? this.opts.color :
       (this.opts.inputConfig && 'color' in this.opts.inputConfig) ? this.opts.inputConfig.color : this.defaultInputColor;
+  }
+
+  get inputType(): string {
+    // This is to handle users using the now deprecated `type` property.
+    // tslint:disable-next-line:deprecation
+    return this.opts.inputType ? this.opts.inputType :
+      (this.opts.inputConfig && 'inputType' in this.opts.inputConfig) ? this.opts.inputConfig.inputType : 'text';
+  }
+
+  get inputPlaceholder(): string {
+    // This is to handle users using the now deprecated `placeholder` property.
+    // tslint:disable-next-line:deprecation
+    return this.opts.placeholder ? this.opts.placeholder :
+    (this.opts.inputConfig && 'placeholder' in this.opts.inputConfig) ? this.opts.inputConfig.placeholder : null;
   }
 
   ngOnInit() {
@@ -480,7 +497,7 @@ export type HideButtonType = 'negative' | 'neutral' | 'positive';
 
 export interface DialogOpts {
   /** The dialog's message. */
-  msg: string | SafeHtml;
+  msg?: string | SafeHtml;
   /** The dialog's title. */
   title?: string;
   /** Whether the dialog's message is in HTML. */
@@ -543,7 +560,9 @@ export interface ConfirmDialogOpts extends DialogOpts {
 
 export interface PromptDialogInputConfig {
   /** The input's placeholder. */
-  placeholder: string;
+  placeholder?: string;
+  /** The input's label. */
+  label?: string;
   /** The input type. */
   inputType?: string;
   /** The input's initial value. */
@@ -579,7 +598,7 @@ export interface PromptDialogOpts extends DialogOpts {
    * The input's placeholder.
    * @deprecated Use {@link PromptDialogInputConfig#placeholder} instead
    */
-  placeholder: string;
+  placeholder?: string;
   /**
    * The input type.
    * @deprecated Use {@link PromptDialogInputConfig#inputType} instead
