@@ -33,7 +33,9 @@
     <div *ngFor="let quote of quoteOfDay?.contents?.quotes">
       <mat-card>
         <mat-card-header>
+          <mat-icon matCardAvatar class="quote-of-day-card--avatar">format_quote</mat-icon>
           <mat-card-title>{{quote?.title}}</mat-card-title>
+          <mat-card-subtitle>{{quote?.author}}</mat-card-subtitle>
           <span fxFlex></span>
           <button mat-icon-button (click)="getQuoteOfDay()" matTooltip="Refresh" color="primary">
             <mat-icon>refresh</mat-icon>

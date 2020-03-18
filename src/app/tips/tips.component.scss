@@ -1,0 +1,14 @@
+@import '~@angular/material/theming';
+
+@mixin tips-theme($theme) {
+  $primary: map-get($theme, primary);
+  .quote-of-day-card--avatar {
+    background-color: mat-color($primary, 100);
+    color: mat-contrast($primary, 100);
+  }
+}
+
+.quote-of-day-card--avatar {
+  text-align: center;
+  line-height: 40px;
+}

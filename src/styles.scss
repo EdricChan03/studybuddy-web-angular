@@ -2,6 +2,7 @@
 
 @import '~@angular/material/theming';
 @import './app/todo/todo-dashboard/todo-dashboard.component';
+@import './app/tips/tips.component';
 @import './app/shared/search-input/search-input.component';
 @import './custom-typography';
 
@@ -26,6 +27,7 @@
 
 @mixin studybuddy-theme($theme) {
   @include tables-theme($theme);
+  @include tips-theme($theme);
   @include todo-dashboard-theme($theme);
   @include search-input-theme($theme);
   $primary: map-get($theme, primary);
