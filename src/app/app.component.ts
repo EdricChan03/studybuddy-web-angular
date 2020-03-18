@@ -38,7 +38,7 @@ export class AppComponent implements OnInit {
     {
       link: 'dashboard',
       title: 'Dashboard',
-      icon: 'view_quilt'
+      icon: 'dashboard'
     },
     {
       link: 'todo',
@@ -48,7 +48,7 @@ export class AppComponent implements OnInit {
         {
           link: 'todo/dashboard',
           title: 'Dashboard',
-          icon: 'view_quilt'
+          icon: 'dashboard'
         },
         {
           link: 'todo/home',
