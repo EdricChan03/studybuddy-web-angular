@@ -3,12 +3,10 @@ import { MatSidenav } from '@angular/material/sidenav';
 
 @Injectable()
 export class ToolbarService {
-  /**
-   * Whether to show the toolbar
-   */
-  private _toolbarShow = true;
+  /** Whether the toolbar should be shown. */
+  showToolbar = true;
   /** The current instance of the sidenav. */
-  private _sidenav: MatSidenav;
+  sidenav: MatSidenav;
   /**
    * Whether to show a progress bar
    */
@@ -21,20 +19,6 @@ export class ToolbarService {
    * Whether to enable indeterminate mode for the progress bar
    */
   private _progressIndeterminate = true;
-
-  set showToolbar(value: boolean) {
-    this._toolbarShow = value;
-  }
-  get showToolbar() {
-    return this._toolbarShow;
-  }
-
-  get sidenav() {
-    return this._sidenav;
-  }
-  set sidenav(sidenav: MatSidenav) {
-    this._sidenav = sidenav;
-  }
 
   get showProgress() {
     return this._progressShown;
