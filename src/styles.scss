@@ -145,10 +145,10 @@
 }
 
 $studybuddy-typography: mat-typography-config(
-  $font-family: 'Baloo, Roboto, "Helvetica Neue", Arial, sans-serif'
+  $font-family: '"Baloo 2", Roboto, "Helvetica Neue", Arial, sans-serif'
 );
 $studybuddy-custom-typography: studybuddy-typography-config(
-  $font-family: 'Baloo, Roboto, "Helvetica Neue", Arial, sans-serif'
+  $font-family: '"Baloo 2", Roboto, "Helvetica Neue", Arial, sans-serif'
 );
 // @import 'assets/icons/material-icons.css';
 @include mat-core($studybuddy-typography);
