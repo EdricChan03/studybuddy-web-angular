@@ -14,21 +14,7 @@
           <mat-icon matListIcon *ngIf="!link.svgIcon && link.icon">{{link.icon}}</mat-icon>
           <mat-icon matListIcon *ngIf="link.svgIcon && !link.icon" [svgIcon]="link.svgIcon"></mat-icon>
           <h3 matLine>{{link.title}}</h3>
-          <span fxFlex></span>
-          <button mat-icon-button (click)="toggleList($event, i)" aria-label="Toggle list" matTooltip="Toggle list"
-            matTooltipPosition="right" *ngIf="link.list">
-            <mat-icon [@toggleIconAnim]="toggleState[i]">keyboard_arrow_right</mat-icon>
-          </button>
         </a>
-        <div *ngIf="link.list" [@toggleItemsAnim]="toggleState[i]">
-          <a mat-list-item [routerLink]="['/'+listLink.link]" *ngFor="let listLink of link.list; let last = last"
-            routerLinkActive="active-link" (click)="closeLeftSidenav(left)">
-            <mat-icon matListIcon *ngIf="!listLink.svgIcon && listLink.icon">{{listLink.icon}}</mat-icon>
-            <mat-icon matListIcon *ngIf="listLink.svgIcon && !listLink.icon" [svgIcon]="listLink.svgIcon"></mat-icon>
-            <h3 matLine>{{listLink.title}}</h3>
-            <mat-divider *ngIf="last"></mat-divider>
-          </a>
-        </div>
       </ng-container>
       <mat-divider></mat-divider>
       <h3 matSubheader>Other</h3>
@@ -37,20 +23,7 @@
           <mat-icon matListIcon *ngIf="!link.svgIcon && link.icon">{{link.icon}}</mat-icon>
           <mat-icon matListIcon *ngIf="link.svgIcon && !link.icon" [svgIcon]="link.svgIcon"></mat-icon>
           <h3 matLine>{{link.title}}</h3>
-          <span fxFlex></span>
-          <button mat-icon-button (click)="toggleOtherList($event, i)" aria-label="Toggle list" matTooltip="Toggle list"
-            matTooltipPosition="right" *ngIf="link.list">
-            <mat-icon [@toggleIconAnim]="toggleOtherState[i]">keyboard_arrow_right</mat-icon>
-          </button>
         </a>
-        <div *ngIf="link.list" [@toggleItemsAnim]="toggleOtherState[i]">
-          <a mat-list-item [routerLink]="['/'+listLink.link]" *ngFor="let listLink of link.list"
-            routerLinkActive="active-link" (click)="closeLeftSidenav(left)">
-            <mat-icon matListIcon *ngIf="!listLink.svgIcon && listLink.icon">{{listLink.icon}}</mat-icon>
-            <mat-icon matListIcon *ngIf="listLink.svgIcon && !listLink.icon" [svgIcon]="listLink.svgIcon"></mat-icon>
-            <h3 matLine>{{listLink.title}}</h3>
-          </a>
-        </div>
       </ng-container>
     </mat-nav-list>
   </mat-sidenav>

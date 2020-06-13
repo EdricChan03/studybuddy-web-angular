@@ -18,11 +18,7 @@ import { AngularFireRemoteConfig } from '@angular/fire/remote-config';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  animations: [
-    animations.toggleIconAnimation,
-    animations.toggleItemsAnimation
-  ]
+  templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit {
   @ViewChild('left', { static: true }) sidenav: MatSidenav;
@@ -32,8 +28,6 @@ export class AppComponent implements OnInit {
   userObservable: Observable<firebase.User>;
   todayDate = new Date();
   showNotificationSettings = false;
-  toggleState = [];
-  toggleOtherState = [];
   sidenavLinks: SidenavLink[] = [
     {
       link: 'dashboard',
@@ -44,23 +38,6 @@ export class AppComponent implements OnInit {
       link: 'todo',
       title: 'Todos',
       icon: 'check_circle',
-      list: [
-        {
-          link: 'todo/dashboard',
-          title: 'Dashboard',
-          icon: 'dashboard'
-        },
-        {
-          link: 'todo/home',
-          title: 'Home',
-          icon: 'home'
-        },
-        {
-          link: 'todo/archived',
-          title: 'Archived',
-          icon: 'archive'
-        }
-      ]
     },
     {
       link: 'downloads',
@@ -76,13 +53,7 @@ export class AppComponent implements OnInit {
       link: 'chats',
       title: 'Chats',
       icon: 'chat'
-    },
-    {
-      link: 'notes',
-      title: 'Notes',
-      icon: 'subject',
-      hidden: true
-    },
+    }
   ];
   otherLinks: SidenavLink[] = [
     {
@@ -185,11 +156,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.panelService.panel = this.rightPanel;
-    this.sidenavLinks.forEach(item => {
-      if (item.list) {
-        this.toggleState.push('notToggled');
-      }
-    });
     if (this.shared.settings !== null && this.shared.settings.hasOwnProperty('showTodosAsTable')) {
       const settingsStorage = this.shared.settings;
       settingsStorage['todoView'] = this.shared.settings['showTodosAsTable'] ? 'table' : 'list';
@@ -218,36 +184,6 @@ export class AppComponent implements OnInit {
     // console.log(`key down: ${$event}`);
     console.log(`onKeydown: key: ${$event.key}`);
     console.log(`onKeydown: keyCode: ${$event.keyCode}`);
-  }
-
-  toggleList(event: KeyboardEvent | MouseEvent, index: number) {
-    event.stopImmediatePropagation();
-    event.stopPropagation();
-    event.preventDefault();
-    if (this.toggleState[index]) {
-      if (this.toggleState[index] === 'notToggled') {
-        this.toggleState[index] = 'toggled';
-      } else {
-        this.toggleState[index] = 'notToggled';
-      }
-    } else {
-      this.toggleState[index] = 'toggled';
-    }
-  }
-
-  toggleOtherList(event: KeyboardEvent | MouseEvent, index: number) {
-    event.stopImmediatePropagation();
-    event.stopPropagation();
-    event.preventDefault();
-    if (this.toggleOtherState[index]) {
-      if (this.toggleOtherState[index] === 'notToggled') {
-        this.toggleOtherState[index] = 'toggled';
-      } else {
-        this.toggleOtherState[index] = 'notToggled';
-      }
-    } else {
-      this.toggleOtherState[index] = 'toggled';
-    }
   }
 
   logOut() {
