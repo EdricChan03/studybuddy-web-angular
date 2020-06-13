@@ -50,7 +50,7 @@ export interface ActionItem {
    *
    * @see ActionItemType
    */
-  type?: ActionItemType | string;
+  type?: ActionItemType;
   /** The click listener for the action item. */
   onItemClickListener?: (ev?: MouseEvent) => void;
   /** Whether to only show this action item in the overflow menu. */

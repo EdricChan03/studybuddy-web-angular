@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { ThemePalette } from '@angular/material/core';
 import { Router } from '@angular/router';
 import { SharedService } from '../../shared.service';
-import { ActionItem } from './action-item';
-import { MenuButtonConfig } from './menu-button-config';
+import { ActionItem } from './models/action-item';
+import { MenuButtonConfig } from './models/menu-button-config';
 
 @Component({
   selector: 'app-toolbar',
@@ -64,7 +64,7 @@ export class ToolbarComponent {
   /** The colour/color of the toolbar. */
   @Input() color: ThemePalette | null = null;
 
-  /** Event that will be emitted when the menu button is clicked on. */
+  /** Event that is emitted when the menu button is clicked on. */
   @Output() menuClick = new EventEmitter<Event>();
 
   /**
