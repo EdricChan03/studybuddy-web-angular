@@ -15,6 +15,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { Observable } from 'rxjs';
 import { transition, style, animate, trigger, keyframes } from '@angular/animations';
 import { MatTableDataSource } from '@angular/material/table';
+import { DialogsService } from '../../core/dialogs/dialogs.service';
 // import { animations } from '../../animations';
 
 @Component({
@@ -43,6 +44,7 @@ export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
   dataSource: MatTableDataSource<TodoItem>;
   columnsToDisplay = ['isDone', 'title', 'content', 'actions'];
   constructor(
+    private coreDialogs: DialogsService,
     private shared: SharedService,
     public toolbar: ToolbarService,
     private dialog: MatDialog,
@@ -108,7 +110,7 @@ export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   deleteSelectedTodos() {
-    this.shared.openConfirmDialog({
+    this.coreDialogs.openConfirmDialog({
       title: `Delete ${this.selectedTodos.length} todos?`,
       msg: 'Once deleted, it will be lost forever and cannot be retrieved again.'
     }).afterClosed().subscribe(result => {
@@ -128,7 +130,7 @@ export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
    * See https://stackoverflow.com/a/49161622 for more info
    */
   deleteAllTodos() {
-    const dialogRef = this.shared.openConfirmDialog({
+    const dialogRef = this.coreDialogs.openConfirmDialog({
       msg: 'Are you sure you want to delete all todos? Once deleted, it cannot be restored!',
       title: 'Delete all todos?'
     });
@@ -286,12 +288,12 @@ export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
     if (showHint) {
       dialogText += '<p><small>TIP: To bypass this dialog, hold the shift key when clicking the delete button.</small></p>';
     }
-    const dialogRef = this.shared.openConfirmDialog({
+    const dialogRef = this.coreDialogs.openConfirmDialog({
       msg: this.dom.bypassSecurityTrustHtml(dialogText),
       title: 'Delete todo?',
       isHtml: true,
-      ok: 'Delete',
-      okColor: 'warn'
+      positiveBtnText: 'Delete',
+      positiveBtnColor: 'warn'
     });
     dialogRef.afterClosed().subscribe(res => {
       if (res === 'ok') {
