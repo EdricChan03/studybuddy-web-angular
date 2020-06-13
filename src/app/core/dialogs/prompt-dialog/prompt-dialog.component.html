@@ -1,0 +1,24 @@
+<h2 matDialogTitle *ngIf="opts?.title">{{ opts?.title }}</h2>
+<mat-dialog-content fxLayout="column" class="mat-typography">
+  <p class="mat-body" *ngIf="!opts.isHtml">{{ opts.msg }}</p>
+  <span *ngIf="opts.isHtml" [innerHTML]="opts.msg"></span>
+  <form #form="ngForm">
+    <mat-form-field [color]="inputColor" style="width:100%">
+      <mat-label *ngIf="opts?.placeholder && !opts.inputConfig?.label">{{ opts.placeholder }}</mat-label>
+      <mat-label *ngIf="opts?.inputConfig && opts.inputConfig?.label">{{ opts.inputConfig.label }}</mat-label>
+      <input matInput [(ngModel)]="input" type="{{opts.inputType ? opts.inputType : 'text'}}" required name="input" [placeholder]="opts.inputConfig.placeholder">
+      <mat-error>This is required.</mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end" *ngIf="hasActionBtns">
+  <button mat-button *ngIf="!hideNegativeBtn" [color]="negativeBtnColor"
+    matDialogClose="cancel"
+    [attr.cdkFocusInitial]="opts.initialActionBtnFocus === 'negative' || null">{{ opts.negativeBtnText }}</button>
+  <button mat-button *ngIf="!hideNeutralBtn" [color]="neutralBtnColor"
+    matDialogClose="neutral"
+    [attr.cdkFocusInitial]="opts.initialActionBtnFocus === 'neutral' || null">{{ opts.neutralBtnText }}</button>
+  <button mat-button *ngIf="!hidePositiveBtn" [color]="positiveBtnColor" [matDialogClose]="input"
+    [disabled]="form.invalid"
+    [attr.cdkFocusInitial]="opts.initialActionBtnFocus === 'positive' || null">{{ opts.positiveBtnText }}</button>
+</mat-dialog-actions>

@@ -1,0 +1,22 @@
+<h2 matDialogTitle *ngIf="opts?.title">{{ opts.title }}</h2>
+<mat-dialog-content fxLayout="column" class="mat-typography">
+  <mat-selection-list #selection>
+    <mat-list-option *ngFor="let option of opts.options" [disabled]="option.disabled" [value]="option.value"
+      [checkboxPosition]="option.checkboxPosition ? option.checkboxPosition : 'before'" [selected]="option.selected">
+      {{ option.content }}
+    </mat-list-option>
+  </mat-selection-list>
+</mat-dialog-content>
+<mat-dialog-actions align="end" *ngIf="hasActionBtns">
+  <button mat-button *ngIf="!hideNegativeBtn" [color]="negativeBtnColor"
+    matDialogClose="cancel"
+    [attr.cdkFocusInitial]="opts.initialActionBtnFocus === 'negative' || null">{{ opts.negativeBtnText }}</button>
+  <button mat-button *ngIf="!hideNeutralBtn" [color]="neutralBtnColor"
+    matDialogClose="neutral"
+    [attr.cdkFocusInitial]="opts.initialActionBtnFocus === 'neutral' || null">{{ opts.neutralBtnText }}</button>
+  <button mat-button *ngIf="!hidePositiveBtn" [color]="positiveBtnColor" [matDialogClose]="selection.selectedOptions"
+    [disabled]="selection.selectedOptions.selected.length < 1"
+    [attr.cdkFocusInitial]="opts.initialActionBtnFocus === 'positive' || null">
+    {{ opts.positiveBtnText }}
+  </button>
+</mat-dialog-actions>

@@ -46,6 +46,7 @@ import { TodoArchivedComponent, TodoDashboardComponent, TodoHomeComponent, TodoP
 import { TodoOutletComponent } from './todo/todo-outlet/todo-outlet.component';
 import { ToolbarService } from './toolbar.service';
 import { UserViewerComponent } from './user-viewer/user-viewer.component';
+import { DialogsModule as CoreDialogsModule } from './core/dialogs/dialogs.module';
 
 function EmailValidator(control: FormControl): ValidationErrors {
   // Regex from https://emailregex.com/
@@ -127,7 +128,8 @@ function minItemsValidationMessage(err, field: FormlyFieldConfig) {
     ServiceWorkerModule.register('./ngsw-worker.js', { enabled: environment.production, scope: './' }),
     DialogsModule,
     HotkeysModule,
-    ComponentsModule
+    ComponentsModule,
+    CoreDialogsModule
   ],
   bootstrap: [AppComponent],
   providers: [
