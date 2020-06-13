@@ -80,6 +80,7 @@ export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.toolbar.setProgress(true, true);
+    this.toolbar.showToolbar = false;
   }
 
   ngAfterViewInit() {
@@ -93,11 +94,12 @@ export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dataSource = null;
     // Also prevent memory leaks here
     this.todos$ = null;
+    // Reset toolbar
+    this.toolbar.showToolbar = true;
   }
 
   clearSelectedTodos() {
     this.selectedTodos = [];
-    this.toolbar.showToolbar = true;
   }
 
   markSelectedTodosAsDone() {
@@ -178,36 +180,7 @@ export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   handleListClick(todo: TodoItem, event: MouseEvent) {
-    if (!this.toolbar.showToolbar) {
-      if (this.selectedTodos.indexOf(todo) === -1) {
-        this.selectedTodos.push(todo);
-        console.log('[DEBUG] Selected items pushed:', this.selectedTodos);
-      } else {
-        this.selectedTodos = this.selectedTodos.filter((filteredTodo) => {
-          return filteredTodo.id !== todo.id;
-        });
-        console.log('[DEBUG] Item removed:', this.selectedTodos);
-      }
-    } else {
-      if (event.ctrlKey || event.metaKey) {
-        if (this.selectedTodos.indexOf(todo) === -1) {
-          this.selectedTodos.push(todo);
-          console.log('[DEBUG] Selected items pushed:', this.selectedTodos);
-        } else {
-          this.selectedTodos = this.selectedTodos.filter((filteredTodo) => {
-            return filteredTodo.id !== todo.id;
-          });
-          console.log('[DEBUG] Item removed:', this.selectedTodos);
-        }
-      } else {
-        this.toggleChecked(todo);
-      }
-    }
-    if (this.selectedTodos.length > 0) {
-      this.toolbar.showToolbar = false;
-    } else {
-      this.toolbar.showToolbar = true;
-    }
+    this.toggleChecked(todo);
   }
 
   checkboxOnClick(event: MouseEvent) {
@@ -265,7 +238,7 @@ export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
           }
         })
           .onAction().subscribe(() => this.archiveTodo(todo));
-      })
+      });
   }
 
   removeTodo(id: string, bypassDialog?: boolean, event?: MouseEvent) {
