@@ -22,6 +22,7 @@ import { SettingsStorageService } from '../settings-storage.service';
 import { SettingsListModule } from '../components/settings-list/settings-list.module';
 
 import { AccountPanelComponent } from './account-panel/account-panel.component';
+import { ExperimentsPanelComponent } from './experiments-panel/experiments-panel.component';
 
 import { EmptyStateModule } from '../../../components/empty-state/empty-state.module';
 
@@ -44,6 +45,7 @@ const ANGULAR_FIRE_MODULES = [
 @NgModule({
   declarations: [
     AccountPanelComponent,
+    ExperimentsPanelComponent,
     DefaultPanelComponent
   ],
   imports: [

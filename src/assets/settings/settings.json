@@ -86,6 +86,12 @@
       "hasSaveResetActions": true
     },
     {
+      "title": "Experiments",
+      "summary": "Enable experimental features",
+      "icon": "science",
+      "id": "experiments"
+    },
+    {
       "title": "Testing",
       "summary": "[INTERNAL] Testing setting types",
       "id": "testing",
