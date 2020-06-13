@@ -103,12 +103,14 @@
   .mat-warn-bg-color {
     background-color: mat-color($warn) !important;
   }
-  a.anchor-link {
-    color: mat-color($primary);
-    &:active {
-      color: mat-color($accent);
+  a.anchor-link, .app-markdown a {
+    color: mat-color($primary, if($is-dark-theme, 200, default));
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
     }
   }
+
   .mat-list-item-content mat-icon,
   .mat-icon-foreground {
     color: map-get($foreground, icons);

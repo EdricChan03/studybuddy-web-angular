@@ -1,6 +1,6 @@
 <h2 matDialogTitle>{{ data?.title }}</h2>
 <mat-dialog-content>
-  <div [innerHTML]="data?.text | markdown"></div>
+  <div [innerHTML]="data?.text | markdown" class="app-markdown"></div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button
