@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, TemplateRef } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, DocumentReference } from '@angular/fire/firestore';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { AuthService } from '../../auth.service';
 import { Chat } from '../../interfaces';
@@ -20,6 +20,7 @@ export class EditChatDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) private id: string,
     private auth: AuthService,
     private afFs: AngularFirestore,
+    private dialog: MatDialog,
     private dialogRef: MatDialogRef<EditChatDialogComponent>,
     private shared: SharedService,
     private fb: FormBuilder
@@ -66,7 +67,7 @@ export class EditChatDialogComponent implements OnInit {
     if (event) {
       event.stopPropagation();
     }
-    this.helpDialogRef = this.shared.openHelpDialog(templateRef);
+    this.helpDialogRef = this.dialog.open(templateRef);
   }
   closeHelpDialog() {
     this.helpDialogRef.close();
