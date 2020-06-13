@@ -10,74 +10,6 @@
     <p><code>SharedService.settings</code>:</p>
     <pre><code>{{ shared.settings | json }}</code></pre>
   </fieldset>
-  <fieldset fxLayout="column">
-    <legend>Dialog properties</legend>
-    <h4>Dialog type:</h4>
-    <mat-radio-group [(ngModel)]="dialog.dialogType" fxLayout="column" required>
-      <mat-radio-button *ngFor="let type of dialogTypes" [value]="type" style="padding: 1px;">{{type | titlecase}}
-      </mat-radio-button>
-    </mat-radio-group>
-    <mat-form-field>
-      <mat-label>Title</mat-label>
-      <input matInput [(ngModel)]="dialog.title">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Message</mat-label>
-      <textarea matInput [(ngModel)]="dialog.message" rows="3"
-        matTextareaAutosize></textarea>
-      <button mat-icon-button matSuffix (click)="generateLoremIpsum()" matTooltip="Generate lorem ipsum">
-        <mat-icon>cached</mat-icon>
-      </button>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Positive button text</mat-label>
-      <input matInput [(ngModel)]="dialog.positiveBtnText">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Positive button color</mat-label>
-      <mat-select [(ngModel)]="dialog.positiveBtnColor">
-        <mat-option *ngFor="let option of dialogBtnColorTypes" [value]="option.value">
-          {{ option.viewValue }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Neutral button text</mat-label>
-      <input matInput [(ngModel)]="dialog.neutralBtnText">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Neutral button color</mat-label>
-      <mat-select [(ngModel)]="dialog.neutralBtnColor">
-        <mat-option *ngFor="let option of dialogBtnColorTypes" [value]="option.value">
-          {{ option.viewValue }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Negative button text</mat-label>
-      <input matInput [(ngModel)]="dialog.negativeBtnText">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Negative button color</mat-label>
-      <mat-select [(ngModel)]="dialog.negativeBtnColor">
-        <mat-option *ngFor="let option of dialogBtnColorTypes" [value]="option.value">
-          {{ option.viewValue }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field *ngIf="dialog.dialogType === 'prompt'">
-      <mat-label>Input placeholder</mat-label>
-      <input matInput [(ngModel)]="dialog.placeholder">
-    </mat-form-field>
-    <mat-form-field *ngIf="dialog.dialogType === 'prompt'">
-      <mat-label>Initial input value</mat-label>
-      <input matInput [(ngModel)]="dialog.value">
-    </mat-form-field>
-    <div>
-      <button mat-button (click)="openDialog()" color="primary">Open Dialog</button>
-    </div>
-  </fieldset>
-  <div id="result"></div>
   <mat-divider></mat-divider>
   <fieldset fxLayout="column">
     <legend>Snackbar properties</legend>
@@ -85,7 +17,7 @@
       <mat-label>Message</mat-label>
       <textarea matInput [(ngModel)]="snackbar.snackBarMsg" rows="3"
         matTextareaAutosize></textarea>
-      <button mat-icon-button matSuffix (click)="generateLoremIpsum(true)" matTooltip="Generate lorem ipsum">
+      <button mat-icon-button matSuffix (click)="generateLoremIpsum()" matTooltip="Generate lorem ipsum">
         <mat-icon>cached</mat-icon>
       </button>
     </mat-form-field>

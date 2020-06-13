@@ -11,6 +11,7 @@ import { NewProjectDialogComponent } from '../../dialogs';
 import { TodoProject } from '../../interfaces';
 import { SharedService } from '../../shared.service';
 import { ToolbarService } from '../../toolbar.service';
+import { DialogsService } from '../../core/dialogs/dialogs.service';
 
 @Component({
   selector: 'app-todo-dashboard',
@@ -34,6 +35,7 @@ export class TodoDashboardComponent implements OnInit {
   projects$: Observable<TodoProject[]>;
   projectsCollection: AngularFirestoreCollection<TodoProject>;
   constructor(
+    private coreDialogs: DialogsService,
     private authService: AuthService,
     private toolbarService: ToolbarService,
     private shared: SharedService,
@@ -122,12 +124,12 @@ export class TodoDashboardComponent implements OnInit {
     if (showHint) {
       dialogText += '<p><small>TIP: To bypass this dialog, hold the shift key when clicking the delete button.</small></p>';
     }
-    const dialogRef = this.shared.openConfirmDialog({
+    const dialogRef = this.coreDialogs.openConfirmDialog({
       msg: this.dom.bypassSecurityTrustHtml(dialogText),
       title: 'Delete project?',
       isHtml: true,
-      ok: 'Delete',
-      okColor: 'warn'
+      positiveBtnText: 'Delete',
+      positiveBtnColor: 'warn'
     });
     dialogRef.afterClosed().subscribe(res => {
       if (res === 'ok') {

@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 import { animations } from './animations';
 import { AuthService } from './auth.service';
+import { DialogsService } from './core/dialogs/dialogs.service';
 import { PanelService } from './core/panel/panel.service';
 import { UserInfoDialogComponent } from './dialogs';
 import { SidenavLink } from './interfaces';
@@ -78,6 +79,7 @@ export class AppComponent implements OnInit {
   constructor(
     public shared: SharedService,
     public auth: AuthService,
+    private coreDialogs: DialogsService,
     // TODO(Edric): Figure out a way to make this private
     public toolbarService: ToolbarService,
     private router: Router,
@@ -182,11 +184,11 @@ export class AppComponent implements OnInit {
   }
 
   logOut() {
-    const dialogRef = this.shared.openConfirmDialog({
+    const dialogRef = this.coreDialogs.openConfirmDialog({
       title: 'Log out?',
       msg: 'Changes not saved will be lost.',
-      ok: 'Log out',
-      okColor: 'warn'
+      positiveBtnText: 'Log out',
+      positiveBtnColor: 'warn'
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'ok') {
@@ -224,11 +226,11 @@ export class AppComponent implements OnInit {
    * Shows a confirmation dialog before logging out the user.
    */
   signOut() {
-    const dialogRef = this.shared.openConfirmDialog({
+    const dialogRef = this.coreDialogs.openConfirmDialog({
       title: 'Log out?',
       msg: 'Changes not saved will be lost! Continue?',
-      ok: 'Log out',
-      okColor: 'warn'
+      positiveBtnText: 'Log out',
+      positiveBtnColor: 'warn'
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'ok') {
@@ -271,7 +273,7 @@ export class AppComponent implements OnInit {
     if (authType) {
       switch (authType) {
         case 'anonymous':
-          this.shared.openAlertDialog({ msg: 'Anonymous login is not supported. Please use another form of authentication' });
+          this.coreDialogs.openAlertDialog({ msg: 'Anonymous login is not supported. Please use another form of authentication' });
           console.error('Anonymous login is not supported. Aborting...');
           break;
         case 'google':
@@ -298,12 +300,13 @@ export class AppComponent implements OnInit {
       });
   }
   deleteUser() {
-    const confirmDialogRef = this.shared.openConfirmDialog({
+    const confirmDialogRef = this.coreDialogs.openConfirmDialog({
       title: 'Unregister?',
       msg: `<p>Unregistering will clear all data associated with your account.</p>
       <p><strong>Take note that if you would like to save your data, you can do so by going to Account > Export data.</strong></p>`,
       isHtml: true,
-      ok: 'Unregister and delete data'
+      positiveBtnColor: 'warn',
+      positiveBtnText: 'Unregister and delete data'
     });
     confirmDialogRef.afterClosed().subscribe(result => {
       if (result === 'ok' && this.user) {
