@@ -182,15 +182,15 @@ $studybuddy-custom-typography: studybuddy-typography-config(
 $studybuddy-light-theme-primary: mat-palette($mat-indigo);
 $studybuddy-light-theme-accent: mat-palette($mat-pink, A200, A100, A400);
 $studybuddy-light-theme-theme: mat-light-theme($studybuddy-light-theme-primary, $studybuddy-light-theme-accent);
-@include angular-material-theme($studybuddy-light-theme-theme);
 @include studybuddy-theme($studybuddy-light-theme-theme);
 @include studybuddy-typography($studybuddy-custom-typography);
+@include angular-material-theme($studybuddy-light-theme-theme);
 .studybuddy-dark {
   $studybuddy-dark-theme-primary: mat-palette($mat-purple);
   $studybuddy-dark-theme-accent: mat-palette($mat-green, A200, A100, A400);
   $studybuddy-dark-theme-theme: mat-dark-theme($studybuddy-dark-theme-primary, $studybuddy-dark-theme-accent);
-  @include angular-material-theme($studybuddy-dark-theme-theme);
   @include studybuddy-theme($studybuddy-dark-theme-theme);
+  @include angular-material-theme($studybuddy-dark-theme-theme);
 }
 
 // app-root {
