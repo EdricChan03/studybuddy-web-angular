@@ -2,23 +2,29 @@
   <h1>Chats</h1>
 
   <mat-nav-list>
-    <mat-list-item (click)="newChat()">
-      <h3 matLine>New chat</h3>
-      <mat-icon matListIcon>add</mat-icon>
-    </mat-list-item>
-    <mat-list-item (click)="joinChat()">
-      <h3 matLine>Join chat</h3>
-      <mat-icon matListIcon>group_add</mat-icon>
-    </mat-list-item>
+    <h2 matSubheader>Actions</h2>
+    <mat-action-list>
+      <mat-list-item (click)="newChat()">
+        <h3 matLine>Create a chat group</h3>
+        <mat-icon matListIcon>add</mat-icon>
+      </mat-list-item>
+      <mat-list-item (click)="joinChat()">
+        <h3 matLine>Join a chat group</h3>
+        <mat-icon matListIcon>group_add</mat-icon>
+      </mat-list-item>
+    </mat-action-list>
     <a mat-list-item routerLink="explore">
-      <h3 matLine>Explore chats</h3>
+      <h3 matLine>Explore chat groups</h3>
       <mat-icon matListIcon>explore</mat-icon>
     </a>
     <mat-divider></mat-divider>
-    <h3 matSubheader>Chats</h3>
+    <h2 matSubheader>Chat groups you're in</h2>
     <a mat-list-item *ngFor="let chat of chats$ | async" [routerLink]="['/chats/' + chat?.id]">
       <mat-icon matListIcon>chat</mat-icon>
-      <h3 matLine>{{chat?.name}}</h3>
+      <h3 matLine>
+        {{chat?.name}}
+        <mat-icon *ngIf="chat?.isVerified" class="chat--verified-icon" inline aria-label="Verified chat group" matTooltip="Verified" matTooltipPosition="above">verified</mat-icon>
+      </h3>
       <p matLine *ngIf="chat?.description">{{chat?.description}}</p>
       <span fxFlex></span>
       <mat-menu #moreMenu="matMenu">

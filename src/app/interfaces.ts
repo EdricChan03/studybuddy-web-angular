@@ -96,6 +96,7 @@ export interface TodoItem extends HasId {
   isArchived?: boolean;
 }
 
+/** Represents a chat group. */
 export interface Chat extends HasId, HasTimestampMetadata {
   /** The name of the chat */
   name: string;
@@ -114,6 +115,8 @@ export interface Chat extends HasId, HasTimestampMetadata {
   pinnedMessage?: DocumentReference;
   /** The visibility of the chat */
   visibility?: ChatVisibility;
+  /** Whether the chat group is verified. */
+  isVerified?: boolean;
 }
 
 /**

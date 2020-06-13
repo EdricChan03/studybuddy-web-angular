@@ -17,3 +17,17 @@
     height: calc(100% - 56px);
   }
 }
+
+.chat-not-joined-container {
+  text-align: center;
+	margin: 16px;
+  padding: 16px;
+
+  .chat-not-joined-container--content {
+    margin-bottom: 16px;
+  }
+
+  .chat-not-joined-container--actions button {
+    margin: 0 8px;
+  }
+}

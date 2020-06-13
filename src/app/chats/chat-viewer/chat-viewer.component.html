@@ -1,3 +1,5 @@
+<app-toolbar [toolbarTitle]="(chat$ | async)?.name" [actionItems]="toolbarActionItems" (menuClick)="toggleSidenav()"
+  #toolbar></app-toolbar>
 <div class="chat-viewer-container" fxLayout="column" fxLayoutAlign="end">
   <div class="chat-messages-container" fxFlex>
     <ng-container *ngIf="messages$ | async; let messages; else: emptystate">
@@ -16,12 +18,13 @@
       </mat-list> -->
       <mat-list dense>
         <mat-list-item *ngFor="let message of messages">
-          <ng-container *ngIf="message?.authorData?.photoUrl as photoUrl">
-            <mat-icon matListAvatar *ngIf="!photoUrl">account_circle</mat-icon>
+          <!-- <ng-container *ngIf="(message?.authorData | async)?.photoUrl as photoUrl; else noPhoto">
             <img *ngIf="photoUrl" matListAvatar [src]="photoUrl" />
           </ng-container>
-          <h2 matLine>
-            {{ message?.authorData?.displayName || 'User' }}</h2>
+          <ng-template #noPhoto>
+            <mat-icon matListAvatar>account_circle</mat-icon>
+          </ng-template> -->
+          <!-- <h2 matLine>{{ (message?.authorData | async)?.displayName || 'User' }}</h2> -->
           <p matLine>{{ message?.message }}</p>
         </mat-list-item>
       </mat-list>
@@ -34,10 +37,34 @@
       </div>
     </ng-template>
   </div>
-  <form class="chat-input-container mat-elevation-z3" [formGroup]="newMessageForm" (ngSubmit)="sendMessage()" fxFlex>
+  <form class="chat-input-container mat-elevation-z3" *ngIf="isMember() | async; else: notMember" [formGroup]="newMessageForm" (ngSubmit)="sendMessage()" fxFlex>
     <input placeholder="Enter message" formControlName="message" required class="chat-input-container__input" fxFlex>
     <button type="submit" mat-icon-button [disabled]="newMessageForm.invalid" matTooltip="Send message">
       <mat-icon>send</mat-icon>
     </button>
   </form>
+  <ng-template #notMember>
+    <div class="chat-not-joined-container mat-elevation-z3">
+      <div class="chat-not-joined-container--content">
+        <h2>You can't chat here yet!</h2>
+        <p>You have to join this chat group first before you can interact.</p>
+      </div>
+      <div class="chat-not-joined-container--actions">
+        <button mat-raised-button color="primary" (click)="joinChat()">Join this server</button>
+        <button mat-button routerLink="/chats/explore">Back to explore</button>
+      </div>
+    </div>
+  </ng-template>
 </div>
+<ng-template #inviteDialog let-data>
+  <h2 matDialogTitle>Invite members&hellip;</h2>
+  <p><small>Note: Only invite links with <code>studybuddychats.page.link</code> or <code>studybuddy.page.link</code> are safe to click on. We are not responsible for any other external invite links generated outside of the app.</small></p>
+  <h3>Invite link</h3>
+  <!--<mat-form-field>
+    <input matInput readonly [value]="data.">
+  </mat-form-field>-->
+  <mat-dialog-actions align="end">
+    <!-- <button mat-button color="primary" (click)="copyInviteLink()">Copy invite link</button> -->
+    <button mat-button color="primary" matDialogClose>Dismiss</button>
+  </mat-dialog-actions>
+</ng-template>

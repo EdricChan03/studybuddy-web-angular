@@ -1,18 +1,19 @@
 import { Component, SecurityContext } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection, DocumentReference, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument, DocumentReference } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable, Subscription } from 'rxjs';
-import { map, debounceTime } from 'rxjs/operators';
+import { DomSanitizer } from '@angular/platform-browser';
+import { firestore } from 'firebase';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AuthService } from '../auth.service';
+import { DialogsService } from '../core/dialogs/dialogs.service';
+import { ChatInfoDialogComponent } from '../dialogs';
+import { EditChatDialogComponent } from '../dialogs/edit-chat-dialog/edit-chat-dialog.component';
 import { JoinChatDialogComponent } from '../dialogs/join-chat-dialog/join-chat-dialog.component';
 import { NewChatDialogComponent } from '../dialogs/new-chat-dialog/new-chat-dialog.component';
 import { Chat } from '../interfaces';
 import { SharedService } from '../shared.service';
 import { ToolbarService } from '../toolbar.service';
-import { firestore } from 'firebase';
-import { DomSanitizer } from '@angular/platform-browser';
-import { EditChatDialogComponent } from '../dialogs/edit-chat-dialog/edit-chat-dialog.component';
-import { ChatInfoDialogComponent } from '../dialogs';
 
 @Component({
   selector: 'app-chats',
@@ -23,6 +24,7 @@ export class ChatsComponent {
   chats$: Observable<Chat[]>;
   chatsCollection: AngularFirestoreCollection<Chat>;
   constructor(
+    private coreDialogs: DialogsService,
     private shared: SharedService,
     private dialog: MatDialog,
     private afFs: AngularFirestore,
@@ -38,7 +40,7 @@ export class ChatsComponent {
           ref => ref.where(
             'members',
             'array-contains',
-            afFs.doc(`users/${auth.authState.uid}`).ref
+            afFs.doc(`users/${auth.user.uid}`).ref
           )
         );
         this.chats$ = this.chatsCollection.snapshotChanges().pipe(map(actions => {
@@ -62,7 +64,7 @@ export class ChatsComponent {
    * @return `true` if the user is an admin/owner, `false` otherwise
    */
   isAdmin(chat: Chat): boolean {
-    return chat.owner.id === this.auth.authState.uid || (chat.admins as DocumentReference[]).some(e => e.id === this.auth.authState.uid);
+    return chat.owner.id === this.auth.user.uid || (chat.admins as DocumentReference[]).some(e => e.id === this.auth.user.uid);
   }
   /**
    * An observable to check if the currently signed-in user is an adminstrator/owner of a specified chat
@@ -76,9 +78,9 @@ export class ChatsComponent {
         map((doc, index) => {
           console.log('Admin data:', doc.get('admins'));
           if (doc.data()['owner']) {
-            return doc.data()['owner']['id'] === this.afFs.doc(`users/${this.auth.authState.uid}`).ref.id;
+            return doc.data()['owner']['id'] === this.afFs.doc(`users/${this.auth.user.uid}`).ref.id;
           } else if (doc.data()['admins']) {
-            return doc.data()['admins'].some(e => e.id === this.afFs.doc(`users/${this.auth.authState.uid}`).ref.id);
+            return doc.data()['admins'].some(e => e.id === this.afFs.doc(`users/${this.auth.user.uid}`).ref.id);
           } else {
             return false;
           }
@@ -129,12 +131,12 @@ export class ChatsComponent {
     Existing messages are kept intact.</p>
     <p>Note: You can unarchive "${chat.name}" at any time.</p>
     `;
-    const dialogRef = this.shared.openConfirmDialog({
+    const dialogRef = this.coreDialogs.openConfirmDialog({
       title: `Archive "${chat.name}"?`,
       msg: this.dom.sanitize(SecurityContext.HTML, dialogText),
       isHtml: true,
-      ok: 'Archive chat',
-      okColor: 'warn'
+      positiveBtnText: 'Archive chat',
+      positiveBtnColor: 'warn'
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'ok') {
@@ -147,7 +149,7 @@ export class ChatsComponent {
       if (event === true) {
         this.afFs.doc(`chats/${chat['id']}`)
           .update({
-            members: firestore.FieldValue.arrayRemove(this.afFs.doc(`users/${this.auth.authState.uid}`).ref)
+            members: firestore.FieldValue.arrayRemove(this.afFs.doc(`users/${this.auth.user.uid}`).ref)
           })
           .then(() => {
             const snackBarRef = this.shared.openSnackBar({
@@ -157,7 +159,7 @@ export class ChatsComponent {
             snackBarRef.onAction().subscribe(() => {
               this.afFs.doc(`chats/${chat['id']}`)
                 .update({
-                  members: firestore.FieldValue.arrayUnion(this.afFs.doc(`users/${this.auth.authState.uid}`).ref)
+                  members: firestore.FieldValue.arrayUnion(this.afFs.doc(`users/${this.auth.user.uid}`).ref)
                 })
                 .then(() => {
                   this.shared.openSnackBar({ msg: 'Successfully reverted action!' });
@@ -178,11 +180,11 @@ export class ChatsComponent {
       <p>Are you sure you want to leave "${chat.name}"?</p>
       <small>Tip: To bypass this dialog, hold down the <kbd>Shift</kbd> key while clicking the leave action.</small>
       `;
-      const dialogRef = this.shared.openConfirmDialog({
+      const dialogRef = this.coreDialogs.openConfirmDialog({
         title: `Leave "${chat.name}"?`,
         msg: this.dom.bypassSecurityTrustHtml(dialogText),
         isHtml: true,
-        ok: 'Leave'
+        positiveBtnText: 'Leave'
       });
       dialogRef.afterClosed().subscribe((result) => {
         if (result === 'ok') {
@@ -234,12 +236,12 @@ export class ChatsComponent {
       <p>Note that only information about the chat can be recovered. All messages will be permanently deleted!</p>
       <small>Tip: To bypass this dialog, hold down the <kbd>Shift</kbd> key while clicking the delete action.</small>
       `;
-      const dialogRef = this.shared.openConfirmDialog({
+      const dialogRef = this.coreDialogs.openConfirmDialog({
         title: `Delete "${chat.name}"?`,
         msg: this.dom.bypassSecurityTrustHtml(dialogText),
         isHtml: true,
-        ok: 'Delete',
-        okColor: 'warn'
+        positiveBtnText: 'Delete',
+        positiveBtnColor: 'warn'
       });
       dialogRef.afterClosed().subscribe((result) => {
         if (result === 'ok') {
@@ -253,12 +255,12 @@ export class ChatsComponent {
     <p>Are you sure you want to report "${chat.name}" as spam?</p>
     <p>Note that once you mark "${chat.name}" as spam, you'll also be removed from the chat.</p>
     `;
-    const dialogRef = this.shared.openConfirmDialog({
+    const dialogRef = this.coreDialogs.openConfirmDialog({
       title: `Report "${chat.name}" as spam?`,
       msg: this.dom.bypassSecurityTrustHtml(dialogText),
       isHtml: true,
-      ok: 'Report as spam',
-      okColor: 'warn'
+      positiveBtnText: 'Report as spam',
+      positiveBtnColor: 'warn'
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'ok') {
@@ -276,7 +278,7 @@ export class ChatsComponent {
           .get()
           .subscribe((value) => {
             chatRef
-              .update({ members: firestore.FieldValue.arrayUnion(this.afFs.doc(`users/${this.auth.authState.uid}`).ref) })
+              .update({ members: firestore.FieldValue.arrayUnion(this.afFs.doc(`users/${this.auth.user.uid}`).ref) })
               .then(() => {
                 this.shared.openSnackBar({
                   msg: `Successfully joined "${value.data()['name']}"!`,
@@ -294,9 +296,9 @@ export class ChatsComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'ok') {
         const formVal: Chat = dialogRef.componentInstance.createChatForm.value;
-        formVal['members'] = [this.afFs.doc(`users/${this.auth.authState.uid}`).ref];
-        formVal['admins'] = [this.afFs.doc(`users/${this.auth.authState.uid}`).ref];
-        formVal['owner'] = this.afFs.doc(`users/${this.auth.authState.uid}`).ref;
+        formVal['members'] = [this.afFs.doc(`users/${this.auth.user.uid}`).ref];
+        formVal['admins'] = [this.afFs.doc(`users/${this.auth.user.uid}`).ref];
+        formVal['owner'] = this.afFs.doc(`users/${this.auth.user.uid}`).ref;
         // Set the created at date as the server's timestamp
         formVal['createdAt'] = firestore.FieldValue.serverTimestamp();
         this.afFs.collection<Chat>(`chats`)
