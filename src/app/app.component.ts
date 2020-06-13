@@ -1,13 +1,12 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireRemoteConfig } from '@angular/fire/remote-config';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Event, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 import * as firebase from 'firebase';
 import { Observable } from 'rxjs';
-import { environment } from '../environments/environment';
-import { animations } from './animations';
+
 import { AuthService } from './auth.service';
 import { DialogsService } from './core/dialogs/dialogs.service';
 import { PanelService } from './core/panel/panel.service';
@@ -15,7 +14,6 @@ import { UserInfoDialogComponent } from './dialogs';
 import { SidenavLink } from './interfaces';
 import { SharedService } from './shared.service';
 import { ToolbarService } from './toolbar.service';
-import { AngularFireRemoteConfig } from '@angular/fire/remote-config';
 
 @Component({
   selector: 'app-root',
@@ -24,11 +22,8 @@ import { AngularFireRemoteConfig } from '@angular/fire/remote-config';
 export class AppComponent implements OnInit {
   @ViewChild('left', { static: true }) sidenav: MatSidenav;
   @ViewChild('rightPanel', { static: true }) rightPanel: MatSidenav;
-  environment = environment;
   user: firebase.User;
   userObservable: Observable<firebase.User>;
-  todayDate = new Date();
-  showNotificationSettings = false;
   sidenavLinks: SidenavLink[] = [
     {
       link: 'dashboard',
@@ -73,21 +68,19 @@ export class AppComponent implements OnInit {
       icon: 'info'
     }
   ];
-  tempId = 0;
   isSignedIn = false;
   keyMaps = {};
   constructor(
-    public shared: SharedService,
     public auth: AuthService,
     private coreDialogs: DialogsService,
+    public shared: SharedService,
     // TODO(Edric): Figure out a way to make this private
     public toolbarService: ToolbarService,
-    private router: Router,
-    private afFs: AngularFirestore,
+    router: Router,
     private dialog: MatDialog,
     @Inject(DOCUMENT) private document: Document,
     public panelService: PanelService,
-    private remoteConfig: AngularFireRemoteConfig
+    remoteConfig: AngularFireRemoteConfig
   ) {
     this.userObservable = auth.getAuthState();
     auth.getAuthState().subscribe((user) => {
@@ -98,7 +91,6 @@ export class AppComponent implements OnInit {
       } else {
         // User is signed out! Show sign in dialog here
         this.isSignedIn = false;
-
       }
     });
 
@@ -112,14 +104,7 @@ export class AppComponent implements OnInit {
       });
     }
 
-    router.events.subscribe(event => {
-      if (event instanceof NavigationStart) {
-        if (router.url === '/todo') {
-          this.toolbarService.showToolbar = true;
-        }
-      }
-      this.navigationInterceptor(event);
-    });
+    router.events.subscribe(event => this.navigationInterceptor(event));
 
     if (this.shared.isDarkThemeEnabled) {
       if (!this.document.body.classList.contains('studybuddy-dark')) {
@@ -147,17 +132,9 @@ export class AppComponent implements OnInit {
     return this.sidenav.opened;
   }
 
-  get isAuthenticated(): boolean {
-    return this.auth.authenticated;
-  }
-
   ngOnInit() {
     this.panelService.panel = this.rightPanel;
-    if (this.shared.settings !== null && this.shared.settings.hasOwnProperty('showTodosAsTable')) {
-      const settingsStorage = this.shared.settings;
-      settingsStorage['todoView'] = this.shared.settings['showTodosAsTable'] ? 'table' : 'list';
-      this.shared.settings = settingsStorage;
-    }
+    this.toolbarService.sidenav = this.sidenav;
   }
 
   navigationInterceptor(event: Event) {
@@ -177,12 +154,6 @@ export class AppComponent implements OnInit {
     }
   }
 
-  onKeydown($event: KeyboardEvent) {
-    // console.log(`key down: ${$event}`);
-    console.log(`onKeydown: key: ${$event.key}`);
-    console.log(`onKeydown: keyCode: ${$event.keyCode}`);
-  }
-
   logOut() {
     const dialogRef = this.coreDialogs.openConfirmDialog({
       title: 'Log out?',
@@ -195,18 +166,13 @@ export class AppComponent implements OnInit {
         this.auth.logOut().then((res) => {
           const snackbarRef = this.shared.openSnackBar({
             msg: 'Signed out',
-            action: 'Undo',
             additionalOpts: {
               duration: 4000,
               horizontalPosition: 'start'
             }
           });
-          snackbarRef.onAction().subscribe(() => {
-            this.newSignIn('google');
-          });
           console.log(res);
-        })
-          .catch((error) => {
+        }).catch((error) => {
             this.handleError(error.message);
           });
       }
@@ -222,125 +188,7 @@ export class AppComponent implements OnInit {
   openUserInfoDialog() {
     this.dialog.open(UserInfoDialogComponent);
   }
-  /**
-   * Shows a confirmation dialog before logging out the user.
-   */
-  signOut() {
-    const dialogRef = this.coreDialogs.openConfirmDialog({
-      title: 'Log out?',
-      msg: 'Changes not saved will be lost! Continue?',
-      positiveBtnText: 'Log out',
-      positiveBtnColor: 'warn'
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'ok') {
-        this.auth.logOut().then((res) => {
-          const snackbarRef = this.shared.openSnackBar({
-            msg: 'Signed out',
-            action: 'Undo',
-            additionalOpts: {
-              duration: 4000,
-              horizontalPosition: 'start'
-            }
-          });
-          snackbarRef.onAction().subscribe(() => {
-            this.newSignIn('google');
-          });
-          console.log(res);
-        })
-          .catch((error) => {
-            this.handleError(error.message);
-          });
-      }
-    });
-  }
-  /**
-   * Signs in with Google
-   */
-  signInWithGoogle() {
-    this.auth.logInWithGoogle().then((result) => {
-      this.shared.openSnackBar({ msg: `Signed in as ${result.user.email}` });
-    }).catch((error) => {
-      this.handleError(error.message);
-    });
-  }
-  /**
-   * Uses new sign in
-   * @param authType The authentication type (optional, assumes default method is Google)
-   */
-  newSignIn(authType?: 'google' | 'anonymous' | 'email', params?: any) {
-    // Checks if the authType argument is passed
-    if (authType) {
-      switch (authType) {
-        case 'anonymous':
-          this.coreDialogs.openAlertDialog({ msg: 'Anonymous login is not supported. Please use another form of authentication' });
-          console.error('Anonymous login is not supported. Aborting...');
-          break;
-        case 'google':
-          // This is already supported
-          this.signInWithGoogle();
-          break;
-        case 'email':
 
-        // this.afAuth.auth.signInWithEmailAndPassword()
-      }
-    } else {
-      // Assume Google login
-      this.signInWithGoogle();
-    }
-  }
-  deleteData() {
-    this.afFs.doc(`users/${this.user.uid}`)
-      .delete()
-      .then(() => {
-        console.log('Data successfully deleted!');
-      })
-      .catch((error) => {
-        this.handleError(error.message);
-      });
-  }
-  deleteUser() {
-    const confirmDialogRef = this.coreDialogs.openConfirmDialog({
-      title: 'Unregister?',
-      msg: `<p>Unregistering will clear all data associated with your account.</p>
-      <p><strong>Take note that if you would like to save your data, you can do so by going to Account > Export data.</strong></p>`,
-      isHtml: true,
-      positiveBtnColor: 'warn',
-      positiveBtnText: 'Unregister and delete data'
-    });
-    confirmDialogRef.afterClosed().subscribe(result => {
-      if (result === 'ok' && this.user) {
-        this.deleteData();
-        this.user.delete().then(() => {
-          console.log('User successfully deleted!');
-          this.shared.openSnackBar({
-            msg: 'Successfully unregistered!'
-          });
-        }).catch((error) => {
-          console.error(error);
-          if (error.code === 'auth/requires-recent-login') {
-            const snackBarRef = this.shared.openSnackBar({
-              msg: 'Please relogin before unregistering first.',
-              action: 'Relogin'
-            });
-            snackBarRef.onAction().subscribe(_ => {
-              // User has not logged in for a while.
-              // Firebase auth needs the user to have a recent login in order for this to work.
-              this.user.reauthenticateWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => {
-                this.deleteUser();
-              })
-                .catch((snackBarError) => {
-                  console.error(snackBarError);
-                  this.handleError(snackBarError.message);
-                });
-            });
-          } else {
-            this.handleError(error.message);
-          }
-        });
-      }
-    });
-  }
   private handleError(errorMsg: string) {
     this.shared.openSnackBar({ msg: `Error: ${errorMsg}` });
   }

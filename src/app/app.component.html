@@ -1,5 +1,5 @@
 <mat-sidenav-container fullscreen>
-  <mat-sidenav #left [mode]="shared.isPortraitHandset ? 'over':'side'" class="app-sidenav mat-elevation-z2">
+  <mat-sidenav #left [mode]="shared.isPortraitHandset ? 'over' : 'side'" class="app-sidenav mat-elevation-z2">
     <mat-toolbar>
       Links
       <span fxFlex></span>
@@ -46,48 +46,22 @@
         <mat-icon>account_circle</mat-icon>
       </button>
       <mat-menu #accountMenu="matMenu" [overlapTrigger]="false">
-        <mat-nav-list>
-          <mat-list-item *ngIf="isSignedIn" disableRipple>
-            <img matListAvatar src="{{(userObservable | async)?.photoURL}}">
-            <h3 matLine>{{(userObservable | async)?.displayName}}</h3>
-            <span matLine style="overflow:initial">{{(userObservable | async)?.email}}</span>
-          </mat-list-item>
-          <a mat-list-item routerLink="/account">
-            <mat-icon matListIcon>account_box</mat-icon>
-            <h3 matLine>My account</h3>
-          </a>
-          <mat-list-item (click)="logOut()" *ngIf="isSignedIn">
-            <mat-icon matListIcon>exit_to_app</mat-icon>
-            <h3 matLine>Sign out</h3>
-          </mat-list-item>
-          <mat-list-item (click)="newSignIn()" *ngIf="!isSignedIn">
-            <mat-icon matListIcon svgIcon="mdi:login"></mat-icon>
-            <h3 matLine>Login</h3>
-          </mat-list-item>
-          <mat-divider></mat-divider>
-          <h3 matSubheader>Help</h3>
-          <a routerLink="/settings" mat-list-item>
-            <mat-icon matListIcon>settings</mat-icon>
-            <h3 matLine>Settings</h3>
-          </a>
-          <a href="https://goo.gl/forms/tz6cmNguIHuZMZIh2" mat-list-item>
-            <mat-icon matListIcon>feedback</mat-icon>
-            <h3 matLine>Send feedback</h3>
-          </a>
-          <a routerLink="." mat-list-item>
-            <mat-icon matListIcon>help_outline</mat-icon>
-            <h3 matLine>Help</h3>
-          </a>
-          <!-- For debugging only -->
-          <div *ngIf="!environment.production">
-            <mat-divider></mat-divider>
-            <h3 matSubheader>Developer</h3>
-            <mat-list-item (click)="openUserInfoDialog()">
-              <mat-icon matListIcon>build</mat-icon>
-              <h3 matLine>Get user info</h3>
-            </mat-list-item>
-          </div>
-        </mat-nav-list>
+        <a mat-menu-item routerLink="/account">
+          <mat-icon>account_box</mat-icon>
+          <span>My account</span>
+        </a>
+        <button mat-menu-item (click)="logOut()" *ngIf="isSignedIn">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Sign out</span>
+        </button>
+        <a mat-menu-item routerLink="/login" *ngIf="!isSignedIn">
+          <mat-icon svgIcon="mdi:login"></mat-icon>
+          <span>Login</span>
+        </a>
+        <button mat-menu-item (click)="openUserInfoDialog()" *ngIf="!shared.isProduction">
+          <mat-icon>information</mat-icon>
+          <span>[DEBUG] View user info</span>
+        </button>
       </mat-menu>
     </mat-toolbar>
     <router-outlet></router-outlet>
