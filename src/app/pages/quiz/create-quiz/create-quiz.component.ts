@@ -17,6 +17,7 @@ export class CreateQuizComponent implements OnInit {
   form = new FormGroup({});
   fields = [this.formlyJsonSchema.toFieldConfig(schema.schema)];
   model = {};
+  user: firebase.User;
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -26,6 +27,7 @@ export class CreateQuizComponent implements OnInit {
   ) {
     shared.title = 'Create quiz';
     this.quizzesCollection = afFs.collection('quizzes');
+    this.afAuth.user.subscribe(user => this.user = user);
   }
 
   ngOnInit() {
@@ -34,7 +36,7 @@ export class CreateQuizComponent implements OnInit {
   submit() {
     this.quizzesCollection.add({
       ...this.model,
-      author: this.afFs.doc(`users/${this.afAuth.auth.currentUser.uid}`).ref,
+      author: this.afFs.doc(`users/${this.user.uid}`).ref,
       createdAt: firestore.FieldValue.serverTimestamp(),
       lastModified: firestore.FieldValue.serverTimestamp()
     } as any).then(doc => {

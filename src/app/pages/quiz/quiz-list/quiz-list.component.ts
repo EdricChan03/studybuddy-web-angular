@@ -21,7 +21,7 @@ export class QuizListComponent implements OnInit {
     private afFs: AngularFirestore
   ) {
     shared.title = 'Quizzes';
-    afAuth.auth.onAuthStateChanged(user => {
+    afAuth.onAuthStateChanged(user => {
       // this.completedQuizzesCollection = afFs.collection(`users/${user.uid}/completedQuizzes`);
       // this.completedQuizzes$ = this.completedQuizzesCollection.valueChanges({ idfield: 'id' });
       this.ownedQuizzesCollection = afFs.collection('quizzes', ref => ref.where('author', '==', afFs.doc(`users/${user.uid}`).ref));

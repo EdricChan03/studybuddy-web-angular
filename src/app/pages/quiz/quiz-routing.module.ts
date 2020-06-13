@@ -4,7 +4,7 @@ import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { QuizListComponent } from './quiz-list/quiz-list.component';
 import { canActivate, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 
-const redirectUnauthorizedToLogin = redirectUnauthorizedTo(['login']);
+const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 
 const routes: Routes = [
   {
