@@ -14,6 +14,7 @@
           <mat-icon matListIcon *ngIf="!link.svgIcon && link.icon">{{link.icon}}</mat-icon>
           <mat-icon matListIcon *ngIf="link.svgIcon && !link.icon" [svgIcon]="link.svgIcon"></mat-icon>
           <h3 matLine>{{link.title}}</h3>
+          <span class="feature-status-badge feature-status-badge--with-color mat-elevation-z1" *ngIf="link?.badge">{{ link.badge }}</span>
         </a>
       </ng-container>
       <mat-divider></mat-divider>
@@ -23,6 +24,7 @@
           <mat-icon matListIcon *ngIf="!link.svgIcon && link.icon">{{link.icon}}</mat-icon>
           <mat-icon matListIcon *ngIf="link.svgIcon && !link.icon" [svgIcon]="link.svgIcon"></mat-icon>
           <h3 matLine>{{link.title}}</h3>
+          <span class="feature-status-badge feature-status-badge--with-color mat-elevation-z1" *ngIf="link?.badge">{{ link.badge }}</span>
         </a>
       </ng-container>
     </mat-nav-list>

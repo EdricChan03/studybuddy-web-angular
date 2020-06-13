@@ -40,6 +40,8 @@ export interface SidenavLink {
   list?: SidenavLink[];
   /** Whether the navigation item should be hidden. */
   hidden?: boolean;
+  /** The navigation item's badge, if any */
+  badge?: string;
 }
 export interface Settings {
   /**
