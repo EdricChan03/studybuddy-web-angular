@@ -1,0 +1,170 @@
+{
+  "$schema": "./settings-schema.json",
+  "panels": [
+    {
+      "title": "Account",
+      "summary": "Account-related actions",
+      "icon": "account_circle",
+      "id": "account"
+    },
+    {
+      "title": "Appearance",
+      "summary": "Change how the site is displayed",
+      "icon": "palette",
+      "id": "appearance",
+      "settings": [
+        {
+          "id": "[DEFAULT]",
+          "settings": [
+            {
+              "id": "enableDarkTheme",
+              "title": "Enable dark theme",
+              "icon": "brightness_2",
+              "type": "checkbox",
+              "value": false
+            }
+          ]
+        }
+      ],
+      "hasSaveResetActions": true
+    },
+    {
+      "title": "Behaviour",
+      "summary": "Customise the behaviour of the site",
+      "icon": "tune",
+      "id": "behavior",
+      "hasSaveResetActions": true,
+      "settings": [
+        {
+          "id": "[DEFAULT]",
+          "settings": [
+            {
+              "title": "Close drawer when navigation links are clicked on",
+              "value": false,
+              "type": "checkbox",
+              "id": "closeSidenavOnClick"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Tasks",
+      "summary": "Change the tasks functionality",
+      "icon": "check_circle_outline",
+      "id": "tasks",
+      "settings": [
+        {
+          "id": "[DEFAULT]",
+          "settings": [
+            {
+              "id": "defaultView",
+              "title": "Default view",
+              "type": "list",
+              "value": "table",
+              "dialogConfig": {
+                "entries": [
+                  {
+                    "title": "List",
+                    "value": "list"
+                  },
+                  {
+                    "title": "Table",
+                    "value": "table"
+                  },
+                  {
+                    "title": "Card",
+                    "value": "card"
+                  }
+                ],
+                "value": "list"
+              }
+            }
+          ]
+        }
+      ],
+      "hasSaveResetActions": true
+    },
+    {
+      "title": "Testing",
+      "summary": "[INTERNAL] Testing setting types",
+      "id": "testing",
+      "icon": "build",
+      "settings": [
+        {
+          "id": "[DEFAULT]",
+          "title": "Default category",
+          "settings": [
+            {
+              "id": "checkboxSetting",
+              "title": "Checkbox setting",
+              "summary": "Toggle me on/off!",
+              "value": false,
+              "type": "checkbox"
+            },
+            {
+              "id": "inputSetting",
+              "title": "Input setting",
+              "summary": "Enter a value!",
+              "value": "",
+              "type": "input"
+            },
+            {
+              "id": "listSetting",
+              "title": "List setting",
+              "summary": "Choose from a list of entries",
+              "value": "",
+              "dialogConfig": {
+                "entries": [
+                  {
+                    "title": "Entry #1",
+                    "value": "entry-1"
+                  },
+                  {
+                    "title": "Entry #2 (with a different color)",
+                    "value": "entry-2",
+                    "color": "warn"
+                  },
+                  {
+                    "title": "Entry #3 (disabled)",
+                    "value": "entry-3",
+                    "disabled": true
+                  }
+                ]
+              },
+              "type": "list"
+            },
+            {
+              "id": "multiSelectListSetting",
+              "title": "Multi-select list setting",
+              "summary": "Select multiple entries from a list of entries",
+              "value": [
+                "entry-2",
+                "entry-3"
+              ],
+              "dialogConfig": {
+                "entries": [
+                  {
+                    "title": "Entry #1",
+                    "value": "entry-1"
+                  },
+                  {
+                    "title": "Entry #2 (with a different color)",
+                    "value": "entry-2",
+                    "color": "warn"
+                  },
+                  {
+                    "title": "Entry #3 (disabled)",
+                    "value": "entry-3",
+                    "disabled": true
+                  }
+                ]
+              },
+              "type": "multi-select-list"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

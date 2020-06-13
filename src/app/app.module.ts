@@ -36,7 +36,6 @@ import { DialogsModule } from './dialogs/dialogs.module';
 import { HotkeysModule } from './hotkeys/hotkeys.module';
 import { LoginComponent } from './login/login.component';
 import { MaterialModule } from './material.module';
-import { SettingsComponent } from './settings/settings.component';
 import { SharedModule } from './shared.service';
 import { CustomFormlyModule } from './shared/formly/custom-formly.module';
 import { SearchInputComponent } from './shared/search-input/search-input.component';
@@ -64,7 +63,6 @@ function minItemsValidationMessage(err, field: FormlyFieldConfig) {
     AppDownloadsComponent,
     TodoHomeComponent,
     TipsComponent,
-    SettingsComponent,
     TodoProjectComponent,
     TodoArchivedComponent,
     TodoDashboardComponent,

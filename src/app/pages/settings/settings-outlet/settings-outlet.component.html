@@ -1,0 +1,33 @@
+<div class="padding-percentage-container">
+  <mat-card>
+    <mat-card-content fxLayout="row" fxLayout.lt-sm="column">
+      <mat-nav-list fxFlex="40" fxFlex.lt-sm [style.display]="((shared.isPortraitHandset && router.url === '/settings') || !shared.isPortraitHandset) ? 'block' : 'none'">
+        <ng-container *ngFor="let panel of panelsService.settingsPanels">
+          <a mat-list-item *ngIf="!panel.hidden" [routerLink]="['./', panel.id]"
+            routerLinkActive="active-link">
+            <mat-icon matListIcon *ngIf="!panel?.svgIcon" aria-hidden="true">{{ panel.icon || 'settings' }}</mat-icon>
+            <mat-icon matListIcon *ngIf="panel?.svgIcon && !panel?.icon" [svgIcon]="panel.svgIcon" aria-hidden="true">
+            </mat-icon>
+            <h2 matLine>{{ panel.title }}</h2>
+            <p matLine *ngIf="panel?.summary">{{ panel.summary }}</p>
+            <span *ngIf="panel?.badge" class="feature-status-badge feature-status-badge--with-color">{{ panel.badge }}</span>
+          </a>
+        </ng-container>
+      </mat-nav-list>
+      <div class="setting-panel" fxFlex>
+        <router-outlet></router-outlet>
+      </div>
+    </mat-card-content>
+    <ng-container *ngIf="currentPanelId$ | async as id">
+      <ng-container *ngIf="panelsService.getSettingPanelById(id) as panel">
+        <mat-card-actions align="end" *ngIf="!panel?.hasSaveResetActions && panel?.actions && panel.actions.length > 0">
+          <button mat-button *ngFor="let action of panel.actions" [color]="action.color" [disabled]="action.disabled" (click)="action.onClickListener($event)">{{ action.title }}</button>
+        </mat-card-actions>
+        <mat-card-actions align="end" *ngIf="panel?.hasSaveResetActions">
+          <button mat-button color="warn" (click)="resetSettings(panel)">Reset</button>
+          <button mat-button color="primary" (click)="saveSettings(panel)">Save</button>
+        </mat-card-actions>
+      </ng-container>
+    </ng-container>
+  </mat-card>
+</div>

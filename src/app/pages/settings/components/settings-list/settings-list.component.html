@@ -1,0 +1,32 @@
+<mat-action-list>
+  <ng-container *ngFor="let category of settings">
+    <h2 matSubheader *ngIf="category.title">{{ category.title }}</h2>
+    <ng-container *ngFor="let setting of category.settings">
+      <ng-container [ngSwitch]="setting.type">
+        <!-- Checkbox is a special case here as we're setting the aria-checked value. -->
+        <button mat-list-item *ngSwitchCase="'checkbox'" (click)="onSettingClick(setting, $event)" [attr.aria-checked]="setting.value">
+          <mat-icon matListIcon *ngIf="setting.icon && !setting.svgIcon">{{ setting.icon }}</mat-icon>
+          <mat-icon matListIcon *ngIf="!setting.icon && setting.svgIcon" [svgIcon]="setting.svgIcon"></mat-icon>
+          <h2 matLine>{{ setting.title }}</h2>
+          <p matLine *ngIf="setting.summary">{{ setting.summary }}</p>
+          <mat-pseudo-checkbox [state]="getCheckboxState(setting.value)"></mat-pseudo-checkbox>
+        </button>
+        <!-- List and multi-select-list also need a special template for displaying the current value as the summary. -->
+          <button mat-list-item *ngSwitchCase="'list' || 'multi-select-list'" (click)="onSettingClick(setting, $event)">
+            <mat-icon matListIcon *ngIf="setting.icon && !setting.svgIcon">{{ setting.icon }}</mat-icon>
+            <mat-icon matListIcon *ngIf="!setting.icon && setting.svgIcon" [svgIcon]="setting.svgIcon"></mat-icon>
+            <h2 matLine>{{ setting.title }}</h2>
+            <p matLine *ngIf="setting.summary">{{ setting.summary }}</p>
+            <p matLine *ngIf="!setting.summary && setting.value">{{ setting.value | titlecase }}</p>
+          </button>
+        <!-- All other setting types can be represented here. -->
+        <button mat-list-item *ngSwitchDefault (click)="onSettingClick(setting, $event)">
+          <mat-icon matListIcon *ngIf="setting.icon && !setting.svgIcon">{{ setting.icon }}</mat-icon>
+          <mat-icon matListIcon *ngIf="!setting.icon && setting.svgIcon" [svgIcon]="setting.svgIcon"></mat-icon>
+          <h2 matLine>{{ setting.title }}</h2>
+          <p matLine *ngIf="setting.summary">{{ setting.summary }}</p>
+        </button>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</mat-action-list>

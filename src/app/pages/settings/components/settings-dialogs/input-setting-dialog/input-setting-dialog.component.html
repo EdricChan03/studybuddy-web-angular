@@ -1,0 +1,17 @@
+<h2 matDialogTitle *ngIf="dialogTitle">{{ dialogTitle }}</h2>
+<mat-dialog-content fxLayout="column">
+  <mat-form-field
+    [appearance]="inputConfig?.appearance"
+    [color]="inputConfig?.color">
+    <input matInput [(ngModel)]="currentValue" [placeholder]="inputConfig?.placeholder" [required]="requiresValue">
+    <mat-error *ngIf="requiresValue">This is required.</mat-error>
+    <mat-hint [align]="inputConfig?.hintAlign" *ngIf="inputConfig?.hint">{{ inputConfig.hint }}</mat-hint>
+    <mat-label *ngIf="inputConfig?.label">{{ inputConfig.label }}</mat-label>
+    <span matPrefix *ngIf="inputConfig?.prefix">{{ inputConfig.prefix }}</span>
+    <span matSuffix *ngIf="inputConfig?.suffix">{{ inputConfig.suffix }}</span>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button matDialogClose [color]="negativeBtnColor">{{ negativeBtnText }}</button>
+  <button mat-button [matDialogClose]="currentValue" [color]="positiveBtnColor" [disabled]="shouldDisablePositiveBtn">{{ positiveBtnText }}</button>
+</mat-dialog-actions>

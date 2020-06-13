@@ -9,7 +9,6 @@ import { ChatViewerComponent } from './chats/chat-viewer/chat-viewer.component';
 import { ChatsComponent } from './chats/chats.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
-import { SettingsComponent } from './settings/settings.component';
 import { SignupComponent } from './signup/signup.component';
 import { TipsComponent } from './tips/tips.component';
 import { TodoArchivedComponent, TodoDashboardComponent, TodoHomeComponent, TodoProjectComponent } from './todo';
@@ -24,7 +23,7 @@ const routes: Route[] = [
   // About StudyBuddy
   { path: 'about', component: AboutComponent },
   // Account
-  { path: 'account', component: AccountComponent, ...canActivate(redirectUnauthorizedToLogin) },
+  { path: 'account', redirectTo: '/settings/account' },
   // Chatrooms! Coming soon.
   { path: 'chats', component: ChatsComponent, ...canActivate(redirectUnauthorizedToLogin) },
   { path: 'chats/explore', component: ChatExploreComponent, ...canActivate(redirectUnauthorizedToLogin) },
@@ -35,8 +34,6 @@ const routes: Route[] = [
   { path: 'downloads', component: AppDownloadsComponent },
   // Login page
   { path: 'login', component: LoginComponent },
-  // Settings page. Currently a bit broken
-  { path: 'settings', component: SettingsComponent, ...canActivate(redirectUnauthorizedToLogin) },
   // Sign up page
   { path: 'signup', component: SignupComponent },
   // An alias for signing up
@@ -65,6 +62,10 @@ const routes: Route[] = [
     path: 'develop',
     canActivate: [DevelopmentGuard],
     loadChildren: () => import('./pages/develop/develop.module').then(m => m.DevelopModule)
+  },
+  {
+    path: 'settings',
+    loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsModule)
   },
   {
     path: 'quizzes',

@@ -37,6 +37,8 @@ export interface SidenavLink {
   /** The navigation item's badge, if any */
   badge?: string;
 }
+
+/** @deprecated Settings are no longer stored in a single object. */
 export interface Settings {
   /**
    * Whether to enable the experimental calendar

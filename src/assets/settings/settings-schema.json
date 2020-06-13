@@ -1,0 +1,319 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://studybuddy-e5f46.web.app/schemas/settings-schema.json",
+  "type": "object",
+  "title": "Settings",
+  "required": [
+    "panels"
+  ],
+  "properties": {
+    "panels": {
+      "type": "array",
+      "description": "The list of settings panels.",
+      "examples": [
+        [
+          {
+            "title": "Account",
+            "id": "account",
+            "settings": [],
+            "summary": "Account-related actions",
+            "settingsCategories": [],
+            "icon": "account_circle"
+          }
+        ]
+      ],
+      "items": {
+        "$ref": "#/definitions/panel"
+      }
+    }
+  },
+  "definitions": {
+    "panel": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "The key that settings in this panel should be saved to. (If no value is specified, the key will default to the panel's ID appended with 'Settings'.)"
+        },
+        "id": {
+          "type": "string",
+          "description": "The panel's unique ID.",
+          "examples": [
+            "account"
+          ]
+        },
+        "title": {
+          "type": "string",
+          "description": "The panel's title.",
+          "examples": [
+            "Account"
+          ]
+        },
+        "summary": {
+          "type": "string",
+          "description": "The panel's summary.",
+          "examples": [
+            "Account-related actions"
+          ]
+        },
+        "icon": {
+          "type": "string",
+          "description": "The panel's icon.",
+          "examples": [
+            "account_circle"
+          ]
+        },
+        "svgIcon": {
+          "type": "string",
+          "description": "The panel's SVG icon.",
+          "examples": [
+            "mdi:account-box"
+          ]
+        },
+        "hidden": {
+          "type": "boolean",
+          "description": "Whether the panel should be hidden.",
+          "default": false
+        },
+        "settings": {
+          "type": "array",
+          "description": "The list of settings categories.",
+          "items": {
+            "$ref": "#/definitions/settingsCategory"
+          }
+        },
+        "hasSaveResetActions": {
+          "type": "boolean",
+          "description": "Whether the panel should have save and reset actions.\nImplies that the `actions` property is empty."
+        },
+        "actions": {
+          "type": "array",
+          "description": "The list of actions.",
+          "items": {
+            "$ref": "#/definitions/panelActions"
+          }
+        },
+        "badge": {
+          "type": "string",
+          "description": "The panel's badge, if any. This can be used to indicate special features."
+        }
+      }
+    },
+    "panelActions": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "The action's title."
+        },
+        "disabled": {
+          "type": "boolean",
+          "description": "Whether the action should be disabled."
+        },
+        "color": {
+          "$ref": "#/definitions/themePalette"
+        },
+        "type": {
+          "type": "string",
+          "description": "The action's type.",
+          "enum": [
+            "help",
+            "reset",
+            "save"
+          ]
+        }
+      },
+      "required": [
+        "title"
+      ]
+    },
+    "settingsCategory": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The settings category's ID.",
+          "default": "[DEFAULT]"
+        },
+        "title": {
+          "type": "string",
+          "description": "The settings category's title."
+        },
+        "settings": {
+          "type": "array",
+          "description": "The list of settings.",
+          "items": {
+            "$ref": "#/definitions/setting"
+          }
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "settingDialogEntry": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "description": "The entry's title.",
+          "type": "string"
+        },
+        "value": {
+          "description": "The entry's value.",
+          "type": "string"
+        },
+        "disabled": {
+          "description": "Whether the entry is disabled.",
+          "type": "boolean",
+          "default": false
+        },
+        "color": {
+          "description": "The entry's color.",
+          "$ref": "#/definitions/themePalette"
+        }
+      },
+      "required": [
+        "title",
+        "value"
+      ]
+    },
+    "settingDialogConfig": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "description": "The current setting value. (Defaults to the setting value)",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "entries": {
+          "description": "The list of entries to be shown.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/settingDialogEntry"
+          }
+        },
+        "title": {
+          "description": "The dialog's title. (Defaults to the setting title)",
+          "type": "string"
+        },
+        "negativeBtnText": {
+          "description": "The negative button's text.",
+          "type": "string",
+          "default": "Cancel"
+        },
+        "negativeBtnColor": {
+          "description": "The negative button's color.",
+          "$ref": "#/definitions/themePalette"
+        },
+        "positiveBtnText": {
+          "description": "The positive button's text.",
+          "type": "string",
+          "default": "Save"
+        },
+        "positiveBtnColor": {
+          "description": "The positive button's color.",
+          "$ref": "#/definitions/themePalette"
+        },
+        "radioGroupColor": {
+          "description": "The radio group's color. (Only applicable for list-type settings)",
+          "$ref": "#/definitions/themePalette"
+        },
+        "selectionListColor": {
+          "description": "The selection list's color. (Only applicable for multi-select-list-type settings)",
+          "$ref": "#/definitions/themePalette"
+        },
+        "checkboxPosition": {
+          "description": "Whether the label should appear before or after the checkbox. (Only applicable for multi-select-list-type settings)",
+          "type": "string",
+          "enum": [
+            "before",
+            "after"
+          ],
+          "default": "before"
+        }
+      }
+    },
+    "setting": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "The setting's unique ID.",
+          "type": "string"
+        },
+        "title": {
+          "description": "The setting's title.",
+          "type": "string"
+        },
+        "summary": {
+          "description": "The setting's summary.",
+          "type": "string"
+        },
+        "icon": {
+          "description": "The setting's icon.",
+          "type": "string"
+        },
+        "type": {
+          "description": "The setting's type.",
+          "enum": [
+            "checkbox",
+            "input",
+            "list",
+            "multi-select-list",
+            "other"
+          ],
+          "type": "string",
+          "default": "other"
+        },
+        "value": {
+          "description": "The setting's value.",
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "dialogConfig": {
+          "description": "The setting's dialog config (if applicable).",
+          "$ref": "#/definitions/settingDialogConfig"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "type"
+      ]
+    },
+    "themePalette": {
+      "description": "Possible color palette values. (See `ThemePalette` from `@angular/material/core` for more info)",
+      "type": "string",
+      "enum": [
+        "primary",
+        "accent",
+        "warn",
+        ""
+      ],
+      "default": ""
+    }
+  }
+}
