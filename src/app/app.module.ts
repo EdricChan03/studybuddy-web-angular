@@ -21,7 +21,6 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
 import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
 import { environment } from '../environments/environment';
 import { AboutComponent } from './about/about.component';
-import { AccountComponent } from './account/account.component';
 import { ApiService } from './api.service';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -71,7 +70,6 @@ function minItemsValidationMessage(err, field: FormlyFieldConfig) {
     ChatsComponent,
     ChatExploreComponent,
     ChatViewerComponent,
-    AccountComponent,
     LoginComponent,
     DashboardComponent,
     TodoOutletComponent,

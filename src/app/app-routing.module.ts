@@ -2,7 +2,6 @@ import { canActivate, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { AboutComponent } from './about/about.component';
-import { AccountComponent } from './account/account.component';
 import { AppDownloadsComponent } from './appdownloads/appdownloads.component';
 import { ChatExploreComponent } from './chats/chat-explore/chat-explore.component';
 import { ChatViewerComponent } from './chats/chat-viewer/chat-viewer.component';
