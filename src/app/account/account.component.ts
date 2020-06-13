@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { SharedService } from '../shared.service';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { AuthService } from '../auth.service';
 import * as firebase from 'firebase';
+
+import { AuthService } from '../auth.service';
+import { DialogsService } from '../core/dialogs/dialogs.service';
+import { SharedService } from '../shared.service';
 
 @Component({
   selector: 'app-account',
@@ -13,6 +15,7 @@ export class AccountComponent {
   user: firebase.User;
   isSignedIn = false;
   constructor(
+    private coreDialogs: DialogsService,
     private shared: SharedService,
     private authService: AuthService,
     private afFs: AngularFirestore
@@ -31,11 +34,11 @@ export class AccountComponent {
     });
   }
   signOut() {
-    const dialogRef = this.shared.openConfirmDialog({
+    const dialogRef = this.coreDialogs.openConfirmDialog({
       title: 'Log out?',
       msg: 'Changes not saved will be lost.',
-      ok: 'Log out',
-      okColor: 'warn'
+      positiveBtnText: 'Log out',
+      positiveBtnColor: 'warn'
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'ok') {
@@ -74,7 +77,7 @@ export class AccountComponent {
     if (authType) {
       switch (authType) {
         case 'anonymous':
-          this.shared.openAlertDialog({ msg: 'Anonymous login is not supported. Please use another form of authentication' });
+          this.coreDialogs.openAlertDialog({ msg: 'Anonymous login is not supported. Please use another form of authentication' });
           console.error('Anonymous login is not supported. Aborting...');
           break;
         case 'google':
@@ -91,7 +94,7 @@ export class AccountComponent {
     }
   }
   deleteData() {
-    this.shared.openConfirmDialog({
+    this.coreDialogs.openConfirmDialog({
       title: 'Delete data?',
       msg: 'Once deleted, all data will be lost!'
     }).afterClosed().subscribe(result => {
@@ -117,12 +120,13 @@ export class AccountComponent {
    * Deletes the currently logged-in user
    */
   deleteUser() {
-    const confirmDialogRef = this.shared.openConfirmDialog({
+    const confirmDialogRef = this.coreDialogs.openConfirmDialog({
       title: 'Unregister?',
       msg: `<p>Unregistering will clear all data associated with your account.</p>
       <p><strong>Take note that if you would like to save your data, you can do so by going to Account > Export data.</strong></p>`,
       isHtml: true,
-      ok: 'Unregister and delete data'
+      positiveBtnText: 'Unregister and delete data',
+      positiveBtnColor: 'warn'
     });
     confirmDialogRef.afterClosed().subscribe(result => {
       if (result === 'ok' && this.user) {
