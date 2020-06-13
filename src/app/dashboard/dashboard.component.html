@@ -7,24 +7,22 @@
       <mat-icon>add</mat-icon> New Todo
     </button>
   </div>
-  <mat-card *ngFor="let todo of todos$ | async">
-    <mat-card-title>{{todo?.title}}</mat-card-title>
-    <mat-card-content *ngIf="todo?.content">
-      <p [innerHTML]="todo?.content | markdown"></p>
-    </mat-card-content>
-    <mat-card-actions align="end">
-      <button mat-button color="primary" (click)="toggleChecked(todo)">
-        <span *ngIf="!todo.isDone">Mark as done</span>
-        <span *ngIf="todo.isDone">Mark as undone</span>
-      </button>
-    </mat-card-actions>
-  </mat-card>
-  <div class="header dashboard-notes-header" fxLayout="row" fxLayoutAlign="space-between center">
-    <h2 fxLayout="row" fxLayoutAlign="center center">
-      Notes
-    </h2>
-    <button mat-raised-button (click)="newNote()" color="primary" disabled>
-      <mat-icon>add</mat-icon> New Note
-    </button>
-  </div>
+  <ng-container
+    *ngIf="(todos$ | async)?.length > 0; else: todosEmptyState">
+    <mat-card *ngFor="let todo of todos$ | async">
+      <mat-card-title>{{todo?.title}}</mat-card-title>
+      <mat-card-content *ngIf="todo?.content">
+        <p [innerHTML]="todo?.content | markdown"></p>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button mat-button color="primary" (click)="toggleChecked(todo)">
+          <span *ngIf="!todo.isDone">Mark as done</span>
+          <span *ngIf="todo.isDone">Mark as undone</span>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </ng-container>
+  <ng-template #todosEmptyState>
+    <app-empty-state emptyStateTitle="All todos done!" emptyStateMsg="Great job!"  emptyStateImageSrc="assets/undraw/undraw_High_five_u364.svg" emptyStateImageClass="empty-state-image"></app-empty-state>
+  </ng-template>
 </div>

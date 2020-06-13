@@ -1,19 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import { TodoItem } from '../interfaces';
-import { SharedService } from '../shared.service';
-
+import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { MatDialog } from '@angular/material/dialog';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ToolbarService } from '../toolbar.service';
+import { auth } from 'firebase/app';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TodoDialogComponent } from '../dialogs';
+import { TodoItem } from '../interfaces';
+import { SharedService } from '../shared.service';
+import { ToolbarService } from '../toolbar.service';
+
 
 @Component({
   selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html'
+  templateUrl: './dashboard.component.html',
+  styles: [`
+  .empty-state-image {
+    width: 300px;
+  }
+  `]
 })
 export class DashboardComponent {
   currentUser: string;
@@ -28,7 +34,7 @@ export class DashboardComponent {
     public toolbarService: ToolbarService
   ) {
     shared.title = 'Dashboard';
-    afAuth.auth.onAuthStateChanged((user) => {
+    afAuth.onAuthStateChanged((user) => {
       if (user) {
         console.log(user);
         this.currentUser = user.uid;
