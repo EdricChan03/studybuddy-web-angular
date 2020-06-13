@@ -60,6 +60,31 @@
   .currently-selected {
     background-color: if($is-dark-theme, #595959, #DCDCDC) !important;
   }
+
+  .feature-status-badge {
+    // @error $background;
+    &.feature-status-badge--default {
+      // background-color: ;
+    }
+    &.feature-status-badge--with-color {
+      background-color: if($is-dark-theme, mat-color($accent), mat-color($primary));
+      color: if($is-dark-theme, map-get($accent, 'default-contrast'), map-get($primary, 'default-contrast'));
+    }
+
+    $palettes-list: (
+      primary: $primary,
+      accent: $accent,
+      warn: $warn
+    );
+
+    @each $key, $val in $palettes-list {
+      &.feature-status-badge--#{$key} {
+        background-color: mat-color($val);
+        color: map-get($val, 'default-contrast');
+      }
+    }
+  }
+
   .mat-primary-text-color {
     color: mat-color($primary) !important;
   }
@@ -212,6 +237,14 @@ table.app-table {
   font-weight: 600;
   font-size: 12px;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.feature-status-badge {
+  letter-spacing: 0.04em;
+  font-weight: 500;
+  font-size: 0.8em;
+  padding: 2px 8px;
+  border-radius: 16px;
 }
 
 .no-padding mat-dialog-container {
