@@ -1,12 +1,12 @@
 import { Component, TemplateRef } from '@angular/core';
-import { TodoProject } from '../../interfaces';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
-import { AuthService } from '../../auth.service';
-import { Observable } from 'rxjs';
-import { SharedService } from '../../shared.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { firestore } from 'firebase';
+
+import { AuthService } from '../../auth.service';
+import { TodoProject } from '../../interfaces';
+import { SharedService } from '../../shared.service';
 @Component({
   selector: 'app-new-project-dialog',
   templateUrl: './new-project-dialog.component.html',
@@ -29,6 +29,7 @@ export class NewProjectDialogComponent {
   projectId: string;
   constructor(
     private authService: AuthService,
+    private dialog: MatDialog,
     private fs: AngularFirestore,
     public shared: SharedService,
     private fb: FormBuilder
@@ -114,9 +115,11 @@ export class NewProjectDialogComponent {
         });
     }
   }
+
   showHelpDialog(templateRef: TemplateRef<any>) {
-    this.helpDialogRef = this.shared.openHelpDialog(templateRef);
+    this.helpDialogRef = this.dialog.open(templateRef);
   }
+
   closeHelpDialog() {
     this.helpDialogRef.close();
     this.helpDialogRef = null;
