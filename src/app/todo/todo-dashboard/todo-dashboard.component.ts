@@ -4,7 +4,6 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { AuthService } from '../../auth.service';
@@ -40,17 +39,8 @@ export class TodoDashboardComponent implements OnInit {
     private shared: SharedService,
     private fs: AngularFirestore,
     private dom: DomSanitizer,
-    private dialog: MatDialog,
-    private route: ActivatedRoute,
-    private router: Router
+    private dialog: MatDialog
   ) {
-    route.queryParams.pipe(
-      filter(params => params.new)).
-      subscribe(params => {
-        if (params.new) {
-          router.navigate(['/todo/dashboard-new']);
-        }
-      });
     shared.title = 'Todo Dashboard';
     this.authService.getAuthState().subscribe((user) => {
       if (user) {

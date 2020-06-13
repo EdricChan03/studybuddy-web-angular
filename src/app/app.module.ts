@@ -36,19 +36,13 @@ import { DialogsModule } from './dialogs/dialogs.module';
 import { HotkeysModule } from './hotkeys/hotkeys.module';
 import { LoginComponent } from './login/login.component';
 import { MaterialModule } from './material.module';
-import { NoteNotFoundComponent } from './notes/note-not-found/note-not-found.component';
-import { NotesHomeComponent } from './notes/notes-home/notes-home.component';
-import { NotesViewerComponent } from './notes/notes-viewer/notes-viewer.component';
 import { SettingsComponent } from './settings/settings.component';
 import { SharedModule } from './shared.service';
 import { CustomFormlyModule } from './shared/formly/custom-formly.module';
 import { SearchInputComponent } from './shared/search-input/search-input.component';
 import { SignupComponent } from './signup/signup.component';
-import { SupportViewerComponent } from './support/shared/support-viewer/support-viewer.component';
-import { SupportHomeComponent } from './support/support-home/support-home.component';
 import { TipsComponent } from './tips/tips.component';
 import { TodoArchivedComponent, TodoDashboardComponent, TodoHomeComponent, TodoProjectComponent } from './todo';
-import { TodoDashboardNewComponent } from './todo/todo-dashboard-new/todo-dashboard-new.component';
 import { TodoOutletComponent } from './todo/todo-outlet/todo-outlet.component';
 import { ToolbarService } from './toolbar.service';
 import { UserViewerComponent } from './user-viewer/user-viewer.component';
@@ -74,20 +68,14 @@ function minItemsValidationMessage(err, field: FormlyFieldConfig) {
     TodoArchivedComponent,
     TodoDashboardComponent,
     AboutComponent,
-    SupportHomeComponent,
-    SupportViewerComponent,
     SearchInputComponent,
     ChatsComponent,
     ChatExploreComponent,
     ChatViewerComponent,
-    NotesHomeComponent,
-    NotesViewerComponent,
-    NoteNotFoundComponent,
     AccountComponent,
     LoginComponent,
     DashboardComponent,
     TodoOutletComponent,
-    TodoDashboardNewComponent,
     SignupComponent,
     UserViewerComponent
   ],

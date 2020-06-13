@@ -1,5 +1,5 @@
-import { ModuleWithProviders, NgModule } from '@angular/core';
 import { canActivate, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
+import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { AboutComponent } from './about/about.component';
 import { AccountComponent } from './account/account.component';
@@ -9,30 +9,18 @@ import { ChatViewerComponent } from './chats/chat-viewer/chat-viewer.component';
 import { ChatsComponent } from './chats/chats.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
-import { NoteNotFoundComponent } from './notes/note-not-found/note-not-found.component';
-import { NotesHomeComponent } from './notes/notes-home/notes-home.component';
-import { NotesViewerComponent } from './notes/notes-viewer/notes-viewer.component';
 import { SettingsComponent } from './settings/settings.component';
 import { SignupComponent } from './signup/signup.component';
-import { SupportViewerComponent } from './support/shared/support-viewer/support-viewer.component';
-import { SupportHomeComponent } from './support/support-home/support-home.component';
 import { TipsComponent } from './tips/tips.component';
 import { TodoArchivedComponent, TodoDashboardComponent, TodoHomeComponent, TodoProjectComponent } from './todo';
-import { TodoDashboardNewComponent } from './todo/todo-dashboard-new/todo-dashboard-new.component';
 import { TodoOutletComponent } from './todo/todo-outlet/todo-outlet.component';
 import { UserViewerComponent } from './user-viewer/user-viewer.component';
 import { DevelopmentGuard } from './development.guard';
 
-
-const SUPPORT_ROUTES: Route[] = [
-  { path: 'home', component: SupportHomeComponent },
-  { path: ':id', component: SupportViewerComponent }
-];
-
 const redirectUnauthorizedToLogin = redirectUnauthorizedTo(['login']);
 
 // The routes
-export const routes: Route[] = [
+const routes: Route[] = [
   // About StudyBuddy
   { path: 'about', component: AboutComponent },
   // Account
@@ -47,21 +35,12 @@ export const routes: Route[] = [
   { path: 'downloads', component: AppDownloadsComponent },
   // Login page
   { path: 'login', component: LoginComponent },
-  // Notes
-  { path: 'notes', component: NotesHomeComponent, ...canActivate(redirectUnauthorizedToLogin) },
-  { path: 'notes/note-not-found', component: NoteNotFoundComponent, ...canActivate(redirectUnauthorizedToLogin) },
-  { path: 'notes/:id', component: NotesViewerComponent, ...canActivate(redirectUnauthorizedToLogin) },
-  // Reroutes those going to the old route to the new 'tips' route
-  // Note: This **may** be removed in a future release
-  { path: 'resources', redirectTo: '/tips' },
   // Settings page. Currently a bit broken
   { path: 'settings', component: SettingsComponent, ...canActivate(redirectUnauthorizedToLogin) },
   // Sign up page
   { path: 'signup', component: SignupComponent },
   // An alias for signing up
   { path: 'sign-up', redirectTo: '/signup' },
-  // Support page
-  { path: 'support', children: SUPPORT_ROUTES },
   // Test links for developers.
   { path: 'test', redirectTo: '/develop/shared-service' },
   // Tips page.
@@ -75,7 +54,6 @@ export const routes: Route[] = [
       // Experimental, currently WIP
       { path: 'project/:projectId', component: TodoProjectComponent },
       { path: 'dashboard', component: TodoDashboardComponent },
-      { path: 'dashboard-new', component: TodoDashboardNewComponent },
       { path: '**', redirectTo: '/todo/dashboard' }
     ]
   },
@@ -96,12 +74,6 @@ export const routes: Route[] = [
   // Wildcard routes
   { path: '**', redirectTo: '/dashboard' }
 ];
-
-// The routing
-/**
- * @deprecated Use {@link AppRoutingModule} instead
- */
-export const AppRouting: ModuleWithProviders = RouterModule.forRoot(routes);
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
