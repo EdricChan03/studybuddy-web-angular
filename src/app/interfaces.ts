@@ -32,12 +32,6 @@ export interface SidenavLink {
    * The title of the navigation item
    */
   title?: string;
-  /**
-   * A sublist of the navigation item
-   *
-   * Note: Only one sublist can be created.
-   */
-  list?: SidenavLink[];
   /** Whether the navigation item should be hidden. */
   hidden?: boolean;
   /** The navigation item's badge, if any */
