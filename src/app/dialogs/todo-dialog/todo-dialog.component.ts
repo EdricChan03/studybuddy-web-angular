@@ -1,14 +1,16 @@
-import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
-import { MatDialogRef, MatDialog } from '@angular/material/dialog';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { SharedService } from '../../shared.service';
-import { TodoItem, TodoProject } from '../../interfaces';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { EditContentDialogComponent } from '../edit-content-dialog/edit-content-dialog.component';
-import { MatChipInputEvent } from '@angular/material/chips';
-import * as firebase from 'firebase';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { auth, User } from 'firebase/app';
+import { firestore } from 'firebase';
 import { Observable } from 'rxjs';
+
+import { DialogsService } from '../../core/dialogs/dialogs.service';
+import { GapiWrapperService } from '../../gapi-wrapper.service';
+import { TodoItem, TodoProject } from '../../interfaces';
+import { SharedService } from '../../shared.service';
 import { NewProjectDialogComponent } from '../new-project-dialog/new-project-dialog.component';
 
 @Component({
@@ -56,15 +58,18 @@ export class TodoDialogComponent implements OnInit {
   todoForm: FormGroup;
   projectsCollection: AngularFirestoreCollection<TodoProject>;
   projects$: Observable<TodoProject[]>;
+  user: User;
   @ViewChild('helpContentDialog', { static: true }) helpContentDialogTmpl: TemplateRef<any>;
   constructor(
     // TODO(Edric): Figure out a way to make this private
     public shared: SharedService,
+    private coreDialogs: DialogsService,
     private afAuth: AngularFireAuth,
     private dialogRef: MatDialogRef<TodoDialogComponent>,
     private afFs: AngularFirestore,
     private dialog: MatDialog,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private gapiWrapper: GapiWrapperService
   ) {
     this.todoForm = fb.group({
       title: ['', Validators.required],
@@ -78,34 +83,37 @@ export class TodoDialogComponent implements OnInit {
       id: { value: this.afFs.createId(), disabled: true },
       project: null
     });
-    if (afAuth.auth.currentUser) {
-      this.todoCollection = this.afFs.collection(`users/${afAuth.auth.currentUser.uid}/todos`);
-      this.projectsCollection = this.afFs.collection(`users/${afAuth.auth.currentUser.uid}/todoProjects`);
-      this.projects$ = this.projectsCollection.valueChanges();
-    } else {
-      // User isn't signed in! Add todo stuff to disable dialog
-      const loginDialogRef = this.shared.openConfirmDialog({
-        title: 'Login before continuing',
-        disableClose: true,
-        isHtml: true,
-        msg: `<p>To access this content, please login before continuing.</p>
-        <p><strong>Note: Please enable popups before clicking the Login button.</strong></p>`,
-        ok: 'Login'
-      }, {
-        disableClose: true
-      });
-      loginDialogRef.afterClosed().subscribe(result => {
-        if (result === 'ok') {
-          // tslint:disable-next-line:no-shadowed-variable
-          this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then((result) => {
-            this.shared.openSnackBar({ msg: `Signed in as ${result.user.email}` });
-          }, err => {
-            this.shared.openSnackBar({ msg: `Error: ${err.message}` });
-          });
-        }
-        this.dialogRef.close();
-      });
-    }
+    afAuth.user.subscribe(user => {
+      this.user = user;
+      if (user) {
+        this.todoCollection = this.afFs.collection(`users/${user.uid}/todos`);
+        this.projectsCollection = this.afFs.collection(`users/${user.uid}/todoProjects`);
+        this.projects$ = this.projectsCollection.valueChanges();
+      } else {
+        // User isn't signed in! Add todo stuff to disable dialog
+        const loginDialogRef = this.coreDialogs.openConfirmDialog({
+          title: 'Login before continuing',
+          isHtml: true,
+          msg: `<p>To access this content, please login before continuing.</p>
+          <p><strong>Note: Please enable popups before clicking the Login button.</strong></p>`,
+          positiveBtnText: 'Login'
+        }, {
+          disableClose: true
+        });
+        loginDialogRef.afterClosed().subscribe(result => {
+          if (result === 'ok') {
+            // tslint:disable-next-line:no-shadowed-variable
+            this.gapiWrapper.login();
+            // this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then((result) => {
+            //   this.shared.openSnackBar({ msg: `Signed in as ${result.user.email}` });
+            // }, err => {
+            //   this.shared.openSnackBar({ msg: `Error: ${err.message}` });
+            // });
+          }
+          this.dialogRef.close();
+        });
+      }
+    });
   }
 
   get todoFormRawValue(): any {
@@ -115,7 +123,7 @@ export class TodoDialogComponent implements OnInit {
   showHelp(help: 'content' | 'project' | 'dueDate') {
     switch (help) {
       case 'content':
-        this.helpDialogRef = this.shared.openHelpDialog(this.helpContentDialogTmpl);
+        this.helpDialogRef = this.dialog.open(this.helpContentDialogTmpl);
         break;
     }
   }
@@ -212,10 +220,10 @@ export class TodoDialogComponent implements OnInit {
               itemToAdd[prop] = this.todoFormRawValue[prop];
               break;
             case 'dueDate':
-              itemToAdd[prop] = firebase.firestore.Timestamp.fromDate(this.todoFormRawValue[prop] as Date);
+              itemToAdd[prop] = firestore.Timestamp.fromDate(this.todoFormRawValue[prop] as Date);
               break;
             case 'project':
-              itemToAdd[prop] = this.afFs.doc(`users/${this.afAuth.auth.currentUser.uid}/todoProjects/${this.todoFormRawValue[prop]}`).ref;
+              itemToAdd[prop] = this.afFs.doc(`users/${this.user.uid}/todoProjects/${this.todoFormRawValue[prop]}`).ref;
               break;
             default:
               throw new Error(`Property ${prop} doesn't exist!`);
