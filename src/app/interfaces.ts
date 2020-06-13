@@ -43,9 +43,9 @@ export interface Settings {
    */
   enableCalendar?: boolean;
   /**
-   * The default view to show the todos
+   * The default view to show the todos in.
    */
-  todoView?: 'list' | 'table' | 'agenda';
+  todoView?: 'list' | 'table';
   /**
    * Whether to enable dark theme
    */
@@ -63,6 +63,8 @@ export interface Settings {
    */
   closeSidenavOnClick?: boolean;
 }
+
+/** Represents a todo item. */
 export interface TodoItem extends HasId {
   /**
    * The content of the todo
