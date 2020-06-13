@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase';
+import { auth } from 'firebase/app';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -25,10 +26,6 @@ export class AuthService {
     return this.afAuth.authState.pipe(map(user => user !== null));
   }
 
-  /** Returns the current instance of Firebase's Auth object */
-  get firebaseAuth(): firebase.auth.Auth {
-    return this.afAuth.auth;
-  }
   /**
    * Attemps to log in with a username and password
    * @param email The email to login as
@@ -36,7 +33,7 @@ export class AuthService {
    * @return A promise with the user's credentials
    */
   logInWithEmailAndPassword(email: string, password: string): Promise<firebase.auth.UserCredential> {
-    return this.afAuth.auth.signInWithEmailAndPassword(email, password);
+    return this.afAuth.signInWithEmailAndPassword(email, password);
   }
   /**
    * Attempts to sign up with a username and password
@@ -45,14 +42,14 @@ export class AuthService {
    * @return A promise with the user's credentials
    */
   signUpWithEmailAndPassword(email: string, password: string): Promise<firebase.auth.UserCredential> {
-    return this.afAuth.auth.createUserWithEmailAndPassword(email, password);
+    return this.afAuth.createUserWithEmailAndPassword(email, password);
   }
   /**
    * Attempts to log in with Google
    * @return A promise with the user's credentials
    */
   logInWithGoogle(): Promise<firebase.auth.UserCredential> {
-    return this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+    return this.afAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
   }
   /**
    * Logs out the current user
@@ -61,7 +58,7 @@ export class AuthService {
    * @return The promise of the logout
    */
   logOut(): Promise<void> {
-    return this.afAuth.auth.signOut();
+    return this.afAuth.signOut();
   }
   /**
    * Gets the auth state
@@ -76,8 +73,8 @@ export class AuthService {
    * Note: Consider using {@link AuthService#getAuthState} instead.
    * @return `true` if there is a logged-in user, `false` otherwise
    */
-  isLoggedIn(): boolean {
-    return this.afAuth.auth.currentUser !== null;
+  async isLoggedIn(): Promise<boolean> {
+    return await this.afAuth.currentUser !== null;
   }
   /**
    * Resets the password of an account
@@ -85,6 +82,6 @@ export class AuthService {
    * @return A promise
    */
   resetPassword(email: string): Promise<void> {
-    return this.afAuth.auth.sendPasswordResetEmail(email);
+    return this.afAuth.sendPasswordResetEmail(email);
   }
 }
