@@ -43,3 +43,6 @@ Thumbs.db
 
 # AngularDoc config file
 .angulardoc.json
+
+# All log files
+*.log
