@@ -10,7 +10,6 @@ import {
   GlobalPositionStrategy
 } from '@angular/cdk/overlay';
 import { ComponentPortal, PortalModule } from '@angular/cdk/portal';
-import { cleanSession } from 'selenium-webdriver/safari';
 import { Observable } from 'rxjs';
 
 @Injectable({
