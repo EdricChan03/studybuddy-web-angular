@@ -1,7 +1,6 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { SharedService } from '../../shared.service';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, TemplateRef } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-new-chat-dialog',
@@ -12,8 +11,8 @@ export class NewChatDialogComponent {
   createChatForm: FormGroup;
   helpDialogRef: MatDialogRef<any>;
   constructor(
-    private fb: FormBuilder,
-    private shared: SharedService
+    private dialog: MatDialog,
+    fb: FormBuilder
   ) {
     this.createChatForm = fb.group({
       name: ['', Validators.required],
@@ -27,7 +26,7 @@ export class NewChatDialogComponent {
     if (event) {
       event.stopPropagation();
     }
-    this.helpDialogRef = this.shared.openHelpDialog(templateRef);
+    this.helpDialogRef = this.dialog.open(templateRef);
   }
   closeHelpDialog() {
     this.helpDialogRef.close();

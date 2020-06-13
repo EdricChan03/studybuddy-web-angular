@@ -36,19 +36,19 @@
     <ng-template #helpVisibilityDialog>
       <h2 matDialogTitle>Help - Chat group visibility</h2>
       <mat-dialog-content fxLayout="column">
-        <h3>Public</h3>
+        <h3><mat-icon inline>public</mat-icon> Public</h3>
         <ul>
           <li>The created chat group is publicly visible to everyone.</li>
           <li>Anyone can join even without the created chat group ID.</li>
           <li>Ideal for public groups and/or communities.</li>
         </ul>
-        <h3>Private</h3>
+        <h3><mat-icon inline>lock</mat-icon> Private</h3>
         <ul>
           <li>The created chat group will not be publicly visible to anyone.</li>
           <li>The created chat group will be invitation-only (admins/existing members can send invites).</li>
           <li>Ideal for friend groups.</li>
         </ul>
-        <h3>Unlisted</h3>
+        <h3><mat-icon inline>link</mat-icon> Unlisted</h3>
         <ul>
           <li>The created chat group will not publicly visible to anyone.</li>
           <li>However, anyone with the created chat group's ID can still join.</li>
