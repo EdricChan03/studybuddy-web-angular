@@ -1,7 +1,10 @@
 <ng-container *ngIf="shared.isOnline; else: nointernet">
   <div class="padding-percentage-container">
     <h1>App downloads</h1>
-    <h2>Android</h2>
+    <h2>
+      Android
+      <span class="feature-status-badge feature-status-badge--warn">Alpha</span>
+    </h2>
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
