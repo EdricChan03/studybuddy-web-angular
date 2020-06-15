@@ -33,6 +33,8 @@ export class ChatViewerComponent implements OnDestroy {
   newMessageForm: FormGroup;
   chatId: string;
 
+  isMember = false;
+
   @ViewChild('toolbar', { static: true }) toolbar: ToolbarComponent;
   @ViewChild('inviteDialog', { static: true }) inviteDialog: TemplateRef<any>;
 
@@ -167,22 +169,24 @@ export class ChatViewerComponent implements OnDestroy {
     // Hide the default toolbar
     this.toolbarService.showToolbar = false;
 
-    this.chat$.subscribe(chat => {
-      this.chat = chat;
-      // Note: This code snippet is inserted here as it needs this.chat, which
-      // is only set when this Observable is subscribed
+    this.chat$.pipe(take(1)).subscribe(chat => {
       this.toolbarActionItems = [...this.toolbarActionItems,
         ...(this.isAdmin(chat) ? this.adminToolbarActionItems : this.nonAdminToolbarActionItems)];
       console.log('Current toolbar action items:', this.toolbarActionItems);
       console.log('Current toolbar instance:', this.toolbar);
+    });
+
+    this.chat$.subscribe(chat => {
+      this.chat = chat;
+      // Note: This code snippet is inserted here as it needs this.chat, which
+      // is only set when this Observable is subscribed
+      this.isMember = this.isMemberOfChat(chat);
       // this.toolbar.actionItems = this.toolbarActionItems;
     });
   }
 
-  isMember(): Observable<boolean> {
-    return this.chat$.pipe(
-      map(chat => (chat.members as DocumentReference[]).some(members => members.id === this.auth.user.uid))
-    );
+  isMemberOfChat(chat: Chat): boolean {
+    return (chat.members as DocumentReference[]).some(members => members.id === this.auth.user.uid);
   }
 
   toggleSidenav() {
