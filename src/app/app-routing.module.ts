@@ -1,4 +1,3 @@
-import { canActivate, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { AboutComponent } from './about/about.component';
@@ -13,9 +12,9 @@ import { TipsComponent } from './tips/tips.component';
 import { TodoArchivedComponent, TodoDashboardComponent, TodoHomeComponent, TodoProjectComponent } from './todo';
 import { TodoOutletComponent } from './todo/todo-outlet/todo-outlet.component';
 import { UserViewerComponent } from './user-viewer/user-viewer.component';
-import { DevelopmentGuard } from './development.guard';
 
-const redirectUnauthorizedToLogin = redirectUnauthorizedTo(['login']);
+import { AuthGuard } from './auth.guard';
+import { DevelopmentGuard } from './development.guard';
 
 // The routes
 const routes: Route[] = [
@@ -24,11 +23,11 @@ const routes: Route[] = [
   // Account
   { path: 'account', redirectTo: '/settings/account' },
   // Chatrooms! Coming soon.
-  { path: 'chats', component: ChatsComponent, ...canActivate(redirectUnauthorizedToLogin) },
-  { path: 'chats/explore', component: ChatExploreComponent, ...canActivate(redirectUnauthorizedToLogin) },
-  { path: 'chats/:id', component: ChatViewerComponent, ...canActivate(redirectUnauthorizedToLogin) },
+  { path: 'chats', component: ChatsComponent, canActivate: [AuthGuard] },
+  { path: 'chats/explore', component: ChatExploreComponent, canActivate: [AuthGuard] },
+  { path: 'chats/:id', component: ChatViewerComponent, canActivate: [AuthGuard] },
   // Dashboard
-  { path: 'dashboard', component: DashboardComponent, ...canActivate(redirectUnauthorizedToLogin) },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   // Downloads for the app. Currently a bit empty
   { path: 'downloads', component: AppDownloadsComponent },
   // Login page
@@ -42,7 +41,7 @@ const routes: Route[] = [
   // Tips page.
   { path: 'tips', component: TipsComponent },
   {
-    path: 'todo', component: TodoOutletComponent, ...canActivate(redirectUnauthorizedToLogin), children: [
+    path: 'todo', component: TodoOutletComponent, canActivate: [AuthGuard], children: [
       // All todos
       { path: 'home', component: TodoHomeComponent },
       // Not working as of now
