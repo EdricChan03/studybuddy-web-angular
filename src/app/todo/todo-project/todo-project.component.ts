@@ -3,7 +3,6 @@ import { AngularFirestoreDocument, AngularFirestore } from '@angular/fire/firest
 import { ActivatedRoute } from '@angular/router';
 import { filter, switchMap } from 'rxjs/operators';
 import { TodoProject } from '../../interfaces';
-import { AuthService } from '../../auth.service';
 import { Observable } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
 
@@ -28,7 +27,7 @@ export class TodoProjectComponent {
       .subscribe(params => {
         this.projectId = params.projectId;
       });
-    afAuth.auth.onAuthStateChanged((user) => {
+    afAuth.onAuthStateChanged((user) => {
       if (user) {
         this.projectDoc = afFs.doc(`users/${user.uid}/todoProjects/${this.projectId}`);
         this.project = this.projectDoc.valueChanges();

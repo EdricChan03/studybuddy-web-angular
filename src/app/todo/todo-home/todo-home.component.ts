@@ -53,7 +53,7 @@ export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
     private afAuth: AngularFireAuth
   ) {
     shared.title = 'Todos';
-    afAuth.auth.onAuthStateChanged((user) => {
+    afAuth.onAuthStateChanged((user) => {
       if (user) {
         this.currentUser = user.uid;
         // Skip archived todos

@@ -53,7 +53,7 @@ export class TodoArchivedComponent implements OnInit, AfterViewInit, OnDestroy {
     private afAuth: AngularFireAuth
   ) {
     shared.title = 'Todos';
-    afAuth.auth.onAuthStateChanged((user) => {
+    afAuth.onAuthStateChanged((user) => {
       if (user) {
         this.currentUser = user.uid;
         this.todosCollection = this.afFs.collection<TodoItem>(
