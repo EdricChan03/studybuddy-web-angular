@@ -6,6 +6,7 @@ import { EventManager } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { HotkeyHelpDialogComponent } from './hotkey-help-dialog/hotkey-help-dialog.component';
+import { HotkeysModule } from './hotkeys.module';
 
 interface HotkeyOptions {
   /** The element to bind the hotkey to. */
@@ -29,12 +30,12 @@ interface HotkeyOptions {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: HotkeysModule
 })
 export class HotkeysService {
   hotkeys = new Map<string, string>();
   readonly hotkeyHelpDialogId = 'hotkey-help-dialog';
-  defaults: Partial<HotkeyOptions> = {
+  readonly defaults: Partial<HotkeyOptions> = {
     element: this.document
   };
 
