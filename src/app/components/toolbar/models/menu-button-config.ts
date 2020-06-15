@@ -1,28 +1,6 @@
 import { UrlTree } from '@angular/router';
 
-/** Represents the behavior/behaviour of the menu button when interacted with. */
-// export enum MenuButtonBehavior {
-//   /**
-//    * Indicates that the menu button's behavior/behaviour should be
-//    * of a menu button.
-//    * This menu button should ideally and typically control a side drawer.
-//    */
-//   MENU = 'menu',
-//   /**
-//    * Indicates that the menu button's behavior/behaviour should be
-//    * of a back button.
-//    * This button should navigate back to the previous page that the user was
-//    * on.
-//    */
-//   BACK = 'back',
-//   /**
-//    * Indicates that custom behavior/behaviour should be used for the
-//    * menu button.
-//    * (Note: This property is currently **unsupported** until a future version.)
-//    */
-//   CUSTOM = 'custom'
-// }
-/** Represents a custom behavior/behaviour of the menu button when interacted with. */
+/** Represents a custom behavior of the menu button when interacted with. */
 export type MenuButtonCustomBehavior = {
   /** The handler to use when the menu button is clicked. */
   handlerType: 'listener';
