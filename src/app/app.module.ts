@@ -32,7 +32,6 @@ import { ChatsComponent } from './chats/chats.component';
 import { ComponentsModule } from './components/components.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DialogsModule } from './dialogs/dialogs.module';
-import { LoginComponent } from './login/login.component';
 import { HotkeysModule } from './core/hotkeys/hotkeys.module';
 import { MaterialModule } from './material.module';
 import { SharedModule } from './shared.service';
@@ -70,7 +69,6 @@ function minItemsValidationMessage(err, field: FormlyFieldConfig) {
     ChatsComponent,
     ChatExploreComponent,
     ChatViewerComponent,
-    LoginComponent,
     DashboardComponent,
     TodoOutletComponent,
     SignupComponent,

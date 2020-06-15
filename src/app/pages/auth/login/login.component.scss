@@ -1,5 +1,8 @@
 .login-container {
   height: 100%;
+}
+
+.login-card {
   .login-logo-container {
     margin: 32px 0;
     display: flex;
@@ -8,9 +11,14 @@
       width: 64px;
     }
   }
-  mat-card-title {
+
+  h2 {
     margin: 16px 0 32px;
     display: flex;
     justify-content: center;
+  }
+
+  .login-card-form {
+    margin-bottom: 16px;
   }
 }

@@ -6,7 +6,6 @@ import { ChatExploreComponent } from './chats/chat-explore/chat-explore.componen
 import { ChatViewerComponent } from './chats/chat-viewer/chat-viewer.component';
 import { ChatsComponent } from './chats/chats.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { TipsComponent } from './tips/tips.component';
 import { TodoArchivedComponent, TodoDashboardComponent, TodoHomeComponent, TodoProjectComponent } from './todo';
@@ -30,8 +29,6 @@ const routes: Route[] = [
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   // Downloads for the app. Currently a bit empty
   { path: 'downloads', component: AppDownloadsComponent },
-  // Login page
-  { path: 'login', component: LoginComponent },
   // Sign up page
   { path: 'signup', component: SignupComponent },
   // An alias for signing up
@@ -60,6 +57,10 @@ const routes: Route[] = [
     path: 'develop',
     canActivate: [DevelopmentGuard],
     loadChildren: () => import('./pages/develop/develop.module').then(m => m.DevelopModule)
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('./pages/auth/login/login.module').then(m => m.LoginModule)
   },
   {
     path: 'settings',
