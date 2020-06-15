@@ -13,6 +13,6 @@ export class UserInfoDialogComponent {
   constructor(
     afAuth: AngularFireAuth
   ) {
-    this.user$ = afAuth.authState;
+    this.user$ = afAuth.user;
   }
 }

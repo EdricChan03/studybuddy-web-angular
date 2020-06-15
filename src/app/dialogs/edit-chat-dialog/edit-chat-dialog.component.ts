@@ -35,8 +35,8 @@ export class EditChatDialogComponent implements OnInit {
   }
 
   isAdmin(chat: Chat): boolean {
-    return chat.owner.id === this.auth.authState.uid ||
-      (chat.admins as DocumentReference[]).some(e => e.id === this.auth.authState.uid);
+    return chat.owner.id === this.auth.user.uid ||
+      (chat.admins as DocumentReference[]).some(e => e.id === this.auth.user.uid);
   }
   ngOnInit() {
     this.chatDoc.get()

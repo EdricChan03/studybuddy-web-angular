@@ -10,20 +10,20 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthService {
-  authState: firebase.User = null;
+  user: firebase.User = null;
   constructor(
     /**
      * Angular Fire - Firebase Authentication
      */
     public afAuth: AngularFireAuth
   ) {
-    afAuth.authState.subscribe((result) => {
-      this.authState = result;
+    afAuth.user.subscribe((user) => {
+      this.user = user;
     });
   }
   /** Checks whether the user is authenticated. */
   get authenticated(): Observable<boolean> {
-    return this.afAuth.authState.pipe(map(user => user !== null));
+    return this.afAuth.user.pipe(map(user => user !== null));
   }
 
   /**

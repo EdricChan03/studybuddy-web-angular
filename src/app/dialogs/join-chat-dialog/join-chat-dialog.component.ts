@@ -43,7 +43,7 @@ export class JoinChatDialogComponent {
         if (snapshot.exists) {
           this.errors.invalidChatId = false;
           console.log();
-          if ((snapshot.data()['members'] as DocumentReference[]).includes(this.afFs.doc(`users/${this.auth.authState.uid}`).ref)) {
+          if ((snapshot.data()['members'] as DocumentReference[]).includes(this.afFs.doc(`users/${this.auth.user.uid}`).ref)) {
             this.errors.userAlreadyJoined = true;
           } else {
             this.errors.userAlreadyJoined = false;
