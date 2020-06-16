@@ -9,8 +9,6 @@ import { SelectionDialogComponent } from './selection-dialog/selection-dialog.co
 import { Dialog } from './dialog';
 import { DialogsModule } from './dialogs.module';
 import {
-  AlertDialogOpts,
-  ConfirmDialogOpts,
   DialogOpts,
   DialogResult,
   DialogType,
