@@ -27,7 +27,7 @@
     "@ngx-formly/core": "^5.3.0",
     "@ngx-formly/material": "^5.3.0",
     "core-js": "^2.6.5",
-    "firebase": "^7.13.1",
+    "firebase": "^7.17.1",
     "ng-circle-progress": "^1.4.0",
     "ngx-markdown": "^9.0.0",
     "prismjs": "^1.20.0",
