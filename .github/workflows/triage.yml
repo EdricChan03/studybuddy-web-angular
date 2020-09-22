@@ -1,0 +1,35 @@
+# Workflow adapted from https://github.com/actions/github-script#apply-a-label-to-an-issue
+name: Triage Issues and PRs
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/github-script@v2
+      with:
+        github-token: ${{ github.token }}
+        script: |
+          // Check if the issue already has labels
+          const { data: labels } = await github.issues.listLabelsOnIssue({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo
+          });
+          console.debug(`Issue ${context.issue.number}'s labels:`, labels);
+
+          if (labels.length == 0) {
+            console.log(`Issue ${context.issue.number} has no labels - adding the triage label...`);
+            github.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['status: needs-triage']
+            });
+          } else {
+            console.log(`Issue ${context.issue.number} already has a label - skipping...`);
+          }

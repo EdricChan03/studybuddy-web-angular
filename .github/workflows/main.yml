@@ -1,0 +1,39 @@
+name: Site workflow
+
+on:
+  push:
+    branches:
+    # Only accept deploying from the master branch
+    - master
+
+jobs:
+  test:
+    name: App linting/testing
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup NodeJS LTS
+      uses: actions/setup-node@v1
+      with:
+        node-version: '10.x'
+    - name: Setup Angular problem matchers
+      uses: EdricChan03/angular-problem-matchers-action@v0.0.0
+    - name: Cache node modules
+      uses: actions/cache@v2
+      id: node_modules_cache
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}-
+          ${{ runner.os }}-node_modules-
+          ${{ runner.os }}-
+    - name: Install dependencies
+      # Skip this step if a cache hit occurs on the key
+      if: steps.node_modules_cache.outputs.cache-hit != 'true'
+      run: npm ci
+    - name: Lint application
+      run: npm run lint
+    - name: Test application
+      run: npm run action:test

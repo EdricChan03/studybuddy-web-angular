@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "action:e2e": "ng e2e --protractor-config=protractor-ci.conf.js",
+    "action:test": "ng test --no-watch --no-progress --code-coverage --browsers=ChromeHeadlessCI",
+    "lint": "ng lint",
     "serveDev": "ng serve -c dev",
     "start": "ng serve",
     "buildProd": "ng build --prod",
