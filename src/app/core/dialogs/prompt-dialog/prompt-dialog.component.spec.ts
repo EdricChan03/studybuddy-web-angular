@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { PromptDialogComponent } from './prompt-dialog.component';
 import { PromptDialogOpts } from '../models';
@@ -21,6 +22,7 @@ describe('PromptDialogComponent', () => {
     const DEFAULT_MODULE_DEF: TestModuleMetadata = {
       declarations: [PromptDialogComponent],
       imports: [
+        NoopAnimationsModule,
         FormsModule,
         MatButtonModule,
         MatDialogModule,

@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed, TestModuleMetadata, TestBedStatic } from '@a
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { SelectionDialogComponent } from './selection-dialog.component';
 import { SelectionDialogOpts } from '../models';
@@ -19,6 +20,7 @@ describe('SelectionDialogComponent', () => {
     const DEFAULT_MODULE_DEF: TestModuleMetadata = {
       declarations: [SelectionDialogComponent],
       imports: [
+        NoopAnimationsModule,
         MatButtonModule,
         MatDialogModule,
         MatListModule
