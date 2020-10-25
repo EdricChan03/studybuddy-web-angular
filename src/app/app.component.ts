@@ -192,8 +192,4 @@ export class AppComponent implements OnInit {
   private handleError(errorMsg: string) {
     this.shared.openSnackBar({ msg: `Error: ${errorMsg}` });
   }
-
-  // fakeMethod() {
-  //   console.log('Hello fake method! This is used to verify that CodeQL actually spits out errors. As a bonus, it's a very long line with no linebreaks!');
-  // }
 }

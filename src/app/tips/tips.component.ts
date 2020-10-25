@@ -30,10 +30,10 @@ export class TipsComponent implements OnInit {
    */
   getQuoteOfDay(enableDebug?: boolean) {
     this.showProgress();
-    this.http.get('https://quotes.rest/qod')
+    this.http.get<QuoteOfTheDay>('https://quotes.rest/qod')
       .subscribe(result => {
         this.hideProgress();
-        this.quoteOfDay = <QuoteOfTheDay>result;
+        this.quoteOfDay = result;
         if (enableDebug) {
           console.log('[DEBUG] Result of quote of the day:', result);
         }
@@ -44,10 +44,10 @@ export class TipsComponent implements OnInit {
    */
   getWordOfDay(enableDebug?: boolean) {
     this.showProgress();
-    this.http.get('http://api.wordnik.com:80/v4/words.json/wordOfTheDay?api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5')
+    this.http.get<WordOfTheDay>('http://api.wordnik.com:80/v4/words.json/wordOfTheDay?api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5')
       .subscribe(result => {
         this.hideProgress();
-        this.wordOfDay = <WordOfTheDay>result;
+        this.wordOfDay = result;
         if (enableDebug) {
           console.log('[DEBUG] Result of quote of the day:', result);
         }

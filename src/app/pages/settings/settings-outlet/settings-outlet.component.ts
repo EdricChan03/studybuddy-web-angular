@@ -46,7 +46,7 @@ export class SettingsOutletComponent {
     );
   }
 
-  private updateSetting(key: string, value: Object) {
+  private updateSetting(key: string, value: object) {
     this.settingsStorage.setSetting(key, JSON.stringify(value));
   }
 

@@ -96,8 +96,8 @@ export class TodoArchivedComponent implements OnInit, AfterViewInit, OnDestroy {
     this.toolbar.showToolbar = true;
   }
   markSelectedTodosAsDone() {
-    for (let i = 0; i < this.selectedTodos.length; i++) {
-      this.todosCollection.doc<TodoItem>(this.selectedTodos[i].id).update({
+    for (const todo of this.selectedTodos) {
+      this.todosCollection.doc<TodoItem>(todo.id).update({
         isDone: true
       });
     }
@@ -124,8 +124,8 @@ export class TodoArchivedComponent implements OnInit, AfterViewInit, OnDestroy {
       positiveBtnText: 'Confirm'
     }).afterClosed().subscribe(result => {
       if (result === 'ok') {
-        for (let i = 0; i < this.selectedTodos.length; i++) {
-          this._deleteTodo(this.selectedTodos[i].id);
+        for (const todo of this.selectedTodos) {
+          this._deleteTodo(todo.id);
         }
         this.shared.openSnackBar({ msg: 'Successfully deleted todos!' });
         // Reset selected todos

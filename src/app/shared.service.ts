@@ -147,6 +147,7 @@ const SHARED_MODULES = [
   MatSnackBarModule
 ];
 
+// tslint:disable:max-classes-per-file
 @NgModule({
   imports: SHARED_MODULES,
   providers: [SharedService]

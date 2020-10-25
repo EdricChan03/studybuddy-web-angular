@@ -19,9 +19,7 @@ export class ApiService {
     return this.http.get<firebase.User>(
       `${this.apiBaseUrl}/v1/user`,
       {
-        params: {
-          email: email
-        }
+        params: { email }
       }
     );
   }
@@ -35,9 +33,7 @@ export class ApiService {
     return this.http.get<firebase.User>(
       `${this.apiBaseUrl}/v1/user`,
       {
-        params: {
-          phoneNumber: phoneNumber
-        }
+        params: { phoneNumber }
       }
     );
   }
@@ -51,9 +47,7 @@ export class ApiService {
     return this.http.get<firebase.User>(
       `${this.apiBaseUrl}/v1/user`,
       {
-        params: {
-          id: id
-        }
+        params: { id }
       }
     );
   }
