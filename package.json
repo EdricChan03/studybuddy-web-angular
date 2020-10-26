@@ -33,7 +33,7 @@
     "firebase": "^7.13.1",
     "ng-circle-progress": "^1.6.0",
     "ngx-markdown": "^10.1.1",
-    "prismjs": "^1.21.0",
+    "prismjs": "^1.22.0",
     "rxjs": "^6.6.3",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.3"
