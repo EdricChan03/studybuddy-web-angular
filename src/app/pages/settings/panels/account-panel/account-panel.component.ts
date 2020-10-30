@@ -1,7 +1,6 @@
 import { Component, TemplateRef } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { MatDialog } from '@angular/material/dialog';
-import { auth } from 'firebase/app';
 import { Observable } from 'rxjs';
 
 import { SharedService } from '../../../../shared.service';
