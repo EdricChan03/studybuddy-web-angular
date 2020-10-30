@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { UrlTree } from '@angular/router';
 
@@ -6,7 +6,7 @@ import { UrlTree } from '@angular/router';
   selector: 'app-empty-state',
   templateUrl: './empty-state.component.html'
 })
-export class EmptyStateComponent implements OnInit {
+export class EmptyStateComponent {
 
   constructor() { }
 
@@ -105,7 +105,23 @@ export class EmptyStateComponent implements OnInit {
    */
   @Input() emptyStateSvgIcon?: string;
 
-  ngOnInit() {
+  get hasImage() {
+    return this.emptyStateImageSrc && !this.emptyStateIcon && !this.emptyStateSvgIcon;
   }
 
+  get hasIcon() {
+    return this.emptyStateIcon && !this.emptyStateSvgIcon && !this.emptyStateImageSrc;
+  }
+
+  get hasSvgIcon() {
+    return this.emptyStateSvgIcon && !this.emptyStateIcon && !this.emptyStateImageSrc;
+  }
+
+  get hasCtaBtnIcon() {
+    return this.ctaBtnIcon && !this.ctaBtnSvgIcon;
+  }
+
+  get hasCtaBtnSvgIcon() {
+    return this.ctaBtnSvgIcon && !this.ctaBtnIcon;
+  }
 }
