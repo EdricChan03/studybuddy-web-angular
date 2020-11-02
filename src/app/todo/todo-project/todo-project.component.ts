@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestoreDocument, AngularFirestore } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
-import { filter, switchMap } from 'rxjs/operators';
-import { TodoProject } from '../../interfaces';
 import { Observable } from 'rxjs';
-import { AngularFireAuth } from '@angular/fire/auth';
+import { filter, map } from 'rxjs/operators';
+
+import { TodoItem, TodoProject } from '../../interfaces';
 
 @Component({
   selector: 'app-todo-project',
@@ -16,9 +17,9 @@ export class TodoProjectComponent {
   projectId: string;
   percentageComplete: Observable<number>;
   constructor(
-    private route: ActivatedRoute,
-    private afFs: AngularFirestore,
-    private afAuth: AngularFireAuth
+    route: ActivatedRoute,
+    afFs: AngularFirestore,
+    afAuth: AngularFireAuth
   ) {
     route.params
       .pipe(
@@ -27,14 +28,15 @@ export class TodoProjectComponent {
       .subscribe(params => {
         this.projectId = params.projectId;
       });
+
     afAuth.onAuthStateChanged((user) => {
       if (user) {
-        this.projectDoc = afFs.doc(`users/${user.uid}/todoProjects/${this.projectId}`);
+        this.projectDoc = afFs.doc<TodoProject>(`users/${user.uid}/todoProjects/${this.projectId}`);
         this.project = this.projectDoc.valueChanges();
         this.percentageComplete = this.projectDoc.get()
         .pipe(
-          switchMap((snapshot) => {
-            const val = snapshot.get('todosDone');
+          map(snapshot => {
+            const val = snapshot.get('todosDone') as TodoItem[];
             return val ? val.length : 0;
           })
         );
