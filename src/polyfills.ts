@@ -81,4 +81,4 @@ import 'first-input-delay';
 /**
  * Needed for `Array.prototype.flatMap` usage in settings component
  */
-import 'core-js/features/';
+import 'core-js/modules/es.array.flat-map';
