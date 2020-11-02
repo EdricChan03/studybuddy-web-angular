@@ -100,8 +100,8 @@ export class TodoDialogComponent implements OnInit {
         });
         loginDialogRef.afterClosed().subscribe(result => {
           if (result === 'ok') {
-            this.afAuth.signInWithPopup(new auth.GoogleAuthProvider()).then((result) => {
-              this.shared.openSnackBar({ msg: `Signed in as ${result.user.email}` });
+            this.afAuth.signInWithPopup(new auth.GoogleAuthProvider()).then(signInResult => {
+              this.shared.openSnackBar({ msg: `Signed in as ${signInResult.user.email}` });
             }, err => {
               this.shared.openSnackBar({ msg: `Error: ${err.message}` });
             });
