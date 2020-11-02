@@ -77,8 +77,3 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
  * See https://github.com/angular/angularfire/blob/master/docs/performance/getting-started.md#measuring-first-input-delay for more info.
  */
 import 'first-input-delay';
-
-/**
- * Needed for `Array.prototype.flatMap` usage in settings component
- */
-import 'core-js/modules/es.array.flat-map';
