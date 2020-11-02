@@ -66,10 +66,6 @@ const routes: Route[] = [
     path: 'settings',
     loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsModule)
   },
-  {
-    path: 'quizzes',
-    loadChildren: () => import('./pages/quiz/quiz.module').then(m => m.QuizModule)
-  },
 
   // Wildcard routes
   { path: '**', redirectTo: '/dashboard' }
