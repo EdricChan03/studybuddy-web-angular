@@ -65,5 +65,6 @@ export const analyticsConfig: AnalyticsConfig = {
 export const currentVersion: Version = new Version(versionStr);
 
 export const baseEnvironment: Environment = {
-  currentVersion
+  currentVersion,
+  analytics: analyticsConfig
 };
