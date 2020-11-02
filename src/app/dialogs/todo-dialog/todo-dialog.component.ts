@@ -3,8 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { auth, User } from 'firebase/app';
-import { firestore } from 'firebase';
+import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 
 import { DialogsService } from '../../core/dialogs/dialogs.service';
@@ -57,7 +56,7 @@ export class TodoDialogComponent implements OnInit {
   todoForm: FormGroup;
   projectsCollection: AngularFirestoreCollection<TodoProject>;
   projects$: Observable<TodoProject[]>;
-  user: User;
+  user: firebase.User;
   @ViewChild('helpContentDialog', { static: true }) helpContentDialogTmpl: TemplateRef<any>;
   constructor(
     // TODO(Edric): Figure out a way to make this private
@@ -100,7 +99,7 @@ export class TodoDialogComponent implements OnInit {
         });
         loginDialogRef.afterClosed().subscribe(result => {
           if (result === 'ok') {
-            this.afAuth.signInWithPopup(new auth.GoogleAuthProvider()).then(signInResult => {
+            this.afAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(signInResult => {
               this.shared.openSnackBar({ msg: `Signed in as ${signInResult.user.email}` });
             }, err => {
               this.shared.openSnackBar({ msg: `Error: ${err.message}` });
@@ -216,7 +215,7 @@ export class TodoDialogComponent implements OnInit {
               itemToAdd[prop] = this.todoFormRawValue[prop];
               break;
             case 'dueDate':
-              itemToAdd[prop] = firestore.Timestamp.fromDate(this.todoFormRawValue[prop] as Date);
+              itemToAdd[prop] = firebase.firestore.Timestamp.fromDate(this.todoFormRawValue[prop] as Date);
               break;
             case 'project':
               itemToAdd[prop] = this.afFs.doc(`users/${this.user.uid}/todoProjects/${this.todoFormRawValue[prop]}`).ref;

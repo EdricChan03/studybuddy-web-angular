@@ -1,5 +1,6 @@
 import { FirebaseAppConfig } from '@angular/fire';
 import { Version } from '@angular/core';
+import firebase from 'firebase/app';
 
 // This file is the base environment file for all of the environment files that
 // inherit from this file
