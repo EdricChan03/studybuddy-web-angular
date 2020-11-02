@@ -8,7 +8,6 @@ import { firestore } from 'firebase';
 import { Observable } from 'rxjs';
 
 import { DialogsService } from '../../core/dialogs/dialogs.service';
-import { GapiWrapperService } from '../../gapi-wrapper.service';
 import { TodoItem, TodoProject } from '../../interfaces';
 import { SharedService } from '../../shared.service';
 import { NewProjectDialogComponent } from '../new-project-dialog/new-project-dialog.component';
@@ -68,8 +67,7 @@ export class TodoDialogComponent implements OnInit {
     private dialogRef: MatDialogRef<TodoDialogComponent>,
     private afFs: AngularFirestore,
     private dialog: MatDialog,
-    private fb: FormBuilder,
-    private gapiWrapper: GapiWrapperService
+    private fb: FormBuilder
   ) {
     this.todoForm = fb.group({
       title: ['', Validators.required],
@@ -102,13 +100,11 @@ export class TodoDialogComponent implements OnInit {
         });
         loginDialogRef.afterClosed().subscribe(result => {
           if (result === 'ok') {
-            // tslint:disable-next-line:no-shadowed-variable
-            this.gapiWrapper.login();
-            // this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then((result) => {
-            //   this.shared.openSnackBar({ msg: `Signed in as ${result.user.email}` });
-            // }, err => {
-            //   this.shared.openSnackBar({ msg: `Error: ${err.message}` });
-            // });
+            this.afAuth.signInWithPopup(new auth.GoogleAuthProvider()).then((result) => {
+              this.shared.openSnackBar({ msg: `Signed in as ${result.user.email}` });
+            }, err => {
+              this.shared.openSnackBar({ msg: `Error: ${err.message}` });
+            });
           }
           this.dialogRef.close();
         });
