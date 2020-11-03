@@ -35,12 +35,12 @@
             <mat-icon>{{showLoginFormPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
           </button>
           <mat-error *ngIf="loginForm.get('password')?.hasError('required')">This is required.</mat-error>
-          <mat-hint><a class="anchor-link" routerLink="/reset-password">Forgot password?</a></mat-hint>
         </mat-form-field>
         <div class="login-card-form-actions" fxLayout="row" fxLayoutAlign="center center">
           <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">Login</button>
         </div>
       </form>
+      <a class="anchor-link" routerLink="/reset-password">Forgot password?</a>
     </div>
   </mat-card>
   <footer class="login-additional-actions">
