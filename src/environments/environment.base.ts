@@ -46,7 +46,7 @@ export interface Environment {
 export const versionStr = '1.0.0';
 
 export const firebaseConfig: FirebaseAppConfig = {
-  apiKey: 'AIzaSyBUoDJ_EL5ht9E4Dj9g5IjyjL4U8DTlyDU',
+  apiKey: 'AIzaSyCL_ahl9JxGOcCgDX7ka7OnE1lTbqT-xLs',
   authDomain: 'studybuddy-e5f46.firebaseapp.com',
   databaseURL: 'https://studybuddy-e5f46.firebaseio.com',
   projectId: 'studybuddy-e5f46',
@@ -67,5 +67,6 @@ export const currentVersion: Version = new Version(versionStr);
 
 export const baseEnvironment: Environment = {
   currentVersion,
+  firebase: firebaseConfig,
   analytics: analyticsConfig
 };
