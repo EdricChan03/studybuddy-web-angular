@@ -1,12 +1,13 @@
 import { Component, TemplateRef } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { MatDialog } from '@angular/material/dialog';
+import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 
-import { SharedService } from '../../../../shared.service';
-import { UserInfoDialogComponent } from '../../../../dialogs';
-import { DialogsService } from '../../../../core/dialogs/dialogs.service';
-import { DialogResult } from '../../../../core/dialogs/models';
+import { SharedService } from '@app/shared.service';
+import { UserInfoDialogComponent } from '@app/dialogs';
+import { DialogsService } from '@app/core/dialogs/dialogs.service';
+import { DialogResult } from '@app/core/dialogs/models';
 
 @Component({
   selector: 'app-account-panel',

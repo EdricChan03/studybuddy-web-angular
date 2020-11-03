@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, DocumentReference } from '@angular/fire/firestore';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { firestore } from 'firebase';
+import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
@@ -38,7 +38,7 @@ export class ChatExploreComponent {
         this.publicChatCollection = afFs.collection<Chat>('chats', query => query.where('visibility', '==', 'public'));
         this.recentChats$ = afFs.collection<Chat>('chats',
           query => query.where('visibility', '==', 'public')
-                        .where('createdAt', '>', firestore.Timestamp.fromDate(this.lastMonthDate))
+                        .where('createdAt', '>', firebase.firestore.Timestamp.fromDate(this.lastMonthDate))
         ).valueChanges({ idField: 'id' });
         this.publicChats$ = this.publicChatCollection.valueChanges({ idField: 'id' });
       }

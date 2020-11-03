@@ -2,7 +2,7 @@ import { Component, TemplateRef } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { firestore } from 'firebase';
+import firebase from 'firebase/app';
 
 import { AuthService } from '../../auth.service';
 import { TodoProject } from '../../interfaces';
@@ -72,7 +72,7 @@ export class NewProjectDialogComponent {
     for (const prop in this.newProjectForm.value) {
       if (this.newProjectForm.value[prop]) {
         if (prop === 'dueDate') {
-          newProject['dueDate'] = firestore.Timestamp.fromDate(this.newProjectForm.value[prop] as Date);
+          newProject['dueDate'] = firebase.firestore.Timestamp.fromDate(this.newProjectForm.value[prop] as Date);
         } else {
           newProject[prop] = this.newProjectForm.value[prop];
         }

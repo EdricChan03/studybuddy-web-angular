@@ -4,7 +4,7 @@ import { AngularFireRemoteConfig } from '@angular/fire/remote-config';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Event, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
-import * as firebase from 'firebase';
+import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 
 import { AuthService } from './auth.service';

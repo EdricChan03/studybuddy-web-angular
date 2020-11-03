@@ -2,7 +2,7 @@ import { Component, SecurityContext } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument, DocumentReference } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
-import { firestore } from 'firebase';
+import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthService } from '../auth.service';
@@ -149,7 +149,7 @@ export class ChatsComponent {
       if (event === true) {
         this.afFs.doc(`chats/${chat['id']}`)
           .update({
-            members: firestore.FieldValue.arrayRemove(this.afFs.doc(`users/${this.auth.user.uid}`).ref)
+            members: firebase.firestore.FieldValue.arrayRemove(this.afFs.doc(`users/${this.auth.user.uid}`).ref)
           })
           .then(() => {
             const snackBarRef = this.shared.openSnackBar({
@@ -159,7 +159,7 @@ export class ChatsComponent {
             snackBarRef.onAction().subscribe(() => {
               this.afFs.doc(`chats/${chat['id']}`)
                 .update({
-                  members: firestore.FieldValue.arrayUnion(this.afFs.doc(`users/${this.auth.user.uid}`).ref)
+                  members: firebase.firestore.FieldValue.arrayUnion(this.afFs.doc(`users/${this.auth.user.uid}`).ref)
                 })
                 .then(() => {
                   this.shared.openSnackBar({ msg: 'Successfully reverted action!' });
@@ -278,7 +278,7 @@ export class ChatsComponent {
           .get()
           .subscribe((value) => {
             chatRef
-              .update({ members: firestore.FieldValue.arrayUnion(this.afFs.doc(`users/${this.auth.user.uid}`).ref) })
+              .update({ members: firebase.firestore.FieldValue.arrayUnion(this.afFs.doc(`users/${this.auth.user.uid}`).ref) })
               .then(() => {
                 this.shared.openSnackBar({
                   msg: `Successfully joined "${value.data()['name']}"!`,
@@ -300,7 +300,7 @@ export class ChatsComponent {
         formVal['admins'] = [this.afFs.doc(`users/${this.auth.user.uid}`).ref];
         formVal['owner'] = this.afFs.doc(`users/${this.auth.user.uid}`).ref;
         // Set the created at date as the server's timestamp
-        formVal['createdAt'] = firestore.FieldValue.serverTimestamp();
+        formVal['createdAt'] = firebase.firestore.FieldValue.serverTimestamp();
         this.afFs.collection<Chat>(`chats`)
           .add(formVal)
           .then(() => {

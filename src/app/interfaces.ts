@@ -1,4 +1,4 @@
-import { firestore } from 'firebase';
+import firebase from 'firebase/app';
 import { DocumentReference } from '@angular/fire/firestore';
 
 /** Interface to indicate that an AngularFire interface should have a document ID */
@@ -10,9 +10,9 @@ export interface HasId {
 /** Interface to indicate that a document object should have timestamp metadata. */
 export interface HasTimestampMetadata {
   /** The date that the document was last modified at. */
-  lastModified?: firestore.Timestamp | firestore.FieldValue;
+  lastModified?: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
   /** The date that the document was created at. */
-  createdAt?: firestore.Timestamp | firestore.FieldValue;
+  createdAt?: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
 }
 
 export interface SidenavLink {
@@ -79,7 +79,7 @@ export interface TodoItem extends HasId {
   /**
    * The due date of the todo
    */
-  dueDate?: firestore.Timestamp;
+  dueDate?: firebase.firestore.Timestamp;
   /**
    * Whether the todo has already been finished
    */
@@ -101,9 +101,9 @@ export interface Chat extends HasId, HasTimestampMetadata {
   /** The name of the chat */
   name: string;
   /** A list of admins in the chat as document references to the UIDs */
-  admins: DocumentReference[] | firestore.FieldValue;
+  admins: DocumentReference[] | firebase.firestore.FieldValue;
   /** A list of members in the chat as document references to the user IDs */
-  members: DocumentReference[] | firestore.FieldValue;
+  members: DocumentReference[] | firebase.firestore.FieldValue;
   /**
    * The owner of the chat (aka. the person who created the chat)
    * as a document document reference to the user ID
@@ -139,9 +139,9 @@ export interface ChatMessage extends HasId {
   /** The message that this message is replying to */
   replyTo?: DocumentReference;
   /** The date that the message was last modified on */
-  lastModified?: firestore.Timestamp | firestore.FieldValue;
+  lastModified?: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
   /** The date that the message was sent on */
-  createdAt?: firestore.Timestamp | firestore.FieldValue;
+  createdAt?: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
 }
 export interface TodoProject extends HasId {
   /**
@@ -157,7 +157,7 @@ export interface TodoProject extends HasId {
   /**
    * The due date of the project
    */
-  dueDate?: firestore.Timestamp;
+  dueDate?: firebase.firestore.Timestamp;
   /**
    * The list of todos assigned to this project as document references
    */

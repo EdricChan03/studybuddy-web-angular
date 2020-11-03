@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { firestore } from 'firebase';
+import firebase from 'firebase/app';
 import { from, Observable } from 'rxjs';
 import { map, take, tap } from 'rxjs/operators';
 import { AuthService } from '../../auth.service';
@@ -268,7 +268,7 @@ export class ChatViewerComponent implements OnDestroy {
 
   joinChat() {
     this.chatDocument.update({
-      members: firestore.FieldValue.arrayUnion(this.afFs.doc(`users/${this.auth.user.uid}`).ref)
+      members: firebase.firestore.FieldValue.arrayUnion(this.afFs.doc(`users/${this.auth.user.uid}`).ref)
     })
     .then(() => {
       this.shared.openSnackBar({ msg: 'You\'ve successfully joined this chat!' });
@@ -306,7 +306,7 @@ export class ChatViewerComponent implements OnDestroy {
       if (event === true) {
         this.chatDocument
           .update({
-            members: firestore.FieldValue.arrayRemove(this.afFs.doc(`users/${this.auth.user.uid}`).ref)
+            members: firebase.firestore.FieldValue.arrayRemove(this.afFs.doc(`users/${this.auth.user.uid}`).ref)
           })
           .then(() => {
             const snackBarRef = this.shared.openSnackBar({
@@ -316,7 +316,7 @@ export class ChatViewerComponent implements OnDestroy {
             snackBarRef.onAction().subscribe(() => {
               this.chatDocument
                 .update({
-                  members: firestore.FieldValue.arrayUnion(this.afFs.doc(`users/${this.auth.user.uid}`).ref)
+                  members: firebase.firestore.FieldValue.arrayUnion(this.afFs.doc(`users/${this.auth.user.uid}`).ref)
                 })
                 .then(() => {
                   this.shared.openSnackBar({ msg: 'Successfully reverted action!' });
@@ -430,8 +430,8 @@ export class ChatViewerComponent implements OnDestroy {
   sendMessage() {
     const chatMsg = {
       author: this.afFs.doc(`users/${this.auth.user.uid}`).ref,
-      createdAt: firestore.FieldValue.serverTimestamp(),
-      lastModified: firestore.FieldValue.serverTimestamp(),
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      lastModified: firebase.firestore.FieldValue.serverTimestamp(),
       message: this.newMessageForm.get('message').value
     };
     this.messagesCollection.add(chatMsg).then(() => {
