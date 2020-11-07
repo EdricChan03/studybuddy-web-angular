@@ -21,7 +21,9 @@
       "dom"
     ],
     "paths": {
-      "@app/*": ["src/app/*"]
+      "@app/*": ["src/app/*"],
+      "@assets/*": ["src/assets/*"],
+      "@app/environment": ["src/environments/environment.ts"]
     }
   },
   "angularCompilerOptions": {
