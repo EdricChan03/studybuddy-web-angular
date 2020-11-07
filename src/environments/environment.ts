@@ -6,6 +6,7 @@ import { baseEnvironment, Environment } from './environment.base';
 export const environment: Environment = {
   production: false,
   ...baseEnvironment,
+  disableRouterAuth: true,
   analytics: {
     debugMode: true
   },

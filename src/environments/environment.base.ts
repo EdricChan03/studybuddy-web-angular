@@ -19,6 +19,8 @@ export interface Environment {
   production?: boolean;
   /** The current version that the app is on. */
   currentVersion?: Version;
+  /** Whether to disable router authentication. */
+  disableRouterAuth?: boolean;
   /** The Firebase config for the current Firebase app */
   firebase?: {
     apiKey?: string;
@@ -68,5 +70,6 @@ export const currentVersion: Version = new Version(versionStr);
 export const baseEnvironment: Environment = {
   currentVersion,
   firebase: firebaseConfig,
-  analytics: analyticsConfig
+  analytics: analyticsConfig,
+  disableRouterAuth: false
 };
