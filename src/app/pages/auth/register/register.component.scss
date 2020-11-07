@@ -1,13 +1,13 @@
-.login-container {
+.register-container {
   height: 100%;
 
-  .login-card {
+  .register-card {
     width: 300px;
-    .login-logo-container {
+    .register-logo-container {
       margin: 32px 0;
       display: flex;
       justify-content: center;
-      .login-logo {
+      .register-logo {
         width: 64px;
       }
     }
@@ -18,17 +18,13 @@
       justify-content: center;
     }
 
-    .login-card-content {
+    .register-card-content {
       .strike {
         margin: 8px 0;
       }
 
-      .login-card-form {
+      .register-card-form {
         margin-bottom: 16px;
-      }
-
-      & > a {
-        align-self: center;
       }
     }
   }

@@ -37,7 +37,6 @@ import { MaterialModule } from './material.module';
 import { SharedModule } from './shared.service';
 import { CustomFormlyModule } from './shared/formly/custom-formly.module';
 import { SearchInputComponent } from './shared/search-input/search-input.component';
-import { SignupComponent } from './signup/signup.component';
 import { TipsComponent } from './tips/tips.component';
 import { TodoArchivedComponent, TodoDashboardComponent, TodoHomeComponent, TodoProjectComponent } from './todo';
 import { TodoOutletComponent } from './todo/todo-outlet/todo-outlet.component';
@@ -71,7 +70,6 @@ function minItemsValidationMessage(err, field: FormlyFieldConfig) {
     ChatViewerComponent,
     DashboardComponent,
     TodoOutletComponent,
-    SignupComponent,
     UserViewerComponent
   ],
   imports: [
