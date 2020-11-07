@@ -58,8 +58,7 @@
     emptyStateMsg="Please login to view this page."
     [hasCustomActions]="true">
     <ng-container empty-state-actions>
-      <button mat-raised-button color="primary">Login</button>
-      <button mat-stroked-button>Continue as anonymous</button>
+      <a mat-raised-button color="primary" routerLink="/auth/login">Login</a>
     </ng-container>
   </app-empty-state>
 </ng-template>
