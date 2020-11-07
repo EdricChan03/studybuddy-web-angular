@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { AngularFireRemoteConfig } from '@angular/fire/remote-config';
-// import { FormGroup } from '@angular/forms';
 import { MatPseudoCheckboxState } from '@angular/material/core';
-// import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
-import { Experiment } from '../../../../core/experiments/models/experiment';
-// import { SharedService } from '../../../../shared.service';
+
+import { Experiment } from '@app/core/experiments/models/experiment';
 import { SettingsPanelsService } from '../../settings-panels.service';
 import { SettingsStorageService } from '../../settings-storage.service';
 
@@ -13,25 +11,12 @@ import { SettingsStorageService } from '../../settings-storage.service';
   templateUrl: './experiments-panel.component.html'
 })
 export class ExperimentsPanelComponent {
-  /* experimentsFormlyConfig: {
-    form: FormGroup,
-    model: any,
-    fields: FormlyFieldConfig[],
-    options: FormlyFormOptions
-  } = {
-      form: new FormGroup({}),
-      model: {},
-      fields: [],
-      options: {}
-    }; */
-
   experiments: Experiment[] = [];
   experimentVals: {[key: string]: boolean | string | number } = {};
   constructor(
     panelsService: SettingsPanelsService,
     settingsStorage: SettingsStorageService,
     remoteConfig: AngularFireRemoteConfig
-    // public shared: SharedService
   ) {
     panelsService.getSettingPanelById('experiments').actions = [
       {

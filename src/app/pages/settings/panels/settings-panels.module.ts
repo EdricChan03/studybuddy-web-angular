@@ -12,10 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FormlyModule } from '@ngx-formly/core';
-import { FormlyMaterialModule } from '@ngx-formly/material';
 
-import { CustomFormlyModule } from '../../../shared/formly/custom-formly.module';
 import { DefaultPanelComponent } from './default-panel/default-panel.component';
 import { SettingsPanelsRoutingModule } from './settings-panels-routing.module';
 import { SettingsStorageService } from '../settings-storage.service';
@@ -24,7 +21,7 @@ import { SettingsListModule } from '../components/settings-list/settings-list.mo
 import { AccountPanelComponent } from './account-panel/account-panel.component';
 import { ExperimentsPanelComponent } from './experiments-panel/experiments-panel.component';
 
-import { EmptyStateModule } from '../../../components/empty-state/empty-state.module';
+import { EmptyStateModule } from '@app/components/empty-state/empty-state.module';
 
 const MATERIAL_MODULES = [
   MatButtonModule,
@@ -55,9 +52,6 @@ const ANGULAR_FIRE_MODULES = [
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
-    FormlyModule.forChild(),
-    FormlyMaterialModule,
-    CustomFormlyModule,
     SettingsListModule,
     SettingsPanelsRoutingModule,
     EmptyStateModule
