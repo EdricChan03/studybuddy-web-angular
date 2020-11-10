@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-import { Dialog } from '../../../../../core/dialogs/dialog';
+import { Dialog } from '@app/core/dialogs/dialog';
 import { Setting } from '../../../models/setting';
 import { SettingDialogEntry, ListSettingDialogConfig } from '../../../models/setting-dialog';
 

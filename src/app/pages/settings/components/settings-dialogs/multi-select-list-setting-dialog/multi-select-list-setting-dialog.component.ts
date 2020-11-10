@@ -3,7 +3,7 @@ import { ThemePalette } from '@angular/material/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSelectionList } from '@angular/material/list';
 
-import { Dialog } from '../../../../../core/dialogs/dialog';
+import { Dialog } from '@app/core/dialogs/dialog';
 import { Setting } from '../../../models/setting';
 import { MultiSelectListSettingDialogConfig, SettingDialogEntry } from '../../../models/setting-dialog';
 

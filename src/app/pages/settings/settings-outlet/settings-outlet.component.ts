@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter, map, startWith, switchMap } from 'rxjs/operators';
-import { SharedService } from '../../../shared.service';
+import { SharedService } from '@app/shared.service';
 import { SettingsPanel } from '../models/settings-panel';
 import { SettingsPanelsService } from '../settings-panels.service';
 import { SettingsStorageService } from '../settings-storage.service';
-import { DialogsService } from '../../../core/dialogs/dialogs.service';
-import { DialogResult } from '../../../core/dialogs/models';
+import { DialogsService } from '@app/core/dialogs/dialogs.service';
+import { DialogResult } from '@app/core/dialogs/models';
 
 @Component({
   selector: 'app-settings-outlet',
