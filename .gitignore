@@ -46,3 +46,6 @@ Thumbs.db
 
 # All log files
 *.log
+
+# Firebase cache
+.firebase
