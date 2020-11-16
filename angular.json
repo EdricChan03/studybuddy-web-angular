@@ -36,33 +36,42 @@
             ],
             "styles": [
               {
-                "input": "src/styles.scss"
+                "input": "src/styles.scss",
+                "inject": true
               },
               {
-                "input": "node_modules/prismjs/themes/prism.css"
+                "input": "node_modules/prismjs/themes/prism.css",
+                "inject": true
               }
             ],
             "scripts": [
               {
-                "input": "node_modules/marked/lib/marked.js"
+                "input": "node_modules/marked/lib/marked.js",
+                "inject": true
               },
               {
-                "input": "node_modules/prismjs/prism.js"
+                "input": "node_modules/prismjs/prism.js",
+                "inject": true
               },
               {
-                "input": "node_modules/prismjs/components/prism-css.min.js"
+                "input": "node_modules/prismjs/components/prism-css.min.js",
+                "inject": true
               },
               {
-                "input": "node_modules/prismjs/components/prism-javascript.min.js"
+                "input": "node_modules/prismjs/components/prism-javascript.min.js",
+                "inject": true
               },
               {
-                "input": "node_modules/prismjs/components/prism-json.min.js"
+                "input": "node_modules/prismjs/components/prism-json.min.js",
+                "inject": true
               },
               {
-                "input": "node_modules/prismjs/components/prism-markup.min.js"
+                "input": "node_modules/prismjs/components/prism-markup.min.js",
+                "inject": true
               },
               {
-                "input": "node_modules/prismjs/components/prism-typescript.min.js"
+                "input": "node_modules/prismjs/components/prism-typescript.min.js",
+                "inject": true
               }
             ]
           },
@@ -91,7 +100,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -136,33 +144,42 @@
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [
               {
-                "input": "node_modules/marked/lib/marked.js"
+                "input": "node_modules/marked/lib/marked.js",
+                "inject": true
               },
               {
-                "input": "node_modules/prismjs/prism.js"
+                "input": "node_modules/prismjs/prism.js",
+                "inject": true
               },
               {
-                "input": "node_modules/prismjs/components/prism-css.min.js"
+                "input": "node_modules/prismjs/components/prism-css.min.js",
+                "inject": true
               },
               {
-                "input": "node_modules/prismjs/components/prism-javascript.min.js"
+                "input": "node_modules/prismjs/components/prism-javascript.min.js",
+                "inject": true
               },
               {
-                "input": "node_modules/prismjs/components/prism-json.min.js"
+                "input": "node_modules/prismjs/components/prism-json.min.js",
+                "inject": true
               },
               {
-                "input": "node_modules/prismjs/components/prism-markup.min.js"
+                "input": "node_modules/prismjs/components/prism-markup.min.js",
+                "inject": true
               },
               {
-                "input": "node_modules/prismjs/components/prism-typescript.min.js"
+                "input": "node_modules/prismjs/components/prism-typescript.min.js",
+                "inject": true
               }
             ],
             "styles": [
               {
-                "input": "src/styles.scss"
+                "input": "src/styles.scss",
+                "inject": true
               },
               {
-                "input": "node_modules/prismjs/themes/prism.css"
+                "input": "node_modules/prismjs/themes/prism.css",
+                "inject": true
               }
             ],
             "assets": [
