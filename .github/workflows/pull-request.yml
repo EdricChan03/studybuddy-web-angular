@@ -2,15 +2,14 @@ name: Pull Request workflow
 
 on:
   pull_request:
-    branches:
     # Only accept PRs targeting the master branch
-    - master
+    branches: [master]
 
 jobs:
   test:
     name: App linting/testing
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v2
     - name: Setup NodeJS LTS
