@@ -3,7 +3,7 @@ name: Pull Request workflow
 on:
   pull_request:
     # Only accept PRs targeting the master branch
-    branches: [master]
+    branches: [main]
 
 jobs:
   test:
