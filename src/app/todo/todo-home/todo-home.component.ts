@@ -1,22 +1,20 @@
-
-import { map } from 'rxjs/operators';
-import { ToolbarService } from '../../toolbar.service';
-import { DomSanitizer } from '@angular/platform-browser';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
-import { TodoDialogComponent } from '../../dialogs';
-import { MatCheckboxChange } from '@angular/material/checkbox';
-// import { MatPaginator } from '@angular/material/paginator';
-import { MatDialog } from '@angular/material/dialog';
+import { animate, keyframes, style, transition, trigger } from '@angular/animations';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { SharedService } from '../../shared.service';
-import { TodoItem } from '../../interfaces';
-import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { Observable } from 'rxjs';
-import { transition, style, animate, trigger, keyframes } from '@angular/animations';
 import { MatTableDataSource } from '@angular/material/table';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 import { DialogsService } from '../../core/dialogs/dialogs.service';
-// import { animations } from '../../animations';
+import { TodoDialogComponent } from '../../dialogs';
+import { TodoItem } from '../../interfaces';
+import { SharedService } from '../../shared.service';
+import { ToolbarService } from '../../toolbar.service';
 
 @Component({
   selector: 'app-todo-home',
