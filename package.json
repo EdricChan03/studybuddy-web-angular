@@ -29,7 +29,7 @@
     "@angular/service-worker": "^11.0.0",
     "@ngx-formly/core": "^5.3.0",
     "@ngx-formly/material": "^5.3.0",
-    "core-js": "^3.22.8",
+    "core-js": "^3.23.0",
     "firebase": "^8.10.1",
     "ng-circle-progress": "^1.6.0",
     "ngx-markdown": "^11.0.1",
