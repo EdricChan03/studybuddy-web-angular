@@ -1,6 +1,6 @@
-import { FirebaseAppConfig } from '@angular/fire';
-import { Version } from '@angular/core';
-import firebase from 'firebase/app';
+import { Version } from "@angular/core";
+import { FirebaseOptions } from "@angular/fire/app";
+import firebase from "firebase/compat/app";
 
 // This file is the base environment file for all of the environment files that
 // inherit from this file
@@ -22,16 +22,7 @@ export interface Environment {
   /** Whether to disable router authentication. */
   disableRouterAuth?: boolean;
   /** The Firebase config for the current Firebase app */
-  firebase?: {
-    apiKey?: string;
-    authDomain?: string;
-    databaseURL?: string;
-    projectId?: string;
-    storageBucket?: string;
-    messagingSenderId?: string;
-    appId?: string;
-    measurementId?: string;
-  };
+  firebase?: FirebaseOptions;
   /** Firebase Analytics configuration options */
   analytics?: AnalyticsConfig;
   /** Firebase Remote Config options */
@@ -41,28 +32,28 @@ export interface Environment {
     /** Defaults to be passed to `DEFAULTS` from `@angular/fire/remote-config`. */
     defaults?: {
       [key: string]: string | number | boolean;
-    }
+    };
   };
 }
 
-export const versionStr = '1.0.0';
+export const versionStr = "1.0.0";
 
-export const firebaseConfig: FirebaseAppConfig = {
-  apiKey: 'AIzaSyCL_ahl9JxGOcCgDX7ka7OnE1lTbqT-xLs',
-  authDomain: 'studybuddy-e5f46.firebaseapp.com',
-  databaseURL: 'https://studybuddy-e5f46.firebaseio.com',
-  projectId: 'studybuddy-e5f46',
-  storageBucket: 'studybuddy-e5f46.appspot.com',
-  messagingSenderId: '713563449638',
-  appId: '1:713563449638:web:e518a1ccfe468413',
-  measurementId: 'G-X3VSHQZVJ7'
+export const firebaseConfig: FirebaseOptions = {
+  apiKey: "AIzaSyCL_ahl9JxGOcCgDX7ka7OnE1lTbqT-xLs",
+  authDomain: "studybuddy-e5f46.firebaseapp.com",
+  databaseURL: "https://studybuddy-e5f46.firebaseio.com",
+  projectId: "studybuddy-e5f46",
+  storageBucket: "studybuddy-e5f46.appspot.com",
+  messagingSenderId: "713563449638",
+  appId: "1:713563449638:web:e518a1ccfe468413",
+  measurementId: "G-X3VSHQZVJ7",
 };
 
 export const analyticsConfig: AnalyticsConfig = {
-  appName: 'StudyBuddy for Web',
+  appName: "StudyBuddy for Web",
   appVersion: versionStr,
   debugMode: false,
-  disableCollection: false
+  disableCollection: false,
 };
 
 export const currentVersion: Version = new Version(versionStr);
@@ -71,5 +62,5 @@ export const baseEnvironment: Environment = {
   currentVersion,
   firebase: firebaseConfig,
   analytics: analyticsConfig,
-  disableRouterAuth: false
+  disableRouterAuth: false,
 };

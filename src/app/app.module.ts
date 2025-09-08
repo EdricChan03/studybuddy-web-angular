@@ -1,15 +1,15 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { AngularFireModule } from '@angular/fire';
+import { AngularFireModule } from '@angular/fire/compat';
 import {
   AngularFireAnalyticsModule, ScreenTrackingService, UserTrackingService,
   APP_NAME, APP_VERSION, COLLECTION_ENABLED, DEBUG_MODE
-} from '@angular/fire/analytics';
-import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFireAuthGuardModule } from '@angular/fire/auth-guard';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { AngularFirePerformanceModule } from '@angular/fire/performance';
-import { AngularFireRemoteConfigModule, DEFAULTS as DEFAULT_CONFIG, SETTINGS as REMOTE_CONFIG_SETTINGS } from '@angular/fire/remote-config';
+} from '@angular/fire/compat/analytics';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { AngularFireAuthGuardModule } from '@angular/fire/compat/auth-guard';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { AngularFirePerformanceModule } from '@angular/fire/compat/performance';
+import { AngularFireRemoteConfigModule, DEFAULTS as DEFAULT_CONFIG, SETTINGS as REMOTE_CONFIG_SETTINGS } from '@angular/fire/compat/remote-config';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormControl, FormsModule, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';

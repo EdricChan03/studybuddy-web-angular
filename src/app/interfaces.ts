@@ -1,5 +1,5 @@
-import firebase from 'firebase/app';
-import { DocumentReference } from '@angular/fire/firestore';
+import firebase from 'firebase/compat/app';
+import { DocumentReference } from '@angular/fire/compat/firestore';
 
 /** Interface to indicate that an AngularFire interface should have a document ID */
 export interface HasId {

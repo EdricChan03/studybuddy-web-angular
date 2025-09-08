@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AngularFireRemoteConfig } from '@angular/fire/remote-config';
+import { AngularFireRemoteConfig } from '@angular/fire/compat/remote-config';
 import { MatPseudoCheckboxState } from '@angular/material/core';
 
 import { Experiment } from '@app/core/experiments/models/experiment';

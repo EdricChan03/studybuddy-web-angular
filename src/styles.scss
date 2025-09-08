@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+@use '~@angular/material' as mat;
 
-@import '~@angular/material/theming';
 @import './app/todo/todo-dashboard/todo-dashboard.component';
 @import './app/tips/tips.component';
 @import './app/shared/search-input/search-input.component';
@@ -15,12 +15,12 @@
   $is-dark-theme: map-get($theme, is-dark);
   $tableBorderOpacity: if($is-dark-theme, 0.08, 0.03);
   table.app-table {
-    color: mat-color($foreground, text);
+    color: mat.get-color-from-palette($foreground, text);
     th {
-      background: mat-color($background, app-bar);
+      background: mat.get-color-from-palette($background, app-bar);
     }
     td {
-      border: 1px solid rgba(mat-color($foreground, secondary-text), $tableBorderOpacity);
+      border: 1px solid rgba(mat.get-color-from-palette($foreground, secondary-text), $tableBorderOpacity);
     }
   }
 }
@@ -37,9 +37,9 @@
   $foreground: map-get($theme, foreground);
   $is-dark-theme: map-get($theme, is-dark);
   mat-card.hover {
-    @include mat-elevation-transition;
+    @include mat.elevation-transition;
     &:hover {
-      @include mat-elevation(8);
+      @include mat.elevation(8);
     }
   }
   .strike>span {
@@ -51,9 +51,9 @@
   }
   .active-link {
     // Since it's a bit hard to actually see the text in the dark theme, it'll use the accent color if it's dark and primary if it's not. Same applies for mat-icon
-    color: if($is-dark-theme, mat-color($accent), mat-color($primary)) !important;
+    color: if($is-dark-theme, mat.get-color-from-palette($accent), mat.get-color-from-palette($primary)) !important;
     mat-icon {
-      color: if($is-dark-theme, mat-color($accent), mat-color($primary)) !important;
+      color: if($is-dark-theme, mat.get-color-from-palette($accent), mat.get-color-from-palette($primary)) !important;
     } // Note: These colors are based on the Android sidenav selection state
     background-color: if($is-dark-theme, #595959, #DCDCDC) !important;
   }
@@ -67,7 +67,7 @@
       // background-color: ;
     }
     &.feature-status-badge--with-color {
-      background-color: if($is-dark-theme, mat-color($accent), mat-color($primary));
+      background-color: if($is-dark-theme, mat.get-color-from-palette($accent), mat.get-color-from-palette($primary));
       color: if($is-dark-theme, map-get($accent, 'default-contrast'), map-get($primary, 'default-contrast'));
     }
 
@@ -79,32 +79,32 @@
 
     @each $key, $val in $palettes-list {
       &.feature-status-badge--#{$key} {
-        background-color: mat-color($val);
+        background-color: mat.get-color-from-palette($val);
         color: map-get($val, 'default-contrast');
       }
     }
   }
 
   .mat-primary-text-color {
-    color: mat-color($primary) !important;
+    color: mat.get-color-from-palette($primary) !important;
   }
   .mat-primary-bg-color {
-    background-color: mat-color($primary) !important;
+    background-color: mat.get-color-from-palette($primary) !important;
   }
   .mat-accent-text-color {
-    color: mat-color($accent) !important;
+    color: mat.get-color-from-palette($accent) !important;
   }
   .mat-accent-bg-color {
-    background-color: mat-color($accent) !important;
+    background-color: mat.get-color-from-palette($accent) !important;
   }
   .mat-warn-text-color {
-    color: mat-color($warn) !important;
+    color: mat.get-color-from-palette($warn) !important;
   }
   .mat-warn-bg-color {
-    background-color: mat-color($warn) !important;
+    background-color: mat.get-color-from-palette($warn) !important;
   }
   a.anchor-link, .app-markdown a {
-    color: mat-color($primary, if($is-dark-theme, 200, default));
+    color: mat.get-color-from-palette($primary, if($is-dark-theme, 200, default));
     text-decoration: none;
     &:hover {
       text-decoration: underline;
@@ -144,16 +144,16 @@
       font-weight: 500;
     }
     &.mat-primary {
-      color: mat-color($primary);
-      background-color: mat-color($primary, 0.15);
+      color: mat.get-color-from-palette($primary);
+      background-color: mat.get-color-from-palette($primary, 0.15);
     }
     &.mat-accent {
-      color: mat-color($accent);
-      background-color: mat-color($accent, 0.15);
+      color: mat.get-color-from-palette($accent);
+      background-color: mat.get-color-from-palette($accent, 0.15);
     }
     &.mat-warn {
-      color: mat-color($warn);
-      background-color: mat-color($warn, 0.15);
+      color: mat.get-color-from-palette($warn);
+      background-color: mat.get-color-from-palette($warn, 0.15);
     }
     &.msg-danger {
       color: #ef6c00;
@@ -167,30 +167,30 @@
   .notifications-badge,
   .badge {
     color: white;
-    background: mat-color($primary);
+    background: mat.get-color-from-palette($primary);
   }
 }
 
-$studybuddy-typography: mat-typography-config(
+$studybuddy-typography: mat.define-typography-config(
   $font-family: '"Baloo 2", Roboto, "Helvetica Neue", Arial, sans-serif'
 );
 $studybuddy-custom-typography: studybuddy-typography-config(
   $font-family: '"Baloo 2", Roboto, "Helvetica Neue", Arial, sans-serif'
 );
 // @import 'assets/icons/material-icons.css';
-@include mat-core($studybuddy-typography);
-$studybuddy-light-theme-primary: mat-palette($mat-indigo);
-$studybuddy-light-theme-accent: mat-palette($mat-pink, A200, A100, A400);
-$studybuddy-light-theme-theme: mat-light-theme($studybuddy-light-theme-primary, $studybuddy-light-theme-accent);
+@include mat.core($studybuddy-typography);
+$studybuddy-light-theme-primary: mat.define-palette(mat.$indigo-palette);
+$studybuddy-light-theme-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$studybuddy-light-theme-theme: mat.define-light-theme($studybuddy-light-theme-primary, $studybuddy-light-theme-accent);
 @include studybuddy-theme($studybuddy-light-theme-theme);
 @include studybuddy-typography($studybuddy-custom-typography);
-@include angular-material-theme($studybuddy-light-theme-theme);
+@include mat.all-component-themes($studybuddy-light-theme-theme);
 .studybuddy-dark {
-  $studybuddy-dark-theme-primary: mat-palette($mat-purple);
-  $studybuddy-dark-theme-accent: mat-palette($mat-green, A200, A100, A400);
-  $studybuddy-dark-theme-theme: mat-dark-theme($studybuddy-dark-theme-primary, $studybuddy-dark-theme-accent);
+  $studybuddy-dark-theme-primary: mat.define-palette(mat.$purple-palette);
+  $studybuddy-dark-theme-accent: mat.define-palette(mat.$green-palette, A200, A100, A400);
+  $studybuddy-dark-theme-theme: mat.define-dark-theme($studybuddy-dark-theme-primary, $studybuddy-dark-theme-accent);
   @include studybuddy-theme($studybuddy-dark-theme-theme);
-  @include angular-material-theme($studybuddy-dark-theme-theme);
+  @include mat.all-component-themes($studybuddy-dark-theme-theme);
 }
 
 // app-root {

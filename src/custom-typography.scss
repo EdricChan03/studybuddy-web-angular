@@ -1,4 +1,4 @@
-@import "~@angular/material/theming";
+@use '~@angular/material' as mat;
 
 // Calculates the letter spacing for a font size using the tracking in Sketch
 @function mat-calc-letter-spacing($tracking, $font-size) {
@@ -36,13 +36,13 @@
 // Converts a typography level into CSS styles.
 // (Modified to allow for !important selector)
 @mixin mat-typography-level-to-styles-important($config, $level) {
-  $font-size: mat-font-size($config, $level);
-  $font-weight: mat-font-weight($config, $level);
-  $line-height: mat-line-height($config, $level);
-  $font-family: mat-font-family($config, $level);
+  $font-size: mat.font-size($config, $level);
+  $font-weight: mat.font-weight($config, $level);
+  $line-height: mat.line-height($config, $level);
+  $font-family: mat.font-family($config, $level);
 
   @include mat-typography-font-shorthand-important($font-size, $font-weight, $line-height, $font-family);
-  letter-spacing: mat-letter-spacing($config, $level) !important;
+  letter-spacing: mat.letter-spacing($config, $level) !important;
   // text-transform: mat-text-transform($config, $level) !important;
 }
 
@@ -53,7 +53,7 @@
   @each $key, $level in $config {
     @if $key != 'font-family' {
       #{$selector} .mat-#{$key} {
-        @include mat-typography-level-to-styles($config, $key);
+        @include mat.typography-level($config, $key);
         @if $key != 'body-1' or $key != 'body-2' or $key != 'button' or
           $key != 'caption' or $key != 'overline' {
           margin: 0 0 16px
@@ -70,7 +70,7 @@
   }
 
   #{$selector} {
-    @include mat-typography-level-to-styles($config, body-1);
+    @include mat.typography-level($config, body-1);
     p {
       margin: 0 0 12px;
     }
@@ -86,102 +86,102 @@
   @include studybuddy-base-typography($config);
 	// Custom overrides
 	.mat-dialog-title {
-		@include mat-typography-level-to-styles-important($config, heading-6);
+		@include mat.typography-level-important($config, heading-6);
 	}
 	.mat-expansion-panel-header {
 		font: {
-			family: mat-font-family($config, subtitle-1);
-			size: mat-font-size($config, subtitle-1);
-			weight: mat-font-weight($config, subtitle-1);
+			family: mat.font-family($config, subtitle-1);
+			size: mat.font-size($config, subtitle-1);
+			weight: mat.font-weight($config, subtitle-1);
 		}
 	}
 	.mat-card-title {
 		font: {
-			size: mat-font-size($config, heading-6);
-			weight: mat-font-weight($config, heading-6);
+			size: mat.font-size($config, heading-6);
+			weight: mat.font-weight($config, heading-6);
 		}
 	}
 
 	.mat-card-header .mat-card-title {
-		font-size: mat-font-size($config, heading-6);
+		font-size: mat.font-size($config, heading-6);
 	}
 }
 @function studybuddy-typography-config(
 	$font-family: 'Roboto, "Helvetica Neue", sans-serif',
-	$display-4: mat-typography-level(112px, 112px, 300),
-	$display-3: mat-typography-level(56px, 56px, 400),
-	$display-2: mat-typography-level(45px, 48px, 400),
-	$display-1: mat-typography-level(34px, 40px, 400),
-	$headline: mat-typography-level(24px, 32px, 400),
-	$title: mat-typography-level(20px, 32px, 500),
-	$subheading-2: mat-typography-level(16px, 28px, 400),
-	$subheading-1: mat-typography-level(15px, 24px, 400),
+	$display-4: mat.define-typography-level(112px, 112px, 300),
+	$display-3: mat.define-typography-level(56px, 56px, 400),
+	$display-2: mat.define-typography-level(45px, 48px, 400),
+	$display-1: mat.define-typography-level(34px, 40px, 400),
+	$headline: mat.define-typography-level(24px, 32px, 400),
+	$title: mat.define-typography-level(20px, 32px, 500),
+	$subheading-2: mat.define-typography-level(16px, 28px, 400),
+	$subheading-1: mat.define-typography-level(15px, 24px, 400),
 	// $body-2: mat-typography-level(14px, 24px, 500),
 	// $body-1: mat-typography-level(14px, 20px, 400),
 	// $caption: mat-typography-level(12px, 20px, 400),
 	// $button: mat-typography-level(14px, 14px, 500),
   // Line-height must be unit-less fraction of the font-size.
-  $input: mat-typography-level(inherit, 1.125, 400),
+  $input: mat.define-typography-level(inherit, 1.125, 400),
   // New typography specs
-  $heading-1: mat-typography-level(
+  $heading-1: mat.define-typography-level(
     96 * 0.0625rem,
     112 * 0.0625rem,
     300,
     $letter-spacing: mat-calc-letter-spacing(-1.5, 96)
   ),
-	$heading-2: mat-typography-level(
+	$heading-2: mat.define-typography-level(
     60 * 0.0625rem,
     71 * 0.0625rem,
     300,
     $letter-spacing: mat-calc-letter-spacing(-0.5, 60)
 	),
-	$heading-3: mat-typography-level(48 * 0.0625rem, 57 * 0.0625rem),
-	$heading-4: mat-typography-level(
+	$heading-3: mat.define-typography-level(48 * 0.0625rem, 57 * 0.0625rem),
+	$heading-4: mat.define-typography-level(
     34 * 0.0625rem,
     40 * 0.0625rem,
     $letter-spacing: mat-calc-letter-spacing(0.25, 34)
   ),
-	$heading-5: mat-typography-level(24 * 0.0625rem, 28 * 0.0625rem),
-	$heading-6: mat-typography-level(
+	$heading-5: mat.define-typography-level(24 * 0.0625rem, 28 * 0.0625rem),
+	$heading-6: mat.define-typography-level(
     20 * 0.0625rem,
     24 * 0.0625rem,
     500,
     $letter-spacing: mat-calc-letter-spacing(0.15, 20)
   ),
-	$subtitle-1: mat-typography-level(
+	$subtitle-1: mat.define-typography-level(
     16 * 0.0625rem,
     24 * 0.0625rem,
     $letter-spacing: mat-calc-letter-spacing(0.15, 16)
   ),
-	$subtitle-2: mat-typography-level(
+	$subtitle-2: mat.define-typography-level(
     14 * 0.0625rem,
     24 * 0.0625rem,
     500,
     $letter-spacing: mat-calc-letter-spacing(0.1, 14)
   ),
-	$body-1: mat-typography-level(
+	$body-1: mat.define-typography-level(
     16 * 0.0625rem,
     28 * 0.0625rem,
     $letter-spacing: mat-calc-letter-spacing(0.44, 16)
   ),
-	$body-2: mat-typography-level(
+	$body-2: mat.define-typography-level(
     14 * 0.0625rem,
     20 * 0.0625rem,
     $letter-spacing: mat-calc-letter-spacing(0.25, 14)
   ),
-	$button: mat-typography-level(
+	$button: mat.define-typography-level(
     14 * 0.0625rem,
     16 * 0.0625rem,
     500,
     $letter-spacing: mat-calc-letter-spacing(1.35, 14)
   ),
-	$caption: mat-typography-level(
+	$caption: mat.define-typography-level(
     12 * 0.0625rem,
     16 * 0.0625rem,
     $letter-spacing: mat-calc-letter-spacing(0.4, 12)
   ),
   // TODO: Figure out a way to support the text-transform property
-  $overline: mat-typography-level(
+  $overline: mat.define-typography-level(
     10 * 0.0625rem,
     16 * 0.0625rem,
     $letter-spacing: mat-calc-letter-spacing(1.5, 10)

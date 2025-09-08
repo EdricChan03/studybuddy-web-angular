@@ -1,8 +1,9 @@
+@use '~@angular/material' as mat;
 @mixin search-input-theme($theme) {
   $background: map-get($theme, background);
   // Code adapted from Google Play Newsstand's search bar in the toolbar
   .search-input {
-    @include mat-elevation-transition;
+    @include mat.elevation-transition;
     flex-grow: 1;
     flex-shrink: 1;
     width: 100%;
@@ -38,7 +39,7 @@
     }
     &.search-input-focused {
       background-color: map-get($background, hover);
-      @include mat-elevation(2);
+      @include mat.elevation(2);
     }
     .search-btn-left {
       margin-left: 12px;

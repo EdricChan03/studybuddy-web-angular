@@ -1,10 +1,11 @@
+@use '~@angular/material' as mat;
 @mixin todo-dashboard-theme($theme) {
   $is-dark-theme: map-get($theme, is-dark);
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
   $primary: map-get($theme, primary);
   .todo-dashboard-project-card .todo-dashboard-project-card-stat mat-icon {
-    color: mat-color($primary) !important;
+    color: mat.get-color-from-palette($primary) !important;
   }
   .todo-dashboard-nav-card {
     .card-section {

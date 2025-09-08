@@ -1,8 +1,8 @@
 import { Component, TemplateRef } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import firebase from 'firebase/app';
+import firebase from 'firebase/compat/app';
 
 import { AuthService } from '../../auth.service';
 import { TodoProject } from '../../interfaces';

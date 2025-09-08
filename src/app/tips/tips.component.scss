@@ -1,10 +1,10 @@
-@import '~@angular/material/theming';
+@use '~@angular/material' as mat;
 
 @mixin tips-theme($theme) {
   $primary: map-get($theme, primary);
   .quote-of-day-card--avatar {
-    background-color: mat-color($primary, 100);
-    color: mat-contrast($primary, 100);
+    background-color: mat.get-color-from-palette($primary, 100);
+    color: mat.get-contrast-color-from-palette($primary, 100);
   }
 }
 
