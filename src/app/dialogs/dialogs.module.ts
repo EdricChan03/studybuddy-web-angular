@@ -14,12 +14,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MarkdownModule } from 'ngx-markdown';
 
-import { ChatInfoDialogComponent } from './chat-info-dialog/chat-info-dialog.component';
-import { EditChatDialogComponent } from './edit-chat-dialog/edit-chat-dialog.component';
 import { EditContentDialogComponent } from './edit-content-dialog/edit-content-dialog.component';
-import { JoinChatDialogComponent } from './join-chat-dialog/join-chat-dialog.component';
 import { MarkdownDialogComponent } from './markdown-dialog/markdown-dialog.component';
-import { NewChatDialogComponent } from './new-chat-dialog/new-chat-dialog.component';
 import { NewProjectDialogComponent } from './new-project-dialog/new-project-dialog.component';
 import { SignInDialogComponent } from './sign-in-dialog/sign-in-dialog.component';
 import { TodoDialogComponent } from './todo-dialog/todo-dialog.component';
@@ -40,12 +36,8 @@ const MATERIAL_MODULES = [
 
 /** A list of dialogs */
 const DIALOGS = [
-  ChatInfoDialogComponent,
-  EditChatDialogComponent,
   EditContentDialogComponent,
-  JoinChatDialogComponent,
   MarkdownDialogComponent,
-  NewChatDialogComponent,
   NewProjectDialogComponent,
   SignInDialogComponent,
   TodoDialogComponent,

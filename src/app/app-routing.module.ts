@@ -2,9 +2,6 @@ import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { AboutComponent } from './about/about.component';
 import { AppDownloadsComponent } from './appdownloads/appdownloads.component';
-import { ChatExploreComponent } from './chats/chat-explore/chat-explore.component';
-import { ChatViewerComponent } from './chats/chat-viewer/chat-viewer.component';
-import { ChatsComponent } from './chats/chats.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { TipsComponent } from './tips/tips.component';
 import { TodoArchivedComponent, TodoDashboardComponent, TodoHomeComponent, TodoProjectComponent } from './todo';
@@ -27,10 +24,6 @@ const redirectRoutes: Route[] = [
 const routes: Route[] = [
   // About StudyBuddy
   { path: 'about', component: AboutComponent },
-  // Chatrooms! Coming soon.
-  { path: 'chats', component: ChatsComponent, canActivate: [AuthGuard] },
-  { path: 'chats/explore', component: ChatExploreComponent, canActivate: [AuthGuard] },
-  { path: 'chats/:id', component: ChatViewerComponent, canActivate: [AuthGuard] },
   // Dashboard
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   // Downloads for the app. Currently a bit empty

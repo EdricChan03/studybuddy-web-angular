@@ -44,11 +44,6 @@ export class AppComponent implements OnInit {
       link: 'tips',
       title: 'Tips',
       icon: 'lightbulb_outline'
-    },
-    {
-      link: 'chats',
-      title: 'Chats',
-      icon: 'chat'
     }
   ];
   otherLinks: SidenavLink[] = [

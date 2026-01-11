@@ -96,53 +96,6 @@ export interface TodoItem extends HasId {
   isArchived?: boolean;
 }
 
-/** Represents a chat group. */
-export interface Chat extends HasId, HasTimestampMetadata {
-  /** The name of the chat */
-  name: string;
-  /** A list of admins in the chat as document references to the UIDs */
-  admins: DocumentReference[] | firebase.firestore.FieldValue;
-  /** A list of members in the chat as document references to the user IDs */
-  members: DocumentReference[] | firebase.firestore.FieldValue;
-  /**
-   * The owner of the chat (aka. the person who created the chat)
-   * as a document document reference to the user ID
-   */
-  owner: DocumentReference;
-  /** A description of the chat */
-  description?: string;
-  /** The pinned message in the chat */
-  pinnedMessage?: DocumentReference;
-  /** The visibility of the chat */
-  visibility?: ChatVisibility;
-  /** Whether the chat group is verified. */
-  isVerified?: boolean;
-}
-
-/**
- * Indicates the visibility of a chat group
- *
- * Description of accepted values:
- * - `public`: Indicates that the chat group is publicly available (aka it will be listed in the list of public chats)
- * - `private`: Indicates that the chat group is private
- * (aka it can only be accessed with the chat's ID and the user has been invited by an existing user in the chat group)
- * - `unlisted`: Indicates that the chat group is only accessible with the ID
- */
-export type ChatVisibility = 'public' | 'private' | 'unlisted';
-
-/** Represents a message in a chat group */
-export interface ChatMessage extends HasId {
-  /** The author of the message */
-  author: DocumentReference;
-  /** The message's content */
-  message: string;
-  /** The message that this message is replying to */
-  replyTo?: DocumentReference;
-  /** The date that the message was last modified on */
-  lastModified?: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
-  /** The date that the message was sent on */
-  createdAt?: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
-}
 export interface TodoProject extends HasId {
   /**
    * The name of the project

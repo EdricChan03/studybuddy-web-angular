@@ -26,9 +26,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AppDownloadsComponent } from './appdownloads/appdownloads.component';
 import { AuthService } from './auth.service';
-import { ChatExploreComponent } from './chats/chat-explore/chat-explore.component';
-import { ChatViewerComponent } from './chats/chat-viewer/chat-viewer.component';
-import { ChatsComponent } from './chats/chats.component';
 import { ComponentsModule } from './components/components.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DialogsModule } from './dialogs/dialogs.module';
@@ -65,9 +62,6 @@ function minItemsValidationMessage(err, field: FormlyFieldConfig) {
     TodoDashboardComponent,
     AboutComponent,
     SearchInputComponent,
-    ChatsComponent,
-    ChatExploreComponent,
-    ChatViewerComponent,
     DashboardComponent,
     TodoOutletComponent,
     UserViewerComponent
