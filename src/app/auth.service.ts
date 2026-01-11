@@ -1,28 +1,32 @@
-import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import firebase from 'firebase/compat/app';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Injectable } from "@angular/core";
+import {
+  Auth,
+  GoogleAuthProvider,
+  User,
+  UserCredential,
+  user,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  authState,
+  sendPasswordResetEmail,
+} from "@angular/fire/auth";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
-// An authentication wrapper for Firebase Auth
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class AuthService {
-  user: firebase.User = null;
-  constructor(
-    /**
-     * Angular Fire - Firebase Authentication
-     */
-    public afAuth: AngularFireAuth
-  ) {
-    afAuth.user.subscribe((user) => {
+  user: User = null;
+  constructor(public afAuth: Auth) {
+    user(afAuth).subscribe((user) => {
       this.user = user;
     });
   }
   /** Checks whether the user is authenticated. */
   get authenticated(): Observable<boolean> {
-    return this.afAuth.user.pipe(map(user => user !== null));
+    return user(this.afAuth).pipe(map((user) => user !== null));
   }
 
   /**
@@ -31,8 +35,11 @@ export class AuthService {
    * @param password The password to login as
    * @return A promise with the user's credentials
    */
-  logInWithEmailAndPassword(email: string, password: string): Promise<firebase.auth.UserCredential> {
-    return this.afAuth.signInWithEmailAndPassword(email, password);
+  logInWithEmailAndPassword(
+    email: string,
+    password: string,
+  ): Promise<UserCredential> {
+    return signInWithEmailAndPassword(this.afAuth, email, password);
   }
   /**
    * Attempts to sign up with a username and password
@@ -40,15 +47,18 @@ export class AuthService {
    * @param password The password to sign up with
    * @return A promise with the user's credentials
    */
-  signUpWithEmailAndPassword(email: string, password: string): Promise<firebase.auth.UserCredential> {
-    return this.afAuth.createUserWithEmailAndPassword(email, password);
+  signUpWithEmailAndPassword(
+    email: string,
+    password: string,
+  ): Promise<UserCredential> {
+    return createUserWithEmailAndPassword(this.afAuth, email, password);
   }
   /**
    * Attempts to log in with Google
    * @return A promise with the user's credentials
    */
-  logInWithGoogle(): Promise<firebase.auth.UserCredential> {
-    return this.afAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+  logInWithGoogle(): Promise<UserCredential> {
+    return signInWithPopup(this.afAuth, new GoogleAuthProvider());
   }
   /**
    * Logs out the current user
@@ -63,8 +73,8 @@ export class AuthService {
    * Gets the auth state
    * @return The obserable of the state
    */
-  getAuthState(): Observable<firebase.User | null> {
-    return this.afAuth.authState;
+  getAuthState(): Observable<User | null> {
+    return authState(this.afAuth);
   }
   /**
    * Checks if the user has been logged in
@@ -73,7 +83,7 @@ export class AuthService {
    * @return `true` if there is a logged-in user, `false` otherwise
    */
   async isLoggedIn(): Promise<boolean> {
-    return await this.afAuth.currentUser !== null;
+    return this.afAuth.currentUser !== null;
   }
   /**
    * Resets the password of an account
@@ -81,6 +91,6 @@ export class AuthService {
    * @return A promise
    */
   resetPassword(email: string): Promise<void> {
-    return this.afAuth.sendPasswordResetEmail(email);
+    return sendPasswordResetEmail(this.afAuth, email);
   }
 }

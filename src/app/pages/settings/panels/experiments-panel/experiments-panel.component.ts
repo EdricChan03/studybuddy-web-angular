@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AngularFireRemoteConfig } from '@angular/fire/compat/remote-config';
+import { getString, RemoteConfig } from '@angular/fire/remote-config';
 import { MatPseudoCheckboxState } from '@angular/material/core';
 
 import { Experiment } from '@app/core/experiments/models/experiment';
@@ -15,8 +15,8 @@ export class ExperimentsPanelComponent {
   experimentVals: {[key: string]: boolean | string | number } = {};
   constructor(
     panelsService: SettingsPanelsService,
-    settingsStorage: SettingsStorageService,
-    remoteConfig: AngularFireRemoteConfig
+    private settingsStorage: SettingsStorageService,
+    remoteConfig: RemoteConfig
   ) {
     panelsService.getSettingPanelById('experiments').actions = [
       {
@@ -38,24 +38,27 @@ export class ExperimentsPanelComponent {
       }
     ];
 
-    remoteConfig.getString('available_experiments').then(value => {
-      console.log('Currently available experiments:', JSON.parse(value));
+    this.loadAvailableExperiments(getString(remoteConfig, 'available_experiments'));
+  }
 
-      const parsedVal = JSON.parse(value) as Experiment[];
-      this.experiments = parsedVal;
-      const keys = parsedVal.map(experiment => experiment.key);
-      keys.forEach(key => {
-        let defaultValue = null;
-        const experiment = parsedVal.find(exp => exp.key === key);
-        if ('defaultValue' in experiment) {
-          defaultValue = experiment.defaultValue;
-        }
-        this.experimentVals[key] = defaultValue;
-      });
+  private loadAvailableExperiments(value: string) {
+    console.log('Currently available experiments:', JSON.parse(value));
 
-      this.experimentVals = settingsStorage.getSetting<{ [key: string]: boolean | string | number }>('experimentSettings', {});
+    const parsedVal = JSON.parse(value) as Experiment[];
+    this.experiments = parsedVal;
+    const keys = parsedVal.map(experiment => experiment.key);
+    keys.forEach(key => {
+      let defaultValue = null;
+      const experiment = parsedVal.find(exp => exp.key === key);
+      if ('defaultValue' in experiment) {
+        defaultValue = experiment.defaultValue;
+      }
+      this.experimentVals[key] = defaultValue;
     });
 
+    this.experimentVals = this.settingsStorage.getSetting<Record<string, boolean | string | number>>(
+      'experimentSettings', {}
+    );
   }
 
   getCheckboxState(boolVal: any): MatPseudoCheckboxState {

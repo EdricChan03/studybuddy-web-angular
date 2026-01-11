@@ -1,12 +1,13 @@
 import { Component, TemplateRef } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
+import { addDoc, collection, CollectionReference, doc, docData, Firestore, updateDoc } from '@angular/fire/firestore';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import firebase from 'firebase/compat/app';
+import { Timestamp } from '@firebase/firestore';
 
 import { AuthService } from '../../auth.service';
 import { TodoProject } from '../../interfaces';
 import { SharedService } from '../../shared.service';
+
 @Component({
   selector: 'app-new-project-dialog',
   templateUrl: './new-project-dialog.component.html',
@@ -23,14 +24,14 @@ export class NewProjectDialogComponent {
   colorError = '';
   newProjectForm: FormGroup;
   currentUser: string;
-  projectsCollection: AngularFirestoreCollection<TodoProject>;
+  projectsCollection: CollectionReference<TodoProject>;
   helpDialogRef: MatDialogRef<any>;
   isEditing = false;
   projectId: string;
   constructor(
     private authService: AuthService,
     private dialog: MatDialog,
-    private fs: AngularFirestore,
+    private fs: Firestore,
     public shared: SharedService,
     private fb: FormBuilder
   ) {
@@ -44,13 +45,11 @@ export class NewProjectDialogComponent {
       if (user) {
         console.log(user);
         this.currentUser = user.uid;
-        this.projectsCollection = this.fs.collection(`users/${this.currentUser}/todoProjects`);
+        this.projectsCollection = collection(fs, `users/${this.currentUser}/todoProjects`) as CollectionReference<TodoProject>;
         if (this.isEditing && this.projectId) {
-          this.projectsCollection
-            .doc(this.projectId)
-            .get()
-            .subscribe(result => {
-              const data = result.data();
+          docData(
+            doc(this.projectsCollection, this.projectId)
+          ).subscribe(data => {
               for (const prop in data) {
                 if (prop === 'dueDate') {
                   this.newProjectForm.patchValue({ [prop]: data[prop].toDate() });
@@ -72,42 +71,33 @@ export class NewProjectDialogComponent {
     for (const prop in this.newProjectForm.value) {
       if (this.newProjectForm.value[prop]) {
         if (prop === 'dueDate') {
-          newProject['dueDate'] = firebase.firestore.Timestamp.fromDate(this.newProjectForm.value[prop] as Date);
+          newProject['dueDate'] = Timestamp.fromDate(this.newProjectForm.value[prop] as Date);
         } else {
           newProject[prop] = this.newProjectForm.value[prop];
         }
       }
     }
     if (!this.isEditing) {
-      this.projectsCollection.add(newProject)
-        .then(result => {
-          this.projectsCollection.doc(result.id).update({ id: result.id })
-            .then(() => {
-              console.log('Successfully added project\'s ID to project!');
-            }, error => {
-              this.shared.openSnackBar({
-                msg: `An error occurred: ${error.message}`,
-                additionalOpts: {
-                  duration: 6000
-                }
-              });
-              console.error('An error occurred: ', error.message);
-            });
-          this.shared.openSnackBar({ msg: 'Successfully created project!' });
-          console.log(`Successfully written data with result: ${result}`);
-        }, error => {
-          this.shared.openSnackBar({
-            msg: `An error occurred: ${error.message}`,
-            additionalOpts: {
-              duration: 6000
-            }
-          });
-          console.error(`An error occurred: ${error.message}`);
+      addDoc(
+        this.projectsCollection,
+        newProject
+      ).then(result => {
+        this.shared.openSnackBar({ msg: 'Successfully created project!' });
+        console.log(`Successfully written data with result: ${result}`);
+      }, error => {
+        this.shared.openSnackBar({
+          msg: `An error occurred: ${error.message}`,
+          additionalOpts: {
+            duration: 6000
+          }
         });
+        console.error(`An error occurred: ${error.message}`);
+      });
     } else {
-      this.projectsCollection.doc(this.projectId)
-        .update(newProject)
-        .then(() => {
+      updateDoc(
+        doc(this.projectsCollection, this.projectId),
+        newProject
+      ).then(() => {
           this.shared.openSnackBar({ msg: 'Successfully updated project!' });
         })
         .catch((error) => {

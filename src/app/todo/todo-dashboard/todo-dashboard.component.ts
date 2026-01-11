@@ -1,7 +1,7 @@
 
-import { animate, keyframes, style, transition, trigger } from '@angular/animations';
+import { animate, keyframes, query, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
+import { collection, collectionData, CollectionReference, deleteDoc, doc, Firestore, query as fsQuery, orderBy, setDoc } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
@@ -33,13 +33,13 @@ import { DialogsService } from '../../core/dialogs/dialogs.service';
 export class TodoDashboardComponent implements OnInit {
   currentUser: string;
   projects$: Observable<TodoProject[]>;
-  projectsCollection: AngularFirestoreCollection<TodoProject>;
+  projectsCollection: CollectionReference<TodoProject>;
   constructor(
     private coreDialogs: DialogsService,
     private authService: AuthService,
     private toolbarService: ToolbarService,
     private shared: SharedService,
-    private fs: AngularFirestore,
+    private fs: Firestore,
     private dom: DomSanitizer,
     private dialog: MatDialog
   ) {
@@ -48,16 +48,15 @@ export class TodoDashboardComponent implements OnInit {
       if (user) {
         console.log(user);
         this.currentUser = user.uid;
-        this.projectsCollection = this.fs.collection(`users/${this.currentUser}/todoProjects`, ref => ref.orderBy('name'));
-        this.projects$ = this.projectsCollection
-          .snapshotChanges().pipe(map(result => {
-            return result.map(a => {
-              const data = a.payload.doc.data() as TodoProject;
-              if (!data.hasOwnProperty('id')) {
-                data.id = a.payload.doc.id;
-              }
+        this.projectsCollection = collection(fs, `users/${this.currentUser}/todoProjects`) as CollectionReference<TodoProject>;
+        const projectsData = fsQuery(
+          this.projectsCollection,
+          orderBy('name')
+        );
+        this.projects$ = collectionData(projectsData, { idField: 'id' }).pipe(map(result => {
+            return result.map(data => {
               // Check if color property exists
-              data.color = a.payload.doc.data().color ? a.payload.doc.data().color : '#000000';
+              data.color = data.color ? data.color : '#000000';
               return data;
             });
           }));
@@ -86,10 +85,11 @@ export class TodoDashboardComponent implements OnInit {
     dialogRef.componentInstance.projectId = project.id;
   }
   deleteProject(project: TodoProject) {
-    this.projectsCollection.doc(project.id).delete().then(() => {
+    const projectDoc = doc(this.projectsCollection, project.id);
+    deleteDoc(projectDoc).then(() => {
       const snackBarRef = this.shared.openSnackBar({ msg: 'Successfully deleted project!', action: 'Undo' });
       snackBarRef.onAction().subscribe(() => {
-        this.projectsCollection.doc(project.id).set(project)
+        setDoc(projectDoc, project)
           .then(() => {
             console.log('Successfully undone deletion!');
           })

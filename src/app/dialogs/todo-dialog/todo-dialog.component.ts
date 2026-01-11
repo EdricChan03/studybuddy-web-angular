@@ -1,9 +1,10 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import firebase from 'firebase/compat/app';
+import { Auth, GoogleAuthProvider, signInWithPopup, user as currentUser } from '@angular/fire/auth';
+import { collection, collectionData, CollectionReference, doc, Firestore, setDoc, updateDoc } from '@angular/fire/firestore';
+import type { User } from '@firebase/auth';
+import { Timestamp } from '@firebase/firestore';
 import { Observable } from 'rxjs';
 
 import { DialogsService } from '../../core/dialogs/dialogs.service';
@@ -20,7 +21,7 @@ export class TodoDialogComponent implements OnInit {
   todoItem: TodoItem;
   isNewTodo = true;
   todoToEdit: TodoItem;
-  todoCollection: AngularFirestoreCollection<TodoItem>;
+  todoCollection: CollectionReference<TodoItem>;
   enableTags = false;
   showDebug = false;
   helpDialogRef: MatDialogRef<any>;
@@ -54,17 +55,16 @@ export class TodoDialogComponent implements OnInit {
     <p>This is an example of syntax-highlighting! <em>wow</em><p>
     \`\`\``;
   todoForm: FormGroup;
-  projectsCollection: AngularFirestoreCollection<TodoProject>;
   projects$: Observable<TodoProject[]>;
-  user: firebase.User;
+  user: User;
   @ViewChild('helpContentDialog', { static: true }) helpContentDialogTmpl: TemplateRef<any>;
   constructor(
     // TODO(Edric): Figure out a way to make this private
     public shared: SharedService,
     private coreDialogs: DialogsService,
-    private afAuth: AngularFireAuth,
+    private afAuth: Auth,
     private dialogRef: MatDialogRef<TodoDialogComponent>,
-    private afFs: AngularFirestore,
+    private afFs: Firestore,
     private dialog: MatDialog,
     private fb: FormBuilder
   ) {
@@ -76,16 +76,14 @@ export class TodoDialogComponent implements OnInit {
       dueDate: null,
       isDone: false,
       isArchived: false,
-      // TODO: Remove ID property
-      id: { value: this.afFs.createId(), disabled: true },
       project: null
     });
-    afAuth.user.subscribe(user => {
+    currentUser(afAuth).subscribe(user => {
       this.user = user;
       if (user) {
-        this.todoCollection = this.afFs.collection(`users/${user.uid}/todos`);
-        this.projectsCollection = this.afFs.collection(`users/${user.uid}/todoProjects`);
-        this.projects$ = this.projectsCollection.valueChanges();
+        this.todoCollection = collection(afFs, `users/${user.uid}/todos`) as CollectionReference<TodoItem>;
+        const projectsCollection = collection(afFs, `users/${user.uid}/todoProjects`);
+        this.projects$ = collectionData(projectsCollection, { idField: 'id' }) as Observable<TodoProject[]>;
       } else {
         // User isn't signed in! Add todo stuff to disable dialog
         const loginDialogRef = this.coreDialogs.openConfirmDialog({
@@ -99,7 +97,7 @@ export class TodoDialogComponent implements OnInit {
         });
         loginDialogRef.afterClosed().subscribe(result => {
           if (result === 'ok') {
-            this.afAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(signInResult => {
+            signInWithPopup(afAuth, new GoogleAuthProvider()).then(signInResult => {
               this.shared.openSnackBar({ msg: `Signed in as ${signInResult.user.email}` });
             }, err => {
               this.shared.openSnackBar({ msg: `Error: ${err.message}` });
@@ -215,17 +213,20 @@ export class TodoDialogComponent implements OnInit {
               itemToAdd[prop] = this.todoFormRawValue[prop];
               break;
             case 'dueDate':
-              itemToAdd[prop] = firebase.firestore.Timestamp.fromDate(this.todoFormRawValue[prop] as Date);
+              itemToAdd[prop] = Timestamp.fromDate(this.todoFormRawValue[prop] as Date);
               break;
             case 'project':
-              itemToAdd[prop] = this.afFs.doc(`users/${this.user.uid}/todoProjects/${this.todoFormRawValue[prop]}`).ref;
+              itemToAdd[prop] = doc(this.afFs, `users/${this.user.uid}/todoProjects/${this.todoFormRawValue[prop]}`);
               break;
             default:
               throw new Error(`Property ${prop} doesn't exist!`);
           }
         }
       }
-      this.todoCollection.doc(itemToAdd.id).set(itemToAdd).then(result => {
+      setDoc(
+        doc(this.afFs, itemToAdd.id),
+        itemToAdd
+      ).then(result => {
         this.shared.openSnackBar({ msg: 'Todo was added' });
         console.log(`Successfully written data with result: ${result}`);
       }, error => {
@@ -238,9 +239,10 @@ export class TodoDialogComponent implements OnInit {
         console.error(`An error occurred: ${error.message}`);
       });
     } else {
-      this.todoCollection.doc<TodoItem>(this.todoToEdit.id)
-        .update(this.todoFormRawValue)
-        .then(result => {
+      updateDoc(
+        doc(this.afFs, this.todoToEdit.id),
+        this.todoFormRawValue
+      ).then(result => {
           this.shared.openSnackBar({
             msg: 'Successfully updated todo!'
           });

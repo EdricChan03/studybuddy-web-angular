@@ -2,18 +2,26 @@
 import { map } from 'rxjs/operators';
 import { ToolbarService } from '../../toolbar.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
+import { Auth } from '@angular/fire/auth';
+import {
+  collection,
+  collectionData,
+  CollectionReference, deleteDoc, doc,
+  Firestore,
+  query as fsQuery,
+  runTransaction, updateDoc,
+  where
+} from '@angular/fire/firestore';
 import { TodoDialogComponent } from '../../dialogs';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 // import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { SharedService } from '../../shared.service';
 import { TodoItem } from '../../interfaces';
 import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy, SecurityContext } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Observable } from 'rxjs';
-import { transition, style, animate, trigger, keyframes } from '@angular/animations';
+import { transition, style, animate, trigger, keyframes, query } from '@angular/animations';
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogsService } from '../../core/dialogs/dialogs.service';
 // import { animations } from '../../animations';
@@ -38,7 +46,7 @@ export class TodoArchivedComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatMenuTrigger, { static: false }) rightClickMenu: MatMenuTrigger;
   currentUser: string;
   todos$: Observable<TodoItem[]>;
-  todosCollection: AngularFirestoreCollection<TodoItem>;
+  todosCollection: CollectionReference<TodoItem>;
   todoView: 'list' | 'table' | 'agenda' = 'list';
   selectedTodos: TodoItem[] = [];
   dataSource: MatTableDataSource<TodoItem>;
@@ -49,25 +57,19 @@ export class TodoArchivedComponent implements OnInit, AfterViewInit, OnDestroy {
     public toolbar: ToolbarService,
     private dialog: MatDialog,
     private dom: DomSanitizer,
-    private afFs: AngularFirestore,
-    private afAuth: AngularFireAuth
+    private afFs: Firestore,
+    private afAuth: Auth
   ) {
     shared.title = 'Todos';
     afAuth.onAuthStateChanged((user) => {
       if (user) {
         this.currentUser = user.uid;
-        this.todosCollection = this.afFs.collection<TodoItem>(
-          `users/${this.currentUser}/todos`,
-          ref => ref.where('isArchived', '==', true)
+        this.todosCollection = collection(afFs, `users/${this.currentUser}/todos`) as CollectionReference<TodoItem>;
+        const todosData = fsQuery(
+          this.todosCollection,
+          where('isArchived', '==', true)
         );
-        this.todos$ = this.todosCollection.snapshotChanges().pipe(map(actions => {
-          return actions.map(a => {
-            // tslint:disable-next-line:no-shadowed-variable
-            const data = a.payload.doc.data() as TodoItem;
-            data.id = a.payload.doc.id;
-            return data;
-          });
-        }));
+        this.todos$ = collectionData(todosData, { idField: 'id' });
       } else {
         console.warn('Current user doesn\'t exist yet!');
       }
@@ -96,12 +98,19 @@ export class TodoArchivedComponent implements OnInit, AfterViewInit, OnDestroy {
     this.toolbar.showToolbar = true;
   }
   markSelectedTodosAsDone() {
-    for (const todo of this.selectedTodos) {
-      this.todosCollection.doc<TodoItem>(todo.id).update({
-        isDone: true
-      });
-    }
-    this.clearSelectedTodos();
+    runTransaction(
+      this.afFs,
+      async (transaction) => {
+        for (const todo of this.selectedTodos) {
+          transaction.update(doc(this.todosCollection, todo.id), { isDone: true });
+        }
+      }
+    ).then(() => {
+      this.clearSelectedTodos();
+    }, err => {
+      console.error('Could not mark selected todos as completed:', err);
+      this.shared.openSnackBar({ msg: 'Could not mark selected todos complete. Try again later' });
+    });
   }
   unarchiveSelectedTodos() {
     this.coreDialogs.openConfirmDialog({
@@ -139,52 +148,17 @@ export class TodoArchivedComponent implements OnInit, AfterViewInit, OnDestroy {
    * See https://stackoverflow.com/a/49161622 for more info
    */
   deleteAllTodos() {
-    const dialogRef = this.coreDialogs.openConfirmDialog({
-      msg: 'Are you sure you want to delete all todos? Once deleted, it cannot be restored!',
-      title: 'Delete all todos?',
-      positiveBtnText: 'Cancel',
-      negativeBtnText: 'Delete',
-      negativeBtnColor: 'warn'
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'ok') {
-        const promises = [];
-        this.todosCollection.ref.get()
-          .then((refs) => {
-            refs.forEach((doc) => {
-              promises.push(this.todosCollection.doc(doc.id).delete());
-            });
-          })
-          .catch((error: { message: string }) => {
-            const snackBarRef = this.shared.openSnackBar({
-              action: 'Retry',
-              msg: `${error.message}`
-            });
-            snackBarRef.onAction().subscribe(() => {
-              this.deleteAllTodos();
-            });
-          });
-        Promise.all(promises).then(() => {
-          console.log('All documents of collection deleted.');
-          this.shared.openSnackBar({
-            msg: 'Successfully deleted all todos!'
-          });
-        })
-          .catch((error: { message: string }) => {
-            const snackBarRef = this.shared.openSnackBar({
-              action: 'Retry',
-              msg: `An error occurred: ${error.message}`,
-            });
-            snackBarRef.onAction().subscribe(() => {
-              this.deleteAllTodos();
-            });
-          });
-      }
-    });
+    // TODO: Probably not a good idea for performance, we should remove this functionality entirely
   }
   toggleChecked(todo: TodoItem) {
-    this.todosCollection.doc<TodoItem>(todo.id).update({
-      isDone: !todo.isDone
+    updateDoc(
+      doc(this.afFs, todo.id),
+      { isDone: !todo.isDone }
+    ).catch((err) => {
+      this.shared.openSnackBar({
+        msg: `Could not mark todo as ${!todo.isDone ? 'completed' : 'incomplete'}. Try again later`
+      });
+      console.error('Could not toggle todo\'s completion:', err);
     });
   }
   handleListClick(todo: TodoItem, event: MouseEvent) {
@@ -253,10 +227,10 @@ export class TodoArchivedComponent implements OnInit, AfterViewInit, OnDestroy {
       unarchiveConfirm = true;
     }
     if (unarchiveConfirm) {
-      this.todosCollection.doc(todo.id).update({
-        isArchived: false
-      })
-        .then(() => {
+      updateDoc(
+        doc(this.todosCollection, todo.id),
+        { isArchived: false }
+      ).then(() => {
           console.log(`Successfully unarchived todo (document ID: ${todo.id})`);
           this.shared.openSnackBar({ msg: 'Successfully unarchived todo!' });
         })
@@ -270,7 +244,9 @@ export class TodoArchivedComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private _deleteTodo(id: string) {
-    this.todosCollection.doc(id).delete().then(() => {
+    deleteDoc(
+      doc(this.todosCollection, id)
+    ).then(() => {
       console.log(`Successfully deleted todo (document ID: ${id})`);
       this.shared.openSnackBar({ msg: 'Successfully deleted todo!' });
     })
@@ -333,8 +309,14 @@ export class TodoArchivedComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param event The checkbox change event
    */
   onSelectedChange(todo: TodoItem, event: MatCheckboxChange) {
-    this.afFs.doc<TodoItem>(`users/${this.currentUser}/todos/${todo.id}`).update({
-      isDone: event.checked
+    updateDoc(
+      doc(this.todosCollection, todo.id),
+      { isDone: event.checked }
+    ).catch((err) => {
+      this.shared.openSnackBar({
+        msg: `Could not mark todo as ${event.checked ? 'complete' : 'incomplete'}. Try again later`
+      });
+      console.error(`Could not update todo isDone to ${event.checked}:`, err);
     });
   }
 

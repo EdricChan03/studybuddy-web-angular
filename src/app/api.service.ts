@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import firebase from 'firebase/compat/app';
+import type { User } from '@firebase/auth-types';
 import { Observable } from 'rxjs';
 
 // This file contains the client-side code for the StudyBuddy API
@@ -16,8 +16,8 @@ export class ApiService {
    * @param email An email address
    * @returns The result of the GET request
    */
-  getUserByEmail(email: string): Observable<firebase.User> {
-    return this.http.get<firebase.User>(
+  getUserByEmail(email: string): Observable<User> {
+    return this.http.get<User>(
       `${this.apiBaseUrl}/v1/user`,
       {
         params: { email }
@@ -30,8 +30,8 @@ export class ApiService {
    * @param phoneNumber A phone number as a string
    * @returns The result of the GET request
    */
-  getUserByPhoneNumber(phoneNumber: string): Observable<firebase.User> {
-    return this.http.get<firebase.User>(
+  getUserByPhoneNumber(phoneNumber: string): Observable<User> {
+    return this.http.get<User>(
       `${this.apiBaseUrl}/v1/user`,
       {
         params: { phoneNumber }
@@ -44,8 +44,8 @@ export class ApiService {
    * @param id A valid user ID
    * @returns The result of the GET request
    */
-  getUserById(id: string): Observable<firebase.User> {
-    return this.http.get<firebase.User>(
+  getUserById(id: string): Observable<User> {
+    return this.http.get<User>(
       `${this.apiBaseUrl}/v1/user`,
       {
         params: { id }

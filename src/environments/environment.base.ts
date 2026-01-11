@@ -1,6 +1,6 @@
 import { Version } from "@angular/core";
 import { FirebaseOptions } from "@angular/fire/app";
-import firebase from "firebase/compat/app";
+import { Settings } from "@firebase/remote-config-types";
 
 // This file is the base environment file for all of the environment files that
 // inherit from this file
@@ -28,7 +28,7 @@ export interface Environment {
   /** Firebase Remote Config options */
   remoteConfig?: {
     /** Settings to be passed to `CONFIG` from `@angular/fire/remote-config`. */
-    settings?: Partial<firebase.remoteConfig.Settings>;
+    settings?: Partial<Settings>;
     /** Defaults to be passed to `DEFAULTS` from `@angular/fire/remote-config`. */
     defaults?: {
       [key: string]: string | number | boolean;

@@ -1,10 +1,10 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { AngularFireRemoteConfig } from '@angular/fire/compat/remote-config';
+import { fetchAndActivate, RemoteConfig } from '@angular/fire/remote-config';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Event, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
-import firebase from 'firebase/compat/app';
+import type { User } from '@firebase/auth-types';
 import { Observable } from 'rxjs';
 
 import { AuthService } from './auth.service';
@@ -22,8 +22,8 @@ import { ToolbarService } from './toolbar.service';
 export class AppComponent implements OnInit {
   @ViewChild('left', { static: true }) sidenav: MatSidenav;
   @ViewChild('rightPanel', { static: true }) rightPanel: MatSidenav;
-  user: firebase.User;
-  userObservable: Observable<firebase.User>;
+  user: User;
+  userObservable: Observable<User>;
   sidenavLinks: SidenavLink[] = [
     {
       link: 'dashboard',
@@ -75,7 +75,7 @@ export class AppComponent implements OnInit {
     private dialog: MatDialog,
     @Inject(DOCUMENT) private document: Document,
     public panelService: PanelService,
-    remoteConfig: AngularFireRemoteConfig
+    remoteConfig: RemoteConfig
   ) {
     this.userObservable = auth.getAuthState();
     auth.getAuthState().subscribe((user) => {
@@ -111,10 +111,7 @@ export class AppComponent implements OnInit {
       }
     }
 
-    // Fetch and activate Firebase Remote Config
-    // See https://firebase.google.com/docs/reference/js/firebase.remoteconfig.RemoteConfig#fetch-and-activate
-    // for what the result of the `Promise` means
-    remoteConfig.fetchAndActivate().then(result => {
+    fetchAndActivate(remoteConfig).then(result => {
       console.log(result ?
         'Successfully activated the fetched configuration!' :
         'Fetched configuration was already activated. Skipping...');
@@ -168,8 +165,8 @@ export class AppComponent implements OnInit {
           });
           console.log(res);
         }).catch((error) => {
-            this.handleError(error.message);
-          });
+          this.handleError(error.message);
+        });
       }
     });
   }

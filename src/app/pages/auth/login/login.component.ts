@@ -1,5 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { Auth, user as currentUser } from '@angular/fire/auth';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map } from 'rxjs/operators';
@@ -23,7 +23,7 @@ export class LoginComponent implements OnDestroy {
     private coreDialogs: DialogsService,
     private shared: SharedService,
     fb: FormBuilder,
-    afAuth: AngularFireAuth,
+    afAuth: Auth,
     private auth: AuthService,
     route: ActivatedRoute,
     private router: Router,
@@ -44,7 +44,7 @@ export class LoginComponent implements OnDestroy {
       this.redirectUrl = redirectUrl;
     });
 
-    afAuth.user.subscribe(user => {
+    currentUser(afAuth).subscribe(user => {
       if (user !== null) {
         // Redirect to `redirectUrl`
         console.log(`User is logged-in. Redirecting to ${this.redirectUrl}...`);

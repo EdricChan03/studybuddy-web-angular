@@ -1,7 +1,7 @@
 import { Component, TemplateRef } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { Auth, updateEmail, updatePassword, updateProfile, user as currentUser } from '@angular/fire/auth';
 import { MatDialog } from '@angular/material/dialog';
-import firebase from 'firebase/compat/app';
+import type { User } from '@firebase/auth';
 import { Observable } from 'rxjs';
 
 import { SharedService } from '@app/shared.service';
@@ -14,16 +14,16 @@ import { DialogResult } from '@app/core/dialogs/models';
   templateUrl: './account-panel.component.html'
 })
 export class AccountPanelComponent {
-  user: firebase.User;
-  user$: Observable<firebase.User>;
+  user: User;
+  user$: Observable<User>;
   constructor(
-    private afAuth: AngularFireAuth,
+    private afAuth: Auth,
     private coreDialogs: DialogsService,
     private dialog: MatDialog,
     public shared: SharedService
   ) {
-    this.user$ = afAuth.user;
-    afAuth.user.subscribe(user => this.user = user);
+    this.user$ = currentUser(afAuth);
+    this.user$.subscribe(user => this.user = user);
   }
 
   openOfflineDialog(reason?: string) {
@@ -57,13 +57,13 @@ export class AccountPanelComponent {
     }
   }
 
-  deleteAccount(user: firebase.User) {
+  deleteAccount(user: User) {
     user.delete().then(() => {
       console.log('Successfully deleted account!');
       this.shared.openSnackBar({
         msg: 'Your account has successfully been deleted.'
       });
-    }, (error: firebase.FirebaseError) => {
+    }, (error) => {
       console.error('Could not delete account:', error);
       if (error.code === 'auth/requires-recent-login') {
         const snackBarRef = this.shared.openSnackBar({
@@ -83,7 +83,7 @@ export class AccountPanelComponent {
     });
   }
 
-  confirmDeleteAccount(user: firebase.User, skipConfirm: boolean = false) {
+  confirmDeleteAccount(user: User, skipConfirm: boolean = false) {
     if (!this.shared.isOnline) {
       this.openOfflineDialog('delete your account');
     } else {
@@ -141,7 +141,7 @@ export class AccountPanelComponent {
         if (result !== DialogResult.CANCEL) {
           switch (updateType) {
             case 'email':
-              this.user.updateEmail(result).then(() => {
+              updateEmail(this.user, result).then(() => {
                 this.shared.openSnackBar({
                   msg: 'Your email address has successfully been updated.'
                 });
@@ -156,7 +156,7 @@ export class AccountPanelComponent {
               });
               break;
             case 'name':
-              this.user.updateProfile({ displayName: result }).then(() => {
+              updateProfile(this.user, { displayName: result }).then(() => {
                 this.shared.openSnackBar({
                   msg: 'Your name has successfully been updated.'
                 });
@@ -171,7 +171,7 @@ export class AccountPanelComponent {
               });
               break;
             case 'password':
-              this.user.updatePassword(result).then(() => {
+              updatePassword(this.user, result).then(() => {
                 this.shared.openSnackBar({
                   msg: 'Your password has successfully been updated.'
                 });

@@ -1,5 +1,5 @@
-import firebase from 'firebase/compat/app';
-import { DocumentReference } from '@angular/fire/compat/firestore';
+import type { FieldValue, Timestamp } from '@firebase/firestore-types';
+import type { DocumentReference } from '@angular/fire/firestore';
 
 /** Interface to indicate that an AngularFire interface should have a document ID */
 export interface HasId {
@@ -10,9 +10,9 @@ export interface HasId {
 /** Interface to indicate that a document object should have timestamp metadata. */
 export interface HasTimestampMetadata {
   /** The date that the document was last modified at. */
-  lastModified?: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
+  lastModified?: Timestamp | FieldValue;
   /** The date that the document was created at. */
-  createdAt?: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
+  createdAt?: Timestamp | FieldValue;
 }
 
 export interface SidenavLink {
@@ -79,7 +79,7 @@ export interface TodoItem extends HasId {
   /**
    * The due date of the todo
    */
-  dueDate?: firebase.firestore.Timestamp;
+  dueDate?: Timestamp;
   /**
    * Whether the todo has already been finished
    */
@@ -110,7 +110,7 @@ export interface TodoProject extends HasId {
   /**
    * The due date of the project
    */
-  dueDate?: firebase.firestore.Timestamp;
+  dueDate?: Timestamp;
   /**
    * The list of todos assigned to this project as document references
    */
