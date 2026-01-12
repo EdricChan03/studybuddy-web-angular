@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FieldArrayType } from '@ngx-formly/core';
 
 @Component({
-  // tslint:disable-next-line: component-selector
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'formly-accordion-type',
   templateUrl: './accordion-type.component.html'
 })

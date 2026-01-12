@@ -282,7 +282,7 @@ export class TodoArchivedComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   deleteConfirmDialog(id: string, showHint?: boolean) {
-    // tslint:disable-next-line:max-line-length
+    // eslint-disable-next-line max-len
     let dialogText = '<p>Are you sure you want to delete the todo? Once deleted, it will be lost forever and cannot be retrieved again.</p>';
     if (showHint) {
       dialogText += '<p><small>TIP: To bypass this dialog, hold the shift key when clicking the delete button.</small></p>';

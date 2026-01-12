@@ -119,7 +119,7 @@ export class TodoDashboardComponent implements OnInit {
     }
   }
   deleteConfirmDialog(project: TodoProject, showHint: boolean = true) {
-    // tslint:disable-next-line:max-line-length
+    // eslint-disable-next-line max-len
     let dialogText = '<p>Are you sure you want to delete the project? Once deleted, it will be forever lost and cannot be retrieved again.</p>';
     if (showHint) {
       dialogText += '<p><small>TIP: To bypass this dialog, hold the shift key when clicking the delete button.</small></p>';

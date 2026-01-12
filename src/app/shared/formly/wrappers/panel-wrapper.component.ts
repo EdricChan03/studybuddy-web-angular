@@ -2,7 +2,7 @@ import { Component, ViewChild, ViewContainerRef } from '@angular/core';
 import { FieldWrapper } from '@ngx-formly/core';
 
 @Component({
-  // tslint:disable-next-line: component-selector
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'formly-wrapper-panel',
   template: `
     <mat-expansion-panel>

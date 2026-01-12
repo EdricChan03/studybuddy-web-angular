@@ -112,13 +112,13 @@ export class SharedService {
   }
 
   private handleSnackBar(opts: SnackBarOpts): MatSnackBarRef<SimpleSnackBar> {
-    // tslint:disable-next-line:deprecation
+    // eslint-disable-next-line import/no-deprecated
     const config = opts.config ? opts.config : opts.additionalOpts;
     return this.snackBar.open(opts.msg, opts.action ? opts.action : undefined, config);
   }
 
   private handleSnackBarWithComponent(opts: SnackBarOpts): MatSnackBarRef<any> {
-    // tslint:disable-next-line:deprecation
+    // eslint-disable-next-line import/no-deprecated
     const config = opts.config ? opts.config : opts.additionalOpts;
     return this.snackBar.openFromComponent(opts.component, config);
   }
@@ -147,7 +147,7 @@ const SHARED_MODULES = [
   MatSnackBarModule
 ];
 
-// tslint:disable:max-classes-per-file
+/* eslint-disable max-classes-per-file */
 @NgModule({
   imports: SHARED_MODULES,
   providers: [SharedService]

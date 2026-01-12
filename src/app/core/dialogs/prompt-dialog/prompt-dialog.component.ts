@@ -51,19 +51,19 @@ export class PromptDialogComponent extends Dialog implements OnInit {
 
   get inputColor(): ThemePalette {
     // This is to handle users using the now deprecated `color` property.
-    // tslint:disable-next-line:deprecation
+    // eslint-disable-next-line import/no-deprecated
     return 'color' in this.opts ? this.opts.color :
       (this.opts.inputConfig && 'color' in this.opts.inputConfig) ?
       this.opts.inputConfig.color : this.defaultInputColor;
   }
 
   ngOnInit() {
-    // tslint:disable:deprecation
+    /* eslint-disable import/no-deprecated */
     if ('value' in this.opts) {
       this.input = this.opts.value;
     } else if ('inputConfig' in this.opts && 'value' in this.opts.inputConfig) {
       this.input = this.opts.inputConfig.value;
     }
-    // tslint:enable:deprecation
+    /* eslint-enable import/no-deprecated */
   }
 }

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FieldType } from '@ngx-formly/core';
 
 @Component({
-  // tslint:disable-next-line: component-selector
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'formly-object-type',
   template: `
     <legend *ngIf="to.label && !to['hideFieldLabel']">{{ to.label }}</legend>
