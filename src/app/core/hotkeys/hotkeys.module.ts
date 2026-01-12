@@ -11,7 +11,7 @@ import { HotkeyHelpDialogComponent } from './hotkey-help-dialog/hotkey-help-dial
     MatButtonModule,
     MatDialogModule
   ],
-  entryComponents: [HotkeyHelpDialogComponent],
   exports: [HotkeyHelpDialogComponent]
 })
-export class HotkeysModule { }
+export class HotkeysModule {
+}

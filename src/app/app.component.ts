@@ -95,7 +95,7 @@ export class AppComponent implements OnInit {
         action: 'Retry'
       });
       snackBarRef.onAction().subscribe(() => {
-        window.location.reload(true);
+        window.location.reload();
       });
     }
 

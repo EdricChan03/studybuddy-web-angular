@@ -1,4 +1,4 @@
-@use '~@angular/material' as mat;
+@use '@angular/material' as mat;
 @mixin search-input-theme($theme) {
   $background: map-get($theme, background);
   // Code adapted from Google Play Newsstand's search bar in the toolbar

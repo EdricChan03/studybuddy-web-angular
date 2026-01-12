@@ -58,9 +58,7 @@ const DIALOGS = [
   ],
   exports: [
     DIALOGS
-  ],
-  entryComponents: [
-    DIALOGS
   ]
 })
-export class DialogsModule { }
+export class DialogsModule {
+}
