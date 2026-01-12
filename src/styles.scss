@@ -51,7 +51,7 @@
   }
   .active-link {
     // Since it's a bit hard to actually see the text in the dark theme, it'll use the accent color if it's dark and primary if it's not. Same applies for mat-icon
-    .mdc-list-item__content {
+    .mdc-list-item__content .mdc-list-item__primary-text {
       color: if($is-dark-theme, mat.get-color-from-palette($accent), mat.get-color-from-palette($primary)) !important;
     }
     mat-icon {
