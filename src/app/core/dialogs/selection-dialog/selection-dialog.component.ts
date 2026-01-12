@@ -7,6 +7,14 @@ import { SelectionDialogOpts } from '../models';
 
 @Component({
   selector: 'app-selection-dialog',
+  styles: [
+    `
+    .selection-dialog__content {
+      display: flex;
+      flex-direction: column;
+    }
+    `
+  ],
   templateUrl: './selection-dialog.component.html'
 })
 export class SelectionDialogComponent extends Dialog {

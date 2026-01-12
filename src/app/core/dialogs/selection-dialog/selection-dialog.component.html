@@ -1,5 +1,5 @@
 <h2 matDialogTitle *ngIf="opts?.title">{{ opts.title }}</h2>
-<mat-dialog-content fxLayout="column" class="mat-typography">
+<mat-dialog-content class="selection-dialog__content mat-typography">
   <mat-selection-list #selection>
     <mat-list-option *ngFor="let option of opts.options" [disabled]="option.disabled" [value]="option.value"
       [togglePosition]="option.checkboxPosition ? option.checkboxPosition : 'before'" [selected]="option.selected">
