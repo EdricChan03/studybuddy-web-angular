@@ -1,3 +1,5 @@
-.app-form-field {
-  padding-bottom: 5px;
+.save-task-dialog__content, .help-markdown-content-dialog__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }

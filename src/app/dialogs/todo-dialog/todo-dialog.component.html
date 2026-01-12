@@ -1,14 +1,14 @@
 <h2 matDialogTitle>{{isNewTodo ? 'New' : 'Edit'}} Todo</h2>
-<div mat-dialog-content>
-  <form [formGroup]="todoForm">
-    <mat-form-field class="app-form-field">
+<mat-dialog-content>
+  <form [formGroup]="todoForm" class="save-task-dialog__content">
+    <mat-form-field>
       <mat-label>Title</mat-label>
       <input matInput formControlName="title">
       <mat-error>This is required</mat-error>
       <mat-hint>The subject of your todo.</mat-hint>
     </mat-form-field>
 
-    <mat-form-field class="app-form-field">
+    <mat-form-field>
       <mat-label>Content</mat-label>
       <textarea formControlName="content" cols="3" matInput matTextareaAutosize></textarea>
       <button mat-icon-button matSuffix matTooltip="Learn more about Markdown" (click)="showHelp('content')">
@@ -18,7 +18,7 @@
     </mat-form-field>
     <ng-template #helpContentDialog>
       <h2 matDialogTitle>Markdown Supported Features</h2>
-      <div matDialogContent fxLayout="column">
+      <mat-dialog-content class="help-markdown-content-dialog__content">
         <mat-tab-group dynamicHeight>
           <mat-tab label="Text">
             <div class="tab-content">
@@ -61,12 +61,12 @@
             </div>
           </mat-tab>
         </mat-tab-group>
-      </div>
+      </mat-dialog-content>
       <div matDialogActions align="end">
         <button mat-button (click)="closeHelpDialog()" color="primary">Dismiss</button>
       </div>
     </ng-template>
-    <mat-form-field class="app-form-field">
+    <mat-form-field>
       <mat-label>Project</mat-label>
       <mat-select formControlName="project">
         <mat-option>None</mat-option>
@@ -80,12 +80,12 @@
       </mat-select>
       <mat-hint>The project to assign this todo to</mat-hint>
     </mat-form-field>
-    <!--<mat-form-field class="app-form-field">
+    <!--<mat-form-field>
       <input matInput placeholder="Project" formControlName="project">
       <mat-hint>The workspace where the todo will be saved in. (optional)</mat-hint>
     </mat-form-field>-->
 
-    <mat-form-field class="app-form-field">
+    <mat-form-field>
       <mat-label>Due date</mat-label>
       <input matInput [matDatepicker]="dueDatePicker" [min]="minDueDate" formControlName="dueDate">
       <mat-datepicker #dueDatePicker [touchUi]="shared.isMobile"></mat-datepicker>
@@ -98,7 +98,7 @@
     </mat-form-field>
     <!--<mat-checkbox [(ngModel)]="enableTags" [ngModelOptions]="{'standalone': true}">Enable tags?</mat-checkbox>
 
-    <mat-form-field class="app-form-field" *ngIf="enableTags">
+    <mat-form-field *ngIf="enableTags">
       <mat-icon matPrefix>local_offer</mat-icon>
       <mat-chip-list #tagsList>
         <mat-chip *ngFor="let tag of todoItem.tags" removable (removed)="removeTag(tag)">
@@ -117,7 +117,7 @@
     <mat-checkbox formControlName="isArchived">Mark as archived</mat-checkbox>
     <br>
   </form>
-</div>
+</mat-dialog-content>
 <div mat-dialog-actions align="end">
   <button mat-button (click)="cancel()" color="primary">Cancel</button>
   <button mat-button (click)="resetForm()" color="warn" *ngIf="isNewTodo">Reset</button>
