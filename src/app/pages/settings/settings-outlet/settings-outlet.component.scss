@@ -1,11 +1,22 @@
-.setting-panel {
-  margin: 16px;
+.settings-list-detail__content {
+  display: flex;
+  flex-direction: row;
 }
-.setting-panel-section {
-  margin-bottom: 10px;
+.settings-list-detail__list-panel {
+  flex-basis: 40%;
 }
-.setting-panel-actions-row {
-  position: absolute;
-  bottom: 16px;
-  right: 16px;
+
+@media screen and (max-width: 959px) {
+  .settings-list-detail__content {
+    flex-direction: column;
+  }
+
+  .settings-list-detail__list-panel {
+    flex: 1;
+  }
+}
+
+.settings-list-detail__detail-panel {
+  flex: 1;
+  margin-left: 1rem;
 }

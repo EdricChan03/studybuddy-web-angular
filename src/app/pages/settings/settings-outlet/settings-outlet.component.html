@@ -1,7 +1,7 @@
 <div class="padding-percentage-container">
   <mat-card appearance="outlined">
-    <mat-card-content fxLayout="row" fxLayout.lt-sm="column">
-      <mat-nav-list fxFlex="40" fxFlex.lt-sm [style.display]="((shared.isPortraitHandset && router.url === '/settings') || !shared.isPortraitHandset) ? 'block' : 'none'">
+    <mat-card-content class="settings-list-detail__content">
+      <mat-nav-list class="settings-list-detail__list-panel">
         <ng-container *ngFor="let panel of panelsService.settingsPanels">
           <a mat-list-item *ngIf="!panel.hidden" [routerLink]="['./', panel.id]"
             routerLinkActive="active-link mdc-list-item--activated">
@@ -14,7 +14,7 @@
           </a>
         </ng-container>
       </mat-nav-list>
-      <div class="setting-panel" fxFlex>
+      <div class="settings-list-detail__detail-panel">
         <router-outlet></router-outlet>
       </div>
     </mat-card-content>
