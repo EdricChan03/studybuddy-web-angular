@@ -1,4 +1,4 @@
-<main class="login-container mat-typography" fxLayout="column" fxLayoutAlign="center center">
+<main class="login-container mat-typography">
   <mat-card appearance="outlined" class="login-card mat-elevation-z2">
     <mat-card-content>
       <div class="login-logo-container">
@@ -14,14 +14,14 @@
           alt="StudyBuddy logo">
       </div>
       <h2>Sign in to your account</h2>
-      <div class="login-card-content" fxLayout="column">
+      <div class="login-card-content">
         <button mat-stroked-button color="primary" (click)="loginWithGoogle()">
           Sign in with Google
         </button>
         <div class="strike">
           <span>Or</span>
         </div>
-        <form class="login-card-form" [formGroup]="loginForm" (ngSubmit)="loginWithEmailAndPassword()" fxLayout="column">
+        <form class="login-card-form" [formGroup]="loginForm" (ngSubmit)="loginWithEmailAndPassword()">
           <mat-form-field>
             <mat-label>Email</mat-label>
             <input matInput type="email" autocomplete="email" formControlName="email">
@@ -37,7 +37,7 @@
             </button>
             <mat-error *ngIf="loginForm.get('password')?.hasError('required')">This is required.</mat-error>
           </mat-form-field>
-          <div class="login-card-form-actions" fxLayout="row" fxLayoutAlign="center center">
+          <div class="login-card-form-actions">
             <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">Login</button>
           </div>
         </form>
