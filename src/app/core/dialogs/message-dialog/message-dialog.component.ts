@@ -6,6 +6,14 @@ import { DialogOpts } from '../models';
 
 @Component({
   selector: 'app-message-dialog',
+  styles: [
+    `
+    .message-dialog__content {
+      display: flex;
+      flex-direction: column;
+    }
+    `
+  ],
   templateUrl: './message-dialog.component.html'
 })
 export class MessageDialogComponent extends Dialog {
