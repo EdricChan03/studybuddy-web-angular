@@ -4,6 +4,16 @@ import { UrlTree } from '@angular/router';
 
 @Component({
   selector: 'app-empty-state',
+  styles: [
+    `
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    `
+  ],
   templateUrl: './empty-state.component.html'
 })
 export class EmptyStateComponent {
