@@ -1,6 +1,6 @@
 import { Component, TemplateRef } from '@angular/core';
 import { Auth, updateEmail, updatePassword, updateProfile, user as currentUser } from '@angular/fire/auth';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import type { User } from '@firebase/auth';
 import { Observable } from 'rxjs';
 
