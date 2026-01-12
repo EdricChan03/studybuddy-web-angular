@@ -1,32 +1,51 @@
 .register-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   height: 100%;
 
   .register-card {
-    width: 300px;
+    width: 33.3333333%;
+    min-width: 300px;
+    max-width: 800px;
+
     .register-logo-container {
-      margin: 32px 0;
+      margin: 2rem 0;
       display: flex;
       justify-content: center;
+
       .register-logo {
-        width: 64px;
+        width: 4rem;
       }
     }
 
     h2 {
-      margin: 16px 0 32px;
+      margin: 1rem 0 2rem;
       display: flex;
       justify-content: center;
     }
 
     .register-card-content {
+      display: flex;
+      flex-direction: column;
+
       .strike {
-        margin: 8px 0;
+        margin: 0.5rem 0;
       }
 
       .register-card-form {
-        margin-bottom: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+
+        .register-card-form-actions {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+        }
       }
     }
   }
 }
-

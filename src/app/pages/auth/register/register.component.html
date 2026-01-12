@@ -1,4 +1,4 @@
-<main class="register-container mat-typography" fxLayout="column" fxLayoutAlign="center center">
+<main class="register-container mat-typography">
   <mat-card appearance="outlined" class="register-card mat-elevation-z2">
     <mat-card-content>
       <div class="register-logo-container">
@@ -14,14 +14,14 @@
           alt="StudyBuddy logo">
       </div>
       <h2>Create an account</h2>
-      <div class="register-card-content" fxLayout="column">
+      <div class="register-card-content">
         <button mat-stroked-button color="primary" (click)="signUpWithGoogle()">
           Sign up with Google
         </button>
         <div class="strike">
           <span>Or</span>
         </div>
-        <form class="register-card-form" [formGroup]="signUpForm" (ngSubmit)="signUpWithEmailAndPassword()" fxLayout="column">
+        <form class="register-card-form" [formGroup]="signUpForm" (ngSubmit)="signUpWithEmailAndPassword()">
           <mat-form-field>
             <mat-label>Email</mat-label>
             <input matInput type="email" autocomplete="email" formControlName="email">
@@ -37,7 +37,7 @@
             </button>
             <mat-error *ngIf="signUpForm.get('password')?.hasError('required')">This is required.</mat-error>
           </mat-form-field>
-          <div class="register-card-form-actions" fxLayout="row" fxLayoutAlign="center center">
+          <div class="register-card-form-actions">
             <button mat-raised-button color="primary" type="submit" [disabled]="signUpForm.invalid">Sign up</button>
           </div>
         </form>
