@@ -32,7 +32,8 @@
       <mat-select formControlName="icon">
         <mat-option>None</mat-option>
         <mat-option value="home">
-          <mat-icon aria-hidden aria-label="Home icon">home</mat-icon>
+          <mat-icon aria-hidden="true">home</mat-icon>
+          Home icon
         </mat-option>
         <mat-select-trigger>
           <mat-icon *ngIf="newProjectForm.get('icon')?.value" inline>{{newProjectForm.get('icon')?.value}}</mat-icon>
