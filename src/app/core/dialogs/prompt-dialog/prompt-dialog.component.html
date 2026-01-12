@@ -1,5 +1,5 @@
 <h2 matDialogTitle *ngIf="opts?.title">{{ opts?.title }}</h2>
-<mat-dialog-content fxLayout="column" class="mat-typography">
+<mat-dialog-content class="prompt-dialog__content mat-typography">
   <p class="mat-body" *ngIf="!opts.isHtml">{{ opts.msg }}</p>
   <span *ngIf="opts.isHtml" [innerHTML]="opts.msg"></span>
   <form #form="ngForm">

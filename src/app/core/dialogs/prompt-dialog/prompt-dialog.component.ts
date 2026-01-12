@@ -7,6 +7,14 @@ import { PromptDialogOpts } from '../models';
 
 @Component({
   selector: 'app-prompt-dialog',
+  styles: [
+    `
+    .prompt-dialog__content {
+      display: flex;
+      flex-direction: column;
+    }
+    `
+  ],
   templateUrl: './prompt-dialog.component.html'
 })
 export class PromptDialogComponent extends Dialog implements OnInit {
