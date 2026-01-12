@@ -1,5 +1,5 @@
 import { ThemePalette } from '@angular/material/core';
-import { MatLegacyFormFieldAppearance as MatFormFieldAppearance } from '@angular/material/legacy-form-field';
+import { MatFormFieldAppearance } from '@angular/material/form-field';
 
 export interface SettingDialogEntry {
   /** The title of the entry. */

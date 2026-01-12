@@ -1,6 +1,6 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Auth, GoogleAuthProvider, signInWithPopup, user as currentUser } from '@angular/fire/auth';
 import { collection, collectionData, CollectionReference, doc, Firestore, setDoc, updateDoc } from '@angular/fire/firestore';
 import type { User } from '@firebase/auth';

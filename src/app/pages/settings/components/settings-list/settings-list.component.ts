@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatPseudoCheckboxState } from '@angular/material/core';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 import { ListSettingDialogComponent } from '../settings-dialogs/list-setting-dialog/list-setting-dialog.component';
 import { MultiSelectListSettingDialogComponent } from '../settings-dialogs/multi-select-list-setting-dialog/multi-select-list-setting-dialog.component';

@@ -13,16 +13,16 @@ import {
   where
 } from '@angular/fire/firestore';
 import { TodoDialogComponent } from '../../dialogs';
-import { MatLegacyCheckboxChange as MatCheckboxChange } from '@angular/material/legacy-checkbox';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 // import { MatPaginator } from '@angular/material/paginator';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { SharedService } from '../../shared.service';
 import { TodoItem } from '../../interfaces';
 import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy, SecurityContext } from '@angular/core';
-import { MatLegacyMenuTrigger as MatMenuTrigger } from '@angular/material/legacy-menu';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { Observable } from 'rxjs';
 import { transition, style, animate, trigger, keyframes, query } from '@angular/animations';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { MatTableDataSource } from '@angular/material/table';
 import { DialogsService } from '../../core/dialogs/dialogs.service';
 // import { animations } from '../../animations';
 

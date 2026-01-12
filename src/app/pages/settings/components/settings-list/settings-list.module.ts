@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatLegacyCheckboxModule as MatCheckboxModule } from '@angular/material/legacy-checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatPseudoCheckboxModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
-import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-list';
+import { MatListModule } from '@angular/material/list';
 
 import { SettingsDialogsModule } from '../settings-dialogs/settings-dialogs.module';
 import { SettingsListComponent } from './settings-list.component';
@@ -10,7 +11,8 @@ import { SettingsListComponent } from './settings-list.component';
 const MATERIAL_MODULES = [
   MatCheckboxModule,
   MatIconModule,
-  MatListModule
+  MatListModule,
+  MatPseudoCheckboxModule
 ];
 
 @NgModule({

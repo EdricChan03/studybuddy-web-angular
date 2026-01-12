@@ -2,7 +2,7 @@
 import { animate, keyframes, query, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { collection, collectionData, CollectionReference, deleteDoc, doc, Firestore, query as fsQuery, orderBy, setDoc } from '@angular/fire/firestore';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';

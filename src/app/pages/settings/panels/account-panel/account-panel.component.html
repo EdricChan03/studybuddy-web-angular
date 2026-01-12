@@ -1,52 +1,54 @@
 <ng-container *ngIf="user$ | async as user; else: notSignedIn">
   <mat-list>
     <mat-list-item *ngIf="!user?.isAnonymous">
-      <img matListAvatar *ngIf="user?.photoURL" [src]="user.photoURL" alt="Profile picture">
-      <h2 matLine>{{ user?.displayName }}</h2>
-      <p matLine>{{ user?.email }}</p>
-      <button mat-icon-button matTooltip="Update account details" (click)="openDialog(updateAcctDialog, true, 'update your account details')">
-        <mat-icon>edit</mat-icon>
-      </button>
+      <img matListItemAvatar *ngIf="user?.photoURL" [src]="user.photoURL" alt="Profile picture">
+      <h2 matListItemTitle>{{ user?.displayName }}</h2>
+      <p matListItemLine>{{ user?.email }}</p>
+      <div matListItemMeta>
+        <button mat-icon-button matTooltip="Update account details" (click)="openDialog(updateAcctDialog, true, 'update your account details')">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
     </mat-list-item>
     <mat-list-item *ngIf="user?.isAnonymous">
-      <h2 matLine>Anonymous user</h2>
+      <h2 matListItemTitle>Anonymous user</h2>
     </mat-list-item>
     <h3 matSubheader>Account details</h3>
     <mat-list-item>
-      <h2 matLine>User ID</h2>
-      <p matLine>{{ user.uid }}</p>
+      <h2 matListItemTitle>User ID</h2>
+      <p matListItemLine>{{ user.uid }}</p>
     </mat-list-item>
     <mat-list-item>
-      <h2 matLine>Has verified email?</h2>
-      <p matLine>{{ getUserFriendlyBoolean(user?.emailVerified) }}</p>
+      <h2 matListItemTitle>Has verified email?</h2>
+      <p matListItemLine>{{ getUserFriendlyBoolean(user?.emailVerified) }}</p>
     </mat-list-item>
     <ng-container *ngIf="user?.metadata">
       <h4 matSubheader>Account metadata</h4>
       <mat-list-item *ngIf="user.metadata?.creationTime">
-        <h2 matLine>Creation time</h2>
-        <p matLine>{{ user.metadata?.creationTime | date:'short' }}</p>
+        <h2 matListItemTitle>Creation time</h2>
+        <p matListItemLine>{{ user.metadata?.creationTime | date:'short' }}</p>
       </mat-list-item>
       <mat-list-item *ngIf="user.metadata?.lastSignInTime">
-        <h2 matLine>Last sign-in time</h2>
-        <p matLine>{{ user.metadata?.lastSignInTime | date:'short' }}</p>
+        <h2 matListItemTitle>Last sign-in time</h2>
+        <p matListItemLine>{{ user.metadata?.lastSignInTime | date:'short' }}</p>
       </mat-list-item>
     </ng-container>
   </mat-list>
   <mat-action-list>
     <h3 matSubheader>Account actions</h3>
     <button mat-list-item (click)="confirmSignOutAccount()" *ngIf="!user?.isAnonymous">
-      <mat-icon matListIcon>exit_to_app</mat-icon>
-      <h2 matLine>Sign out</h2>
+      <mat-icon matListItemIcon>exit_to_app</mat-icon>
+      <h2 matListItemTitle>Sign out</h2>
     </button>
     <button mat-list-item (click)="confirmDeleteAccount(user)">
-      <mat-icon matListIcon>delete</mat-icon>
-      <h2 matLine>Delete account</h2>
+      <mat-icon matListItemIcon>delete</mat-icon>
+      <h2 matListItemTitle>Delete account</h2>
     </button>
     <ng-container *ngIf="!shared.isProduction">
       <h3 matSubheader>Debug</h3>
       <button mat-list-item (click)="openUserInfoDialog()">
-        <mat-icon matListIcon>build</mat-icon>
-        <h2 matLine>View user info</h2>
+        <mat-icon matListItemIcon>build</mat-icon>
+        <h2 matListItemTitle>View user info</h2>
       </button>
     </ng-container>
   </mat-action-list>
@@ -56,7 +58,8 @@
   <app-empty-state
     emptyStateTitle="You're not logged in!"
     emptyStateMsg="Please login to view this page."
-    [hasCustomActions]="true">
+    [hasCustomActions]="true"
+    class="mat-typography">
     <ng-container empty-state-actions>
       <a mat-raised-button color="primary" routerLink="/auth/login">Login</a>
     </ng-container>

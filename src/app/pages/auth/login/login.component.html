@@ -1,49 +1,51 @@
-<div class="login-container" fxLayout="column" fxLayoutAlign="center center">
-  <mat-card class="login-card mat-elevation-z2">
-    <div class="login-logo-container">
-      <img
-        class="login-logo"
-        srcset="assets/icons/icon-48x48.png 48w,
-                assets/icons/icon-72x72.png 72w,
-                assets/icons/icon-96x96.png 96w,
-                assets/icons/icon-148x148.png 148w,
-                assets/icons/icon-192x192.png 192w,
-                assets/icons/icon-512x512.png 512w"
-        src="assets/icons/icon-512x512.png"
-        alt="StudyBuddy logo">
-    </div>
-    <h2>Sign in to your account</h2>
-    <div class="login-card-content" fxLayout="column">
-      <button mat-stroked-button color="primary" (click)="loginWithGoogle()">
-        Sign in with Google
-      </button>
-      <div class="strike">
-        <span>Or</span>
+<main class="login-container mat-typography" fxLayout="column" fxLayoutAlign="center center">
+  <mat-card appearance="outlined" class="login-card mat-elevation-z2">
+    <mat-card-content>
+      <div class="login-logo-container">
+        <img
+          class="login-logo"
+          srcset="assets/icons/icon-48x48.png 48w,
+                  assets/icons/icon-72x72.png 72w,
+                  assets/icons/icon-96x96.png 96w,
+                  assets/icons/icon-148x148.png 148w,
+                  assets/icons/icon-192x192.png 192w,
+                  assets/icons/icon-512x512.png 512w"
+          src="assets/icons/icon-512x512.png"
+          alt="StudyBuddy logo">
       </div>
-      <form class="login-card-form" [formGroup]="loginForm" (ngSubmit)="loginWithEmailAndPassword()" fxLayout="column">
-        <mat-form-field>
-          <mat-label>Email</mat-label>
-          <input matInput type="email" autocomplete="email" formControlName="email">
-          <mat-error *ngIf="loginForm.get('email')?.hasError('required')">This is required.</mat-error>
-          <mat-error *ngIf="loginForm.get('email')?.hasError('email')">Please enter a valid email.</mat-error>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Password</mat-label>
-          <input matInput [type]="showLoginFormPassword ? 'text' : 'password'" autocomplete="current-password" formControlName="password">
-          <button mat-icon-button (click)="showLoginFormPassword = !showLoginFormPassword"
-            [matTooltip]="(showLoginFormPassword ? 'Hide' : 'Show') + ' Password'" matSuffix type="button">
-            <mat-icon>{{showLoginFormPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-          </button>
-          <mat-error *ngIf="loginForm.get('password')?.hasError('required')">This is required.</mat-error>
-        </mat-form-field>
-        <div class="login-card-form-actions" fxLayout="row" fxLayoutAlign="center center">
-          <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">Login</button>
+      <h2>Sign in to your account</h2>
+      <div class="login-card-content" fxLayout="column">
+        <button mat-stroked-button color="primary" (click)="loginWithGoogle()">
+          Sign in with Google
+        </button>
+        <div class="strike">
+          <span>Or</span>
         </div>
-      </form>
-      <a class="anchor-link" routerLink="/reset-password">Forgot password?</a>
-    </div>
+        <form class="login-card-form" [formGroup]="loginForm" (ngSubmit)="loginWithEmailAndPassword()" fxLayout="column">
+          <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input matInput type="email" autocomplete="email" formControlName="email">
+            <mat-error *ngIf="loginForm.get('email')?.hasError('required')">This is required.</mat-error>
+            <mat-error *ngIf="loginForm.get('email')?.hasError('email')">Please enter a valid email.</mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input matInput [type]="showLoginFormPassword ? 'text' : 'password'" autocomplete="current-password" formControlName="password">
+            <button mat-icon-button (click)="showLoginFormPassword = !showLoginFormPassword"
+              [matTooltip]="(showLoginFormPassword ? 'Hide' : 'Show') + ' Password'" matSuffix type="button">
+              <mat-icon>{{showLoginFormPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="loginForm.get('password')?.hasError('required')">This is required.</mat-error>
+          </mat-form-field>
+          <div class="login-card-form-actions" fxLayout="row" fxLayoutAlign="center center">
+            <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">Login</button>
+          </div>
+        </form>
+        <a class="anchor-link" routerLink="/reset-password">Forgot password?</a>
+      </div>
+    </mat-card-content>
   </mat-card>
   <footer class="login-additional-actions">
     <p>Don't have an account? <a class="anchor-link" routerLink="/signup">Sign up</a></p>
   </footer>
-</div>
+</main>

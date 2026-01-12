@@ -1,7 +1,7 @@
 import { Component, TemplateRef } from '@angular/core';
 import { addDoc, collection, CollectionReference, doc, docData, Firestore, updateDoc } from '@angular/fire/firestore';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Timestamp } from '@firebase/firestore';
 
 import { AuthService } from '../../auth.service';

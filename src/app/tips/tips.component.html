@@ -1,65 +1,67 @@
-<ng-container *ngIf="shared.isOnline; else: nointernet">
-  <div class="padding-percentage-container">
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Word of the Day</mat-card-title>
-        <span fxFlex></span>
-        <button mat-icon-button (click)="getWordOfDay()" matTooltip="Refresh" color="primary">
-          <mat-icon>refresh</mat-icon>
-        </button>
-      </mat-card-header>
-      <mat-card-title>{{wordOfDay?.word}}</mat-card-title>
-      <mat-card-content>
-        <p>Definitions:</p>
-        <ol>
-          <li *ngFor="let def of wordOfDay?.definitions">
-            <p>{{def?.text}}</p>
-            <p *ngIf="def.note">Note: {{def?.note}}</p>
-            <span>({{def?.partOfSpeech}})</span>
-          </li>
-        </ol>
-        <p>Examples:</p>
-        <ol>
-          <li *ngFor="let example of wordOfDay?.examples">
-            <strong>{{example?.title}}:</strong>
-            <em>{{example?.text}}</em>
-          </li>
-        </ol>
-      </mat-card-content>
-      <mat-card-footer *ngIf="wordOfDay == undefined">
-        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-      </mat-card-footer>
-    </mat-card>
-    <div *ngFor="let quote of quoteOfDay?.contents?.quotes">
-      <mat-card>
+<main class="mat-typography">
+  <ng-container *ngIf="shared.isOnline; else: nointernet">
+    <div class="padding-percentage-container">
+      <mat-card appearance="outlined">
         <mat-card-header>
-          <mat-icon matCardAvatar class="quote-of-day-card--avatar">format_quote</mat-icon>
-          <mat-card-title>{{quote?.title}}</mat-card-title>
-          <mat-card-subtitle>{{quote?.author}}</mat-card-subtitle>
+          <mat-card-title>Word of the Day</mat-card-title>
           <span fxFlex></span>
-          <button mat-icon-button (click)="getQuoteOfDay()" matTooltip="Refresh" color="primary">
+          <button mat-icon-button (click)="getWordOfDay()" matTooltip="Refresh" color="primary">
             <mat-icon>refresh</mat-icon>
           </button>
         </mat-card-header>
-        <mat-card-title style="line-height: 32px">{{quote?.quote}}</mat-card-title>
         <mat-card-content>
-          <p>Tags:</p>
-          <mat-chip-list>
-            <mat-chip *ngFor="let tag of quote?.tags">{{tag}}</mat-chip>
-          </mat-chip-list>
+          <mat-card-title>{{wordOfDay?.word}}</mat-card-title>
+          <p>Definitions:</p>
+          <ol>
+            <li *ngFor="let def of wordOfDay?.definitions">
+              <p>{{def?.text}}</p>
+              <p *ngIf="def.note">Note: {{def?.note}}</p>
+              <span>({{def?.partOfSpeech}})</span>
+            </li>
+          </ol>
+          <p>Examples:</p>
+          <ol>
+            <li *ngFor="let example of wordOfDay?.examples">
+              <strong>{{example?.title}}:</strong>
+              <em>{{example?.text}}</em>
+            </li>
+          </ol>
         </mat-card-content>
-        <mat-card-footer *ngIf="quoteOfDay == undefined">
+        <mat-card-footer *ngIf="wordOfDay == undefined">
           <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         </mat-card-footer>
       </mat-card>
+      <div *ngFor="let quote of quoteOfDay?.contents?.quotes">
+        <mat-card appearance="outlined">
+          <mat-card-header>
+            <mat-icon matCardAvatar class="quote-of-day-card--avatar">format_quote</mat-icon>
+            <mat-card-title>{{quote?.title}}</mat-card-title>
+            <mat-card-subtitle>{{quote?.author}}</mat-card-subtitle>
+            <span fxFlex></span>
+            <button mat-icon-button (click)="getQuoteOfDay()" matTooltip="Refresh" color="primary">
+              <mat-icon>refresh</mat-icon>
+            </button>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-card-title style="line-height: 32px">{{quote?.quote}}</mat-card-title>
+            <p>Tags:</p>
+            <mat-chip-listbox>
+              <mat-chip-option *ngFor="let tag of quote?.tags">{{tag}}</mat-chip-option>
+            </mat-chip-listbox>
+          </mat-card-content>
+          <mat-card-footer *ngIf="quoteOfDay == undefined">
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+          </mat-card-footer>
+        </mat-card>
+      </div>
     </div>
-  </div>
-</ng-container>
-<ng-template #nointernet>
-  <div class="center-container">
-    <div class="center-container-div">
-      <h2>No internet</h2>
-      <p>An internet connection is required to view today's tips.</p>
+  </ng-container>
+  <ng-template #nointernet>
+    <div class="center-container">
+      <div class="center-container-div">
+        <h2>No internet</h2>
+        <p>An internet connection is required to view today's tips.</p>
+      </div>
     </div>
-  </div>
-</ng-template>
+  </ng-template>
+</main>

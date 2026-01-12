@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../shared.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { MarkdownDialogComponent, MarkdownDialogConfig } from '../dialogs/markdown-dialog/markdown-dialog.component';
 
 interface DownloadUrl {

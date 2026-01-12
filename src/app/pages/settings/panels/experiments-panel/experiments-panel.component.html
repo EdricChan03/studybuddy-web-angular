@@ -2,9 +2,11 @@
   <h2 matSubheader>Available experiments</h2>
   <ng-container *ngFor="let experiment of experiments">
     <button mat-list-item *ngIf="experiment.type === 'boolean' || experiment.type === 'checkbox'" (click)="experimentVals[experiment.key] = !experimentVals[experiment.key]" [attr.aria-checked]="experimentVals[experiment.key]">
-      <h2 matLine>{{ experiment.name }}</h2>
-      <p matLine *ngIf="experiment?.description">{{ experiment.description }}</p>
-      <mat-pseudo-checkbox [state]="getCheckboxState(experimentVals[experiment.key])"></mat-pseudo-checkbox>
+      <h2 matListItemTitle>{{ experiment.name }}</h2>
+      <p matListItemLine *ngIf="experiment?.description">{{ experiment.description }}</p>
+      <div matListItemMeta>
+        <mat-pseudo-checkbox [state]="getCheckboxState(experimentVals[experiment.key])"></mat-pseudo-checkbox>
+      </div>
     </button>
   </ng-container>
 </mat-action-list>

@@ -9,21 +9,21 @@
     </mat-toolbar>
     <mat-nav-list>
       <ng-container *ngFor="let link of sidenavLinks; let i = index">
-        <a mat-list-item [routerLink]="['/'+link.link]" routerLinkActive="active-link" (click)="closeLeftSidenav(left)"
+        <a mat-list-item [routerLink]="['/'+link.link]" routerLinkActive="active-link mdc-list-item--activated" (click)="closeLeftSidenav(left)"
           *ngIf="!link.hidden">
-          <mat-icon matListIcon *ngIf="!link.svgIcon && link.icon">{{link.icon}}</mat-icon>
-          <mat-icon matListIcon *ngIf="link.svgIcon && !link.icon" [svgIcon]="link.svgIcon"></mat-icon>
-          <h3 matLine>{{link.title}}</h3>
+          <mat-icon matListItemIcon *ngIf="!link.svgIcon && link.icon">{{link.icon}}</mat-icon>
+          <mat-icon matListItemIcon *ngIf="link.svgIcon && !link.icon" [svgIcon]="link.svgIcon"></mat-icon>
+          <h3 matListItemTitle>{{link.title}}</h3>
           <span class="feature-status-badge feature-status-badge--with-color mat-elevation-z1" *ngIf="link?.badge">{{ link.badge }}</span>
         </a>
       </ng-container>
       <mat-divider></mat-divider>
       <h3 matSubheader>Other</h3>
       <ng-container *ngFor="let link of otherLinks; let i = index">
-        <a mat-list-item [routerLink]="['/'+link.link]" routerLinkActive="active-link" (click)="closeLeftSidenav(left)">
-          <mat-icon matListIcon *ngIf="!link.svgIcon && link.icon">{{link.icon}}</mat-icon>
-          <mat-icon matListIcon *ngIf="link.svgIcon && !link.icon" [svgIcon]="link.svgIcon"></mat-icon>
-          <h3 matLine>{{link.title}}</h3>
+        <a mat-list-item [routerLink]="['/'+link.link]" routerLinkActive="active-link mdc-list-item--activated" (click)="closeLeftSidenav(left)">
+          <mat-icon matListItemIcon *ngIf="!link.svgIcon && link.icon">{{link.icon}}</mat-icon>
+          <mat-icon matListItemIcon *ngIf="link.svgIcon && !link.icon" [svgIcon]="link.svgIcon"></mat-icon>
+          <h3 matListItemTitle>{{link.title}}</h3>
           <span class="feature-status-badge feature-status-badge--with-color mat-elevation-z1" *ngIf="link?.badge">{{ link.badge }}</span>
         </a>
       </ng-container>

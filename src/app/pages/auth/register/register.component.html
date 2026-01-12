@@ -1,48 +1,50 @@
-<div class="register-container" fxLayout="column" fxLayoutAlign="center center">
-  <mat-card class="register-card mat-elevation-z2">
-    <div class="register-logo-container">
-      <img
-        class="register-logo"
-        srcset="assets/icons/icon-48x48.png 48w,
-                assets/icons/icon-72x72.png 72w,
-                assets/icons/icon-96x96.png 96w,
-                assets/icons/icon-148x148.png 148w,
-                assets/icons/icon-192x192.png 192w,
-                assets/icons/icon-512x512.png 512w"
-        src="assets/icons/icon-512x512.png"
-        alt="StudyBuddy logo">
-    </div>
-    <h2>Create an account</h2>
-    <div class="register-card-content" fxLayout="column">
-      <button mat-stroked-button color="primary" (click)="signUpWithGoogle()">
-        Sign up with Google
-      </button>
-      <div class="strike">
-        <span>Or</span>
+<main class="register-container mat-typography" fxLayout="column" fxLayoutAlign="center center">
+  <mat-card appearance="outlined" class="register-card mat-elevation-z2">
+    <mat-card-content>
+      <div class="register-logo-container">
+        <img
+          class="register-logo"
+          srcset="assets/icons/icon-48x48.png 48w,
+                  assets/icons/icon-72x72.png 72w,
+                  assets/icons/icon-96x96.png 96w,
+                  assets/icons/icon-148x148.png 148w,
+                  assets/icons/icon-192x192.png 192w,
+                  assets/icons/icon-512x512.png 512w"
+          src="assets/icons/icon-512x512.png"
+          alt="StudyBuddy logo">
       </div>
-      <form class="register-card-form" [formGroup]="signUpForm" (ngSubmit)="signUpWithEmailAndPassword()" fxLayout="column">
-        <mat-form-field>
-          <mat-label>Email</mat-label>
-          <input matInput type="email" autocomplete="email" formControlName="email">
-          <mat-error *ngIf="signUpForm.get('email')?.hasError('required')">This is required.</mat-error>
-          <mat-error *ngIf="signUpForm.get('email')?.hasError('email')">Please enter a valid email.</mat-error>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Password</mat-label>
-          <input matInput [type]="showSignUpFormPassword ? 'text' : 'password'" autocomplete="new-password" formControlName="password">
-          <button mat-icon-button (click)="showSignUpFormPassword = !showSignUpFormPassword"
-            [matTooltip]="(showSignUpFormPassword ? 'Hide' : 'Show') + ' Password'" matSuffix type="button">
-            <mat-icon>{{showSignUpFormPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-          </button>
-          <mat-error *ngIf="signUpForm.get('password')?.hasError('required')">This is required.</mat-error>
-        </mat-form-field>
-        <div class="register-card-form-actions" fxLayout="row" fxLayoutAlign="center center">
-          <button mat-raised-button color="primary" type="submit" [disabled]="signUpForm.invalid">Sign up</button>
+      <h2>Create an account</h2>
+      <div class="register-card-content" fxLayout="column">
+        <button mat-stroked-button color="primary" (click)="signUpWithGoogle()">
+          Sign up with Google
+        </button>
+        <div class="strike">
+          <span>Or</span>
         </div>
-      </form>
-    </div>
+        <form class="register-card-form" [formGroup]="signUpForm" (ngSubmit)="signUpWithEmailAndPassword()" fxLayout="column">
+          <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input matInput type="email" autocomplete="email" formControlName="email">
+            <mat-error *ngIf="signUpForm.get('email')?.hasError('required')">This is required.</mat-error>
+            <mat-error *ngIf="signUpForm.get('email')?.hasError('email')">Please enter a valid email.</mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input matInput [type]="showSignUpFormPassword ? 'text' : 'password'" autocomplete="new-password" formControlName="password">
+            <button mat-icon-button (click)="showSignUpFormPassword = !showSignUpFormPassword"
+              [matTooltip]="(showSignUpFormPassword ? 'Hide' : 'Show') + ' Password'" matSuffix type="button">
+              <mat-icon>{{showSignUpFormPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="signUpForm.get('password')?.hasError('required')">This is required.</mat-error>
+          </mat-form-field>
+          <div class="register-card-form-actions" fxLayout="row" fxLayoutAlign="center center">
+            <button mat-raised-button color="primary" type="submit" [disabled]="signUpForm.invalid">Sign up</button>
+          </div>
+        </form>
+      </div>
+    </mat-card-content>
   </mat-card>
   <footer class="login-additional-actions">
     <p>Have an existing account? <a class="anchor-link" routerLink="/login">Login</a></p>
   </footer>
-</div>
+</main>
