@@ -1,14 +1,12 @@
 <main class="mat-typography">
 
-  <div class="padding-percentage-container">
-    <div class="header dashboard-todos-header" fxLayout="row" fxLayoutAlign="space-between center">
-      <h2 fxLayout="row" fxLayoutAlign="center center">
-        Todos
-      </h2>
+  <section class="padding-percentage-container">
+    <header class="header task-dashboard__header">
+      <h2>Todos</h2>
       <button mat-raised-button (click)="newTodo()" color="primary">
-        <mat-icon>add</mat-icon> New Todo
+        <mat-icon aria-hidden="true">add</mat-icon> New Todo
       </button>
-    </div>
+    </header>
     <ng-container
       *ngIf="(todos$ | async)?.length > 0; else: todosEmptyState">
       <mat-card appearance="outlined" *ngFor="let todo of todos$ | async">
@@ -29,5 +27,5 @@
     <ng-template #todosEmptyState>
       <app-empty-state emptyStateTitle="All todos done!" emptyStateMsg="Great job!"  emptyStateImageSrc="assets/undraw/undraw_High_five_u364.svg" emptyStateImageClass="empty-state-image"></app-empty-state>
     </ng-template>
-  </div>
+  </section>
 </main>

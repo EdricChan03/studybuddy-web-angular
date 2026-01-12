@@ -18,6 +18,12 @@ import { ToolbarService } from '../toolbar.service';
     .empty-state-image {
       width: 300px;
     }
+    .task-dashboard__header {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
   `]
 })
 export class DashboardComponent {
