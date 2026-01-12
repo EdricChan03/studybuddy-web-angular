@@ -4,7 +4,7 @@ import { SettingsPanel, SettingsPanelCategory, DEFAULT_PANEL_CATEGORY } from './
 
 import { environment } from '../../../environments/environment';
 
-import { panels } from '../../../assets/settings/settings.json';
+import settingsJson from '../../../assets/settings/settings.json';
 
 @Injectable()
 /** Service which lists the list of settings panels available. */
@@ -18,7 +18,7 @@ export class SettingsPanelsService {
   }
 
   /** The list of panels. */
-  settingsPanels: SettingsPanel[] = panels;
+  settingsPanels: SettingsPanel[] = settingsJson.panels;
 
   constructor() {
     this.settingsPanels.forEach(panel => {
