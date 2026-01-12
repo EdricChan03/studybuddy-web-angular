@@ -4,7 +4,7 @@ import { fetchAndActivate, RemoteConfig } from '@angular/fire/remote-config';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Event, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
-import type { User } from '@firebase/auth-types';
+import type { User } from '@firebase/auth';
 import { Observable } from 'rxjs';
 
 import { AuthService } from './auth.service';
