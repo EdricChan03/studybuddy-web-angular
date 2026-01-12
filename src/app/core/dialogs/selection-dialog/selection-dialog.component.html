@@ -2,7 +2,7 @@
 <mat-dialog-content fxLayout="column" class="mat-typography">
   <mat-selection-list #selection>
     <mat-list-option *ngFor="let option of opts.options" [disabled]="option.disabled" [value]="option.value"
-      [checkboxPosition]="option.checkboxPosition ? option.checkboxPosition : 'before'" [selected]="option.selected">
+      [togglePosition]="option.checkboxPosition ? option.checkboxPosition : 'before'" [selected]="option.selected">
       {{ option.content }}
     </mat-list-option>
   </mat-selection-list>
