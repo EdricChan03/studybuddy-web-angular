@@ -17,6 +17,16 @@ import { SharedService } from '../../shared.service';
       opacity: 0.75;
       font-size: 0.75em;
     }
+
+    .new-project-dialog__content-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .color-help-dialog__content {
+      display: flex;
+      flex-direction: column;
+    }
     `
   ]
 })
