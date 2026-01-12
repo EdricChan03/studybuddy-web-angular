@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Auth, user as currentUser } from '@angular/fire/auth';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 
@@ -15,14 +15,14 @@ import { ToolbarService } from '@app/toolbar.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnDestroy {
-  loginForm: FormGroup;
+  loginForm: UntypedFormGroup;
   showLoginFormPassword = false;
   redirectUrl = '/dashboard';
 
   constructor(
     private coreDialogs: DialogsService,
     private shared: SharedService,
-    fb: FormBuilder,
+    fb: UntypedFormBuilder,
     afAuth: Auth,
     private auth: AuthService,
     route: ActivatedRoute,

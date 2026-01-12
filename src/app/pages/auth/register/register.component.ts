@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { AuthService } from '@app/auth.service';
@@ -12,7 +12,7 @@ import { ToolbarService } from '@app/toolbar.service';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnDestroy, OnInit {
-  signUpForm: FormGroup;
+  signUpForm: UntypedFormGroup;
   showSignUpFormPassword = false;
 
   constructor(
@@ -20,7 +20,7 @@ export class RegisterComponent implements OnDestroy, OnInit {
     private router: Router,
     private shared: SharedService,
     private toolbar: ToolbarService,
-    fb: FormBuilder
+    fb: UntypedFormBuilder
   ) {
     shared.title = 'Register';
     toolbar.showToolbar = false;

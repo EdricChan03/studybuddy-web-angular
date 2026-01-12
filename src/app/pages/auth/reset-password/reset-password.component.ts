@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { AuthService } from '@app/auth.service';
 import { SharedService } from '@app/shared.service';
@@ -11,13 +11,13 @@ import { ToolbarService } from '@app/toolbar.service';
   styleUrls: ['./reset-password.component.scss']
 })
 export class ResetPasswordComponent implements OnDestroy, OnInit {
-  resetPwdForm: FormGroup;
+  resetPwdForm: UntypedFormGroup;
   showConfirmedMsg = false;
   constructor(
     private auth: AuthService,
     private shared: SharedService,
     private toolbar: ToolbarService,
-    fb: FormBuilder
+    fb: UntypedFormBuilder
   ) {
     shared.title = 'Reset Password';
     toolbar.showToolbar = false;

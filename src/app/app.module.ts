@@ -20,7 +20,7 @@ import {
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {
-  FormControl,
+  UntypedFormControl,
   FormsModule,
   ReactiveFormsModule,
   ValidationErrors,
@@ -59,7 +59,7 @@ import { ToolbarService } from './toolbar.service';
 import { UserViewerComponent } from './user-viewer/user-viewer.component';
 import { DialogsModule as CoreDialogsModule } from './core/dialogs/dialogs.module';
 
-function EmailValidator(control: FormControl): ValidationErrors {
+function EmailValidator(control: UntypedFormControl): ValidationErrors {
   // Regex from https://emailregex.com/
   return !control.value ||
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(

@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Auth, GoogleAuthProvider, signInWithPopup, user as currentUser } from '@angular/fire/auth';
 import { collection, collectionData, CollectionReference, doc, Firestore, setDoc, updateDoc } from '@angular/fire/firestore';
@@ -54,7 +54,7 @@ export class TodoDialogComponent implements OnInit {
     \`\`\`html
     <p>This is an example of syntax-highlighting! <em>wow</em><p>
     \`\`\``;
-  todoForm: FormGroup;
+  todoForm: UntypedFormGroup;
   projects$: Observable<TodoProject[]>;
   user: User;
   @ViewChild('helpContentDialog', { static: true }) helpContentDialogTmpl: TemplateRef<any>;
@@ -66,7 +66,7 @@ export class TodoDialogComponent implements OnInit {
     private dialogRef: MatDialogRef<TodoDialogComponent>,
     private afFs: Firestore,
     private dialog: MatDialog,
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {
     this.todoForm = fb.group({
       title: ['', Validators.required],

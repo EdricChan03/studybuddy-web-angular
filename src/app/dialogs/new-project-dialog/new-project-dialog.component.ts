@@ -1,6 +1,6 @@
 import { Component, TemplateRef } from '@angular/core';
 import { addDoc, collection, CollectionReference, doc, docData, Firestore, updateDoc } from '@angular/fire/firestore';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Timestamp } from '@firebase/firestore';
 
@@ -22,7 +22,7 @@ import { SharedService } from '../../shared.service';
 })
 export class NewProjectDialogComponent {
   colorError = '';
-  newProjectForm: FormGroup;
+  newProjectForm: UntypedFormGroup;
   currentUser: string;
   projectsCollection: CollectionReference<TodoProject>;
   helpDialogRef: MatDialogRef<any>;
@@ -33,7 +33,7 @@ export class NewProjectDialogComponent {
     private dialog: MatDialog,
     private fs: Firestore,
     public shared: SharedService,
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {
     this.newProjectForm = fb.group({
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
