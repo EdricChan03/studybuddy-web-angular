@@ -1,10 +1,11 @@
 <h2 matDialogTitle *ngIf="dialogTitle">{{ dialogTitle }}</h2>
-<mat-dialog-content fxLayout="column">
-  <mat-radio-group [(ngModel)]="currentValue" [color]="radioGroupColor" fxLayout="column" class="list-setting-dialog--radio-group">
+<mat-dialog-content class="list-setting-dialog__content">
+  <mat-radio-group [(ngModel)]="currentValue" [color]="radioGroupColor" class="list-setting-dialog__radio-group">
     <mat-radio-button *ngFor="let entry of entries"
       [value]="entry.value"
       [disabled]="entry.disabled"
-      [color]="entry.color || null" class="list-setting-dialog--radio-button">
+      [color]="entry.color || null"
+      class="list-setting-dialog__radio-button">
       {{ entry.title }}
     </mat-radio-button>
   </mat-radio-group>

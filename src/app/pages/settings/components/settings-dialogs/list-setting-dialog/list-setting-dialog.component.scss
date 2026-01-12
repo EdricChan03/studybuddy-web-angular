@@ -1,6 +1,10 @@
-.list-setting-dialog--radio-group {
-  margin: 8px 0;
-  .list-setting-dialog--radio-button {
-    margin: 8px 0;
-  }
+.list-setting-dialog__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.list-setting-dialog__radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
