@@ -70,7 +70,10 @@ export class DashboardComponent {
   }
 
   newTodo() {
-    const dialogRef = this.dialog.open(TodoDialogComponent, { disableClose: true });
+    const dialogRef = this.dialog.open(
+      TodoDialogComponent,
+      { disableClose: true, width: '50%', minWidth: '300px' }
+    );
     dialogRef.componentInstance.isNewTodo = true;
   }
 }
