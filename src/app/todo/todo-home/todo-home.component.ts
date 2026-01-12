@@ -16,7 +16,6 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { MatTableDataSource } from '@angular/material/table';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { DialogsService } from '../../core/dialogs/dialogs.service';
 import { TodoDialogComponent } from '../../dialogs';
@@ -143,8 +142,16 @@ export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   toggleChecked(todo: TodoItem) {
-    this.todosCollection.doc<TodoItem>(todo.id).update({
-      isDone: !todo.isDone
+    updateDoc(
+      doc(this.todosCollection, todo.id),
+      {
+        isDone: !todo.isDone
+      }
+    ).catch(err => {
+      this.shared.openSnackBar({
+        msg: `Could not mark todo as ${!todo.isDone ? 'completed' : 'incomplete'}. Try again later`
+      });
+      console.error('Could not update todo\'s completion:', err);
     });
   }
 
