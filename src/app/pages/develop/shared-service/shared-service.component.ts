@@ -16,9 +16,18 @@ interface TestSnackBar {
   selector: 'app-develop-shared-service',
   templateUrl: './shared-service.component.html',
   styles: [`
-    mat-radio-group mat-radio-button {
-      margin: 8px 0;
+    .fieldset-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      .fieldset-section__radio-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
     }
+
   `]
 })
 export class DevelopSharedServiceComponent {

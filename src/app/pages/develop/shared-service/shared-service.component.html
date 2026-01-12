@@ -11,7 +11,7 @@
     <pre><code>{{ shared.settings | json }}</code></pre>
   </fieldset>
   <mat-divider></mat-divider>
-  <fieldset fxLayout="column">
+  <fieldset class="fieldset-section">
     <legend>Snackbar properties</legend>
     <mat-form-field>
       <mat-label>Message</mat-label>
@@ -30,11 +30,11 @@
       <input matInput [(ngModel)]="snackbar.action">
     </mat-form-field>
     <h3>Vertical Position:</h3>
-    <mat-radio-group [(ngModel)]="snackbar.verticalPosition" fxLayout="column">
+    <mat-radio-group [(ngModel)]="snackbar.verticalPosition" class="fieldset-section__radio-group">
       <mat-radio-button *ngFor="let opt of verticalPos" [value]="opt">{{opt}}</mat-radio-button>
     </mat-radio-group>
     <h3>Horizontal Position:</h3>
-    <mat-radio-group [(ngModel)]="snackbar.horizontalPosition" fxLayout="column">
+    <mat-radio-group [(ngModel)]="snackbar.horizontalPosition" class="fieldset-section__radio-group">
       <mat-radio-button *ngFor="let opt of horizontalPos" [value]="opt">{{opt}}</mat-radio-button>
     </mat-radio-group>
     <h3>Extra classes</h3>
