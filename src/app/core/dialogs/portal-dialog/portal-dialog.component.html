@@ -1,5 +1,5 @@
 <h2 matDialogTitle *ngIf="opts?.title">{{ opts.title }}</h2>
-<mat-dialog-content fxLayout="column" class="mat-typography">
+<mat-dialog-content class="portal-dialog__content mat-typography">
   <ng-template [cdkPortalOutlet]="opts.portal" *ngIf="opts.portal"></ng-template>
 </mat-dialog-content>
 <mat-dialog-actions align="end" *ngIf="hasActionBtns">

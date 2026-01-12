@@ -7,6 +7,14 @@ import { PortalDialogOpts } from '../models';
 
 @Component({
   selector: 'app-portal-dialog',
+  styles: [
+    `
+    .portal-dialog__content {
+      display: flex;
+      flex-direction: column;
+    }
+    `
+  ],
   templateUrl: './portal-dialog.component.html'
 })
 export class PortalDialogComponent<T = any> extends Dialog {
