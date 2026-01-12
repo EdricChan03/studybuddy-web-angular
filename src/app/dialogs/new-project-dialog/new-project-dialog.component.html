@@ -1,5 +1,5 @@
 <h2 matDialogTitle>{{ isEditing ? 'Edit' : 'New' }} project</h2>
-<mat-dialog-content class="new-project-dialog__content">
+<mat-dialog-content class="new-project-dialog__content mat-typography">
   <form [formGroup]="newProjectForm" class="new-project-dialog__content-form">
     <mat-form-field>
       <mat-label>Name</mat-label>
@@ -43,7 +43,7 @@
     </mat-form-field>
     <ng-template #helpColorDialog>
       <h2 matDialogTitle>Help</h2>
-      <mat-dialog-content class="color-help-dialog__content">
+      <mat-dialog-content class="color-help-dialog__content mat-typography">
         <p>Accepted color values: #RRGGBB</p>
         <p>Where they denote the following:</p>
         <ul>
