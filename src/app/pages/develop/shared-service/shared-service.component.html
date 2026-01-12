@@ -16,7 +16,7 @@
     <mat-form-field>
       <mat-label>Message</mat-label>
       <textarea matInput [(ngModel)]="snackbar.snackBarMsg" rows="3"
-        matTextareaAutosize></textarea>
+        cdkTextareaAutosize></textarea>
       <button mat-icon-button matSuffix (click)="generateLoremIpsum()" matTooltip="Generate lorem ipsum">
         <mat-icon>cached</mat-icon>
       </button>
