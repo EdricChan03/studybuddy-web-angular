@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import {
   Auth,
   GoogleAuthProvider,
@@ -10,20 +10,22 @@ import {
   signInWithPopup,
   authState,
   sendPasswordResetEmail,
-} from "@angular/fire/auth";
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
+} from '@angular/fire/auth';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class AuthService {
   user: User = null;
+
   constructor(public afAuth: Auth) {
     user(afAuth).subscribe((user) => {
       this.user = user;
     });
   }
+
   /** Checks whether the user is authenticated. */
   get authenticated(): Observable<boolean> {
     return user(this.afAuth).pipe(map((user) => user !== null));
@@ -41,6 +43,7 @@ export class AuthService {
   ): Promise<UserCredential> {
     return signInWithEmailAndPassword(this.afAuth, email, password);
   }
+
   /**
    * Attempts to sign up with a username and password
    * @param email The email to sign up with
@@ -53,6 +56,7 @@ export class AuthService {
   ): Promise<UserCredential> {
     return createUserWithEmailAndPassword(this.afAuth, email, password);
   }
+
   /**
    * Attempts to log in with Google
    * @return A promise with the user's credentials
@@ -60,6 +64,7 @@ export class AuthService {
   logInWithGoogle(): Promise<UserCredential> {
     return signInWithPopup(this.afAuth, new GoogleAuthProvider());
   }
+
   /**
    * Logs out the current user
    * Note: Ideally, a confirmation dialog should be shown askingwhether the user wishes to log out.
@@ -69,6 +74,7 @@ export class AuthService {
   logOut(): Promise<void> {
     return this.afAuth.signOut();
   }
+
   /**
    * Gets the auth state
    * @return The obserable of the state
@@ -76,6 +82,7 @@ export class AuthService {
   getAuthState(): Observable<User | null> {
     return authState(this.afAuth);
   }
+
   /**
    * Checks if the user has been logged in
    * Note: Ideally, this should be used once Angular has loaded the component's view.
@@ -85,6 +92,7 @@ export class AuthService {
   async isLoggedIn(): Promise<boolean> {
     return this.afAuth.currentUser !== null;
   }
+
   /**
    * Resets the password of an account
    * @param email The email to reset the password
