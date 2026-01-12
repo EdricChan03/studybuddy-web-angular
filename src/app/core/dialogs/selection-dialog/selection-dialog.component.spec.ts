@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, TestModuleMetadata, TestBedStatic } from '@angular/core/testing';
+import { ComponentFixture, TestBed, TestModuleMetadata } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
@@ -12,7 +12,7 @@ describe('SelectionDialogComponent', () => {
   let componentEl: HTMLElement;
   let fixture: ComponentFixture<SelectionDialogComponent>;
 
-  function configureTestingModule(moduleDef?: Partial<TestModuleMetadata>, resetTestingModule: boolean = false): TestBedStatic {
+  function configureTestingModule(moduleDef?: Partial<TestModuleMetadata>, resetTestingModule: boolean = false): TestBed {
     if (resetTestingModule) {
       TestBed.resetTestingModule();
     }

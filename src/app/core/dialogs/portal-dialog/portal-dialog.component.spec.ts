@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, TestModuleMetadata, TestBedStatic } from '@angular/core/testing';
+import { ComponentFixture, TestBed, TestModuleMetadata } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 
@@ -10,7 +10,7 @@ describe('PortalDialogComponent', () => {
   let componentEl: HTMLElement;
   let fixture: ComponentFixture<PortalDialogComponent>;
 
-  function configureTestingModule(moduleDef?: Partial<TestModuleMetadata>, resetTestingModule: boolean = false): TestBedStatic {
+  function configureTestingModule(moduleDef?: Partial<TestModuleMetadata>, resetTestingModule: boolean = false): TestBed {
     if (resetTestingModule) {
       TestBed.resetTestingModule();
     }
@@ -28,6 +28,7 @@ describe('PortalDialogComponent', () => {
       ...moduleDef
     });
   }
+
   beforeEach(() => {
     configureTestingModule({
       providers: [
