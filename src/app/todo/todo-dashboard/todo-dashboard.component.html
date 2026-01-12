@@ -3,52 +3,52 @@
     <h1>Todo Dashboard</h1>
     <h2>Navigation links</h2>
     <mat-card appearance="outlined" class="todo-dashboard-nav-card">
-      <a class="card-section" fxLayout="row" fxLayoutAlign="space-between center" routerLink="/todo/home" tabindex="0">
+      <a class="card-section" routerLink="/todo/home" tabindex="0">
         <span>Home</span>
         <mat-icon>navigate_next</mat-icon>
       </a>
-      <a class="card-section" fxLayout="row" fxLayoutAlign="space-between center" routerLink="/todo/archived" tabindex="0">
+      <a class="card-section" routerLink="/todo/archived" tabindex="0">
         <span>Archived</span>
         <mat-icon>navigate_next</mat-icon>
       </a>
     </mat-card>
-    <div class="header todo-dashboard-projects-header" fxLayout="row" fxLayoutAlign="space-between center">
-      <h2 fxLayout="row" fxLayoutAlign="center center">
-        Projects
-      </h2>
-      <button mat-raised-button (click)="newProject()" color="primary">
-        <mat-icon>add</mat-icon> New Project
-      </button>
-    </div>
-    <ng-template #emptyState>
-      <div class="empty-state-container-inner">
-        <img src="./assets/undraw/undraw_High_five_u364.svg" alt="High five">
-        <h2>No projects!</h2>
-        <button mat-raised-button (click)="newProject()" color="primary">New project</button>
-      </div>
-    </ng-template>
-    <ng-container *ngIf="(projects$ | async)?.length >= 0; else: emptyState">
-      <div fxLayout="row wrap" class="todo-dashboard-project-card-container">
-        <mat-card appearance="outlined" class="todo-dashboard-project-card hover" *ngFor="let project of projects$ | async"
-          @todoProjectUpdateAnim tabindex="0" [routerLink]="['/todo/project', project?.id]">
-          <mat-card-header>
-            <mat-card-title [style.color]="project?.color">{{project?.name}}</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <p>0 todos</p>
-            <p>100% complete</p>
-            <p *ngIf="project?.dueDate" class="todo-dashboard-project-card-stat"><mat-icon>today</mat-icon> {{ project?.dueDate.toDate() | date }}</p>
-          </mat-card-content>
-          <mat-card-actions align="end">
-            <button mat-icon-button (click)="editProject(project, $event)" color="primary" matTooltip="Edit project">
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button mat-icon-button (click)="removeProject(project, false, $event)" color="warn" matTooltip="Delete project">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </mat-card-actions>
-        </mat-card>
-      </div>
-    </ng-container>
+    <section>
+      <header class="header todo-dashboard-projects-header">
+        <h2>Projects</h2>
+        <button mat-raised-button (click)="newProject()" color="primary">
+          <mat-icon aria-hidden="true">add</mat-icon> New Project
+        </button>
+      </header>
+      <ng-template #emptyState>
+        <div class="empty-state-container-inner">
+          <img src="./assets/undraw/undraw_High_five_u364.svg" alt="High five">
+          <h2>No projects!</h2>
+          <button mat-raised-button (click)="newProject()" color="primary">New project</button>
+        </div>
+      </ng-template>
+      <ng-container *ngIf="(projects$ | async)?.length >= 0; else: emptyState">
+        <div class="todo-dashboard-project-card-container">
+          <mat-card appearance="outlined" class="todo-dashboard-project-card hover" *ngFor="let project of projects$ | async"
+            @todoProjectUpdateAnim tabindex="0" [routerLink]="['/todo/project', project?.id]">
+            <mat-card-header>
+              <mat-card-title [style.color]="project?.color">{{project?.name}}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <p>0 todos</p>
+              <p>100% complete</p>
+              <p *ngIf="project?.dueDate" class="todo-dashboard-project-card-stat"><mat-icon>today</mat-icon> {{ project?.dueDate.toDate() | date }}</p>
+            </mat-card-content>
+            <mat-card-actions align="end">
+              <button mat-icon-button (click)="editProject(project, $event)" color="primary" matTooltip="Edit project">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button (click)="removeProject(project, false, $event)" color="warn" matTooltip="Delete project">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+      </ng-container>
+    </section>
   </div>
 </main>
