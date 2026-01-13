@@ -6,14 +6,12 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormlyModule } from '@ngx-formly/core';
-import { AccordionTypeComponent } from './types/accordion-type/accordion-type.component';
 import { ArrayTypeComponent } from './types/array-type/array-type.component';
 import { NullTypeComponent } from './types/null-type/null-type.component';
 import { ObjectTypeComponent } from './types/object-type/object-type.component';
 import { PanelWrapperComponent } from './wrappers/panel-wrapper.component';
 
 const COMPONENTS = [
-  AccordionTypeComponent,
   ArrayTypeComponent,
   NullTypeComponent,
   ObjectTypeComponent,
@@ -72,14 +70,14 @@ const MATERIAL_MODULES = [
             }
           }
         },
-        // { name: 'array', component: AccordionTypeComponent },
-        { name: 'object', component: ObjectTypeComponent, defaultOptions: {
-          templateOptions: {
-            hideFieldLabel: false,
-            hideFieldDesc: false
+        {
+          name: 'object', component: ObjectTypeComponent, defaultOptions: {
+            templateOptions: {
+              hideFieldLabel: false,
+              hideFieldDesc: false
+            }
           }
-        } },
-        // { name: 'accordion', component: AccordionTypeComponent }
+        },
       ]
     }),
     MATERIAL_MODULES
