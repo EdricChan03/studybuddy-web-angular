@@ -7,7 +7,7 @@
     </mat-icon>
   </button>
   <span>{{ toolbarTitle }}</span>
-  <span fxFlex *ngIf="actionItems"></span>
+  <span class="app-flex-spacer" *ngIf="actionItems"></span>
   <ng-container *ngIf="actionItems">
     <ng-container *ngFor="let item of nonOverflowActionItems">
       <button mat-button *ngIf="item.type === 'button'" (click)="item.onItemClickListener($event)"

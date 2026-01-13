@@ -4,7 +4,7 @@
       <mat-card appearance="outlined">
         <mat-card-header>
           <mat-card-title>Word of the Day</mat-card-title>
-          <span fxFlex></span>
+          <span class="app-flex-spacer"></span>
           <button mat-icon-button (click)="getWordOfDay()" matTooltip="Refresh" color="primary">
             <mat-icon>refresh</mat-icon>
           </button>
@@ -37,7 +37,7 @@
             <mat-icon matCardAvatar class="quote-of-day-card--avatar">format_quote</mat-icon>
             <mat-card-title>{{quote?.title}}</mat-card-title>
             <mat-card-subtitle>{{quote?.author}}</mat-card-subtitle>
-            <span fxFlex></span>
+            <span class="app-flex-spacer"></span>
             <button mat-icon-button (click)="getQuoteOfDay()" matTooltip="Refresh" color="primary">
               <mat-icon>refresh</mat-icon>
             </button>

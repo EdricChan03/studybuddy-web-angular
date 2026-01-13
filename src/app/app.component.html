@@ -2,7 +2,7 @@
   <mat-sidenav #left [mode]="shared.isPortraitHandset ? 'over' : 'side'" class="app-sidenav mat-elevation-z2">
     <mat-toolbar>
       Links
-      <span fxFlex></span>
+      <span class="app-flex-spacer"></span>
       <button mat-icon-button (click)="left.close()" matTooltip="Close sidenav" matTooltipPosition="right">
         <mat-icon>keyboard_arrow_left</mat-icon>
       </button>
@@ -41,7 +41,7 @@
         <mat-icon>menu</mat-icon>
       </button>
       <span class="toolbar-title">Study Buddy <span *ngIf="shared?.title">- {{shared.title}}</span></span>
-      <span fxFlex></span>
+      <span class="app-flex-spacer"></span>
       <button mat-icon-button [matMenuTriggerFor]="accountMenu" matTooltip="Account">
         <mat-icon>account_circle</mat-icon>
       </button>
