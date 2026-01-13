@@ -18,7 +18,6 @@ import {
   provideRemoteConfig,
 } from '@angular/fire/remote-config';
 
-import { FlexLayoutModule } from '@angular/flex-layout';
 import {
   UntypedFormControl,
   FormsModule,
@@ -106,7 +105,6 @@ function minItemsValidationMessage(err, field: FormlyFieldConfig) {
     MaterialModule,
     AppRoutingModule,
     HttpClientModule,
-    FlexLayoutModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAnalytics(() => {
       const analytics = getAnalytics();

@@ -1,7 +1,6 @@
 import { PortalModule } from '@angular/cdk/portal';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FlexModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -34,7 +33,6 @@ const MATERIAL_MODULES = [
   imports: [
     CommonModule,
     FormsModule,
-    FlexModule,
     PortalModule,
     MATERIAL_MODULES
   ]

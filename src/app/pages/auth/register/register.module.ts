@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FlexModule } from '@angular/flex-layout/flex';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -18,7 +17,6 @@ import { RegisterRoutingModule } from './register-routing.module';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    FlexModule,
     MatButtonModule,
     MatCardModule,
     MatFormFieldModule,

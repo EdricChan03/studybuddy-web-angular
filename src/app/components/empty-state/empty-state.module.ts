@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FlexModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
@@ -16,7 +15,6 @@ const MATERIAL_MODULES = [
   exports: [EmptyStateComponent],
   imports: [
     CommonModule,
-    FlexModule,
     RouterModule,
     MATERIAL_MODULES
   ]
