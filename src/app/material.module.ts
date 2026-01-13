@@ -1,5 +1,6 @@
 import { LayoutModule } from '@angular/cdk/layout';
 import { PlatformModule } from '@angular/cdk/platform';
+import { PortalModule } from '@angular/cdk/portal';
 import { NgModule } from '@angular/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -63,7 +64,8 @@ const MATERIAL_MODULES = [
 ];
 const CDK_MODULES = [
   LayoutModule,
-  PlatformModule
+  PlatformModule,
+  PortalModule
 ];
 @NgModule({
   exports: [
