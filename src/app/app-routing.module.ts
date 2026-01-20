@@ -10,8 +10,8 @@ import { UserViewerComponent } from './user-viewer/user-viewer.component';
 
 import { redirectRoutes as authRedirectRoutes } from './pages/auth/redirect-routes';
 
-import { AuthGuard } from './auth.guard';
-import { DevelopmentGuard } from './development.guard';
+import { authGuard } from './auth.guard';
+import { devGuard } from './development.guard';
 
 // Redirect routes
 const redirectRoutes: Route[] = [
@@ -25,13 +25,13 @@ const routes: Route[] = [
   // About StudyBuddy
   { path: 'about', component: AboutComponent },
   // Dashboard
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
   // Downloads for the app. Currently a bit empty
   { path: 'downloads', component: AppDownloadsComponent },
   // Tips page.
   { path: 'tips', component: TipsComponent },
   {
-    path: 'todo', component: TodoOutletComponent, canActivate: [AuthGuard], children: [
+    path: 'todo', component: TodoOutletComponent, canActivate: [authGuard], children: [
       // All todos
       { path: 'home', component: TodoHomeComponent },
       // Not working as of now
@@ -48,7 +48,7 @@ const routes: Route[] = [
   // Lazy loaded feature modules
   {
     path: 'develop',
-    canActivate: [DevelopmentGuard],
+    canActivate: [devGuard],
     loadChildren: () => import('./pages/develop/develop.module').then(m => m.DevelopModule)
   },
   {
