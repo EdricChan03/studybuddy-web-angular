@@ -10,8 +10,8 @@
       ],
       "parserOptions": {
         "project": [
-          "src/tsconfig.app.json",
-          "src/tsconfig.spec.json"
+          "tsconfig.app.json",
+          "tsconfig.spec.json"
         ],
         "createDefaultProgram": true
       },
