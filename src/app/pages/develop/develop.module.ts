@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { DevelopRoutingModule } from './develop-routing.module';
 import { DevelopSharedServiceComponent } from './shared-service/shared-service.component';
@@ -20,7 +21,8 @@ const MATERIAL_MODULES = [
   MatIconModule,
   MatInputModule,
   MatRadioModule,
-  MatSelectModule
+  MatSelectModule,
+  MatTooltipModule
 ];
 
 @NgModule({
