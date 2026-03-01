@@ -75,7 +75,7 @@ export class LoginComponent implements OnDestroy {
         this.auth.resetPassword(result).then(_ => {
           this.shared.openSnackBar({
             msg: 'Your password has successfully been reset! An email will shortly be sent your way to update your password.',
-            additionalOpts: { duration: 6000 }
+            config: { duration: 6000 }
           });
         }).catch(error => {
           this.shared.openSnackBar({ msg: `Error: ${error.message}` });

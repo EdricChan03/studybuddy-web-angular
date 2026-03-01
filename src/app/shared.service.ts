@@ -18,11 +18,6 @@ export interface SnackBarOpts<D = any> {
   component?: ComponentType<any>;
   /** Configuration for the snackbar. */
   config?: MatSnackBarConfig<D>;
-  /**
-   * Additional options for the snackbar.
-   * @deprecated Use {@link SnackBarOpts#config} instead
-   */
-  additionalOpts?: MatSnackBarConfig<D>;
 }
 
 // Shared service
@@ -112,15 +107,11 @@ export class SharedService {
   }
 
   private handleSnackBar(opts: SnackBarOpts): MatSnackBarRef<SimpleSnackBar> {
-    // eslint-disable-next-line import/no-deprecated
-    const config = opts.config ? opts.config : opts.additionalOpts;
-    return this.snackBar.open(opts.msg, opts.action ? opts.action : undefined, config);
+    return this.snackBar.open(opts.msg, opts.action ? opts.action : undefined, opts.config);
   }
 
   private handleSnackBarWithComponent(opts: SnackBarOpts): MatSnackBarRef<any> {
-    // eslint-disable-next-line import/no-deprecated
-    const config = opts.config ? opts.config : opts.additionalOpts;
-    return this.snackBar.openFromComponent(opts.component, config);
+    return this.snackBar.openFromComponent(opts.component, opts.config);
   }
 
   /** Closes the current snackbar. */

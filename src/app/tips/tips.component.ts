@@ -57,7 +57,7 @@ export class TipsComponent implements OnInit {
     this.hideProgress();
     this.shared.openSnackBar({
       msg: `Error: ${error.message}`,
-      additionalOpts: { duration: 6000 }
+      config: { duration: 6000 }
     });
     console.error('Error: ', error.message);
   }

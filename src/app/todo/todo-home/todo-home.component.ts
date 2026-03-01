@@ -206,7 +206,7 @@ export class TodoHomeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.shared.openSnackBar({
         msg: `An error occurred while attempting to archive the todo: ${error.message}`,
         action: 'Retry',
-        additionalOpts: {
+        config: {
           duration: 8000
         }
       })

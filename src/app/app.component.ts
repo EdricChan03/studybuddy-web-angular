@@ -158,7 +158,7 @@ export class AppComponent implements OnInit {
         this.auth.logOut().then((res) => {
           const snackbarRef = this.shared.openSnackBar({
             msg: 'Signed out',
-            additionalOpts: {
+            config: {
               duration: 4000,
               horizontalPosition: 'start'
             }

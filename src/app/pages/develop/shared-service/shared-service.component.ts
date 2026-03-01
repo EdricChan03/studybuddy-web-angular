@@ -66,7 +66,7 @@ export class DevelopSharedServiceComponent {
   openSnackBar() {
     this.shared.openSnackBar({
       msg: this.getValOrReturnDefault(this.snackbar.snackBarMsg, 'I\'m a snackbar!'),
-      additionalOpts: {
+      config: {
         horizontalPosition: this.snackbar.horizontalPosition,
         verticalPosition: this.snackbar.verticalPosition,
         panelClass: this.snackbar.panelClass
@@ -78,7 +78,7 @@ export class DevelopSharedServiceComponent {
   openErrorSnackBar() {
     this.shared.openSnackBar({
       msg: this.getValOrReturnDefault(this.snackbar.snackBarMsg, 'Error: Something happened'),
-      additionalOpts: {
+      config: {
         duration: 5000
       }
     });
@@ -87,7 +87,7 @@ export class DevelopSharedServiceComponent {
   openDurationSnackBar() {
     this.shared.openSnackBar({
       msg: this.getValOrReturnDefault(this.snackbar.snackBarMsg, 'I\'m a duration snackbar!'),
-      additionalOpts: {
+      config: {
         duration: this.snackbar.duration ? this.snackbar.duration : 5000,
         horizontalPosition: this.snackbar.horizontalPosition,
         verticalPosition: this.snackbar.verticalPosition,
@@ -101,8 +101,7 @@ export class DevelopSharedServiceComponent {
     const snackBarRef = this.shared.openSnackBar({
       msg: this.getValOrReturnDefault(this.snackbar.snackBarMsg, 'I\'m a snackbar with an action!'),
       action: this.snackbar.action,
-      additionalOpts:
-      {
+      config: {
         horizontalPosition: this.snackbar.horizontalPosition,
         verticalPosition: this.snackbar.verticalPosition,
         panelClass: this.snackbar.panelClass

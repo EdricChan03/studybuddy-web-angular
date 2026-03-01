@@ -97,7 +97,7 @@ export class NewProjectDialogComponent {
       }, error => {
         this.shared.openSnackBar({
           msg: `An error occurred: ${error.message}`,
-          additionalOpts: {
+          config: {
             duration: 6000
           }
         });

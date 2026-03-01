@@ -42,10 +42,7 @@ export class RegisterComponent implements OnDestroy, OnInit {
           {
             msg: 'You\'re already logged in! Redirecting in 2 seconds...',
             action: 'Log out',
-            additionalOpts:
-            {
-              duration: 5000
-            }
+            config: { duration: 5000 }
           }
         );
         snackBarRef.onAction().subscribe(() => {

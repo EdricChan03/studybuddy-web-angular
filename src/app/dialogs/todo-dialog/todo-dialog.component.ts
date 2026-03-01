@@ -232,7 +232,7 @@ export class TodoDialogComponent implements OnInit {
       }, error => {
         this.shared.openSnackBar({
           msg: `An error occurred: ${error.message}`,
-          additionalOpts: {
+          config: {
             duration: 6000
           }
         });
@@ -250,7 +250,7 @@ export class TodoDialogComponent implements OnInit {
         }, error => {
           this.shared.openSnackBar({
             msg: `An error occurred: ${error.message}`,
-            additionalOpts: { duration: 6000 }
+            config: { duration: 6000 }
           });
           console.error(`An error occurred: ${error.message}`);
         });
