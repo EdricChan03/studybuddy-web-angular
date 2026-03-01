@@ -23,7 +23,7 @@
     "@angular/material": "^16.2.14",
     "@angular/platform-browser": "^16.2.12",
     "@angular/platform-browser-dynamic": "^16.2.12",
-    "@angular/platform-server": "^16.2.12",
+    "@angular/platform-server": "^21.2.0",
     "@angular/router": "^16.2.12",
     "@angular/service-worker": "^16.2.12",
     "@ngx-formly/core": "^6.3.12",
@@ -40,7 +40,7 @@
     "zone.js": "~0.13.3"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^16.2.16",
+    "@angular-devkit/build-angular": "^21.2.0",
     "@angular-eslint/builder": "16.3.1",
     "@angular-eslint/eslint-plugin": "16.3.1",
     "@angular-eslint/eslint-plugin-template": "16.3.1",
