@@ -22,7 +22,7 @@
     "@angular/forms": "^16.2.12",
     "@angular/material": "^16.2.14",
     "@angular/platform-browser": "^16.2.12",
-    "@angular/platform-browser-dynamic": "^16.2.12",
+    "@angular/platform-browser-dynamic": "^22.2.2",
     "@angular/platform-server": "^16.2.12",
     "@angular/router": "^16.2.12",
     "@angular/service-worker": "^16.2.12",
